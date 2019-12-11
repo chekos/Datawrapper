@@ -5,6 +5,6 @@ __email__ = 'chekos@tacosdedatos.com'
 __version__ = '0.1.1'
 
 import datawrapper.datawrapper as dw
-from IPython.display import HTML
+from IPython.display import HTML, Image
 
 Datawrapper = dw.Datawrapper
