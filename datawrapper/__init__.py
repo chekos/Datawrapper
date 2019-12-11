@@ -4,6 +4,7 @@ __author__ = """Sergio Sanchez"""
 __email__ = 'chekos@tacosdedatos.com'
 __version__ = '0.1.1'
 
-from .datawrapper import Datawrapper
+import datawrapper.datawrapper as dw
+from IPython.display import HTML
 
-datawrapper = Datawrapper()
+Datawrapper = dw.Datawrapper
