@@ -12,6 +12,7 @@ class Datawrapper():
     _BASE_URL = "https://api.datawrapper.de"
     _CHARTS_URL = _BASE_URL + "/v3/charts"
     _PUBLISH_URL = _BASE_URL + "/charts"
+    _FOLDERS_URL = _BASE_URL + "/folders"
 
     _ACCESS_TOKEN = os.getenv("DATAWRAPPER_ACCESS_TOKEN")
 
@@ -58,7 +59,7 @@ class Datawrapper():
 
 
 
-    def create_chart(self, title = 'New Chart', chart_type = "d3-bars-stacked", data = None):
+    def create_chart(self, title = 'New Chart', chart_type = "d3-bars-stacked", data = None, folder_id = ""):
         """
         Creates a new Datawrapper chart, table or map.
         You can pass a pandas DataFrame as data argument to upload data.
@@ -67,7 +68,7 @@ class Datawrapper():
         _header = self._auth_header
         _header['content-type'] = 'application/json'
 
-        _data = {"title": title, "type": chart_type}
+        _data = {"title": title, "type": chart_type, "folderId": folder_id}
 
         new_chart_response = r.post(
             url = self._CHARTS_URL,
@@ -170,6 +171,32 @@ class Datawrapper():
             #return update_properties_response.json()
         else:
             print("Chart could not be updated.")
+    
+    def update_chart(self, chart_id, title = '', theme = '', chart_type = '', language = '', folder_id = '', organization_id = ''):
+        """
+        Updates a chart's title, theme, type, language, or location (folder/organization).
+        """
+        _header = self._auth_header
+        _header['accept'] = '*/*'
+        _header['content-type'] = 'application/json'
+        _query = {}
+        if title: _query['title'] = title
+        if theme: _query['theme'] = theme
+        if chart_type: _query['type'] = chart_type
+        if language: _query['language'] = language
+        if folder_id: _query['folderId'] = folder_id
+        if organization_id: _query['organizationId'] = organization_id
+
+        update_chart_response = r.patch(
+            url = self._CHARTS_URL + f"/{chart_id}",
+            headers = _header,
+            data = json.dumps(_query)
+        )
+        if update_chart_response.status_code == 200:
+            print(f"Chart with id {chart_id} updated!")
+            return self.publish_chart(chart_id)
+        else:
+            print("Chart could not be updated at the time.")
 
     def display_chart(self, chart_id):
         """
@@ -179,6 +206,18 @@ class Datawrapper():
         _iframe_code = _chart_properties['metadata']['publish']['embed-codes']['embed-method-iframe']
         
         return HTML(_iframe_code)
+    
+    def get_iframe_code(self, chart_id, responsive = False):
+        """
+        Returns a chart's iframe code.
+        """
+        _chart_properties = self.chart_properties(chart_id)
+    
+        if responsive:
+            iframe_code = _chart_properties['metadata']['publish']['embed-codes']['embed-method-responsive']
+        else:
+            iframe_code = _chart_properties['metadata']['publish']['embed-codes']['embed-method-iframe']
+        return iframe_code
 
     def export_chart(self, chart_id, unit = "px", mode = "rgb", width = 600, plain = False, scale = 1, output = 'png', filepath = "./image.png", display = False):
         """
@@ -217,7 +256,76 @@ class Datawrapper():
         else:
             print(f"File exported at {_filepath}")
 
-
-
-
+    def get_folders(self):
+        """
+        Retrieves the list of folders of your Datawrapper account.
+        """
+        get_folders_response = r.get(
+            url = self._FOLDERS_URL,
+            headers = self._auth_header,
+        )
         
+        if get_folders_response.status_code == 200:
+            return get_folders_response.json()
+        else:
+            print("Couldn't retrieve folders in account. Make sure you have the rigth authorization credentials (access token).")
+
+    def move_chart(self, chart_id, folder_id):
+        """
+        Moves a chart, table or map to a specified folder.
+        """
+        _header = self._auth_header
+        _header['content-type'] = 'application/json'
+
+        _data = {'folderId': folder_id}
+
+        move_chart_response = r.patch(
+            url = self._CHARTS_URL + f"/{chart_id}",
+            headers = _header,
+            data = json.dumps(_data),
+        )
+
+        if move_chart_response.status_code == 200:
+            print(f"Chart moved to folder {folder_id}")
+        else:
+            print("Chart could not be moved at the moment.")
+    
+    def delete_chart(self, chart_id):
+        """
+        Deletes a specified chart, table or map.
+        """
+        delete_chart_response = r.delete(
+            url = self._CHARTS_URL + f"/{chart_id}",
+            headers = self._auth_header
+        )
+        if delete_chart_response.content:
+            return delete_chart_response.content
+        else:
+            print(f"Successfully deleted chart with id {chart_id}")
+    
+    def get_charts(self, user_id = None, published = "true", search = "", order = "DESC", order_by = "createdAt", limit = 25):
+        """
+        Retrieves a list of charts by user.
+        """
+        _url = self._CHARTS_URL
+        _header = self._auth_header
+        _header['accept'] = '*/*'
+        _query = {}
+        if user_id: _query['userId'] = user_id
+        if published: _query['published'] = published
+        if search: _query['search'] = search
+        if order: _query['order'] = order
+        if order_by: _query['orderBy'] = order_by
+        if limit: _query['limit'] = limit
+
+        get_charts_response = r.get(
+            url = _url,
+            headers = _header,
+            params = _query
+        )
+
+        if get_charts_response.status_code == 200:
+            return get_charts_response.json()['list']
+        else:
+            print("Could not retrieve charts at this moment.")
+            
