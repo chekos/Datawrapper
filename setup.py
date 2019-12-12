@@ -12,9 +12,9 @@ with open('HISTORY.rst') as history_file:
 
 requirements = ['Click>=7.0', 'requests>=2.0', 'ipython>=7.0']
 
-setup_requirements = [ ]
+setup_requirements = ['Click>=7.0', 'requests>=2.0', 'ipython>=7.0']
 
-test_requirements = [ ]
+test_requirements = ['Click>=7.0', 'requests>=2.0', 'ipython>=7.0']
 
 setup(
     author="Sergio Sanchez",
