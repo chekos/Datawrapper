@@ -19,7 +19,7 @@ test_requirements = ['Click>=7.0', 'requests>=2.0', 'ipython>=7.0']
 setup(
     author="Sergio Sanchez",
     author_email='chekos@tacosdedatos.com',
-    python_requires='>=3.5',
+    python_requires='>=3.6',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
