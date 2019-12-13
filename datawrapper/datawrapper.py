@@ -1,4 +1,16 @@
-"""Main module."""
+"""Access Datawrapper's API to create, update, delete charts.
+
+Datawrapper API lets you programatically interface with your charts. 
+It lets you create and edit charts, update your account information and many more things to come.
+
+    This package is a light-weight wrapper around Datawrapper's API.
+
+        Typical usage example:
+
+        dw = Datawrapper(access_token = <YOUR_ACCESS_TOKEN_HERE>)
+
+        dw.account_info()
+"""
 import requests as r
 import os
 import json
@@ -7,8 +19,13 @@ from pathlib import Path
 
 
 class Datawrapper:
-    """
-    Access Datawrapper's API to create, update, delete charts.
+    """Handles connecting with Datawrapper's API.
+
+    Handles access to your Datawrapper's account, create, delete and move charts, tables or maps.
+    Will attempt to read environment variable DATAWRAPPER_ACCESS_TOKEN by default. 
+
+    Args:
+        access_token: A personal access token to use the API. See app.datawrapper.de/account/api-tokens.
     """
 
     _BASE_URL = "https://api.datawrapper.de"
@@ -45,7 +62,7 @@ class Datawrapper:
         Adds data to a chart, table, map.
         Arguments:
             id (str): Chart, table or map id.
-            data (pandas DataFrame): a 
+            data (pandas.DataFrame): a DataFrame containing the data to be added.
         """
         _header = self._auth_header
         _header["content-type"] = "text/csv"
@@ -64,6 +81,12 @@ class Datawrapper:
         Creates a new Datawrapper chart, table or map.
         You can pass a pandas DataFrame as data argument to upload data.
         Returns created chart information.
+
+        Arguments:
+            title (str): Title for new chart, table or map.
+            chart_type (str): Chart type to be created. See https://developer.datawrapper.de/docs/chart-types.
+            data (pandas.DataFrame): Optional. A DataFrame containing the data to be added.
+            folder_id (str): Datawrapper folder id for the chart, table or map to be created at. 
         """
         _header = self._auth_header
         _header["content-type"] = "application/json"
@@ -123,7 +146,11 @@ class Datawrapper:
 
     def publish_chart(self, chart_id, display=True):
         """
-        Publishes a chart, table or map. 
+        Publishes a chart, table or map.
+
+        Arguments:
+            chart_id (str): Chart, table or map id to publish.
+            display (bool): Display the chart published as output in notebook cell.
         """
         publish_chart_response = r.post(
             url=f"{self._PUBLISH_URL}/{chart_id}/publish", headers=self._auth_header,
@@ -144,6 +171,9 @@ class Datawrapper:
     def chart_properties(self, chart_id):
         """
         Retrieve information of a specific chart, table or map.
+
+        Arguments:
+            chart_id (str): Chart, table or map to retreive information from.
         """
         chart_properties_response = r.get(
             url=self._CHARTS_URL + f"/{chart_id}", headers=self._auth_header,
@@ -158,6 +188,11 @@ class Datawrapper:
     def update_metadata(self, chart_id, properties):
         """
         Updates a chart's, table's or map's metadata.
+        Example: https://developer.datawrapper.de/docs/creating-a-chart-new#section-edit-colors
+
+        Arguments:
+            chart_id (str): Chart, table or map id.
+            properties (dict): A python dictionary of properties to update.
         """
         _header = self._auth_header
         _header["content-type"] = "application/json"
@@ -186,6 +221,15 @@ class Datawrapper:
     ):
         """
         Updates a chart's title, theme, type, language, or location (folder/organization).
+
+        Arguments:
+            chart_id (str): Chart, table or map id to update.
+            title (str): New title.
+            theme (str): New theme.
+            chart_type (str): New chart type. See https://developer.datawrapper.de/docs/chart-types.
+            language (str): New language.
+            folder_id (str): New folder id (id of folder to move chart to).
+            organization_id (str): New organization id (id of organization to move chart to).
         """
         _header = self._auth_header
         _header["accept"] = "*/*"
@@ -218,6 +262,13 @@ class Datawrapper:
     def display_chart(self, chart_id):
         """
         Displays a datawrapper chart.
+
+        Argument:
+            chart_id (str): Chart, table or map id to display.
+        Returns:
+            IPython.display.HTML output with chart's iframe-embed code.
+        
+        Interactivity may be limited as it is assumed it is being displayed within a Jupyter notebook environment.
         """
         _chart_properties = self.chart_properties(chart_id)
         _iframe_code = _chart_properties["metadata"]["publish"]["embed-codes"][
@@ -229,6 +280,10 @@ class Datawrapper:
     def get_iframe_code(self, chart_id, responsive=False):
         """
         Returns a chart's iframe code.
+
+        Arguments:
+            chart_id (str): Chart, table or map id to retrieve iframe code for.
+            responsive (bool): Whether to return chart's typical iframe embed code or responsive iframe embed code.
         """
         _chart_properties = self.chart_properties(chart_id)
 
@@ -247,7 +302,7 @@ class Datawrapper:
         chart_id,
         unit="px",
         mode="rgb",
-        width=600,
+        width=None,
         plain=False,
         scale=1,
         output="png",
@@ -256,6 +311,18 @@ class Datawrapper:
     ):
         """
         Exports a datawrapper chart, table, or map.
+        See https://developer.datawrapper.de/docs/exporting-as-pdfsvg
+
+        Arguments:
+            chart_id (str): Chart, table or map id to export.
+            units (str): One of px, mm, inch. Defines the unit in wich the borderwidth, height, and width will be measured in.
+            mode (str): One of rgb or cmyk. Which color mode the output should be in. Default is rgb.
+            width (int): Width of visualization. If not specified, it takes the chart width.
+            plain (bool): Defines if only the visualization should be exported (True), or if it should include header and footer as well (False).
+            scale (int): Defines the multiplier for the size.
+            output (str): one of png, pdf, or svg. 
+            filepath (str): Name/filepath to save output in.
+            display (bool): Whether to display the exported image.
         """
         _export_url = f"{self._CHARTS_URL}/{chart_id}/export/{output}"
         _filepath = Path(filepath)
@@ -296,7 +363,7 @@ class Datawrapper:
 
     def get_folders(self):
         """
-        Retrieves the list of folders of your Datawrapper account.
+        Returns a list of folders of your Datawrapper account.
         """
         get_folders_response = r.get(url=self._FOLDERS_URL, headers=self._auth_header,)
 
@@ -310,6 +377,10 @@ class Datawrapper:
     def move_chart(self, chart_id, folder_id):
         """
         Moves a chart, table or map to a specified folder.
+
+        Arguments:
+            chart_id (str): Chart, table or map to be moved.
+            folder_id (str): Id of folder to move chart, table or map to.
         """
         _header = self._auth_header
         _header["content-type"] = "application/json"
@@ -350,6 +421,17 @@ class Datawrapper:
     ):
         """
         Retrieves a list of charts by user.
+
+        Arguments:
+            user_id (str): ID of the user to fetch charts for.
+            published (str): Flag to filter results by publish status
+            search (str): Search for charts with a specific title.
+            order (str): Result order (ascending or descending).
+            order_by (str): Attribute to order by. One of createdAt, email, id, or name.
+            limit: Maximum items to fetch. Useful for pagination.
+
+        Returns:
+            A list of charts.
         """
         _url = self._CHARTS_URL
         _header = self._auth_header
