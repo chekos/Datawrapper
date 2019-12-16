@@ -96,6 +96,10 @@ html_theme = 'sphinx_rtd_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+# Adapted from Altair's docs
+html_short_title = 'datawrapper'
+html_logo = '_static/datawrapper_logo_light.png'
+
 
 # -- Options for HTMLHelp output ---------------------------------------
 
@@ -157,6 +161,3 @@ texinfo_documents = [
      'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-
