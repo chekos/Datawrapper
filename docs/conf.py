@@ -98,7 +98,7 @@ html_static_path = ['_static']
 
 # Adapted from Altair's docs
 html_short_title = 'datawrapper'
-html_logo = '_static/datawrapper_logo_light.png'
+html_logo = '_static/datawrapper_logo_light.PNG'
 
 
 # -- Options for HTMLHelp output ---------------------------------------
