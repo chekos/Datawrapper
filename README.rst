@@ -31,11 +31,11 @@ Features
 * Retrieve your account information (including folders).
 * Add data to charts, tables or maps.
 * Create charts, tables or maps.
-  * and add data from a `pandas.DataFrame` in one call!
+  - and add data from a `pandas.DataFrame` in one call!
 * Update chart descriptions.
 * Publish charts, tables or maps.
 * Retrieve chart properties, update its metadata, and other information.
-* Display a chart (as output of notebook cell - it gets weird because interactivity ¯\_(ツ)_/¯
+* Display a chart (as output of notebook cell - it gets weird because interactivity ¯\\_(ツ)_/¯
 )
 * Retrieve a chart, table or map's iframe code to embed.
 * Export chart as png (still working on the svg and pdf parts).
