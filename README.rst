@@ -30,8 +30,7 @@ Features
 
 * Retrieve your account information (including folders).
 * Add data to charts, tables or maps.
-* Create charts, tables or maps.
-  - and add data from a `pandas.DataFrame` in one call!
+* Create charts, tables or maps - and add data from a `pandas.DataFrame` in one call!
 * Update chart descriptions.
 * Publish charts, tables or maps.
 * Retrieve chart properties, update its metadata, and other information.
