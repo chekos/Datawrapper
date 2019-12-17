@@ -18,7 +18,7 @@ datawrapper
         :alt: MyBinder.org badge
 
 
-A light-weight wrapper for the `Datawrapper API (v3.0)<https://developer.datawrapper.de/docs/getting-started>`.
+A light-weight wrapper for the Datawrapper API (v3.0) <https://developer.datawrapper.de/docs/getting-started>.
 
 
 * Free software: MIT license
