@@ -18,7 +18,7 @@ datawrapper
         :alt: MyBinder.org badge
 
 
-A light-weight wrapper for the Datawrapper API.
+A light-weight wrapper for the `Datawrapper API (v3.0)<https://developer.datawrapper.de/docs/getting-started>`.
 
 
 * Free software: MIT license
@@ -28,7 +28,21 @@ A light-weight wrapper for the Datawrapper API.
 Features
 --------
 
-* TODO
+* Retrieve your account information (including folders).
+* Add data to charts, tables or maps.
+* Create charts, tables or maps.
+  * and add data from a `pandas.DataFrame` in one call!
+* Update chart descriptions.
+* Publish charts, tables or maps.
+* Retrieve chart properties, update its metadata, and other information.
+* Display a chart (as output of notebook cell - it gets weird because interactivity ¯\_(ツ)_/¯
+)
+* Retrieve a chart, table or map's iframe code to embed.
+* Export chart as png (still working on the svg and pdf parts).
+* Move charts across folders and organizations.
+* Delete charts.
+* Get a list of all your charts.
+
 
 Credits
 -------
