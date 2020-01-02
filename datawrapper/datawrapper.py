@@ -305,6 +305,7 @@ class Datawrapper:
         width=None,
         plain=False,
         scale=1,
+        border_width=20,
         output="png",
         filepath="./image.png",
         display=False,
@@ -320,6 +321,7 @@ class Datawrapper:
             width (int): Width of visualization. If not specified, it takes the chart width.
             plain (bool): Defines if only the visualization should be exported (True), or if it should include header and footer as well (False).
             scale (int): Defines the multiplier for the size.
+            border_width (int): Margin around the visualization. E.g., a borderWidth of 20px gives the visualization a 20px margin.
             output (str): one of png, pdf, or svg. 
             filepath (str): Name/filepath to save output in.
             display (bool): Whether to display the exported image.
@@ -339,6 +341,7 @@ class Datawrapper:
             "width": width,
             "plain": plain,
             "scale": scale,
+            "borderWidth": border_width,
         }
 
         _header = self._auth_header
