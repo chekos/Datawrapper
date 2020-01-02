@@ -350,19 +350,22 @@ class Datawrapper:
         export_chart_response = r.get(
             url=_export_url, headers=_header, params=querystring
         )
+        print(export_chart_response)
 
         if export_chart_response.status_code == 200:
             with open(_filepath, "wb") as response:
                 response.write(export_chart_response.content)
+            if display:
+                return Image(_filepath)
+            else:
+                print(f"File exported at {_filepath}")
         elif export_chart_response.status_code == 403:
             print("You don't have access to the requested code.")
+        elif export_chart_response.status_code == 401:
+            print("You couldn't be authenticated.")
         else:
             print("Couldn't export at this time.")
 
-        if display:
-            return Image(_filepath)
-        else:
-            print(f"File exported at {_filepath}")
 
     def get_folders(self):
         """
