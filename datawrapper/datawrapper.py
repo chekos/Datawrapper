@@ -350,7 +350,7 @@ class Datawrapper:
         export_chart_response = r.get(
             url=_export_url, headers=_header, params=querystring
         )
-        print(export_chart_response)
+
 
         if export_chart_response.status_code == 200:
             with open(_filepath, "wb") as response:
