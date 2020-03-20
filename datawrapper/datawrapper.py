@@ -61,7 +61,7 @@ class Datawrapper:
         """
         Adds data to a chart, table, map.
         Arguments:
-            id (str): Chart, table or map id.
+            chart_id (str): Chart, table or map id.
             data (pandas.DataFrame): a DataFrame containing the data to be added.
         """
         _header = self._auth_header
@@ -70,7 +70,7 @@ class Datawrapper:
         _data = data.to_csv(index=False, encoding="utf-8")
 
         add_data_response = r.put(
-            url=f"{self._CHARTS_URL}/{chart_id}/data", headers=_header, data=_data
+            url=f"{self._CHARTS_URL}/{chart_id}/data", headers=_header, data=_data.encode('utf-8')
         )
         return add_data_response
 
