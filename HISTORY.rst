@@ -2,6 +2,10 @@
 History
 =======
 
+0.4.3 (2020-04-10)
+------------------
+* Encode data in UTF-8 by default. Thanks to @alex-pobeditel-2004
+
 0.4.2 (2019-12-17)
 ------------------
 

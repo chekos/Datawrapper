@@ -2,7 +2,7 @@
 
 __author__ = """Sergio Sanchez"""
 __email__ = "chekos@tacosdedatos.com"
-__version__ = "__version__ = '0.4.3'"
+__version__ = "0.4.3"
 
 import datawrapper.datawrapper as dw
 from IPython.display import HTML, Image
