@@ -9,6 +9,10 @@ datawrapper
 .. image:: https://img.shields.io/travis/chekos/datawrapper.svg
         :target: https://travis-ci.org/chekos/datawrapper
 
+.. image:: https://img.shields.io/pypi/dm/datawrapper
+        :target: https://img.shields.io/pypi/dm/datawrapper
+        
+
 .. image:: https://readthedocs.org/projects/datawrapper/badge/?version=latest
         :target: https://datawrapper.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
