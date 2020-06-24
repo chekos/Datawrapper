@@ -69,10 +69,11 @@ class Datawrapper:
 
         _data = data.to_csv(index=False, encoding="utf-8")
 
-        add_data_response = r.put(
-            url=f"{self._CHARTS_URL}/{chart_id}/data", headers=_header, data=_data.encode('utf-8')
+        return r.put(
+            url=f"{self._CHARTS_URL}/{chart_id}/data",
+            headers=_header,
+            data=_data.encode('utf-8'),
         )
-        return add_data_response
 
     def create_chart(
         self, title="New Chart", chart_type="d3-bars-stacked", data=None, folder_id=""
@@ -156,9 +157,9 @@ class Datawrapper:
             url=f"{self._PUBLISH_URL}/{chart_id}/publish", headers=self._auth_header,
         )
         if publish_chart_response.status_code <= 201:
-            publish_chart_info = publish_chart_response.json()
             # print(f"Chart published at {publish_chart_info[]}")
             if display:
+                publish_chart_info = publish_chart_response.json()
                 iframe_code = publish_chart_info["data"]["metadata"]["publish"][
                     "embed-codes"
                 ]["embed-method-iframe"]
@@ -330,11 +331,7 @@ class Datawrapper:
         _filepath = Path(filepath)
         _filepath = _filepath.with_suffix(f".{output}")
 
-        if plain:
-            plain = "true"
-        else:
-            plain = "false"
-
+        plain = "true" if plain else "false"
         querystring = {
             "unit": unit,
             "mode": mode,
