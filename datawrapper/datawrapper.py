@@ -1,6 +1,6 @@
 """Access Datawrapper's API to create, update, delete charts.
 
-Datawrapper API lets you programatically interface with your charts. 
+Datawrapper API lets you programatically interface with your charts.
 It lets you create and edit charts, update your account information and many more things to come.
 
     This package is a light-weight wrapper around Datawrapper's API.
@@ -22,7 +22,7 @@ class Datawrapper:
     """Handles connecting with Datawrapper's API.
 
     Handles access to your Datawrapper's account, create, delete and move charts, tables or maps.
-    Will attempt to read environment variable DATAWRAPPER_ACCESS_TOKEN by default. 
+    Will attempt to read environment variable DATAWRAPPER_ACCESS_TOKEN by default.
 
     Args:
         access_token: A personal access token to use the API. See app.datawrapper.de/account/api-tokens.
@@ -87,7 +87,7 @@ class Datawrapper:
             title (str): Title for new chart, table or map.
             chart_type (str): Chart type to be created. See https://developer.datawrapper.de/docs/chart-types.
             data (pandas.DataFrame): Optional. A DataFrame containing the data to be added.
-            folder_id (str): Datawrapper folder id for the chart, table or map to be created at. 
+            folder_id (str): Datawrapper folder id for the chart, table or map to be created at.
         """
         _header = self._auth_header
         _header["content-type"] = "application/json"
@@ -268,7 +268,7 @@ class Datawrapper:
             chart_id (str): Chart, table or map id to display.
         Returns:
             IPython.display.HTML output with chart's iframe-embed code.
-        
+
         Interactivity may be limited as it is assumed it is being displayed within a Jupyter notebook environment.
         """
         _chart_properties = self.chart_properties(chart_id)
@@ -305,6 +305,7 @@ class Datawrapper:
         mode="rgb",
         width=None,
         plain=False,
+        zoom=2,
         scale=1,
         border_width=20,
         output="png",
@@ -321,9 +322,10 @@ class Datawrapper:
             mode (str): One of rgb or cmyk. Which color mode the output should be in. Default is rgb.
             width (int): Width of visualization. If not specified, it takes the chart width.
             plain (bool): Defines if only the visualization should be exported (True), or if it should include header and footer as well (False).
-            scale (int): Defines the multiplier for the size.
+            zoom (int): Defines the multiplier for the png size.
+            scale (int): Defines the multiplier for the pdf size.
             border_width (int): Margin around the visualization. E.g., a borderWidth of 20px gives the visualization a 20px margin.
-            output (str): one of png, pdf, or svg. 
+            output (str): one of png, pdf, or svg.
             filepath (str): Name/filepath to save output in.
             display (bool): Whether to display the exported image.
         """
@@ -337,6 +339,7 @@ class Datawrapper:
             "mode": mode,
             "width": width,
             "plain": plain,
+            "zoom": zoom,
             "scale": scale,
             "borderWidth": border_width,
         }
