@@ -75,6 +75,20 @@ class Datawrapper:
             data=_data.encode('utf-8'),
         )
 
+    def refresh_data(self, chart_id):
+        """
+        Fetch configured external data and add it to the chart.
+        Arguments:
+            chart_id (str): Chart, table or map id.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        return r.post(
+            url=f"{self._CHARTS_URL}/{chart_id}/data/refresh",
+            headers=_header,
+        )
+
     def create_chart(
         self, title="New Chart", chart_type="d3-bars-stacked", data=None, folder_id=""
     ):
