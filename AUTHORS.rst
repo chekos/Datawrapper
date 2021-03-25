@@ -11,3 +11,5 @@ Contributors
 ------------
 
 @alex-pobeditel-2004
+@hackerlikecomputer
+@joaopalmeiro
