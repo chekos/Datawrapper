@@ -2,6 +2,8 @@
 
 <div align="center">
 
+[![PyPI Version](https://img.shields.io/pypi/v/datawrapper.svg)](https://pypi.python.org/pypi/datawrapper)
+[![Monthly downloads](https://img.shields.io/pypi/dm/datawrapper)](https://img.shields.io/pypi/dm/datawrappe)
 [![Build status](https://github.com/chekos/datawrapper/workflows/build/badge.svg?branch=master&event=push)](https://github.com/chekos/datawrapper/actions?query=workflow%3Abuild)
 [![Python Version](https://img.shields.io/pypi/pyversions/datawrapper.svg)](https://pypi.org/project/datawrapper/)
 [![Dependencies Status](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen.svg)](https://github.com/chekos/datawrapper/pulls?utf8=%E2%9C%93&q=is%3Apr%20author%3Aapp%2Fdependabot)
