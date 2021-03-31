@@ -11,7 +11,7 @@ It lets you create and edit charts, update your account information and many mor
 
         dw.account_info()
 """
-from typing import Dict, List, Union
+from typing import Any, Dict, List, Union
 
 import json
 import os
@@ -53,7 +53,7 @@ class Datawrapper:
         self._access_token = access_token
         self._auth_header = {"Authorization": f"Bearer {access_token}"}
 
-    def account_info(self) -> Dict:
+    def account_info(self) -> Union[Dict[Any, Any], None]:
         """Access your account information.
 
         Returns
@@ -126,7 +126,7 @@ class Datawrapper:
         chart_type: str = "d3-bars-stacked",
         data: Union[pd.DataFrame, None] = None,
         folder_id: str = "",
-    ) -> Dict:
+    ) -> Union[Dict[Any, Any], None]:
         """Creates a new Datawrapper chart, table or map.
         You can pass a pandas DataFrame as a `data` argument to upload data.
         Returns the created chart's information.
@@ -177,7 +177,7 @@ class Datawrapper:
         source_url: str = "",
         intro: str = "",
         byline: str = "",
-    ) -> None:
+    ) -> Union[Any, None]:
         """Update a chart's description.
 
         Parameters
@@ -216,7 +216,9 @@ class Datawrapper:
         else:
             print("Couldn't update chart.")
 
-    def publish_chart(self, chart_id: str, display: bool = True) -> None:
+    def publish_chart(
+        self, chart_id: str, display: bool = True
+    ) -> Union[Any, None]:
         """Publishes a chart, table or map.
 
         Parameters
@@ -244,7 +246,7 @@ class Datawrapper:
         else:
             print("Chart couldn't be published at this time.")
 
-    def chart_properties(self, chart_id: str) -> Dict:
+    def chart_properties(self, chart_id: str) -> Union[Dict[Any, Any], None]:
         """Retrieve information of a specific chart, table or map.
 
         Parameters
@@ -268,7 +270,9 @@ class Datawrapper:
                 "Make sure you have the right id and authorization credentials (access_token)."
             )
 
-    def update_metadata(self, chart_id: str, properties: dict) -> None:
+    def update_metadata(
+        self, chart_id: str, properties: Dict[Any, Any]
+    ) -> Union[Any, None]:
         """Update a chart, table, or map's metadata.
         Example: https://developer.datawrapper.de/creating-a-chart-new#section-edit-colors
 
@@ -303,7 +307,7 @@ class Datawrapper:
         language: str = "",
         folder_id: str = "",
         organization_id: str = "",
-    ) -> None:
+    ) -> Union[Any, None]:
         """Updates a chart's title, theme, type, language, or location (folder/organization).
 
         Parameters
@@ -411,7 +415,7 @@ class Datawrapper:
         output: str = "png",
         filepath: str = "./image.png",
         display: bool = False,
-    ) -> None:
+    ) -> Union[Any, None]:
         """Exports a chart, table, or map.
 
         Parameters
@@ -480,7 +484,7 @@ class Datawrapper:
         else:
             print("Couldn't export at this time.")
 
-    def get_folders(self) -> Dict:
+    def get_folders(self) -> Union[Dict[Any, Any], None]:
         """Get a list of folders in your Datawrapper account.
 
         Returns
@@ -500,7 +504,7 @@ class Datawrapper:
                 "Couldn't retrieve folders in account. Make sure you have the rigth authorization credentials (access token)."
             )
 
-    def move_chart(self, chart_id: str, folder_id: str) -> None:
+    def move_chart(self, chart_id: str, folder_id: str) -> Union[Any, None]:
         """Moves a chart, table, or map to a specified folder.
 
         Parameters
