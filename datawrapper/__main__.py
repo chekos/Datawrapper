@@ -11,10 +11,14 @@ It lets you create and edit charts, update your account information and many mor
 
         dw.account_info()
 """
+from typing import Union
+
 import json
 import os
 from pathlib import Path
 
+import IPython
+import pandas as pd
 import requests as r
 from IPython.display import HTML, Image
 
@@ -37,16 +41,25 @@ class Datawrapper:
     _ACCESS_TOKEN = os.getenv("DATAWRAPPER_ACCESS_TOKEN")
 
     def __init__(self, access_token=_ACCESS_TOKEN):
+        """To create a token head to app.datawrapper.de/account/api-tokens.
+        By default this will look for DATAWRAPPER_ACCESS_TOKEN environment variable.
+
+        Parameters
+        ----------
+        access_token : [type], optional
+            [description], by default _ACCESS_TOKEN
         """
-        Arguments:
-            access_token (str): To create a token head to app.datawrapper.de/account/api-tokens
-        """
+
         self._access_token = access_token
         self._auth_header = {"Authorization": f"Bearer {access_token}"}
 
-    def account_info(self):
-        """
-        Access your account information.
+    def account_info(self) -> dict:
+        """Access your account information.
+
+        Returns
+        -------
+        dict
+            A dictionary containing your account information.
         """
         account_info_response = r.get(
             url=self._BASE_URL + "/v3/me", headers=self._auth_header
@@ -58,13 +71,22 @@ class Datawrapper:
                 "Couldn't find account. Make sure your credentials (access_code) are correct."
             )
 
-    def add_data(self, chart_id, data):
+    def add_data(self, chart_id: str, data: pd.DataFrame) -> r.Response:
+        """Add data to a specified chart.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table or map to add data to.
+        data : pd.DataFrame
+            A pandas dataframe containing the data to be added.
+
+        Returns
+        -------
+        requests.Response
+            A requests.Response
         """
-        Adds data to a chart, table, map.
-        Arguments:
-            chart_id (str): Chart, table or map id.
-            data (pandas.DataFrame): a DataFrame containing the data to be added.
-        """
+
         _header = self._auth_header
         _header["content-type"] = "text/csv"
 
@@ -76,11 +98,18 @@ class Datawrapper:
             data=_data.encode("utf-8"),
         )
 
-    def refresh_data(self, chart_id):
-        """
-        Fetch configured external data and add it to the chart.
-        Arguments:
-            chart_id (str): Chart, table or map id.
+    def refresh_data(self, chart_id: str) -> r.Response:
+        """Fetch configured external data and add it to the chart.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table or map to add data to.
+
+        Returns
+        -------
+        requests.Response
+            A requests.Response
         """
         _header = self._auth_header
         _header["accept"] = "*/*"
@@ -92,22 +121,32 @@ class Datawrapper:
 
     def create_chart(
         self,
-        title="New Chart",
-        chart_type="d3-bars-stacked",
-        data=None,
-        folder_id="",
-    ):
-        """
-        Creates a new Datawrapper chart, table or map.
-        You can pass a pandas DataFrame as data argument to upload data.
-        Returns created chart information.
+        title: str = "New Chart",
+        chart_type: str = "d3-bars-stacked",
+        data: Union[pd.DataFrame, None] = None,
+        folder_id: str = "",
+    ) -> dict:
+        """Creates a new Datawrapper chart, table or map.
+        You can pass a pandas DataFrame as a `data` argument to upload data.
+        Returns the created chart's information.
 
-        Arguments:
-            title (str): Title for new chart, table or map.
-            chart_type (str): Chart type to be created. See https://developer.datawrapper.de/docs/chart-types.
-            data (pandas.DataFrame): Optional. A DataFrame containing the data to be added.
-            folder_id (str): Datawrapper folder id for the chart, table or map to be created at.
+        Parameters
+        ----------
+        title : str, optional
+            Title for new chart, table or map, by default "New Chart"
+        chart_type : str, optional
+            Chart type to be created. See https://developer.datawrapper.de/docs/chart-types, by default "d3-bars-stacked"
+        data : [type], optional
+            A pandas DataFrame containing the data to be added, by default None
+        folder_id : str, optional
+            ID of folder in Datawrapper.de for the chart, table or map to be created in, by default ""
+
+        Returns
+        -------
+        dict
+            A dictionary containing the created chart's information.
         """
+
         _header = self._auth_header
         _header["content-type"] = "application/json"
 
@@ -131,17 +170,29 @@ class Datawrapper:
         return chart_info
 
     def update_description(
-        self, chart_id, source_name="", source_url="", intro="", byline=""
-    ):
+        self,
+        chart_id: str,
+        source_name: str = "",
+        source_url: str = "",
+        intro: str = "",
+        byline: str = "",
+    ) -> None:
+        """Update a chart's description.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table or map.
+        source_name : str, optional
+            Source of data, by default ""
+        source_url : str, optional
+            URL of source of data, by default ""
+        intro : str, optional
+            Introduction of your chart, table or map, by default ""
+        byline : str, optional
+            Who made this?, by default ""
         """
-        Update a chart's description.
-        Arguments:
-            id (str): Chart, table or map id.
-            source_name (str): The data source.
-            source_url (str): The data source's url.
-            intro (str): Introduction of your chart/table/map.
-            byline (str): Who made this?
-        """
+
         _header = self._auth_header
         _header["content-type"] = "application/json"
         _data = {
@@ -164,14 +215,17 @@ class Datawrapper:
         else:
             print("Couldn't update chart.")
 
-    def publish_chart(self, chart_id, display=True):
-        """
-        Publishes a chart, table or map.
+    def publish_chart(self, chart_id: str, display: bool = True) -> None:
+        """Publishes a chart, table or map.
 
-        Arguments:
-            chart_id (str): Chart, table or map id to publish.
-            display (bool): Display the chart published as output in notebook cell.
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table or map.
+        display : bool, optional
+            Display the published chart as output in notebook cell, by default True
         """
+
         publish_chart_response = r.post(
             url=f"{self._PUBLISH_URL}/{chart_id}/publish",
             headers=self._auth_header,
@@ -189,12 +243,18 @@ class Datawrapper:
         else:
             print("Chart couldn't be published at this time.")
 
-    def chart_properties(self, chart_id):
-        """
-        Retrieve information of a specific chart, table or map.
+    def chart_properties(self, chart_id: str) -> dict:
+        """Retrieve information of a specific chart, table or map.
 
-        Arguments:
-            chart_id (str): Chart, table or map to retreive information from.
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table, or map.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the information of the chart, table, or map.
         """
         chart_properties_response = r.get(
             url=self._CHARTS_URL + f"/{chart_id}",
@@ -207,14 +267,16 @@ class Datawrapper:
                 "Make sure you have the right id and authorization credentials (access_token)."
             )
 
-    def update_metadata(self, chart_id, properties):
-        """
-        Updates a chart's, table's or map's metadata.
-        Example: https://developer.datawrapper.de/docs/creating-a-chart-new#section-edit-colors
+    def update_metadata(self, chart_id: str, properties: dict) -> None:
+        """Update a chart, table, or map's metadata.
+        Example: https://developer.datawrapper.de/creating-a-chart-new#section-edit-colors
 
-        Arguments:
-            chart_id (str): Chart, table or map id.
-            properties (dict): A python dictionary of properties to update.
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table, or map.
+        properties : dict
+            A python dictionary of properties to update.
         """
         _header = self._auth_header
         _header["content-type"] = "application/json"
@@ -233,25 +295,32 @@ class Datawrapper:
 
     def update_chart(
         self,
-        chart_id,
-        title="",
-        theme="",
-        chart_type="",
-        language="",
-        folder_id="",
-        organization_id="",
-    ):
-        """
-        Updates a chart's title, theme, type, language, or location (folder/organization).
+        chart_id: str,
+        title: str = "",
+        theme: str = "",
+        chart_type: str = "",
+        language: str = "",
+        folder_id: str = "",
+        organization_id: str = "",
+    ) -> None:
+        """Updates a chart's title, theme, type, language, or location (folder/organization).
 
-        Arguments:
-            chart_id (str): Chart, table or map id to update.
-            title (str): New title.
-            theme (str): New theme.
-            chart_type (str): New chart type. See https://developer.datawrapper.de/docs/chart-types.
-            language (str): New language.
-            folder_id (str): New folder id (id of folder to move chart to).
-            organization_id (str): New organization id (id of organization to move chart to).
+        Parameters
+        ----------
+        chart_id : str
+            ID Of chart, table, or map.
+        title : str, optional
+            New title, by default ""
+        theme : str, optional
+            New theme, by default ""
+        chart_type : str, optional
+            New chart type. See https://developer.datawrapper.de/docs/chart-types, by default ""
+        language : str, optional
+            New language, by default ""
+        folder_id : str, optional
+            New folder's ID, by default ""
+        organization_id : str, optional
+            New organization's ID, by default ""
         """
         _header = self._auth_header
         _header["accept"] = "*/*"
@@ -281,16 +350,18 @@ class Datawrapper:
         else:
             print("Chart could not be updated at the time.")
 
-    def display_chart(self, chart_id):
-        """
-        Displays a datawrapper chart.
+    def display_chart(self, chart_id: str) -> IPython.display.HTML:
+        """Displays a datawrapper chart.
 
-        Argument:
-            chart_id (str): Chart, table or map id to display.
-        Returns:
-            IPython.display.HTML output with chart's iframe-embed code.
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table, or map.
 
-        Interactivity may be limited as it is assumed it is being displayed within a Jupyter notebook environment.
+        Returns
+        -------
+        IPython.display.HTML
+            HTML displaying the chart.
         """
         _chart_properties = self.chart_properties(chart_id)
         _iframe_code = _chart_properties["metadata"]["publish"]["embed-codes"][
@@ -299,13 +370,20 @@ class Datawrapper:
 
         return HTML(_iframe_code)
 
-    def get_iframe_code(self, chart_id, responsive=False):
-        """
-        Returns a chart's iframe code.
+    def get_iframe_code(self, chart_id: str, responsive: bool = False) -> str:
+        """Returns a chart, table, or map's iframe embed code.
 
-        Arguments:
-            chart_id (str): Chart, table or map id to retrieve iframe code for.
-            responsive (bool): Whether to return chart's typical iframe embed code or responsive iframe embed code.
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table, or map.
+        responsive : bool, optional
+            Whether to return a responsive iframe embed code., by default False
+
+        Returns
+        -------
+        str
+            iframe embed code.
         """
         _chart_properties = self.chart_properties(chart_id)
 
@@ -321,34 +399,49 @@ class Datawrapper:
 
     def export_chart(
         self,
-        chart_id,
-        unit="px",
-        mode="rgb",
-        width=None,
-        plain=False,
-        zoom=2,
-        scale=1,
-        border_width=20,
-        output="png",
-        filepath="./image.png",
-        display=False,
-    ):
-        """
-        Exports a datawrapper chart, table, or map.
-        See https://developer.datawrapper.de/docs/exporting-as-pdfsvg
+        chart_id: str,
+        unit: str = "px",
+        mode: str = "rgb",
+        width: int = None,
+        plain: bool = False,
+        zoom: int = 2,
+        scale: int = 1,
+        border_width: int = 20,
+        output: str = "png",
+        filepath: str = "./image.png",
+        display: bool = False,
+    ) -> None:
+        """Exports a chart, table, or map.
 
-        Arguments:
-            chart_id (str): Chart, table or map id to export.
-            units (str): One of px, mm, inch. Defines the unit in wich the borderwidth, height, and width will be measured in.
-            mode (str): One of rgb or cmyk. Which color mode the output should be in. Default is rgb.
-            width (int): Width of visualization. If not specified, it takes the chart width.
-            plain (bool): Defines if only the visualization should be exported (True), or if it should include header and footer as well (False).
-            zoom (int): Defines the multiplier for the png size.
-            scale (int): Defines the multiplier for the pdf size.
-            border_width (int): Margin around the visualization. E.g., a borderWidth of 20px gives the visualization a 20px margin.
-            output (str): one of png, pdf, or svg.
-            filepath (str): Name/filepath to save output in.
-            display (bool): Whether to display the exported image.
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table, or map.
+        unit : str, optional
+            One of px, mm, inch. Defines the unit in which the borderwidth, height, and width will be measured in, by default "px"
+        mode : str, optional
+            One of rgb or cmyk. Which color mode the output should be in, by default "rgb"
+        width : int, optional
+            Width of visualization. If not specified, it takes the chart width, by default None
+        plain : bool, optional
+            Defines if only the visualization should be exported (True), or if it should include header and footer as well (False), by default False
+        zoom : int, optional
+            Defines the multiplier for the png size, by default 2
+        scale : int, optional
+            Defines the multiplier for the pdf size, by default 1
+        border_width : int, optional
+            Margin arouund the visualization, by default 20
+        output : str, optional
+            One of png, pdf, or svg, by default "png"
+        filepath : str, optional
+            Name/filepath to save output in, by default "./image.png"
+        display : bool, optional
+            Whether to display the exported image as output in the notebook cell, by default False
+
+        Returns
+        -------
+        IPython.display.Image
+            If display is True, it returns an Image.
         """
         _export_url = f"{self._CHARTS_URL}/{chart_id}/export/{output}"
         _filepath = Path(filepath)
@@ -386,9 +479,13 @@ class Datawrapper:
         else:
             print("Couldn't export at this time.")
 
-    def get_folders(self):
-        """
-        Returns a list of folders of your Datawrapper account.
+    def get_folders(self) -> dict:
+        """Get a list of folders in your Datawrapper account.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the folders in your Datawrapper account and their information.
         """
         get_folders_response = r.get(
             url=self._FOLDERS_URL,
@@ -402,14 +499,17 @@ class Datawrapper:
                 "Couldn't retrieve folders in account. Make sure you have the rigth authorization credentials (access token)."
             )
 
-    def move_chart(self, chart_id, folder_id):
-        """
-        Moves a chart, table or map to a specified folder.
+    def move_chart(self, chart_id: str, folder_id: str) -> None:
+        """Moves a chart, table, or map to a specified folder.
 
-        Arguments:
-            chart_id (str): Chart, table or map to be moved.
-            folder_id (str): Id of folder to move chart, table or map to.
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table, or map.
+        folder_id : str
+            ID of folder to move visualization to.
         """
+
         _header = self._auth_header
         _header["content-type"] = "application/json"
 
@@ -426,10 +526,21 @@ class Datawrapper:
         else:
             print("Chart could not be moved at the moment.")
 
-    def delete_chart(self, chart_id):
+    def delete_chart(self, chart_id: str) -> r.Response.content:
+        """Deletes a specified chart, table or map.
+
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table, or map.
+
+        Returns
+        -------
+        r.Response.content
+            The content of the requests.delete
         """
-        Deletes a specified chart, table or map.
-        """
+
         delete_chart_response = r.delete(
             url=self._CHARTS_URL + f"/{chart_id}", headers=self._auth_header
         )
@@ -440,27 +551,36 @@ class Datawrapper:
 
     def get_charts(
         self,
-        user_id=None,
-        published="true",
-        search="",
-        order="DESC",
-        order_by="createdAt",
-        limit=25,
-    ):
-        """
-        Retrieves a list of charts by user.
+        user_id: str = "",
+        published: str = "true",
+        search: str = "",
+        order: str = "DESC",
+        order_by: str = "createdAt",
+        limit: int = 25,
+    ) -> list:
+        """Retrieves a list of charts by User
 
-        Arguments:
-            user_id (str): ID of the user to fetch charts for.
-            published (str): Flag to filter results by publish status
-            search (str): Search for charts with a specific title.
-            order (str): Result order (ascending or descending).
-            order_by (str): Attribute to order by. One of createdAt, email, id, or name.
-            limit: Maximum items to fetch. Useful for pagination.
+        Parameters
+        ----------
+        user_id : str, optional
+            ID of the user to fetch charts for, by default ""
+        published : str, optional
+            Flag to filter resutls by publish status, by default "true"
+        search : str, optional
+            Search for charts with a specific title, by default ""
+        order : str, optional
+            Result order (ascending or descending), by default "DESC"
+        order_by : str, optional
+            Attribute to order by. One of createdAt, email, id, or name, by default "createdAt"
+        limit : int, optional
+            Maximum items to fetch, by default 25
 
-        Returns:
-            A list of charts.
+        Returns
+        -------
+        list
+            List of charts.
         """
+
         _url = self._CHARTS_URL
         _header = self._auth_header
         _header["accept"] = "*/*"
