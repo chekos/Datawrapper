@@ -11,11 +11,12 @@ It lets you create and edit charts, update your account information and many mor
 
         dw.account_info()
 """
-import requests as r
-import os
 import json
-from IPython.display import HTML, Image
+import os
 from pathlib import Path
+
+import requests as r
+from IPython.display import HTML, Image
 
 
 class Datawrapper:
@@ -72,7 +73,7 @@ class Datawrapper:
         return r.put(
             url=f"{self._CHARTS_URL}/{chart_id}/data",
             headers=_header,
-            data=_data.encode('utf-8'),
+            data=_data.encode("utf-8"),
         )
 
     def refresh_data(self, chart_id):
@@ -90,7 +91,11 @@ class Datawrapper:
         )
 
     def create_chart(
-        self, title="New Chart", chart_type="d3-bars-stacked", data=None, folder_id=""
+        self,
+        title="New Chart",
+        chart_type="d3-bars-stacked",
+        data=None,
+        folder_id="",
     ):
         """
         Creates a new Datawrapper chart, table or map.
@@ -168,7 +173,8 @@ class Datawrapper:
             display (bool): Display the chart published as output in notebook cell.
         """
         publish_chart_response = r.post(
-            url=f"{self._PUBLISH_URL}/{chart_id}/publish", headers=self._auth_header,
+            url=f"{self._PUBLISH_URL}/{chart_id}/publish",
+            headers=self._auth_header,
         )
         if publish_chart_response.status_code <= 201:
             # print(f"Chart published at {publish_chart_info[]}")
@@ -191,7 +197,8 @@ class Datawrapper:
             chart_id (str): Chart, table or map to retreive information from.
         """
         chart_properties_response = r.get(
-            url=self._CHARTS_URL + f"/{chart_id}", headers=self._auth_header,
+            url=self._CHARTS_URL + f"/{chart_id}",
+            headers=self._auth_header,
         )
         if chart_properties_response.status_code == 200:
             return chart_properties_response.json()
@@ -303,13 +310,13 @@ class Datawrapper:
         _chart_properties = self.chart_properties(chart_id)
 
         if responsive:
-            iframe_code = _chart_properties["metadata"]["publish"]["embed-codes"][
-                "embed-method-responsive"
-            ]
+            iframe_code = _chart_properties["metadata"]["publish"][
+                "embed-codes"
+            ]["embed-method-responsive"]
         else:
-            iframe_code = _chart_properties["metadata"]["publish"]["embed-codes"][
-                "embed-method-iframe"
-            ]
+            iframe_code = _chart_properties["metadata"]["publish"][
+                "embed-codes"
+            ]["embed-method-iframe"]
         return iframe_code
 
     def export_chart(
@@ -365,7 +372,6 @@ class Datawrapper:
             url=_export_url, headers=_header, params=querystring
         )
 
-
         if export_chart_response.status_code == 200:
             with open(_filepath, "wb") as response:
                 response.write(export_chart_response.content)
@@ -380,12 +386,14 @@ class Datawrapper:
         else:
             print("Couldn't export at this time.")
 
-
     def get_folders(self):
         """
         Returns a list of folders of your Datawrapper account.
         """
-        get_folders_response = r.get(url=self._FOLDERS_URL, headers=self._auth_header,)
+        get_folders_response = r.get(
+            url=self._FOLDERS_URL,
+            headers=self._auth_header,
+        )
 
         if get_folders_response.status_code == 200:
             return get_folders_response.json()
