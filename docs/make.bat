@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=datawrapper
+set SPHINXPROJ=pypums
 
 if "%1" == "" goto help
 

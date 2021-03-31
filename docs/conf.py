@@ -20,9 +20,10 @@
 import os
 import sys
 
+import datawrapper
+
 sys.path.insert(0, os.path.abspath(".."))
 
-import datawrapper
 
 # -- General configuration ---------------------------------------------
 
@@ -32,8 +33,17 @@ import datawrapper
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ["sphinx.ext.autodoc", "sphinx.ext.viewcode", "sphinx.ext.napoleon", "sphinx_copybutton"]
-
+extensions = [
+    "myst_nb",
+    "sphinx.ext.autosectionlabel",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.autosummary",
+    "sphinxcontrib.bibtex",
+    "sphinx_tabs.tabs",
+]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
@@ -41,15 +51,15 @@ templates_path = ["_templates"]
 # You can specify multiple suffix as a list of string:
 #
 # source_suffix = ['.rst', '.md']
-source_suffix = ".rst"
+source_suffix = [".rst", ".md"]
 
 # The master toctree document.
 master_doc = "index"
 
 # General information about the project.
-project = "datawrapper"
-copyright = "2019, Sergio Sanchez"
-author = "Sergio Sanchez"
+project = "Datawrapper"
+copyright = "2021, Sergio Sánchez Zavala"
+author = "Sergio Sánchez Zavala"
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -65,7 +75,7 @@ release = datawrapper.__version__
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -84,23 +94,37 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
-
-# Theme options are theme-specific and customize the look and feel of a
-# theme further.  For a list of options available for each theme, see the
-# documentation.
-#
-# html_theme_options = {}
-
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["_static"]
+html_static_path = ["static"]
 
-# Adapted from Altair's docs
-html_short_title = "datawrapper"
-html_logo = "_static/datawrapper_logo_light_small.png"
+# Probando el theme de MyST
+html_theme = "sphinx_book_theme"
+html_logo = "static/datawrapper_logo_light.png"
+html_favicon = "static/datawrapper_logo_light_small.png"
+html_title = "Datawrapper"
+html_theme_options = {
+    "github_url": "https://github.com/chekos/datawrapper",
+    "repository_url": "https://github.com/chekos/datawrapper",
+    "expand_sections": ["examples/index"],
+    "path_to_docs": "docs",
+    "use_issues_button": True,
+    "use_edit_page_button": True,
+    "launch_buttons": {
+        "binderhub_url": "https://mybinder.org/v2/gh/chekos/datawrapper/v0.4.5",
+        "thebelab": True,
+    },
+}
 
+
+# from altair docs
+autodoc_default_flags = ["members", "inherited-members"]
+
+autodoc_member_order = "groupwise"
+
+# generate autosummary even if no references
+autosummary_generate = True
 
 # -- Options for HTMLHelp output ---------------------------------------
 
@@ -133,9 +157,9 @@ latex_documents = [
         master_doc,
         "datawrapper.tex",
         "datawrapper Documentation",
-        "Sergio Sanchez",
+        "Sergio Sánchez Zavala",
         "manual",
-    ),
+    )
 ]
 
 
@@ -143,7 +167,9 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc, "datawrapper", "datawrapper Documentation", [author], 1)]
+man_pages = [
+    (master_doc, "datawrapper", "datawrapper Documentation", [author], 1)
+]
 
 
 # -- Options for Texinfo output ----------------------------------------
@@ -160,5 +186,9 @@ texinfo_documents = [
         "datawrapper",
         "One line description of project.",
         "Miscellaneous",
-    ),
+    )
 ]
+
+
+# Jupyter notebooks execution
+jupyter_execute_notebooks = "off"
