@@ -378,9 +378,9 @@ class Datawrapper:
             HTML displaying the chart.
         """
         _chart_properties = self.chart_properties(chart_id)
-        _iframe_code = _chart_properties["metadata"]["publish"]["embed-codes"][
+        _iframe_code = _chart_properties["metadata"]["publish"]["embed-codes"][  # type: ignore
             "embed-method-iframe"
-        ]  # type: ignore
+        ]
 
         return HTML(_iframe_code)
 
@@ -404,17 +404,17 @@ class Datawrapper:
         _chart_properties = self.chart_properties(chart_id)
 
         if responsive:
-            iframe_code = _chart_properties["metadata"]["publish"][
+            iframe_code = _chart_properties["metadata"]["publish"][  # type: ignore
                 "embed-codes"
             ][
                 "embed-method-responsive"
-            ]  # type: ignore
+            ]
         else:
-            iframe_code = _chart_properties["metadata"]["publish"][
+            iframe_code = _chart_properties["metadata"]["publish"][  # type: ignore
                 "embed-codes"
             ][
                 "embed-method-iframe"
-            ]  # type: ignore
+            ]
         return iframe_code
 
     def export_chart(
