@@ -11,7 +11,7 @@ It lets you create and edit charts, update your account information and many mor
 
         dw.account_info()
 """
-from typing import Union
+from typing import Dict, List, Union
 
 import json
 import os
@@ -53,7 +53,7 @@ class Datawrapper:
         self._access_token = access_token
         self._auth_header = {"Authorization": f"Bearer {access_token}"}
 
-    def account_info(self) -> dict:
+    def account_info(self) -> Dict:
         """Access your account information.
 
         Returns
@@ -70,6 +70,7 @@ class Datawrapper:
             print(
                 "Couldn't find account. Make sure your credentials (access_code) are correct."
             )
+            return None
 
     def add_data(self, chart_id: str, data: pd.DataFrame) -> r.Response:
         """Add data to a specified chart.
@@ -125,7 +126,7 @@ class Datawrapper:
         chart_type: str = "d3-bars-stacked",
         data: Union[pd.DataFrame, None] = None,
         folder_id: str = "",
-    ) -> dict:
+    ) -> Dict:
         """Creates a new Datawrapper chart, table or map.
         You can pass a pandas DataFrame as a `data` argument to upload data.
         Returns the created chart's information.
@@ -243,7 +244,7 @@ class Datawrapper:
         else:
             print("Chart couldn't be published at this time.")
 
-    def chart_properties(self, chart_id: str) -> dict:
+    def chart_properties(self, chart_id: str) -> Dict:
         """Retrieve information of a specific chart, table or map.
 
         Parameters
@@ -479,7 +480,7 @@ class Datawrapper:
         else:
             print("Couldn't export at this time.")
 
-    def get_folders(self) -> dict:
+    def get_folders(self) -> Dict:
         """Get a list of folders in your Datawrapper account.
 
         Returns
@@ -557,7 +558,7 @@ class Datawrapper:
         order: str = "DESC",
         order_by: str = "createdAt",
         limit: int = 25,
-    ) -> list:
+    ) -> List:
         """Retrieves a list of charts by User
 
         Parameters
