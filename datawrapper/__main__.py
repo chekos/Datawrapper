@@ -380,7 +380,7 @@ class Datawrapper:
         _chart_properties = self.chart_properties(chart_id)
         _iframe_code = _chart_properties["metadata"]["publish"]["embed-codes"][
             "embed-method-iframe"
-        ]
+        ]  # type: ignore
 
         return HTML(_iframe_code)
 
@@ -406,11 +406,15 @@ class Datawrapper:
         if responsive:
             iframe_code = _chart_properties["metadata"]["publish"][
                 "embed-codes"
-            ]["embed-method-responsive"]
+            ][
+                "embed-method-responsive"
+            ]  # type: ignore
         else:
             iframe_code = _chart_properties["metadata"]["publish"][
                 "embed-codes"
-            ]["embed-method-iframe"]
+            ][
+                "embed-method-iframe"
+            ]  # type: ignore
         return iframe_code
 
     def export_chart(
@@ -478,8 +482,8 @@ class Datawrapper:
         _header["accept"] = "*/*"
 
         export_chart_response = r.get(
-            url=_export_url, headers=_header, params=querystring
-        )  # type: ignore
+            url=_export_url, headers=_header, params=querystring  # type: ignore
+        )
 
         if export_chart_response.status_code == 200:
             with open(_filepath, "wb") as response:
@@ -545,7 +549,7 @@ class Datawrapper:
             print("Chart could not be moved at the moment.")
         return None
 
-    def delete_chart(self, chart_id: str) -> r.Response.content:
+    def delete_chart(self, chart_id: str) -> r.Response.content:  # type: ignore
         """Deletes a specified chart, table or map.
 
 
@@ -621,7 +625,7 @@ class Datawrapper:
         get_charts_response = r.get(url=_url, headers=_header, params=_query)
 
         if get_charts_response.status_code == 200:
-            return get_charts_response.json()["list"]
+            return get_charts_response.json()["list"]  # type: ignore
         else:
             print("Could not retrieve charts at this moment.")
             return None
