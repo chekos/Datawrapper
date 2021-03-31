@@ -101,8 +101,9 @@ html_static_path = ["static"]
 
 # Probando el theme de MyST
 html_theme = "sphinx_book_theme"
-html_logo = "static/tacosdedatos-utils.png"
-html_title = ""
+html_logo = "static/datawrapper_logo_light.png"
+html_favicon = "static/datawrapper_logo_light_small.png"
+html_title = "Datawrapper"
 html_theme_options = {
     "github_url": "https://github.com/chekos/datawrapper",
     "repository_url": "https://github.com/chekos/datawrapper",
@@ -187,3 +188,7 @@ texinfo_documents = [
         "Miscellaneous",
     )
 ]
+
+
+# Jupyter notebooks execution
+jupyter_execute_notebooks = "off"
