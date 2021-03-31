@@ -17,5 +17,5 @@ Modules
    :toctree: generated/toplevel/
    :nosignatures:
 
-   surveys
+   __main__
    
