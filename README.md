@@ -44,26 +44,6 @@ or install with `Poetry`
 poetry add datawrapper
 ```
 
-Then you can run
-
-```bash
-datawrapper --help
-```
-
-```bash
-datawrapper --name Roman
-```
-
-or if installed with `Poetry`:
-
-```bash
-poetry run datawrapper --help
-```
-
-```bash
-poetry run datawrapper --name Roman
-```
-
 ### Makefile usage
 
 [`Makefile`](https://github.com/chekos/datawrapper/blob/master/Makefile) contains many functions for fast assembling and convenient work.
