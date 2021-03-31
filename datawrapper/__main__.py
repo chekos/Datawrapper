@@ -11,7 +11,7 @@ It lets you create and edit charts, update your account information and many mor
 
         dw.account_info()
 """
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, Iterable, List, Union
 
 import json
 import os
@@ -53,7 +53,7 @@ class Datawrapper:
         self._access_token = access_token
         self._auth_header = {"Authorization": f"Bearer {access_token}"}
 
-    def account_info(self) -> Union[Dict[Any, Any], None]:
+    def account_info(self) -> Union[Dict[Any, Any], None, Any]:
         """Access your account information.
 
         Returns
@@ -126,7 +126,7 @@ class Datawrapper:
         chart_type: str = "d3-bars-stacked",
         data: Union[pd.DataFrame, None] = None,
         folder_id: str = "",
-    ) -> Union[Dict[Any, Any], None]:
+    ) -> Union[Dict[Any, Any], None, Any]:
         """Creates a new Datawrapper chart, table or map.
         You can pass a pandas DataFrame as a `data` argument to upload data.
         Returns the created chart's information.
@@ -215,6 +215,7 @@ class Datawrapper:
             print("Chart updated!")
         else:
             print("Couldn't update chart.")
+        return None
 
     def publish_chart(
         self, chart_id: str, display: bool = True
@@ -245,8 +246,11 @@ class Datawrapper:
                 return HTML(iframe_code)
         else:
             print("Chart couldn't be published at this time.")
+            return None
 
-    def chart_properties(self, chart_id: str) -> Union[Dict[Any, Any], None]:
+    def chart_properties(
+        self, chart_id: str
+    ) -> Union[Dict[Any, Any], None, Any, Iterable]:
         """Retrieve information of a specific chart, table or map.
 
         Parameters
@@ -269,6 +273,7 @@ class Datawrapper:
             print(
                 "Make sure you have the right id and authorization credentials (access_token)."
             )
+            return None
 
     def update_metadata(
         self, chart_id: str, properties: Dict[Any, Any]
@@ -297,6 +302,7 @@ class Datawrapper:
             # return update_properties_response.json()
         else:
             print("Chart could not be updated.")
+        return None
 
     def update_chart(
         self,
@@ -354,6 +360,7 @@ class Datawrapper:
             return self.publish_chart(chart_id)
         else:
             print("Chart could not be updated at the time.")
+            return None
 
     def display_chart(self, chart_id: str) -> IPython.display.HTML:
         """Displays a datawrapper chart.
@@ -375,7 +382,9 @@ class Datawrapper:
 
         return HTML(_iframe_code)
 
-    def get_iframe_code(self, chart_id: str, responsive: bool = False) -> str:
+    def get_iframe_code(
+        self, chart_id: str, responsive: bool = False
+    ) -> Union[str, Any]:
         """Returns a chart, table, or map's iframe embed code.
 
         Parameters
@@ -407,7 +416,7 @@ class Datawrapper:
         chart_id: str,
         unit: str = "px",
         mode: str = "rgb",
-        width: int = None,
+        width: int = 100,
         plain: bool = False,
         zoom: int = 2,
         scale: int = 1,
@@ -452,12 +461,12 @@ class Datawrapper:
         _filepath = Path(filepath)
         _filepath = _filepath.with_suffix(f".{output}")
 
-        plain = "true" if plain else "false"
+        _plain = "true" if plain else "false"
         querystring = {
             "unit": unit,
             "mode": mode,
             "width": width,
-            "plain": plain,
+            "plain": _plain,
             "zoom": zoom,
             "scale": scale,
             "borderWidth": border_width,
@@ -483,8 +492,9 @@ class Datawrapper:
             print("You couldn't be authenticated.")
         else:
             print("Couldn't export at this time.")
+        return None
 
-    def get_folders(self) -> Union[Dict[Any, Any], None]:
+    def get_folders(self) -> Union[Dict[Any, Any], None, Any]:
         """Get a list of folders in your Datawrapper account.
 
         Returns
@@ -503,6 +513,7 @@ class Datawrapper:
             print(
                 "Couldn't retrieve folders in account. Make sure you have the rigth authorization credentials (access token)."
             )
+            return None
 
     def move_chart(self, chart_id: str, folder_id: str) -> Union[Any, None]:
         """Moves a chart, table, or map to a specified folder.
@@ -530,6 +541,7 @@ class Datawrapper:
             print(f"Chart moved to folder {folder_id}")
         else:
             print("Chart could not be moved at the moment.")
+        return None
 
     def delete_chart(self, chart_id: str) -> r.Response.content:
         """Deletes a specified chart, table or map.
@@ -553,6 +565,7 @@ class Datawrapper:
             return delete_chart_response.content
         else:
             print(f"Successfully deleted chart with id {chart_id}")
+            return None
 
     def get_charts(
         self,
@@ -609,3 +622,4 @@ class Datawrapper:
             return get_charts_response.json()["list"]
         else:
             print("Could not retrieve charts at this moment.")
+            return None
