@@ -244,13 +244,15 @@ class Datawrapper:
                 # iframe_width = publish_chart_info['data']['metadata']['publish']['embed-width']
                 # iframe_height = publish_chart_info['data']['metadata']['publish']['embed-height']
                 return HTML(iframe_code)
+            else:
+                return None
         else:
             print("Chart couldn't be published at this time.")
             return None
 
     def chart_properties(
         self, chart_id: str
-    ) -> Union[Dict[Any, Any], None, Any, Iterable]:
+    ) -> Union[Dict[Any, Any], None, Any, Iterable[Any]]:
         """Retrieve information of a specific chart, table or map.
 
         Parameters
@@ -477,7 +479,7 @@ class Datawrapper:
 
         export_chart_response = r.get(
             url=_export_url, headers=_header, params=querystring
-        )
+        )  # type: ignore
 
         if export_chart_response.status_code == 200:
             with open(_filepath, "wb") as response:
@@ -575,7 +577,7 @@ class Datawrapper:
         order: str = "DESC",
         order_by: str = "createdAt",
         limit: int = 25,
-    ) -> List:
+    ) -> Union[None, List[Any]]:
         """Retrieves a list of charts by User
 
         Parameters
@@ -614,7 +616,7 @@ class Datawrapper:
         if order_by:
             _query["orderBy"] = order_by
         if limit:
-            _query["limit"] = limit
+            _query["limit"] = str(limit)
 
         get_charts_response = r.get(url=_url, headers=_header, params=_query)
 
