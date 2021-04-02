@@ -155,7 +155,7 @@ python-versions = ">=3.6,<4.0"
 
 [[package]]
 name = "decorator"
-version = "4.4.2"
+version = "5.0.0"
 description = "Decorators for Humans"
 category = "main"
 optional = false
@@ -910,8 +910,8 @@ darglint = [
     {file = "darglint-1.7.0.tar.gz", hash = "sha256:e49b36ac9b4272a9a988b508d23e9f31c29f80a5fc030f1023b46740b5deab31"},
 ]
 decorator = [
-    {file = "decorator-4.4.2-py2.py3-none-any.whl", hash = "sha256:41fa54c2a0cc4ba648be4fd43cff00aedf5b9465c9bf18d64325bc225f08f760"},
-    {file = "decorator-4.4.2.tar.gz", hash = "sha256:e3a62f0520172440ca0dcc823749319382e377f37f140a0b99ef45fecb84bfe7"},
+    {file = "decorator-5.0.0-py2.py3-none-any.whl", hash = "sha256:fcb017be35f10951958e0871fb70e553db9cac018e303d748b63fcd60eb70149"},
+    {file = "decorator-5.0.0.tar.gz", hash = "sha256:11f6e1e1ba3e7ffbfd9362da692e65791d6367bfd68ebf07064dd29a6e30f137"},
 ]
 distlib = [
     {file = "distlib-0.3.1-py2.py3-none-any.whl", hash = "sha256:8c09de2c67b3e7deef7184574fc060ab8a793e7adbb183d942c389c8b13c52fb"},
