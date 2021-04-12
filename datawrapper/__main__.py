@@ -157,6 +157,10 @@ class Datawrapper:
             url=self._CHARTS_URL, headers=_header, data=json.dumps(_data)
         )
 
+        if chart_type == "d3-maps-choropleth" or chart_type == "d3-maps-symbols" or chart_type == "locator-map":
+            print("\nNOTE: Maps need a valid basemap, set in properties -> visualize")
+            print("Full list of valid maps can be retrieved with\n\ncurl --request GET --url https://api.datawrapper.de/plugin/basemap\n")
+
         if new_chart_response.status_code <= 201:
             chart_info = new_chart_response.json()
             print(f"New chart {chart_info['type']} created!")
@@ -214,6 +218,7 @@ class Datawrapper:
         if update_description_response.status_code == 200:
             print("Chart updated!")
         else:
+            print("Error. Status code: ", update_description_response.status_code)
             print("Couldn't update chart.")
         return None
 
@@ -303,6 +308,10 @@ class Datawrapper:
             print("Chart's metadata updated!")
             # return update_properties_response.json()
         else:
+            print("Error. Status code: ", update_properties_response.status_code)
+            x = update_properties_response.text
+            y = json.loads(x)
+            print("Message: ", y["message"])
             print("Chart could not be updated.")
         return None
 
