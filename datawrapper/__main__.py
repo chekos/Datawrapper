@@ -281,7 +281,7 @@ class Datawrapper:
         self, chart_id: str, properties: Dict[Any, Any]
     ) -> Union[Any, None]:
         """Update a chart, table, or map's metadata.
-        Example: https://developer.datawrapper.de/creating-a-chart-new#section-edit-colors
+        Example: https://developer.datawrapper.de/docs/creating-a-chart-new#edit-colors
 
         Parameters
         ----------
