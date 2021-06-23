@@ -154,7 +154,7 @@ class Datawrapper:
         _data = {"title": title, "type": chart_type}
 
         if folder_id:
-            _data['folderId'] = folder_id
+            _data["folderId"] = folder_id
 
         new_chart_response = r.post(
             url=self._CHARTS_URL, headers=_header, data=json.dumps(_data)
