@@ -151,7 +151,10 @@ class Datawrapper:
         _header = self._auth_header
         _header["content-type"] = "application/json"
 
-        _data = {"title": title, "type": chart_type, "folderId": folder_id}
+        _data = {"title": title, "type": chart_type}
+
+        if folder_id:
+            _data["folderId"] = folder_id
 
         new_chart_response = r.post(
             url=self._CHARTS_URL, headers=_header, data=json.dumps(_data)
@@ -174,7 +177,7 @@ class Datawrapper:
             print(f"New chart {chart_info['type']} created!")
         else:
             print(
-                "Chart could not be created, check your authorization credentials (access token)"
+                f"Chart could not be created, check your authorization credentials (access token){', and that the folder_id is valid (i.e exists, and your account has access to it)' if folder_id else ''}"
             )
 
         if data is not None:
