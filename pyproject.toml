@@ -33,7 +33,7 @@ classifiers = [  # Update me
 
 [tool.poetry.dependencies]
 python = "^3.7.1"
-importlib_metadata = {version = ">=1.6,<4.0", python = "<3.8"}
+importlib_metadata = {version = ">=1.6,<5.0", python = "<3.8"}
 rich = ">=9.8.2,<11.0.0"
 requests = "^2.25.1"
 ipython = "^7.22.0"
