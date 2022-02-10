@@ -11,7 +11,7 @@ It lets you create and edit charts, update your account information and many mor
 
         dw.account_info()
 """
-from typing import Any, Dict, Iterable, List, Union
+from typing import Any, Dict, Iterable, List, Optional, Union
 
 import json
 import os
@@ -126,7 +126,7 @@ class Datawrapper:
         chart_type: str = "d3-bars-stacked",
         data: Union[pd.DataFrame, None] = None,
         folder_id: str = "",
-        metadata: Dict[Any, Any] = None,
+        metadata: Optional[Dict[Any, Any]] = None,
     ) -> Union[Dict[Any, Any], None, Any]:
         """Creates a new Datawrapper chart, table or map.
         You can pass a pandas DataFrame as a `data` argument to upload data.
@@ -159,7 +159,7 @@ class Datawrapper:
         if folder_id:
             _data["folderId"] = folder_id
         if metadata:
-            _data["metadata"] = metadata
+            _data["metadata"] = metadata  # type: ignore
 
         new_chart_response = r.post(
             url=self._CHARTS_URL, headers=_header, data=json.dumps(_data)
