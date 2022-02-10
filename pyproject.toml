@@ -6,7 +6,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "datawrapper"
-version = "0.4.6"
+version = "0.4.7"
 description = "A light-weight python wrapper for the Datawrapper API (v3). While it is not developed by Datawrapper officially, you can use it with your API credentials from datawrapper.de"
 readme = "README.md"
 authors = [
