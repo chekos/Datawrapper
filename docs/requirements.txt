@@ -3,4 +3,3 @@ sphinx-tabs==2.1.0
 sphinxcontrib-bibtex==1.0.0
 sphinx-book-theme==0.0.42
 importlib_metadata==1.6.1
-datawrapper
