@@ -12,4 +12,4 @@ try:
 except PackageNotFoundError:  # pragma: no cover
     __version__ = "unknown"
 
-from .__main__ import Datawrapper
+from datawrapper.datawrapper import Datawrapper

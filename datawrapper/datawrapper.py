@@ -19,7 +19,7 @@ from pathlib import Path
 
 import IPython
 import pandas as pd
-import requests as r
+import httpx as r
 from IPython.display import HTML, Image
 
 
@@ -170,9 +170,7 @@ class Datawrapper:
             or chart_type == "d3-maps-symbols"
             or chart_type == "locator-map"
         ):
-            print(
-                "\nNOTE: Maps need a valid basemap, set in properties -> visualize"
-            )
+            print("\nNOTE: Maps need a valid basemap, set in properties -> visualize")
             print(
                 "Full list of valid maps can be retrieved with\n\ncurl --request GET --url https://api.datawrapper.de/plugin/basemap\n"
             )
@@ -234,15 +232,11 @@ class Datawrapper:
         if update_description_response.status_code == 200:
             print("Chart updated!")
         else:
-            print(
-                "Error. Status code: ", update_description_response.status_code
-            )
+            print("Error. Status code: ", update_description_response.status_code)
             print("Couldn't update chart.")
         return None
 
-    def publish_chart(
-        self, chart_id: str, display: bool = True
-    ) -> Union[Any, None]:
+    def publish_chart(self, chart_id: str, display: bool = True) -> Union[Any, None]:
         """Publishes a chart, table or map.
 
         Parameters
@@ -326,9 +320,7 @@ class Datawrapper:
             print("Chart's metadata updated!")
             # return update_properties_response.json()
         else:
-            print(
-                "Error. Status code: ", update_properties_response.status_code
-            )
+            print("Error. Status code: ", update_properties_response.status_code)
             x = update_properties_response.text
             y = json.loads(x)
             print("Message: ", y["message"])
@@ -435,15 +427,11 @@ class Datawrapper:
         if responsive:
             iframe_code = _chart_properties["metadata"]["publish"][  # type: ignore
                 "embed-codes"
-            ][
-                "embed-method-responsive"
-            ]
+            ]["embed-method-responsive"]
         else:
             iframe_code = _chart_properties["metadata"]["publish"][  # type: ignore
                 "embed-codes"
-            ][
-                "embed-method-iframe"
-            ]
+            ]["embed-method-iframe"]
         return iframe_code
 
     def export_chart(
@@ -511,7 +499,10 @@ class Datawrapper:
         _header["accept"] = "*/*"
 
         export_chart_response = r.get(
-            url=_export_url, headers=_header, params=querystring  # type: ignore
+            url=_export_url,
+            headers=_header,
+            params=querystring,
+            timeout=None,
         )
 
         if export_chart_response.status_code == 200:
