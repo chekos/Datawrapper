@@ -65,7 +65,9 @@ class Datawrapper:
             A dictionary containing your account information.
         """
         account_info_response = httpx.get(
-            url=self._BASE_URL + "/v3/me", headers=self._auth_header, timeout = None,
+            url=self._BASE_URL + "/v3/me",
+            headers=self._auth_header,
+            timeout=None,
         )
         if account_info_response.status_code == 200:
             return account_info_response.json()
@@ -288,7 +290,7 @@ class Datawrapper:
         chart_properties_response = httpx.get(
             url=self._CHARTS_URL + f"/{chart_id}",
             headers=self._auth_header,
-            timeout = None
+            timeout=None,
         )
         if chart_properties_response.status_code == 200:
             return chart_properties_response.json()
@@ -535,7 +537,7 @@ class Datawrapper:
         get_folders_response = httpx.get(
             url=self._FOLDERS_URL,
             headers=self._auth_header,
-            timeout = None,
+            timeout=None,
         )
 
         if get_folders_response.status_code == 200:
@@ -652,7 +654,9 @@ class Datawrapper:
         if limit:
             _query["limit"] = str(limit)
 
-        get_charts_response = httpx.get(url=_url, headers=_header, params=_query, timeout = None)
+        get_charts_response = httpx.get(
+            url=_url, headers=_header, params=_query, timeout=None
+        )
 
         if get_charts_response.status_code == 200:
             return get_charts_response.json()["list"]  # type: ignore
