@@ -21,6 +21,9 @@ import IPython
 import pandas as pd
 import httpx as r
 from IPython.display import HTML, Image
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class Datawrapper:
