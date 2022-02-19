@@ -32,7 +32,7 @@ setup(
     version=VERSION,
     packages=["datawrapper"],
     install_requires=[
-        "ipython>=7.22.0",
+        "ipython>=7.16.0",
         "pandas>=1.1.0",
         "httpx>=0.22.0",
         "rich>=11.0.0",
