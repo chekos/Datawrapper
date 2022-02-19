@@ -19,7 +19,7 @@ from pathlib import Path
 
 import IPython
 import pandas as pd
-import httpx as r
+import httpx
 from IPython.display import HTML, Image
 from dotenv import load_dotenv
 
@@ -64,8 +64,8 @@ class Datawrapper:
         dict
             A dictionary containing your account information.
         """
-        account_info_response = r.get(
-            url=self._BASE_URL + "/v3/me", headers=self._auth_header
+        account_info_response = httpx.get(
+            url=self._BASE_URL + "/v3/me", headers=self._auth_header, timeout = None,
         )
         if account_info_response.status_code == 200:
             return account_info_response.json()
@@ -75,7 +75,7 @@ class Datawrapper:
             )
             return None
 
-    def add_data(self, chart_id: str, data: pd.DataFrame) -> r.Response:
+    def add_data(self, chart_id: str, data: pd.DataFrame) -> httpx.Response:
         """Add data to a specified chart.
 
         Parameters
@@ -96,13 +96,13 @@ class Datawrapper:
 
         _data = data.to_csv(index=False, encoding="utf-8")
 
-        return r.put(
+        return httpx.put(
             url=f"{self._CHARTS_URL}/{chart_id}/data",
             headers=_header,
             data=_data.encode("utf-8"),
         )
 
-    def refresh_data(self, chart_id: str) -> r.Response:
+    def refresh_data(self, chart_id: str) -> httpx.Response:
         """Fetch configured external data and add it to the chart.
 
         Parameters
@@ -118,7 +118,7 @@ class Datawrapper:
         _header = self._auth_header
         _header["accept"] = "*/*"
 
-        return r.post(
+        return httpx.post(
             url=f"{self._CHARTS_URL}/{chart_id}/data/refresh",
             headers=_header,
         )
@@ -164,7 +164,7 @@ class Datawrapper:
         if metadata:
             _data["metadata"] = metadata  # type: ignore
 
-        new_chart_response = r.post(
+        new_chart_response = httpx.post(
             url=self._CHARTS_URL, headers=_header, data=json.dumps(_data)
         )
 
@@ -227,7 +227,7 @@ class Datawrapper:
                 }
             }
         }
-        update_description_response = r.patch(
+        update_description_response = httpx.patch(
             url=self._CHARTS_URL + f"/{chart_id}",
             headers=_header,
             data=json.dumps(_data),
@@ -250,7 +250,7 @@ class Datawrapper:
             Display the published chart as output in notebook cell, by default True
         """
 
-        publish_chart_response = r.post(
+        publish_chart_response = httpx.post(
             url=f"{self._PUBLISH_URL}/{chart_id}/publish",
             headers=self._auth_header,
         )
@@ -285,9 +285,10 @@ class Datawrapper:
         dict
             A dictionary containing the information of the chart, table, or map.
         """
-        chart_properties_response = r.get(
+        chart_properties_response = httpx.get(
             url=self._CHARTS_URL + f"/{chart_id}",
             headers=self._auth_header,
+            timeout = None
         )
         if chart_properties_response.status_code == 200:
             return chart_properties_response.json()
@@ -314,7 +315,7 @@ class Datawrapper:
         _header["content-type"] = "application/json"
         _data = {"metadata": properties}
 
-        update_properties_response = r.patch(
+        update_properties_response = httpx.patch(
             url=self._CHARTS_URL + f"/{chart_id}",
             headers=_header,
             data=json.dumps(_data),
@@ -376,7 +377,7 @@ class Datawrapper:
         if organization_id:
             _query["organizationId"] = organization_id
 
-        update_chart_response = r.patch(
+        update_chart_response = httpx.patch(
             url=self._CHARTS_URL + f"/{chart_id}",
             headers=_header,
             data=json.dumps(_query),
@@ -501,7 +502,7 @@ class Datawrapper:
         _header = self._auth_header
         _header["accept"] = "*/*"
 
-        export_chart_response = r.get(
+        export_chart_response = httpx.get(
             url=_export_url,
             headers=_header,
             params=querystring,
@@ -531,9 +532,10 @@ class Datawrapper:
         dict
             A dictionary containing the folders in your Datawrapper account and their information.
         """
-        get_folders_response = r.get(
+        get_folders_response = httpx.get(
             url=self._FOLDERS_URL,
             headers=self._auth_header,
+            timeout = None,
         )
 
         if get_folders_response.status_code == 200:
@@ -560,7 +562,7 @@ class Datawrapper:
 
         _data = {"folderId": folder_id}
 
-        move_chart_response = r.patch(
+        move_chart_response = httpx.patch(
             url=self._CHARTS_URL + f"/{chart_id}",
             headers=_header,
             data=json.dumps(_data),
@@ -572,7 +574,7 @@ class Datawrapper:
             print("Chart could not be moved at the moment.")
         return None
 
-    def delete_chart(self, chart_id: str) -> r.Response.content:  # type: ignore
+    def delete_chart(self, chart_id: str) -> httpx.Response.content:  # type: ignore
         """Deletes a specified chart, table or map.
 
 
@@ -583,11 +585,11 @@ class Datawrapper:
 
         Returns
         -------
-        r.Response.content
+        httpx.Response.content
             The content of the requests.delete
         """
 
-        delete_chart_response = r.delete(
+        delete_chart_response = httpx.delete(
             url=self._CHARTS_URL + f"/{chart_id}", headers=self._auth_header
         )
         if delete_chart_response.content:
@@ -650,7 +652,7 @@ class Datawrapper:
         if limit:
             _query["limit"] = str(limit)
 
-        get_charts_response = r.get(url=_url, headers=_header, params=_query)
+        get_charts_response = httpx.get(url=_url, headers=_header, params=_query, timeout = None)
 
         if get_charts_response.status_code == 200:
             return get_charts_response.json()["list"]  # type: ignore
