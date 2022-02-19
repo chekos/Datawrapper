@@ -3,6 +3,10 @@ import os
 
 VERSION = "1.0rc1"
 
+test_requirements = ["pytest", "pytest-dotenv"]
+dev_requirements = ["black", "isort", "python-dotenv"]
+dev_requirements.extend(test_requirements)
+
 
 def get_long_description():
     with open(
@@ -27,7 +31,14 @@ setup(
     license="Apache License, Version 2.0",
     version=VERSION,
     packages=["datawrapper"],
-    install_requires=["ipython>=7.22.0","pandas>=1.1.0","httpx>=0.22.0","rich>=11.0.0","typer>=0.4.0"],
-    extras_require={"test": ["pytest"], "dev": ["black", "isort", "pytest", "ipykernel"]},
+    install_requires=[
+        "ipython>=7.22.0",
+        "pandas>=1.1.0",
+        "httpx>=0.22.0",
+        "rich>=11.0.0",
+        "typer>=0.4.0",
+        "python-dotenv>=0.19.2",
+    ],
+    extras_require={"test": test_requirements, "dev": dev_requirements},
     python_requires=">=3.6",
 )
