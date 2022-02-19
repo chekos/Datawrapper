@@ -1,55 +1,46 @@
-name: Publish package to PyPI
+name: Publish Python Package
 
-on: 
+on:
   release:
     types: [published]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.9"]
-
+        python-version: [3.6, 3.7, 3.8, 3.9]
     steps:
-    - uses: actions/checkout@v2.4.0
+    - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2.3.2
+      uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-
-    - name: Install poetry
-      run: make download-poetry
-
-    - name: Set up cache
-      uses: actions/cache@v2.1.7
-      with:
-        path: .venv
-        key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
+        cache: pip
     - name: Install dependencies
       run: |
-        source "$HOME/.poetry/env"
-        poetry config virtualenvs.in-project true
-        poetry install
-
-    - name: Run safety checks
-      run: |
-        source "$HOME/.poetry/env"
-        STRICT=1 make check-safety
-
-    - name: Run style checks
-      run: |
-        source "$HOME/.poetry/env"
-        STRICT=1 make check-style
-
+        pip install -e '.[test]'
     - name: Run tests
       run: |
-        source "$HOME/.poetry/env"
-        make test
-
-    - name: Publish to PyPI
+        pytest
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+        cache: pip
+    - name: Install dependencies
       run: |
-        make download-poetry 
-        source "$HOME/.poetry/env"
-        poetry config virtualenvs.in-project true
-        poetry publish --build --username ${{ secrets.PYPI_USERNAME }} --password ${{ secrets.PYPI_PASSWORD }}
+        pip install setuptools wheel twine build
+    - name: Publish
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+      run: |
+        python -m build
+        twine upload dist/*
+
