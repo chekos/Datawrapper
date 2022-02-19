@@ -1,7 +1,7 @@
 from setuptools import setup
 import os
 
-VERSION = "0.1"
+VERSION = "1.0rc1"
 
 
 def get_long_description():
@@ -28,6 +28,6 @@ setup(
     version=VERSION,
     packages=["datawrapper"],
     install_requires=["ipython>=7.22.0","pandas>=1.1.0","httpx>=0.22.0","rich>=11.0.0","typer>=0.4.0"],
-    extras_require={"test": ["pytest"], "dev": ["black", "isort"]},
+    extras_require={"test": ["pytest"], "dev": ["black", "isort", "pytest", "ipykernel"]},
     python_requires=">=3.6",
 )
