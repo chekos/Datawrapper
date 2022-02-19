@@ -18,6 +18,8 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: pip
     - name: Install dependencies
+      env:
+        DATAWRAPPER_ACCESS_TOKEN: ${{ secrets.DATAWRAPPER_ACCESS_TOKEN }}
       run: |
         pip install -e '.[test]'
     - name: Run tests
