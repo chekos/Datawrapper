@@ -610,6 +610,8 @@ class Datawrapper:
         order: str = "DESC",
         order_by: str = "createdAt",
         limit: int = 25,
+        folder_id: str = "",
+        team_id: str = "",
     ) -> Union[None, List[Any]]:
         """Retrieves a list of charts by User
 
@@ -627,6 +629,10 @@ class Datawrapper:
             Attribute to order by. One of createdAt, email, id, or name, by default "createdAt"
         limit : int, optional
             Maximum items to fetch, by default 25
+        folder_id : str, optional
+            ID of folder in Datawrapper.de where to list charts, by default ""
+        team_id : str, optional
+            ID of the team where to list charts. The authenticated user must have access to this team, by default ""
 
         Returns
         -------
@@ -650,6 +656,10 @@ class Datawrapper:
             _query["orderBy"] = order_by
         if limit:
             _query["limit"] = str(limit)
+        if folder_id:
+            _data["folderId"] = folder_id
+        if team_id:
+            _data["teamId"] = team_id
 
         get_charts_response = r.get(url=_url, headers=_header, params=_query)
 
