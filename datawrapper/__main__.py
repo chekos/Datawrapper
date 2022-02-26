@@ -126,6 +126,7 @@ class Datawrapper:
         chart_type: str = "d3-bars-stacked",
         data: Union[pd.DataFrame, None] = None,
         folder_id: str = "",
+        organization_id: str = "",
     ) -> Union[Dict[Any, Any], None, Any]:
         """Creates a new Datawrapper chart, table or map.
         You can pass a pandas DataFrame as a `data` argument to upload data.
@@ -141,6 +142,8 @@ class Datawrapper:
             A pandas DataFrame containing the data to be added, by default None
         folder_id : str, optional
             ID of folder in Datawrapper.de for the chart, table or map to be created in, by default ""
+        organization_id : str, optional
+            ID of the team where the chart should be created. The authenticated user must have access to this team.
 
         Returns
         -------
@@ -155,6 +158,8 @@ class Datawrapper:
 
         if folder_id:
             _data["folderId"] = folder_id
+        if organization_id:
+            _data["organizationId"] = organization_id
 
         new_chart_response = r.post(
             url=self._CHARTS_URL, headers=_header, data=json.dumps(_data)
