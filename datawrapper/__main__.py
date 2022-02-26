@@ -662,9 +662,9 @@ class Datawrapper:
         if limit:
             _query["limit"] = str(limit)
         if folder_id:
-            _data["folderId"] = folder_id
+            _query["folderId"] = folder_id
         if team_id:
-            _data["teamId"] = team_id
+            _query["teamId"] = team_id
 
         get_charts_response = r.get(url=_url, headers=_header, params=_query)
 
