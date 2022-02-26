@@ -614,7 +614,6 @@ class Datawrapper:
         search: str = "",
         order: str = "DESC",
         order_by: str = "createdAt",
-        folder_id: str = "",
         limit: int = 25,
         folder_id: str = "",
         team_id: str = "",
@@ -633,8 +632,6 @@ class Datawrapper:
             Result order (ascending or descending), by default "DESC"
         order_by : str, optional
             Attribute to order by. One of createdAt, email, id, or name, by default "createdAt"
-        folder_id: str, optional
-            ID of the folder to search charts in, by default ""
         limit : int, optional
             Maximum items to fetch, by default 25
         folder_id : str, optional
@@ -662,8 +659,6 @@ class Datawrapper:
             _query["order"] = order
         if order_by:
             _query["orderBy"] = order_by
-        if folder_id:
-            _query["folderId"] = folder_id
         if limit:
             _query["limit"] = str(limit)
         if folder_id:
