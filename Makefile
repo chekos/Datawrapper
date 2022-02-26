@@ -103,7 +103,6 @@ check-safety:
 	$(POETRY_COMMAND_FLAG)poetry check
 	$(PIP_COMMAND_FLAG)poetry run pip check
 	$(PIP_COMMAND_FLAG)poetry run python -m pip install --upgrade pip
-	$(SAFETY_COMMAND_FLAG)poetry run safety check --full-report
 	$(BANDIT_COMMAND_FLAG)poetry run bandit -ll -r datawrapper/
 
 .PHONY: check-style

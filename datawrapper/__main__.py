@@ -11,7 +11,7 @@ It lets you create and edit charts, update your account information and many mor
 
         dw.account_info()
 """
-from typing import Any, Dict, Iterable, List, Union
+from typing import Any, Dict, Iterable, List, Optional, Union
 
 import json
 import os
@@ -127,6 +127,7 @@ class Datawrapper:
         data: Union[pd.DataFrame, None] = None,
         folder_id: str = "",
         organization_id: str = "",
+        metadata: Optional[Dict[Any, Any]] = None,
     ) -> Union[Dict[Any, Any], None, Any]:
         """Creates a new Datawrapper chart, table or map.
         You can pass a pandas DataFrame as a `data` argument to upload data.
@@ -144,6 +145,8 @@ class Datawrapper:
             ID of folder in Datawrapper.de for the chart, table or map to be created in, by default ""
         organization_id : str, optional
             ID of the team where the chart should be created. The authenticated user must have access to this team.
+        metadata: dict, optional
+            A Python dictionary of properties to add.
 
         Returns
         -------
@@ -160,6 +163,8 @@ class Datawrapper:
             _data["folderId"] = folder_id
         if organization_id:
             _data["organizationId"] = organization_id
+        if metadata:
+            _data["metadata"] = metadata  # type: ignore
 
         new_chart_response = r.post(
             url=self._CHARTS_URL, headers=_header, data=json.dumps(_data)
@@ -609,6 +614,7 @@ class Datawrapper:
         search: str = "",
         order: str = "DESC",
         order_by: str = "createdAt",
+        folder_id: str = "",
         limit: int = 25,
         folder_id: str = "",
         team_id: str = "",
@@ -627,6 +633,8 @@ class Datawrapper:
             Result order (ascending or descending), by default "DESC"
         order_by : str, optional
             Attribute to order by. One of createdAt, email, id, or name, by default "createdAt"
+        folder_id: str, optional
+            ID of the folder to search charts in, by default ""
         limit : int, optional
             Maximum items to fetch, by default 25
         folder_id : str, optional
@@ -654,6 +662,8 @@ class Datawrapper:
             _query["order"] = order
         if order_by:
             _query["orderBy"] = order_by
+        if folder_id:
+            _query["folderId"] = folder_id
         if limit:
             _query["limit"] = str(limit)
         if folder_id:
