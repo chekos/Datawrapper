@@ -1,149 +1,113 @@
+#* Variables
 SHELL := /usr/bin/env bash
+PYTHON := python
+PYTHONPATH := `pwd`
 
+#* Docker variables
 IMAGE := datawrapper
 VERSION := latest
 
-#! An ugly hack to create individual flags
-ifeq ($(STRICT), 1)
-	POETRY_COMMAND_FLAG =
-	PIP_COMMAND_FLAG =
-	SAFETY_COMMAND_FLAG =
-	BANDIT_COMMAND_FLAG =
-	SECRETS_COMMAND_FLAG =
-	BLACK_COMMAND_FLAG =
-	DARGLINT_COMMAND_FLAG =
-	ISORT_COMMAND_FLAG =
-	MYPY_COMMAND_FLAG =
-else
-	POETRY_COMMAND_FLAG = -
-	PIP_COMMAND_FLAG = -
-	SAFETY_COMMAND_FLAG = -
-	BANDIT_COMMAND_FLAG = -
-	SECRETS_COMMAND_FLAG = -
-	BLACK_COMMAND_FLAG = -
-	DARGLINT_COMMAND_FLAG = -
-	ISORT_COMMAND_FLAG = -
-	MYPY_COMMAND_FLAG = -
-endif
+#* Poetry
+.PHONY: poetry-download
+poetry-download:
+	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | $(PYTHON) -
 
-##! Please tell me how to use `for loops` to create variables in Makefile :(
-##! If you have better idea, please PR me in https://github.com/TezRomacH/python-package-template
+.PHONY: poetry-remove
+poetry-remove:
+	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | $(PYTHON) - --uninstall
 
-ifeq ($(POETRY_STRICT), 1)
-	POETRY_COMMAND_FLAG =
-else ifeq ($(POETRY_STRICT), 0)
-	POETRY_COMMAND_FLAG = -
-endif
-
-ifeq ($(PIP_STRICT), 1)
-	PIP_COMMAND_FLAG =
-else ifeq ($(PIP_STRICT), 0)
-	PIP_COMMAND_FLAG = -
-endif
-
-ifeq ($(SAFETY_STRICT), 1)
-	SAFETY_COMMAND_FLAG =
-else ifeq ($(SAFETY_STRICT), 0)
-	SAFETY_COMMAND_FLAG = -
-endif
-
-ifeq ($(BANDIT_STRICT), 1)
-	BANDIT_COMMAND_FLAG =
-else ifeq ($(BANDIT_STRICT), 0)
-	BANDIT_COMMAND_FLAG = -
-endif
-
-ifeq ($(SECRETS_STRICT), 1)
-	SECRETS_COMMAND_FLAG =
-else ifeq ($(SECRETS_STRICT), 0)
-	SECRETS_COMMAND_FLAG = -
-endif
-
-ifeq ($(BLACK_STRICT), 1)
-	BLACK_COMMAND_FLAG =
-else ifeq ($(BLACK_STRICT), 0)
-	BLACK_COMMAND_FLAG = -
-endif
-
-ifeq ($(DARGLINT_STRICT), 1)
-	DARGLINT_COMMAND_FLAG =
-else ifeq ($(DARGLINT_STRICT), 0)
-	DARGLINT_COMMAND_FLAG = -
-endif
-
-ifeq ($(ISORT_STRICT), 1)
-	ISORT_COMMAND_FLAG =
-else ifeq ($(ISORT_STRICT), 0)
-	ISORT_COMMAND_FLAG = -
-endif
-
-
-ifeq ($(MYPY_STRICT), 1)
-	MYPY_COMMAND_FLAG =
-else ifeq ($(MYPY_STRICT), 0)
-	MYPY_COMMAND_FLAG = -
-endif
-
-#! The end of the ugly part. I'm really sorry
-
-.PHONY: download-poetry
-download-poetry:
-	curl -sSL https://install.python-poetry.org | python3 -
-
+#* Installation
 .PHONY: install
 install:
-	poetry lock -n
+	poetry lock -n && poetry export --without-hashes > requirements.txt
 	poetry install -n
-ifneq ($(NO_PRE_COMMIT), 1)
+	-poetry run mypy --install-types --non-interactive ./
+
+.PHONY: pre-commit-install
+pre-commit-install:
 	poetry run pre-commit install
-endif
+
+#* Formatters
+.PHONY: codestyle
+codestyle:
+	poetry run pyupgrade --exit-zero-even-if-changed --py37-plus **/*.py
+	poetry run isort --settings-path pyproject.toml ./
+	poetry run black --config pyproject.toml ./
+
+.PHONY: formatting
+formatting: codestyle
+
+#* Linting
+.PHONY: test
+test:
+	PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml --cov-report=html --cov=datawrapper tests/
+	poetry run coverage-badge -o assets/images/coverage.svg -f
+
+.PHONY: check-codestyle
+check-codestyle:
+	poetry run isort --diff --check-only --settings-path pyproject.toml ./
+	poetry run black --diff --check --config pyproject.toml ./
+	poetry run darglint --verbosity 2 datawrapper tests
+
+.PHONY: mypy
+mypy:
+	poetry run mypy --config-file pyproject.toml ./
 
 .PHONY: check-safety
 check-safety:
-	$(POETRY_COMMAND_FLAG)poetry check
-	$(PIP_COMMAND_FLAG)poetry run pip check
-	$(PIP_COMMAND_FLAG)poetry run python -m pip install --upgrade pip
-	$(BANDIT_COMMAND_FLAG)poetry run bandit -ll -r datawrapper/
-
-.PHONY: check-style
-check-style:
-	$(BLACK_COMMAND_FLAG)poetry run black --config pyproject.toml --diff --check ./
-	$(DARGLINT_COMMAND_FLAG)poetry run darglint -v 2 **/*.py
-	$(ISORT_COMMAND_FLAG)poetry run isort --settings-path pyproject.toml --check-only **/*.py
-	$(MYPY_COMMAND_FLAG)poetry run mypy --config-file setup.cfg datawrapper tests/**/*.py
-
-.PHONY: codestyle
-codestyle:
-	-poetry run pyupgrade --py37-plus **/*.py
-	poetry run isort --settings-path pyproject.toml **/*.py
-	poetry run black --config pyproject.toml ./
-
-.PHONY: test
-test:
-	poetry run pytest
+	poetry check
+	poetry run safety check --full-report
+	poetry run bandit -ll --recursive datawrapper tests
 
 .PHONY: lint
-lint: test check-safety check-style
+lint: test check-codestyle mypy check-safety
 
-# Example: make docker VERSION=latest
-# Example: make docker IMAGE=some_name VERSION=0.4.5
-.PHONY: docker
-docker:
+.PHONY: update-dev-deps
+update-dev-deps:
+	poetry add -D bandit@latest darglint@latest "isort[colors]@latest" mypy@latest pre-commit@latest pydocstyle@latest pylint@latest pytest@latest pyupgrade@latest safety@latest coverage@latest coverage-badge@latest pytest-html@latest pytest-cov@latest
+	poetry add -D --allow-prereleases black@latest
+
+#* Docker
+# Example: make docker-build VERSION=latest
+# Example: make docker-build IMAGE=some_name VERSION=0.1.0
+.PHONY: docker-build
+docker-build:
 	@echo Building docker $(IMAGE):$(VERSION) ...
 	docker build \
 		-t $(IMAGE):$(VERSION) . \
 		-f ./docker/Dockerfile --no-cache
 
-# Example: make clean_docker VERSION=latest
-# Example: make clean_docker IMAGE=some_name VERSION=0.4.5
-.PHONY: clean_docker
-clean_docker:
+# Example: make docker-remove VERSION=latest
+# Example: make docker-remove IMAGE=some_name VERSION=0.1.0
+.PHONY: docker-remove
+docker-remove:
 	@echo Removing docker $(IMAGE):$(VERSION) ...
 	docker rmi -f $(IMAGE):$(VERSION)
 
-.PHONY: clean_build
-clean:
+#* Cleaning
+.PHONY: pycache-remove
+pycache-remove:
+	find . | grep -E "(__pycache__|\.pyc|\.pyo$$)" | xargs rm -rf
+
+.PHONY: dsstore-remove
+dsstore-remove:
+	find . | grep -E ".DS_Store" | xargs rm -rf
+
+.PHONY: mypycache-remove
+mypycache-remove:
+	find . | grep -E ".mypy_cache" | xargs rm -rf
+
+.PHONY: ipynbcheckpoints-remove
+ipynbcheckpoints-remove:
+	find . | grep -E ".ipynb_checkpoints" | xargs rm -rf
+
+.PHONY: pytestcache-remove
+pytestcache-remove:
+	find . | grep -E ".pytest_cache" | xargs rm -rf
+
+.PHONY: build-remove
+build-remove:
 	rm -rf build/
 
-.PHONY: clean
-clean: clean_build clean_docker
+.PHONY: cleanup
+cleanup: pycache-remove dsstore-remove mypycache-remove ipynbcheckpoints-remove pytestcache-remove

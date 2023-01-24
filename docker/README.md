@@ -1,25 +1,25 @@
-# Docker for datawrapper
+# Docker for datawrapper-py
 
 ## Installation
 
 To create Docker you need to run:
 
 ```bash
-make docker
+make docker-build
 ```
 
 which is equivalent to:
 
 ```bash
-make docker VERSION=latest
+make docker-build VERSION=latest
 ```
 
-You could also provide name and version for the image itself.
-Default name is `IMAGE := datawrapper`.
+You may provide name and version for the image.
+Default name is `IMAGE := datawrapper_py`.
 Default version is `VERSION := latest`.
 
 ```bash
-make docker IMAGE=some_name VERSION=0.4.5
+make docker-build IMAGE=some_name VERSION=0.1.0
 ```
 
 ## Usage
@@ -27,21 +27,21 @@ make docker IMAGE=some_name VERSION=0.4.5
 ```bash
 docker run -it --rm \
    -v $(pwd):/workspace \
-   datawrapper bash
+   datawrapper_py bash
 ```
 
 ## How to clean up
 
-To uninstall docker image run `make clean_docker` with `VERSION`:
+To uninstall docker image run `make docker-remove` with `VERSION`:
 
 ```bash
-make clean_docker VERSION=0.4.5
+make docker-remove VERSION=0.1.0
 ```
 
-like in installation, you can also choose the image name
+you may also choose the image name
 
 ```bash
-make clean_docker IMAGE=some_name VERSION=latest
+make docker-remove IMAGE=some_name VERSION=latest
 ```
 
-If you want to clean all, including `build` run `make clean`
+If you want to clean all, including `build` and `pycache` run `make cleanup`
