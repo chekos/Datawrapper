@@ -6,7 +6,7 @@ We use `poetry` to manage the [dependencies](https://github.com/python-poetry/po
 If you dont have `poetry` installed, you should run the command below.
 
 ```bash
-make download-poetry
+make poetry-download
 ```
 
 To install dependencies and prepare [`pre-commit`](https://pre-commit.com/) hooks you would need to run `install` command:
