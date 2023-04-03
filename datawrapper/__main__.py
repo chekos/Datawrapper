@@ -14,6 +14,7 @@ It lets you create and edit charts, update your account information and many mor
 from typing import Any, Dict, Iterable, List, Optional, Union
 
 import json
+import logging
 import os
 from pathlib import Path
 
@@ -21,6 +22,8 @@ import IPython
 import pandas as pd
 import requests as r
 from IPython.display import HTML, Image
+
+logger = logging.getLogger(__name__)
 
 
 class Datawrapper:
@@ -67,7 +70,7 @@ class Datawrapper:
         if account_info_response.status_code == 200:
             return account_info_response.json()
         else:
-            print(
+            logger.error(
                 "Couldn't find account. Make sure your credentials (access_code) are correct."
             )
             return None
@@ -170,18 +173,18 @@ class Datawrapper:
             or chart_type == "d3-maps-symbols"
             or chart_type == "locator-map"
         ):
-            print(
+            logger.debug(
                 "\nNOTE: Maps need a valid basemap, set in properties -> visualize"
             )
-            print(
+            logger.debug(
                 "Full list of valid maps can be retrieved with\n\ncurl --request GET --url https://api.datawrapper.de/plugin/basemap\n"
             )
 
         if new_chart_response.status_code <= 201:
             chart_info = new_chart_response.json()
-            print(f"New chart {chart_info['type']} created!")
+            logger.debug(f"New chart {chart_info['type']} created!")
         else:
-            print(
+            logger.error(
                 f"Chart could not be created, check your authorization credentials (access token){', and that the folder_id is valid (i.e exists, and your account has access to it)' if folder_id else ''}"
             )
 
@@ -252,12 +255,12 @@ class Datawrapper:
             data=json.dumps(_data),
         )
         if update_description_response.status_code == 200:
-            print("Chart updated!")
+            logger.debug("Chart updated!")
         else:
-            print(
+            logger.error(
                 "Error. Status code: ", update_description_response.status_code
             )
-            print("Couldn't update chart.")
+            logger.error("Couldn't update chart.")
         return None
 
     def publish_chart(
@@ -278,7 +281,7 @@ class Datawrapper:
             headers=self._auth_header,
         )
         if publish_chart_response.status_code <= 201:
-            # print(f"Chart published at {publish_chart_info[]}")
+            logger.debug(f"Chart published at {publish_chart_info[]}")
             if display:
                 publish_chart_info = publish_chart_response.json()
                 iframe_code = publish_chart_info["data"]["metadata"]["publish"][
@@ -290,7 +293,7 @@ class Datawrapper:
             else:
                 return None
         else:
-            print("Chart couldn't be published at this time.")
+            logger.error("Chart couldn't be published at this time.")
             return None
 
     def chart_properties(
@@ -315,7 +318,7 @@ class Datawrapper:
         if chart_properties_response.status_code == 200:
             return chart_properties_response.json()
         else:
-            print(
+            logger.error(
                 "Make sure you have the right id and authorization credentials (access_token)."
             )
             return None
@@ -343,16 +346,16 @@ class Datawrapper:
             data=json.dumps(_data),
         )
         if update_properties_response.status_code == 200:
-            print("Chart's metadata updated!")
+            logger.debug("Chart's metadata updated!")
             # return update_properties_response.json()
         else:
-            print(
+            logger.error(
                 "Error. Status code: ", update_properties_response.status_code
             )
             x = update_properties_response.text
             y = json.loads(x)
-            print("Message: ", y["message"])
-            print("Chart could not be updated.")
+            logger.debug("Message: ", y["message"])
+            logger.debug("Chart could not be updated.")
         return None
 
     def update_chart(
@@ -407,10 +410,10 @@ class Datawrapper:
             data=json.dumps(_query),
         )
         if update_chart_response.status_code == 200:
-            print(f"Chart with id {chart_id} updated!")
+            logger.debug(f"Chart with id {chart_id} updated!")
             return self.publish_chart(chart_id)
         else:
-            print("Chart could not be updated at the time.")
+            logger.debug("Chart could not be updated at the time.")
             return None
 
     def display_chart(self, chart_id: str) -> IPython.display.HTML:
@@ -540,13 +543,13 @@ class Datawrapper:
             if display:
                 return Image(_filepath)
             else:
-                print(f"File exported at {_filepath}")
+                logger.debug(f"File exported at {_filepath}")
         elif export_chart_response.status_code == 403:
-            print("You don't have access to the requested code.")
+            logger.error("You don't have access to the requested code.")
         elif export_chart_response.status_code == 401:
-            print("You couldn't be authenticated.")
+            logger.error("You couldn't be authenticated.")
         else:
-            print("Couldn't export at this time.")
+            logger.error("Couldn't export at this time.")
         return None
 
     def get_folders(self) -> Union[Dict[Any, Any], None, Any]:
@@ -565,7 +568,7 @@ class Datawrapper:
         if get_folders_response.status_code == 200:
             return get_folders_response.json()
         else:
-            print(
+            logger.error(
                 "Couldn't retrieve folders in account. Make sure you have the rigth authorization credentials (access token)."
             )
             return None
@@ -593,9 +596,9 @@ class Datawrapper:
         )
 
         if move_chart_response.status_code == 200:
-            print(f"Chart moved to folder {folder_id}")
+            logger.debug(f"Chart moved to folder {folder_id}")
         else:
-            print("Chart could not be moved at the moment.")
+            logger.error("Chart could not be moved at the moment.")
         return None
 
     def delete_chart(self, chart_id: str) -> r.Response.content:  # type: ignore
@@ -619,7 +622,7 @@ class Datawrapper:
         if delete_chart_response.content:
             return delete_chart_response.content
         else:
-            print(f"Successfully deleted chart with id {chart_id}")
+            logger.debug(f"Successfully deleted chart with id {chart_id}")
             return None
 
     def get_charts(
@@ -681,5 +684,5 @@ class Datawrapper:
         if get_charts_response.status_code == 200:
             return get_charts_response.json()["list"]  # type: ignore
         else:
-            print("Could not retrieve charts at this moment.")
+            logger.error("Could not retrieve charts at this moment.")
             return None
