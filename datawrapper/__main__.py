@@ -197,6 +197,11 @@ class Datawrapper:
         source_url: str = "",
         intro: str = "",
         byline: str = "",
+        aria_description: str = "",
+        number_prepend: str = "",
+        number_append: str = "",
+        number_format: str = "-",
+        number_divisor: int = 0,
     ) -> Union[Any, None]:
         """Update a chart's description.
 
@@ -212,6 +217,16 @@ class Datawrapper:
             Introduction of your chart, table or map, by default ""
         byline : str, optional
             Who made this?, by default ""
+        aria_description : str, optional
+            Alt text description
+        number_prepend : str, optional
+            Something to put before the number
+        number_append : str, optional
+            Something to after before the number
+        number_format : str, optional
+            The format number
+        number_divisor : str, optional
+            A multiplier or divisor for the numbers
         """
 
         _header = self._auth_header
@@ -223,6 +238,11 @@ class Datawrapper:
                     "source-url": source_url,
                     "intro": intro,
                     "byline": byline,
+                    "aria-description": aria_description,
+                    "number-prepend": number_prepend,
+                    "number-append": number_append,
+                    "number-format": number_format,
+                    "number-divisor": number_divisor,
                 }
             }
         }
