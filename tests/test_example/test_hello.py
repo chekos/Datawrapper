@@ -1,5 +1,6 @@
 """Unit test package for datawrapper."""
 import pytest
+
 from datawrapper.example import hello
 
 
