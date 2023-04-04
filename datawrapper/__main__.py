@@ -263,9 +263,7 @@ class Datawrapper:
             logger.error("Couldn't update chart.")
         return None
 
-    def publish_chart(
-        self, chart_id: str, display: bool = True
-    ) -> Union[Any, None]:
+    def publish_chart(self, chart_id: str, display: bool = True) -> Union[Any, None]:
         """Publishes a chart, table or map.
 
         Parameters
@@ -281,9 +279,9 @@ class Datawrapper:
             headers=self._auth_header,
         )
         if publish_chart_response.status_code <= 201:
-            logger.debug(f"Chart published at {publish_chart_info[]}")
+            publish_chart_info = publish_chart_response.json()
+            logger.debug(f"Chart published at {publish_chart_info['url']}")
             if display:
-                publish_chart_info = publish_chart_response.json()
                 iframe_code = publish_chart_info["data"]["metadata"]["publish"][
                     "embed-codes"
                 ]["embed-method-iframe"]
@@ -349,9 +347,7 @@ class Datawrapper:
             logger.debug("Chart's metadata updated!")
             # return update_properties_response.json()
         else:
-            logger.error(
-                "Error. Status code: ", update_properties_response.status_code
-            )
+            logger.error("Error. Status code: ", update_properties_response.status_code)
             x = update_properties_response.text
             y = json.loads(x)
             logger.debug("Message: ", y["message"])
@@ -458,15 +454,11 @@ class Datawrapper:
         if responsive:
             iframe_code = _chart_properties["metadata"]["publish"][  # type: ignore
                 "embed-codes"
-            ][
-                "embed-method-responsive"
-            ]
+            ]["embed-method-responsive"]
         else:
             iframe_code = _chart_properties["metadata"]["publish"][  # type: ignore
                 "embed-codes"
-            ][
-                "embed-method-iframe"
-            ]
+            ]["embed-method-iframe"]
         return iframe_code
 
     def export_chart(
