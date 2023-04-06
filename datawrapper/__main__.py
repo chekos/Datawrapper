@@ -502,7 +502,7 @@ class Datawrapper:
         display : bool, optional
             Whether to display the exported image as output in the notebook cell, by default False
 
-        Returns
+        Returns None
         -------
         IPython.display.Image
             If display is True, it returns an Image.
@@ -537,12 +537,17 @@ class Datawrapper:
             else:
                 logger.debug(f"File exported at {_filepath}")
         elif export_chart_response.status_code == 403:
-            logger.error("You don't have access to the requested code.")
+            msg = "You don't have access to the requested chart."
+            logger.error(msg)
+            raise Exception(msg)
         elif export_chart_response.status_code == 401:
-            logger.error("You couldn't be authenticated.")
+            msg = "You couldn't be authenticated."
+            logger.error(msg)
+            raise Exception(msg)
         else:
-            logger.error("Couldn't export at this time.")
-        return None
+            msg = "Chart could not be exported."
+            logger.error(msg)
+            raise Exception(msg)
 
     def get_folders(self) -> Union[Dict[Any, Any], None, Any]:
         """Get a list of folders in your Datawrapper account.
