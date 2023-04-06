@@ -192,4 +192,4 @@ texinfo_documents = [
 jupyter_execute_notebooks = "off"
 
 # bibtext files
-bibtex_bibfiles = ['refs.bib']
+bibtex_bibfiles = ["refs.bib"]
