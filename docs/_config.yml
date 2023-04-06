@@ -1,0 +1,6 @@
+# Bibliography
+bibtex_bibfiles:
+  - references.bib
+sphinx:
+  config:
+    bibtex_reference_style: author_year  # or label, super, \supercite
