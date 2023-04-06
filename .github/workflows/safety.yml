@@ -1,4 +1,4 @@
-name: build
+name: safety
 
 on: [push, pull_request]
 
@@ -30,10 +30,6 @@ jobs:
         poetry config virtualenvs.in-project true
         poetry install
 
-    - name: Run style checks
+    - name: Run safety checks
       run: |
-        make check-codestyle
-
-    - name: Run tests
-      run: |
-        make test
+        make check-safety
