@@ -58,7 +58,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "Datawrapper"
-copyright = "2021, Sergio Sánchez Zavala"
+copyright = "2023, Sergio Sánchez Zavala"
 author = "Sergio Sánchez Zavala"
 
 # The version info for the project you're documenting, acts as replacement
@@ -190,3 +190,6 @@ texinfo_documents = [
 
 # Jupyter notebooks execution
 jupyter_execute_notebooks = "off"
+
+# bibtext files
+bibtex_bibfiles = ["refs.bib"]
