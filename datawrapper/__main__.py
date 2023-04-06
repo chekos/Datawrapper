@@ -466,7 +466,7 @@ class Datawrapper:
         chart_id: str,
         unit: str = "px",
         mode: str = "rgb",
-        width: int = 100,
+        width: int = 400,
         plain: bool = False,
         zoom: int = 2,
         scale: int = 1,
