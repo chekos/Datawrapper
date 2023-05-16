@@ -12,7 +12,6 @@ ipython = "*"
 
 [dev-packages]
 mypy = "*"
-bandit = "*"
 pytest = "*"
 flake8 = "*"
 pre-commit = "*"
