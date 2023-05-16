@@ -88,7 +88,7 @@ jobs:
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv sync --dev --python=${{ matrix.python }}
+        run: pipenv install --dev --python=${{ matrix.python }}
         shell: bash
 
       - id: tests
