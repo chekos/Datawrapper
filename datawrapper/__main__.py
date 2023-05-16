@@ -11,12 +11,11 @@ It lets you create and edit charts, update your account information and many mor
 
         dw.account_info()
 """
-from typing import Any, Dict, Iterable, List, Optional, Union
-
 import json
 import logging
 import os
 from pathlib import Path
+from typing import Any, Dict, Iterable, List, Optional, Union
 
 import IPython
 import pandas as pd
@@ -45,6 +44,7 @@ class Datawrapper:
 
     def __init__(self, access_token=_ACCESS_TOKEN):
         """To create a token head to app.datawrapper.de/account/api-tokens.
+
         By default this will look for DATAWRAPPER_ACCESS_TOKEN environment variable.
 
         Parameters
@@ -132,7 +132,9 @@ class Datawrapper:
         metadata: Optional[Dict[Any, Any]] = None,
     ) -> Union[Dict[Any, Any], None, Any]:
         """Creates a new Datawrapper chart, table or map.
+
         You can pass a pandas DataFrame as a `data` argument to upload data.
+
         Returns the created chart's information.
 
         Parameters
@@ -325,6 +327,7 @@ class Datawrapper:
         self, chart_id: str, properties: Dict[Any, Any]
     ) -> Union[Any, None]:
         """Update a chart, table, or map's metadata.
+
         Example: https://developer.datawrapper.de/docs/creating-a-chart-new#edit-colors
 
         Parameters
@@ -536,6 +539,7 @@ class Datawrapper:
                 return Image(_filepath)
             else:
                 logger.debug(f"File exported at {_filepath}")
+                return None
         elif export_chart_response.status_code == 403:
             msg = "You don't have access to the requested chart."
             logger.error(msg)
@@ -600,7 +604,6 @@ class Datawrapper:
 
     def delete_chart(self, chart_id: str) -> r.Response.content:  # type: ignore
         """Deletes a specified chart, table or map.
-
 
         Parameters
         ----------
