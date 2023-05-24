@@ -58,6 +58,13 @@ setup(
         "Tracker": "https://github.com/chekos/datawrapper/issues",
     },
     packages=("datawrapper",),
+    install_requires=[
+        "importlib_metadata",
+        "rich",
+        "requests",
+        "pandas",
+        "ipython",
+    ],
     setup_requires=["setuptools_scm"],
     use_scm_version={"version_scheme": version_scheme, "local_scheme": local_version},
     license="MIT",
