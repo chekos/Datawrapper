@@ -474,6 +474,7 @@ class Datawrapper:
         zoom: int = 2,
         scale: int = 1,
         border_width: int = 20,
+        transparent: bool = False,
         output: str = "png",
         filepath: str = "./image.png",
         display: bool = False,
@@ -498,6 +499,8 @@ class Datawrapper:
             Defines the multiplier for the pdf size, by default 1
         border_width : int, optional
             Margin arouund the visualization, by default 20
+        transparent : bool, optional
+            Set to `True` to export your visualization with a transparent background.
         output : str, optional
             One of png, pdf, or svg, by default "png"
         filepath : str, optional
@@ -523,6 +526,7 @@ class Datawrapper:
             "zoom": zoom,
             "scale": scale,
             "borderWidth": border_width,
+            "transparent": transparent
         }
 
         _header = self._auth_header
