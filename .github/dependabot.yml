@@ -7,22 +7,26 @@ updates:
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     allow:
       - dependency-type: "all"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          ["version-update:semver-patch", "version-update:semver-minor"]
     commit-message:
       prefix: ":arrow_up:"
-    open-pull-requests-limit: 50
+    open-pull-requests-limit: 5
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
     allow:
       - dependency-type: "all"
     commit-message:
       prefix: ":arrow_up:"
-    open-pull-requests-limit: 50
+    open-pull-requests-limit: 5
 
   - package-ecosystem: "docker"
     directory: "/docker"
@@ -32,4 +36,4 @@ updates:
       - dependency-type: "all"
     commit-message:
       prefix: ":arrow_up:"
-    open-pull-requests-limit: 50
+    open-pull-requests-limit: 5
