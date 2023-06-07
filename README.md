@@ -16,6 +16,7 @@
 A light-weight python wrapper for the Datawrapper API (v3). While it is not developed by Datawrapper officially, you can use it with your API credentials from datawrapper.de
 
 </div>
+<!--intro-start-->
 
 ## 🚀 Features
 
@@ -90,6 +91,7 @@ This project is licensed under the terms of the `MIT` license. See [LICENSE](htt
   howpublished = {\url{https://github.com/chekos/datawrapper}}
 }
 ```
+<!--intro-end-->
 
 ## Credits
 
