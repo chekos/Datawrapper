@@ -2,7 +2,6 @@ import os
 import time
 
 from setuptools import setup
-from setuptools_scm.version import guess_next_version
 
 
 def read(file_name):
@@ -29,6 +28,8 @@ def version_scheme(version):
     if version.exact:
         return version.format_with("{tag}")
     else:
+        from setuptools_scm.version import guess_next_version
+
         _super_value = version.format_next_version(guess_next_version)
         now = int(time.time())
         return _super_value + str(now)
