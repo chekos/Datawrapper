@@ -129,6 +129,7 @@ class Datawrapper:
         chart_type: str = "d3-bars-stacked",
         data: Union[pd.DataFrame, None] = None,
         folder_id: str = "",
+        organization_id: str = "",
         metadata: Optional[Dict[Any, Any]] = None,
     ) -> Union[Dict[Any, Any], None, Any]:
         """Creates a new Datawrapper chart, table or map.
@@ -147,6 +148,8 @@ class Datawrapper:
             A pandas DataFrame containing the data to be added, by default None
         folder_id : str, optional
             ID of folder in Datawrapper.de for the chart, table or map to be created in, by default ""
+        organization_id : str, optional
+            ID of the team where the chart should be created. The authenticated user must have access to this team.
         metadata: dict, optional
             A Python dictionary of properties to add.
 
@@ -163,6 +166,8 @@ class Datawrapper:
 
         if folder_id:
             _data["folderId"] = folder_id
+        if organization_id:
+            _data["organizationId"] = organization_id
         if metadata:
             _data["metadata"] = metadata  # type: ignore
 
@@ -636,8 +641,9 @@ class Datawrapper:
         search: str = "",
         order: str = "DESC",
         order_by: str = "createdAt",
-        folder_id: str = "",
         limit: int = 25,
+        folder_id: str = "",
+        team_id: str = "",
     ) -> Union[None, List[Any]]:
         """Retrieves a list of charts by User
 
@@ -653,10 +659,12 @@ class Datawrapper:
             Result order (ascending or descending), by default "DESC"
         order_by : str, optional
             Attribute to order by. One of createdAt, email, id, or name, by default "createdAt"
-        folder_id: str, optional
-            ID of the folder to search charts in, by default ""
         limit : int, optional
             Maximum items to fetch, by default 25
+        folder_id : str, optional
+            ID of folder in Datawrapper.de where to list charts, by default ""
+        team_id : str, optional
+            ID of the team where to list charts. The authenticated user must have access to this team, by default ""
 
         Returns
         -------
@@ -678,10 +686,12 @@ class Datawrapper:
             _query["order"] = order
         if order_by:
             _query["orderBy"] = order_by
-        if folder_id:
-            _query["folderId"] = folder_id
         if limit:
             _query["limit"] = str(limit)
+        if folder_id:
+            _query["folderId"] = folder_id
+        if team_id:
+            _query["teamId"] = team_id
 
         get_charts_response = r.get(url=_url, headers=_header, params=_query)
 
