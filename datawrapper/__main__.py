@@ -16,7 +16,7 @@ import logging
 import os
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Union
-
+from io import StringIO
 import IPython
 import pandas as pd
 import requests as r
@@ -322,6 +322,40 @@ class Datawrapper:
         )
         if chart_properties_response.status_code == 200:
             return chart_properties_response.json()
+        else:
+            logger.error(
+                "Make sure you have the right id and authorization credentials (access_token)."
+            )
+            return None
+
+    def chart_data(
+        self,
+        chart_id: str,
+        dtype = None,
+        parse_dates = None
+    ) -> Union[pd.DataFrame, None]:
+        """Retrieve data of a specific chart, table or map as a pandas DataFrame.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table, or map.
+        dtype : Type name or dict of column -> type, optional
+            Set data types, see https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html, by default {}
+        parse_dates : bool or list of int or names or list of lists or dict, optional
+            Parse dates, see https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html, by default False
+
+        Returns
+        -------
+        pd.DataFrame
+            A pandas DataFrame containing the data of the chart, table, or map.
+        """
+        chart_data_response = r.get(
+            url=self._CHARTS_URL + f"/{chart_id}/data",
+            headers=self._auth_header,
+        )
+        if chart_data_response.status_code == 200:
+            return pd.read_csv(StringIO(chart_data_response.text), dtype=dtype, parse_dates=parse_dates)
         else:
             logger.error(
                 "Make sure you have the right id and authorization credentials (access_token)."
