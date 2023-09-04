@@ -11,7 +11,7 @@ jobs:
     steps:
       - id: checkout
         name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - id: setup-python
         name: Setup Python
@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - id: setup-python
         name: Setup Python
@@ -72,7 +72,7 @@ jobs:
         python: ['3.8', '3.9', '3.10', '3.11']
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - id: setup-python
         name: Setup Python
@@ -102,7 +102,7 @@ jobs:
     needs: [test-python]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - id: setup-python
         name: Setup Python
