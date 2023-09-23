@@ -11,6 +11,8 @@ It lets you create and edit charts, update your account information and many mor
 
         dw.account_info()
 """
+from __future__ import annotations
+
 import json
 import logging
 import os
@@ -75,27 +77,33 @@ class Datawrapper:
             )
             return None
 
-    def add_data(self, chart_id: str, data: pd.DataFrame) -> r.Response:
+    def add_data(self, chart_id: str, data: pd.DataFrame | str) -> r.Response:
         """Add data to a specified chart.
 
         Parameters
         ----------
         chart_id : str
             ID of chart, table or map to add data to.
-        data : pd.DataFrame
-            A pandas dataframe containing the data to be added.
+        data : pd.DataFrame | str
+            A pandas dataframe containing the data to be added or a string that contains the data.
 
         Returns
         -------
         requests.Response
             A requests.Response
         """
-
+        # Set headers
         _header = self._auth_header
         _header["content-type"] = "text/csv"
 
-        _data = data.to_csv(index=False, encoding="utf-8")
+        # If data is a pandas dataframe, convert to csv
+        if isinstance(data, pd.DataFrame):
+            _data = data.to_csv(index=False, encoding="utf-8")
+        # If data is a string, use that
+        else:
+            _data = data
 
+        # Add data to chart
         return r.put(
             url=f"{self._CHARTS_URL}/{chart_id}/data",
             headers=_header,
