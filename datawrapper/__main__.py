@@ -336,6 +336,31 @@ class Datawrapper:
             )
             return None
 
+    def chart_data(self, chart_id: str):
+        """Retrieve the data stored for a specific chart, table or map, which is typically CSV.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table, or map.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the information of the chart, table, or map.
+        """
+        # Request the data endpoint
+        response = r.get(
+            url=self._CHARTS_URL + f"/{chart_id}/data",
+            headers=self._auth_header,
+        )
+
+        # Check if the request was successful
+        assert response.ok, "Make sure you have the right id and authorization credentials (access_token)."
+
+        # Return the data
+        return response.json()
+
     def update_metadata(
         self, chart_id: str, properties: Dict[Any, Any]
     ) -> Union[Any, None]:
