@@ -135,7 +135,7 @@ class Datawrapper:
         self,
         title: str = "New Chart",
         chart_type: str = "d3-bars-stacked",
-        data: Union[pd.DataFrame, None] = None,
+        data: pd.DataFrame | str | None = None,
         folder_id: str = "",
         organization_id: str = "",
         metadata: Optional[Dict[Any, Any]] = None,
@@ -153,7 +153,7 @@ class Datawrapper:
         chart_type : str, optional
             Chart type to be created. See https://developer.datawrapper.de/docs/chart-types, by default "d3-bars-stacked"
         data : [type], optional
-            A pandas DataFrame containing the data to be added, by default None
+            A pandas DataFrame or string containing the data to be added, by default None
         folder_id : str, optional
             ID of folder in Datawrapper.de for the chart, table or map to be created in, by default ""
         organization_id : str, optional
