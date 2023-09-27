@@ -16,8 +16,9 @@ from __future__ import annotations
 import json
 import logging
 import os
+from io import StringIO
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Union
+from typing import Any, Iterable
 
 import IPython
 import pandas as pd
@@ -58,7 +59,7 @@ class Datawrapper:
         self._access_token = access_token
         self._auth_header = {"Authorization": f"Bearer {access_token}"}
 
-    def account_info(self) -> Union[Dict[Any, Any], None, Any]:
+    def account_info(self) -> dict[Any, Any] | None | Any:
         """Access your account information.
 
         Returns
@@ -138,8 +139,8 @@ class Datawrapper:
         data: pd.DataFrame | str | None = None,
         folder_id: str = "",
         organization_id: str = "",
-        metadata: Optional[Dict[Any, Any]] = None,
-    ) -> Union[Dict[Any, Any], None, Any]:
+        metadata: dict[Any, Any] | None = None,
+    ) -> dict[Any, Any] | None | Any:
         """Creates a new Datawrapper chart, table or map.
 
         You can pass a pandas DataFrame as a `data` argument to upload data.
@@ -220,7 +221,7 @@ class Datawrapper:
         number_append: str = "",
         number_format: str = "-",
         number_divisor: int = 0,
-    ) -> Union[Any, None]:
+    ) -> Any | None:
         """Update a chart's description.
 
         Parameters
@@ -278,7 +279,7 @@ class Datawrapper:
             logger.error("Couldn't update chart.")
         return None
 
-    def publish_chart(self, chart_id: str, display: bool = True) -> Union[Any, None]:
+    def publish_chart(self, chart_id: str, display: bool = True) -> Any | None:
         """Publishes a chart, table or map.
 
         Parameters
@@ -311,7 +312,7 @@ class Datawrapper:
 
     def chart_properties(
         self, chart_id: str
-    ) -> Union[Dict[Any, Any], None, Any, Iterable[Any]]:
+    ) -> dict[Any, Any] | None | Any | Iterable[Any]:
         """Retrieve information of a specific chart, table or map.
 
         Parameters
@@ -356,14 +357,21 @@ class Datawrapper:
         )
 
         # Check if the request was successful
-        assert response.ok, "Make sure you have the right id and authorization credentials (access_token)."
+        assert (
+            response.ok
+        ), "Make sure you have the right id and authorization credentials (access_token)."
 
-        # Return the data
-        return response.json()
+        # Return the data as json if the mimetype is json
+        if "json" in response.headers["content-type"]:
+            return response.json()
+        # If it's a csv, read the text into a dataframe
+        elif "text/csv" in response.headers["content-type"]:
+            return pd.read_csv(StringIO(response.text))
+        # Otherwise just return the text
+        else:
+            return response.text
 
-    def update_metadata(
-        self, chart_id: str, properties: Dict[Any, Any]
-    ) -> Union[Any, None]:
+    def update_metadata(self, chart_id: str, properties: dict[Any, Any]) -> Any | None:
         """Update a chart, table, or map's metadata.
 
         Example: https://developer.datawrapper.de/docs/creating-a-chart-new#edit-colors
@@ -404,7 +412,7 @@ class Datawrapper:
         language: str = "",
         folder_id: str = "",
         organization_id: str = "",
-    ) -> Union[Any, None]:
+    ) -> Any | None:
         """Updates a chart's title, theme, type, language, or location (folder/organization).
 
         Parameters
@@ -473,9 +481,7 @@ class Datawrapper:
 
         return HTML(_iframe_code)
 
-    def get_iframe_code(
-        self, chart_id: str, responsive: bool = False
-    ) -> Union[str, Any]:
+    def get_iframe_code(self, chart_id: str, responsive: bool = False) -> str | Any:
         """Returns a chart, table, or map's iframe embed code.
 
         Parameters
@@ -516,7 +522,7 @@ class Datawrapper:
         output: str = "png",
         filepath: str = "./image.png",
         display: bool = False,
-    ) -> Union[Any, None]:
+    ) -> Any | None:
         """Exports a chart, table, or map.
 
         Parameters
@@ -564,7 +570,7 @@ class Datawrapper:
             "zoom": zoom,
             "scale": scale,
             "borderWidth": border_width,
-            "transparent": transparent
+            "transparent": transparent,
         }
 
         _header = self._auth_header
@@ -595,7 +601,7 @@ class Datawrapper:
             logger.error(msg)
             raise Exception(msg)
 
-    def get_folders(self) -> Union[Dict[Any, Any], None, Any]:
+    def get_folders(self) -> dict[Any, Any] | None | Any:
         """Get a list of folders in your Datawrapper account.
 
         Returns
@@ -616,7 +622,7 @@ class Datawrapper:
             )
             return None
 
-    def move_chart(self, chart_id: str, folder_id: str) -> Union[Any, None]:
+    def move_chart(self, chart_id: str, folder_id: str) -> Any | None:
         """Moves a chart, table, or map to a specified folder.
 
         Parameters
@@ -677,7 +683,7 @@ class Datawrapper:
         limit: int = 25,
         folder_id: str = "",
         team_id: str = "",
-    ) -> Union[None, List[Any]]:
+    ) -> None | list[Any]:
         """Retrieves a list of charts by User
 
         Parameters
