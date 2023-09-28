@@ -3,6 +3,18 @@ from datawrapper import Datawrapper
 import pandas as pd
 
 
+def test_get_charts():
+    """Test the get_charts method."""
+    dw = Datawrapper()
+    dw.get_charts()
+
+
+def test_get_folders():
+    """Test the get_folders method."""
+    dw = Datawrapper()
+    dw.get_folders()
+
+
 def test_usage():
     """Test creating and updating charts with the same code as our example notebook."""
     # Connect
