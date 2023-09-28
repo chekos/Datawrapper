@@ -67,7 +67,7 @@ def test_usage():
         filepath="chart.png",
         display=False
     )
-    dw.get_iframe_code()
+    dw.get_iframe_code(chart_info["id"])
 
     # Pull metadata
     dw.chart_properties(chart_info["id"])
