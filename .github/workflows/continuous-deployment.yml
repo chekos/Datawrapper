@@ -2,7 +2,11 @@ name: Continuous deployment
 
 on:
   push:
+  pull_request:
   workflow_dispatch:
+
+env:
+  DATAWRAPPER_ACCESS_TOKEN: ${{ secrets.DATAWRAPPER_ACCESS_TOKEN }}
 
 jobs:
   lint-python:
@@ -11,13 +15,13 @@ jobs:
     steps:
       - id: checkout
         name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - id: setup-python
         name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           cache: 'pipenv'
 
       - id: install-pipenv
@@ -40,13 +44,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - id: setup-python
         name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           cache: 'pipenv'
 
       - id: install-pipenv
@@ -72,7 +76,7 @@ jobs:
         python: ['3.8', '3.9', '3.10', '3.11']
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - id: setup-python
         name: Setup Python
@@ -102,13 +106,13 @@ jobs:
     needs: [test-python]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - id: setup-python
         name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           cache: 'pipenv'
 
       - id: install-pipenv

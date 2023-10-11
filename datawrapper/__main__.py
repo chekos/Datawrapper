@@ -617,10 +617,9 @@ class Datawrapper:
         if get_folders_response.status_code == 200:
             return get_folders_response.json()
         else:
-            logger.error(
-                "Couldn't retrieve folders in account. Make sure you have the rigth authorization credentials (access token)."
-            )
-            return None
+            msg = "Couldn't retrieve folders in account. Make sure you have the rigth authorization credentials (access token)."
+            logger.error(msg)
+            raise Exception(msg)
 
     def move_chart(self, chart_id: str, folder_id: str) -> Any | None:
         """Moves a chart, table, or map to a specified folder.
@@ -737,5 +736,6 @@ class Datawrapper:
         if get_charts_response.status_code == 200:
             return get_charts_response.json()["list"]  # type: ignore
         else:
-            logger.error("Could not retrieve charts at this moment.")
-            return None
+            msg = "Could not retrieve charts at this moment."
+            logger.error(msg)
+            raise Exception(msg)
