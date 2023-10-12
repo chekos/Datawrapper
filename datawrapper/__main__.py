@@ -72,10 +72,9 @@ class Datawrapper:
         if account_info_response.status_code == 200:
             return account_info_response.json()
         else:
-            logger.error(
-                "Couldn't find account. Make sure your credentials (access_code) are correct."
-            )
-            return None
+            msg = "Couldn't find account. Make sure your credentials (access_code) are correct."
+            logger.error(msg)
+            raise Exception(msg)
 
     def add_data(self, chart_id: str, data: pd.DataFrame | str) -> r.Response:
         """Add data to a specified chart.
@@ -199,9 +198,9 @@ class Datawrapper:
             chart_info = new_chart_response.json()
             logger.debug(f"New chart {chart_info['type']} created!")
         else:
-            logger.error(
-                f"Chart could not be created, check your authorization credentials (access token){', and that the folder_id is valid (i.e exists, and your account has access to it)' if folder_id else ''}"
-            )
+            msg = f"Chart could not be created, check your authorization credentials (access token){', and that the folder_id is valid (i.e exists, and your account has access to it)' if folder_id else ''}"
+            logger.error(msg)
+            raise Exception(msg)
 
         if data is not None:
             self.add_data(chart_id=chart_info["id"], data=data)
@@ -271,12 +270,11 @@ class Datawrapper:
         )
         if update_description_response.status_code == 200:
             logger.debug("Chart updated!")
+            return None
         else:
-            logger.error(
-                "Error. Status code: ", update_description_response.status_code
-            )
-            logger.error("Couldn't update chart.")
-        return None
+            msg = f"Error. Status code: {update_description_response.status_code}"
+            logger.error(msg)
+            raise Exception(msg)
 
     def publish_chart(self, chart_id: str, display: bool = True) -> Union[Any, None]:
         """Publishes a chart, table or map.
@@ -306,8 +304,9 @@ class Datawrapper:
             else:
                 return None
         else:
-            logger.error("Chart couldn't be published at this time.")
-            return None
+            msg = "Chart couldn't be published at this time."
+            logger.error(msg)
+            raise Exception(msg)
 
     def chart_properties(
         self, chart_id: str
@@ -331,10 +330,9 @@ class Datawrapper:
         if chart_properties_response.status_code == 200:
             return chart_properties_response.json()
         else:
-            logger.error(
-                "Make sure you have the right id and authorization credentials (access_token)."
-            )
-            return None
+            msg = "Make sure you have the right id and authorization credentials (access_token)."
+            logger.error(msg)
+            raise Exception(msg)
 
     def update_metadata(
         self, chart_id: str, properties: Dict[Any, Any]
@@ -361,14 +359,14 @@ class Datawrapper:
         )
         if update_properties_response.status_code == 200:
             logger.debug("Chart's metadata updated!")
-            # return update_properties_response.json()
+            return None
         else:
-            logger.error("Error. Status code: ", update_properties_response.status_code)
-            x = update_properties_response.text
-            y = json.loads(x)
-            logger.debug("Message: ", y["message"])
+            msg = f"Error. Status code: {update_properties_response.status_code}"
+            logger.error(msg)
+            text = json.loads(update_properties_response.text)
+            logger.debug("Message: ", text["message"])
             logger.debug("Chart could not be updated.")
-        return None
+            raise Exception(msg)
 
     def update_chart(
         self,
@@ -425,8 +423,9 @@ class Datawrapper:
             logger.debug(f"Chart with id {chart_id} updated!")
             return self.publish_chart(chart_id)
         else:
-            logger.debug("Chart could not be updated at the time.")
-            return None
+            msg = "Chart could not be updated at the time."
+            logger.debug(msg)
+            raise Exception(msg)
 
     def display_chart(self, chart_id: str) -> IPython.display.HTML:
         """Displays a datawrapper chart.
@@ -586,10 +585,9 @@ class Datawrapper:
         if get_folders_response.status_code == 200:
             return get_folders_response.json()
         else:
-            logger.error(
-                "Couldn't retrieve folders in account. Make sure you have the rigth authorization credentials (access token)."
-            )
-            return None
+            msg = "Couldn't retrieve folders in account. Make sure you have the rigth authorization credentials (access token)."
+            logger.error(msg)
+            raise Exception(msg)
 
     def move_chart(self, chart_id: str, folder_id: str) -> Union[Any, None]:
         """Moves a chart, table, or map to a specified folder.
@@ -615,9 +613,11 @@ class Datawrapper:
 
         if move_chart_response.status_code == 200:
             logger.debug(f"Chart moved to folder {folder_id}")
+            return None
         else:
-            logger.error("Chart could not be moved at the moment.")
-        return None
+            msg = "Chart could not be moved at the moment."
+            logger.error(msg)
+            raise Exception(msg)
 
     def delete_chart(self, chart_id: str) -> r.Response.content:  # type: ignore
         """Deletes a specified chart, table or map.
@@ -706,5 +706,6 @@ class Datawrapper:
         if get_charts_response.status_code == 200:
             return get_charts_response.json()["list"]  # type: ignore
         else:
-            logger.error("Could not retrieve charts at this moment.")
-            return None
+            msg = "Could not retrieve charts at this moment."
+            logger.error(msg)
+            raise Exception(msg)
