@@ -660,7 +660,7 @@ class Datawrapper:
         Returns
         -------
         str
-            ID of the forked chart.
+            ID of the copied chart.
         """
         _header = self._auth_header
         _header["accept"] = "*/*"
@@ -672,9 +672,9 @@ class Datawrapper:
         )
 
         if response.ok:
-            fork_id = response.json()["id"]
-            logger.debug(f"Chart {chart_id} copied to {fork_id}")
-            return fork_id
+            copy_id = response.json()["id"]
+            logger.debug(f"Chart {chart_id} copied to {copy_id}")
+            return copy_id
         else:
             msg = "Chart could not be copied at the moment."
             logger.error(msg)
