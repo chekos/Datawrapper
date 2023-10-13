@@ -15,6 +15,18 @@ def test_get_folders():
     dw.get_folders()
 
 
+def test_fork():
+    """Test the fork_chart method."""
+    dw = Datawrapper()
+    # For the test, we will fork a random
+    # chart from the Datawrapper "river"
+    # of open-source material.
+    source_id = "dZntB"
+    fork_id = dw.fork_chart(source_id)
+    assert isinstance(source_id, str)
+    assert source_id != fork_id
+
+
 def test_usage():
     """Test creating and updating charts with the same code as our example notebook."""
     # Connect

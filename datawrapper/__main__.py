@@ -649,6 +649,37 @@ class Datawrapper:
             logger.error("Chart could not be moved at the moment.")
         return None
 
+    def fork_chart(self, chart_id: str) -> str:
+        """Fork a chart, table, or map and create an editable copy.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table, or map.
+        
+        Returns
+        -------
+        str
+            ID of the forked chart.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        url = f"{self._CHARTS_URL}/{chart_id}/fork"
+        response = r.post(
+            url=url,
+            headers=_header
+        )
+
+        if response.ok:
+            fork_id = response.json()["id"]
+            logger.debug(f"Chart {chart_id} copied to {fork_id}")
+            return fork_id
+        else:
+            msg = "Chart could not be forked. If it's a chart you created, you should trying copying it instead."
+            logger.error(msg)
+            raise Exception(msg)
+
     def delete_chart(self, chart_id: str) -> r.Response.content:  # type: ignore
         """Deletes a specified chart, table or map.
 
