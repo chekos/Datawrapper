@@ -15,6 +15,17 @@ def test_get_folders():
     dw.get_folders()
 
 
+def test_copy():
+    """Test the copy_chart method."""
+    dw = Datawrapper()
+    chart_info = dw.create_chart(
+        title="Test copy_chart",
+        chart_type="d3-bars-stacked",
+    )
+    chart_id = dw.copy_chart(chart_info["id"])
+    assert isinstance(chart_id, str)
+
+
 def test_usage():
     """Test creating and updating charts with the same code as our example notebook."""
     # Connect
