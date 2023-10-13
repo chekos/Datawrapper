@@ -656,7 +656,7 @@ class Datawrapper:
         ----------
         chart_id : str
             ID of chart, table, or map.
-        
+
         Returns
         -------
         str
