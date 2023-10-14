@@ -22,8 +22,8 @@ def test_copy():
         title="Test copy_chart",
         chart_type="d3-bars-stacked",
     )
-    chart_id = dw.copy_chart(chart_info["id"])
-    assert isinstance(chart_id, str)
+    copy_info = dw.copy_chart(chart_info["id"])
+    assert isinstance(copy_info, dict)
 
 
 def test_usage():
