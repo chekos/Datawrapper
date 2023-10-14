@@ -659,8 +659,8 @@ class Datawrapper:
         
         Returns
         -------
-        str
-            ID of the forked chart.
+        dict
+            A dictionary containing the information of the chart, table, or map.
         """
         _header = self._auth_header
         _header["accept"] = "*/*"
