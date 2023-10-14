@@ -24,6 +24,7 @@ def test_copy():
     )
     copy_info = dw.copy_chart(chart_info["id"])
     assert isinstance(copy_info, dict)
+    assert chart_info["title"] == copy_info["title"]
 
 
 def test_usage():
