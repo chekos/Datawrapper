@@ -650,6 +650,37 @@ class Datawrapper:
             logger.error(msg)
             raise Exception(msg)
 
+    def copy_chart(self, chart_id: str) -> dict[Any, Any]:
+        """Copy one of your charts, tables, or maps and create a new editable copy.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table, or map.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the information of the chart, table, or map.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        url = f"{self._CHARTS_URL}/{chart_id}/copy"
+        response = r.post(
+            url=url,
+            headers=_header
+        )
+
+        if response.ok:
+            copy_id = response.json()
+            logger.debug(f"Chart {chart_id} copied to {copy_id}")
+            return copy_id
+        else:
+            msg = "Chart could not be copied at the moment."
+            logger.error(msg)
+            raise Exception(msg)
+
     def delete_chart(self, chart_id: str) -> r.Response.content:  # type: ignore
         """Deletes a specified chart, table or map.
 
