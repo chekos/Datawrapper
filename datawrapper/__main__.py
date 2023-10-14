@@ -41,7 +41,7 @@ class Datawrapper:
     _BASE_URL = "https://api.datawrapper.de"
     _CHARTS_URL = _BASE_URL + "/v3/charts"
     _PUBLISH_URL = _BASE_URL + "/charts"
-    _FOLDERS_URL = _BASE_URL + "/folders"
+    _FOLDERS_URL = _BASE_URL + "/v3/folders"
 
     _ACCESS_TOKEN = os.getenv("DATAWRAPPER_ACCESS_TOKEN")
 
@@ -73,10 +73,9 @@ class Datawrapper:
         if account_info_response.status_code == 200:
             return account_info_response.json()
         else:
-            logger.error(
-                "Couldn't find account. Make sure your credentials (access_code) are correct."
-            )
-            return None
+            msg = "Couldn't find account. Make sure your credentials (access_code) are correct."
+            logger.error(msg)
+            raise Exception(msg)
 
     def add_data(self, chart_id: str, data: pd.DataFrame | str) -> r.Response:
         """Add data to a specified chart.
@@ -200,9 +199,9 @@ class Datawrapper:
             chart_info = new_chart_response.json()
             logger.debug(f"New chart {chart_info['type']} created!")
         else:
-            logger.error(
-                f"Chart could not be created, check your authorization credentials (access token){', and that the folder_id is valid (i.e exists, and your account has access to it)' if folder_id else ''}"
-            )
+            msg = f"Chart could not be created, check your authorization credentials (access token){', and that the folder_id is valid (i.e exists, and your account has access to it)' if folder_id else ''}"
+            logger.error(msg)
+            raise Exception(msg)
 
         if data is not None:
             self.add_data(chart_id=chart_info["id"], data=data)
@@ -272,12 +271,11 @@ class Datawrapper:
         )
         if update_description_response.status_code == 200:
             logger.debug("Chart updated!")
+            return None
         else:
-            logger.error(
-                "Error. Status code: ", update_description_response.status_code
-            )
-            logger.error("Couldn't update chart.")
-        return None
+            msg = f"Error. Status code: {update_description_response.status_code}"
+            logger.error(msg)
+            raise Exception(msg)
 
     def publish_chart(self, chart_id: str, display: bool = True) -> Any | None:
         """Publishes a chart, table or map.
@@ -307,8 +305,9 @@ class Datawrapper:
             else:
                 return None
         else:
-            logger.error("Chart couldn't be published at this time.")
-            return None
+            msg = "Chart couldn't be published at this time."
+            logger.error(msg)
+            raise Exception(msg)
 
     def chart_properties(
         self, chart_id: str
@@ -332,10 +331,9 @@ class Datawrapper:
         if chart_properties_response.status_code == 200:
             return chart_properties_response.json()
         else:
-            logger.error(
-                "Make sure you have the right id and authorization credentials (access_token)."
-            )
-            return None
+            msg = "Make sure you have the right id and authorization credentials (access_token)."
+            logger.error(msg)
+            raise Exception(msg)
 
     def chart_data(self, chart_id: str):
         """Retrieve the data stored for a specific chart, table or map, which is typically CSV.
@@ -394,14 +392,14 @@ class Datawrapper:
         )
         if update_properties_response.status_code == 200:
             logger.debug("Chart's metadata updated!")
-            # return update_properties_response.json()
+            return None
         else:
-            logger.error("Error. Status code: ", update_properties_response.status_code)
-            x = update_properties_response.text
-            y = json.loads(x)
-            logger.debug("Message: ", y["message"])
+            msg = f"Error. Status code: {update_properties_response.status_code}"
+            logger.error(msg)
+            text = json.loads(update_properties_response.text)
+            logger.debug("Message: ", text["message"])
             logger.debug("Chart could not be updated.")
-        return None
+            raise Exception(msg)
 
     def update_chart(
         self,
@@ -458,8 +456,9 @@ class Datawrapper:
             logger.debug(f"Chart with id {chart_id} updated!")
             return self.publish_chart(chart_id)
         else:
-            logger.debug("Chart could not be updated at the time.")
-            return None
+            msg = "Chart could not be updated at the time."
+            logger.debug(msg)
+            raise Exception(msg)
 
     def display_chart(self, chart_id: str) -> IPython.display.HTML:
         """Displays a datawrapper chart.
@@ -621,6 +620,169 @@ class Datawrapper:
             logger.error(msg)
             raise Exception(msg)
 
+    def get_folder(self, folder_id: str | int) -> dict[Any, Any]:
+        """Get an existing folder.
+
+        Parameters
+        ----------
+        folder_id : str | int
+            ID of folder to get.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the folder's information.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        response = r.get(
+            url=self._FOLDERS_URL + f"/{folder_id}",
+            headers=_header,
+        )
+
+        if response.ok:
+            folder_info = response.json()
+            logger.debug(f"Folder {folder_info['name']} retrieved with id {folder_id}")
+            return folder_info
+        else:
+            msg = "Folder could not be retrieved."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def create_folder(
+        self,
+        name: str,
+        parent_id: str | int | None = None,
+        team_id: str | int | None = None
+    ) -> dict[Any, Any]:
+        """Create a new folder.
+
+        Parameters
+        ----------
+        name: str
+            Name of the folder to be created.
+        parent_id: str | int, optional
+            The parent folder that the folder belongs to.
+        team_id: str | int, optional
+            The team that the folder belongs to. If teamId is empty, the folder will belong to the user directly.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the folder's information.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        _query: dict[str, Any] = {"name": name}
+        if parent_id:
+            _query["parentId"] = parent_id
+        if team_id:
+            _query["teamId"] = team_id
+
+        response = r.post(
+            url=self._FOLDERS_URL,
+            headers=_header,
+            data=json.dumps(_query),
+        )
+
+        if response.ok:
+            folder_info = response.json()
+            logger.debug(f"Folder {folder_info['name']} created with id {folder_info['id']}")
+            return folder_info
+        else:
+            msg = "Folder could not be created."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def update_folder(
+        self,
+        folder_id: str | int,
+        name: str | None = None,
+        parent_id: str | int | None = None,
+        team_id: str | int | None = None,
+        user_id: str | int | None = None,
+    ) -> dict[Any, Any]:
+        """Update an existing folder.
+
+        Parameters
+        ----------
+        folder_id : str | int
+            ID of folder to update.
+        name: str, optional
+            Name to change the folder to.
+        parent_id: str | int, optional
+            The parent folder where this folder is stored.
+        team_id: str | int, optional
+            The team that the folder belongs to.
+        user_id: str | int, optional
+            The user that the folder belongs to.
+
+        Returns
+        -------
+        r.Response.content
+            The content of the requests.delete
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        _query: dict[str, Any] = {}
+        if name:
+            _query["name"] = name
+        if parent_id:
+            _query["parentId"] = parent_id
+        if team_id:
+            _query["teamId"] = team_id
+        if user_id:
+            _query["userId"] = user_id
+
+        url = self._FOLDERS_URL + f"/{folder_id}"
+        response = r.patch(
+            url=url,
+            headers=_header,
+            data=json.dumps(_query),
+        )
+
+        if response.ok:
+            folder_info = response.json()
+            logger.debug(f"Folder {folder_id} updated")
+            return folder_info
+        else:
+            msg = "Folder could not be updated."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def delete_folder(self, folder_id: str | int):
+        """Delete an existing folder.
+
+        Parameters
+        ----------
+        folder_id : str | int
+            ID of folder to delete.
+
+        Returns
+        -------
+        r.Response.content
+            The content of the requests.delete
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        url = self._FOLDERS_URL + f"/{folder_id}"
+        response = r.delete(
+            url=url,
+            headers=_header,
+        )
+
+        if response.ok:
+            logger.debug(f"Folder {folder_id} deleted")
+            return response.content
+        else:
+            msg = "Folder could not be deleted."
+            logger.error(msg)
+            raise Exception(msg)
+
     def move_chart(self, chart_id: str, folder_id: str) -> Any | None:
         """Moves a chart, table, or map to a specified folder.
 
@@ -645,9 +807,42 @@ class Datawrapper:
 
         if move_chart_response.status_code == 200:
             logger.debug(f"Chart moved to folder {folder_id}")
+            return None
         else:
-            logger.error("Chart could not be moved at the moment.")
-        return None
+            msg = "Chart could not be moved at the moment."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def copy_chart(self, chart_id: str) -> dict[Any, Any]:
+        """Copy one of your charts, tables, or maps and create a new editable copy.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table, or map.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the information of the chart, table, or map.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        url = f"{self._CHARTS_URL}/{chart_id}/copy"
+        response = r.post(
+            url=url,
+            headers=_header
+        )
+
+        if response.ok:
+            copy_id = response.json()
+            logger.debug(f"Chart {chart_id} copied to {copy_id}")
+            return copy_id
+        else:
+            msg = "Chart could not be copied at the moment."
+            logger.error(msg)
+            raise Exception(msg)
 
     def fork_chart(self, chart_id: str) -> str:
         """Fork a chart, table, or map and create an editable copy.
