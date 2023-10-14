@@ -650,7 +650,7 @@ class Datawrapper:
         return None
 
     def copy_chart(self, chart_id: str) -> dict[Any, Any]:
-        """Copy a chart, table, or map and create an editable copy.
+        """Copy one of your charts, tables, or maps and create a new editable copy.
 
         Parameters
         ----------
