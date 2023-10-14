@@ -22,9 +22,9 @@ def test_fork():
     # chart from the Datawrapper "river"
     # of open-source material.
     source_id = "dZntB"
-    fork_id = dw.fork_chart(source_id)
-    assert isinstance(source_id, str)
-    assert source_id != fork_id
+    fork = dw.fork_chart(source_id)
+    assert isinstance(fork, dict)
+    assert source_id != fork["id"]
 
 
 def test_usage():
