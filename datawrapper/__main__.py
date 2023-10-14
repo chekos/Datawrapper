@@ -690,7 +690,6 @@ class Datawrapper:
 
         if response.ok:
             folder_info = response.json()
-            print(folder_info)
             logger.debug(f"Folder {folder_info['name']} created with id {folder_info['id']}")
             return folder_info
         else:
@@ -740,13 +739,11 @@ class Datawrapper:
             _query["userId"] = user_id
 
         url = self._FOLDERS_URL + f"/{folder_id}"
-        print(url)
         response = r.patch(
             url=url,
             headers=_header,
             data=json.dumps(_query),
         )
-        print(response.content)
 
         if response.ok:
             folder_info = response.json()
