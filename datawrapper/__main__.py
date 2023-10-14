@@ -649,7 +649,7 @@ class Datawrapper:
             logger.error("Chart could not be moved at the moment.")
         return None
 
-    def copy_chart(self, chart_id: str) -> str:
+    def copy_chart(self, chart_id: str) -> dict[Any, Any]:
         """Copy a chart, table, or map and create an editable copy.
 
         Parameters
@@ -659,8 +659,8 @@ class Datawrapper:
 
         Returns
         -------
-        str
-            ID of the copied chart.
+        dict
+            A dictionary containing the information of the chart, table, or map.
         """
         _header = self._auth_header
         _header["accept"] = "*/*"
@@ -672,7 +672,7 @@ class Datawrapper:
         )
 
         if response.ok:
-            copy_id = response.json()["id"]
+            copy_id = response.json()
             logger.debug(f"Chart {chart_id} copied to {copy_id}")
             return copy_id
         else:
