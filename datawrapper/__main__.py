@@ -41,7 +41,7 @@ class Datawrapper:
     _BASE_URL = "https://api.datawrapper.de"
     _CHARTS_URL = _BASE_URL + "/v3/charts"
     _PUBLISH_URL = _BASE_URL + "/charts"
-    _FOLDERS_URL = _BASE_URL + "/folders"
+    _FOLDERS_URL = _BASE_URL + "/v3/folders"
 
     _ACCESS_TOKEN = os.getenv("DATAWRAPPER_ACCESS_TOKEN")
 
@@ -618,6 +618,172 @@ class Datawrapper:
             return get_folders_response.json()
         else:
             msg = "Couldn't retrieve folders in account. Make sure you have the rigth authorization credentials (access token)."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def get_folder(self, folder_id: str | int) -> dict[Any, Any]:
+        """Get an existing folder.
+
+        Parameters
+        ----------
+        folder_id : str | int
+            ID of folder to get.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the folder's information.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        response = r.get(
+            url=self._FOLDERS_URL + f"/{folder_id}",
+            headers=_header,
+        )
+
+        if response.ok:
+            folder_info = response.json()
+            logger.debug(f"Folder {folder_info['name']} retrieved with id {folder_id}")
+            return folder_info
+        else:
+            msg = "Folder could not be retrieved."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def create_folder(
+        self,
+        name: str,
+        parent_id: str | int | None = None,
+        team_id: str | int | None = None
+    ) -> dict[Any, Any]:
+        """Create a new folder.
+
+        Parameters
+        ----------
+        name: str
+            Name of the folder to be created.
+        parent_id: str | int, optional
+            The parent folder that the folder belongs to.
+        team_id: str | int, optional
+            The team that the folder belongs to. If teamId is empty, the folder will belong to the user directly.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the folder's information.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        _query = {"name": name}
+        if parent_id:
+            _query["parentId"] = parent_id
+        if team_id:
+            _query["teamId"] = team_id
+
+        response = r.post(
+            url=self._FOLDERS_URL,
+            headers=_header,
+            data=json.dumps(_query),
+        )
+
+        if response.ok:
+            folder_info = response.json()
+            print(folder_info)
+            logger.debug(f"Folder {folder_info['name']} created with id {folder_info['id']}")
+            return folder_info
+        else:
+            msg = "Folder could not be created."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def update_folder(
+        self,
+        folder_id: str | int,
+        name: str | None = None,
+        parent_id: str | int | None = None,
+        team_id: str | int | None = None,
+        user_id: str | int | None = None,
+    ) -> dict[Any, Any]:
+        """Update an existing folder.
+
+        Parameters
+        ----------
+        folder_id : str | int
+            ID of folder to update.
+        name: str, optional
+            Name to change the folder to.
+        parent_id: str | int, optional
+            The parent folder where this folder is stored.
+        team_id: str | int, optional
+            The team that the folder belongs to.
+        user_id: str | int, optional
+            The user that the folder belongs to.
+
+        Returns
+        -------
+        r.Response.content
+            The content of the requests.delete
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        _query = {}
+        if name:
+            _query["name"] = name
+        if parent_id:
+            _query["parentId"] = parent_id
+        if team_id:
+            _query["teamId"] = team_id
+        if user_id:
+            _query["userId"] = user_id
+
+        url = self._FOLDERS_URL + f"/{folder_id}"
+        print(url)
+        response = r.patch(
+            url=url,
+            headers=_header,
+            data=json.dumps(_query),
+        )
+        print(response.content)
+
+        if response.ok:
+            folder_info = response.json()
+            logger.debug(f"Folder {folder_id} updated")
+            return folder_info
+        else:
+            msg = "Folder could not be updated."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def delete_folder(self, folder_id: str | int) -> dict[Any, Any]:
+        """Delete an existing folder.
+
+        Parameters
+        ----------
+        folder_id : str | int
+            ID of folder to delete.
+
+        Returns
+        -------
+        r.Response.content
+            The content of the requests.delete
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        url = self._FOLDERS_URL + f"/{folder_id}"
+        response = r.delete(
+            url=url,
+            headers=_header,
+        )
+
+        if response.ok:
+            logger.debug(f"Folder {folder_id} deleted")
+            return response.content
+        else:
+            msg = "Folder could not be deleted."
             logger.error(msg)
             raise Exception(msg)
 
