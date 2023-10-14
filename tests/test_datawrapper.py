@@ -14,6 +14,16 @@ def test_get_folders():
     dw = Datawrapper()
     dw.get_folders()
 
+def test_fork():
+    """Test the fork_chart method."""
+    dw = Datawrapper()
+    # For the test, we will fork a random
+    # chart from the Datawrapper "river"
+    # of open-source material.
+    source_id = "dZntB"
+    fork = dw.fork_chart(source_id)
+    assert isinstance(fork, dict)
+    assert source_id != fork["id"]
 
 def test_copy():
     """Test the copy_chart method."""
@@ -25,7 +35,6 @@ def test_copy():
     copy_info = dw.copy_chart(chart_info["id"])
     assert isinstance(copy_info, dict)
     assert chart_info["title"] == copy_info["title"]
-
 
 def test_usage():
     """Test creating and updating charts with the same code as our example notebook."""
