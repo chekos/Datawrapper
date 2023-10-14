@@ -676,7 +676,7 @@ class Datawrapper:
         _header = self._auth_header
         _header["accept"] = "*/*"
 
-        _query = {"name": name}
+        _query: dict[str, Any] = {"name": name}
         if parent_id:
             _query["parentId"] = parent_id
         if team_id:
@@ -728,7 +728,7 @@ class Datawrapper:
         _header = self._auth_header
         _header["accept"] = "*/*"
 
-        _query = {}
+        _query: dict[str, Any] = {}
         if name:
             _query["name"] = name
         if parent_id:
@@ -754,7 +754,7 @@ class Datawrapper:
             logger.error(msg)
             raise Exception(msg)
 
-    def delete_folder(self, folder_id: str | int) -> dict[Any, Any]:
+    def delete_folder(self, folder_id: str | int):
         """Delete an existing folder.
 
         Parameters
