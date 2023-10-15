@@ -626,7 +626,7 @@ class Datawrapper:
             logger.error(msg)
             raise Exception(msg)
 
-    def get_basemaps(self) -> list[dict[Any, Any]]:
+    def get_basemaps(self) -> list[dict[str, Any]]:
         """Get a list of the available basemaps.
 
         Returns
@@ -634,9 +634,43 @@ class Datawrapper:
         list[dict]
             A list of dictionaries containing the basemaps available in your Datawrapper account.
         """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
         response = r.get(
             url=self._BASEMAPS_URL,
-            headers=self._auth_header,
+            headers=_header,
+        )
+
+        if response.ok:
+            return response.json()
+        else:
+            msg = "Couldn't retrieve basemaps in your account."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def get_basemap(self, basemap_id: str, wgs84: bool = False) -> dict[str, Any]:
+        """Get a list of the available basemaps.
+
+        Parameters
+        ----------
+        basemap_id : str
+            ID of basemap to get.
+        wgs84 : bool, optional
+            Whether to return the basemap in the WGS84 project, by default False
+
+        Returns
+        -------
+        dict
+            A dictionaries containing the requested basemap's metadata.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        response = r.get(
+            url=f"{self._BASEMAPS_URL}/{basemap_id}",
+            headers=_header,
+            params={"wgs84": wgs84},
         )
 
         if response.ok:
