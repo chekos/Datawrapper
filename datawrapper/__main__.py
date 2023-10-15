@@ -1,7 +1,8 @@
 """Access Datawrapper's API to create, update, delete charts.
 
 Datawrapper API lets you programatically interface with your charts.
-It lets you create and edit charts, update your account information and many more things to come.
+It lets you create and edit charts, update your account information and many more things
+ to come.
 
     This package is a light-weight wrapper around Datawrapper's API.
 
@@ -31,11 +32,13 @@ logger = logging.getLogger(__name__)
 class Datawrapper:
     """Handles connecting with Datawrapper's API.
 
-    Handles access to your Datawrapper's account, create, delete and move charts, tables or maps.
+    Handles access to your Datawrapper's account, create, delete and move charts, tables
+      or maps.
     Will attempt to read environment variable DATAWRAPPER_ACCESS_TOKEN by default.
 
     Args:
-        access_token: A personal access token to use the API. See app.datawrapper.de/account/api-tokens.
+        access_token: A personal access token to use the API.
+        See app.datawrapper.de/account/api-tokens.
     """
 
     _BASE_URL = "https://api.datawrapper.de"
@@ -73,7 +76,10 @@ class Datawrapper:
         if account_info_response.status_code == 200:
             return account_info_response.json()
         else:
-            msg = "Couldn't find account. Make sure your credentials (access_code) are correct."
+            msg = (
+                "Couldn't find account. Make sure your credentials ",
+                "(access_code) are correct.",
+            )
             logger.error(msg)
             raise Exception(msg)
 
@@ -85,7 +91,8 @@ class Datawrapper:
         chart_id : str
             ID of chart, table or map to add data to.
         data : pd.DataFrame | str
-            A pandas dataframe containing the data to be added or a string that contains the data.
+            A pandas dataframe containing the data to be added or a string that contains
+            the data.
 
         Returns
         -------
@@ -151,13 +158,17 @@ class Datawrapper:
         title : str, optional
             Title for new chart, table or map, by default "New Chart"
         chart_type : str, optional
-            Chart type to be created. See https://developer.datawrapper.de/docs/chart-types, by default "d3-bars-stacked"
+            Chart type to be created. See https://developer.datawrapper.de/docs/chart-types,
+            by default "d3-bars-stacked"
         data : [type], optional
-            A pandas DataFrame or string containing the data to be added, by default None
+            A pandas DataFrame or string containing the data to be added,
+            by default None
         folder_id : str, optional
-            ID of folder in Datawrapper.de for the chart, table or map to be created in, by default ""
+            ID of folder in Datawrapper.de for the chart, table or map to be created in,
+            by default ""
         organization_id : str, optional
-            ID of the team where the chart should be created. The authenticated user must have access to this team.
+            ID of the team where the chart should be created. The authenticated user
+            must have access to this team.
         metadata: dict, optional
             A Python dictionary of properties to add.
 
@@ -192,7 +203,10 @@ class Datawrapper:
                 "\nNOTE: Maps need a valid basemap, set in properties -> visualize"
             )
             logger.debug(
-                "Full list of valid maps can be retrieved with\n\ncurl --request GET --url https://api.datawrapper.de/plugin/basemap\n"
+                (
+                    "Full list of valid maps can be retrieved with\n\n",
+                    "curl --request GET --url https://api.datawrapper.de/plugin/basemap\n",
+                )
             )
 
         if new_chart_response.status_code <= 201:
@@ -299,8 +313,6 @@ class Datawrapper:
                 iframe_code = publish_chart_info["data"]["metadata"]["publish"][
                     "embed-codes"
                 ]["embed-method-iframe"]
-                # iframe_width = publish_chart_info['data']['metadata']['publish']['embed-width']
-                # iframe_height = publish_chart_info['data']['metadata']['publish']['embed-height']
                 return HTML(iframe_code)
             else:
                 return None
@@ -331,12 +343,17 @@ class Datawrapper:
         if chart_properties_response.status_code == 200:
             return chart_properties_response.json()
         else:
-            msg = "Make sure you have the right id and authorization credentials (access_token)."
+            msg = (
+                "Make sure you have the right id and authorization ",
+                "credentials (access_token).",
+            )
             logger.error(msg)
             raise Exception(msg)
 
     def chart_data(self, chart_id: str):
-        """Retrieve the data stored for a specific chart, table or map, which is typically CSV.
+        """Retrieve the data stored for a specific chart, table or map,
+        which is typically CSV.
+
 
         Parameters
         ----------
@@ -357,7 +374,7 @@ class Datawrapper:
         # Check if the request was successful
         assert (
             response.ok
-        ), "Make sure you have the right id and authorization credentials (access_token)."
+        ), "Ensure you have the right id and authorization credentials (access_token)."
 
         # Return the data as json if the mimetype is json
         if "json" in response.headers["content-type"]:
@@ -411,7 +428,9 @@ class Datawrapper:
         folder_id: str = "",
         organization_id: str = "",
     ) -> Any | None:
-        """Updates a chart's title, theme, type, language, or location (folder/organization).
+        """Updates a chart's title, theme, type, language,
+        or location (folder/organization).
+
 
         Parameters
         ----------
@@ -422,7 +441,8 @@ class Datawrapper:
         theme : str, optional
             New theme, by default ""
         chart_type : str, optional
-            New chart type. See https://developer.datawrapper.de/docs/chart-types, by default ""
+            New chart type. See https://developer.datawrapper.de/docs/chart-types,
+            by default ""
         language : str, optional
             New language, by default ""
         folder_id : str, optional
@@ -529,13 +549,17 @@ class Datawrapper:
         chart_id : str
             ID of chart, table, or map.
         unit : str, optional
-            One of px, mm, inch. Defines the unit in which the borderwidth, height, and width will be measured in, by default "px"
+            One of px, mm, inch. Defines the unit in which the borderwidth, height,
+            and width will be measured in, by default "px"
         mode : str, optional
-            One of rgb or cmyk. Which color mode the output should be in, by default "rgb"
+            One of rgb or cmyk. Which color mode the output should be in,
+            by default "rgb"
         width : int, optional
-            Width of visualization. If not specified, it takes the chart width, by default None
+            Width of visualization. If not specified, it takes the chart width,
+            by default None
         plain : bool, optional
-            Defines if only the visualization should be exported (True), or if it should include header and footer as well (False), by default False
+            Defines if only the visualization should be exported (True), or if it should
+             include header and footer as well (False), by default False
         zoom : int, optional
             Defines the multiplier for the png size, by default 2
         scale : int, optional
@@ -549,7 +573,8 @@ class Datawrapper:
         filepath : str, optional
             Name/filepath to save output in, by default "./image.png"
         display : bool, optional
-            Whether to display the exported image as output in the notebook cell, by default False
+            Whether to display the exported image as output in the notebook cell,
+            by default False
 
         Returns None
         -------
@@ -606,7 +631,8 @@ class Datawrapper:
         Returns
         -------
         dict
-            A dictionary containing the folders in your Datawrapper account and their information.
+            A dictionary containing the folders in your Datawrapper account and their
+            information.
         """
         get_folders_response = r.get(
             url=self._FOLDERS_URL,
@@ -616,7 +642,10 @@ class Datawrapper:
         if get_folders_response.status_code == 200:
             return get_folders_response.json()
         else:
-            msg = "Couldn't retrieve folders in account. Make sure you have the rigth authorization credentials (access token)."
+            msg = (
+                "Couldn't retrieve folders in account. Make sure you have the right ",
+                "authorization credentials (access token).",
+            )
             logger.error(msg)
             raise Exception(msg)
 
@@ -654,7 +683,7 @@ class Datawrapper:
         self,
         name: str,
         parent_id: str | int | None = None,
-        team_id: str | int | None = None
+        team_id: str | int | None = None,
     ) -> dict[Any, Any]:
         """Create a new folder.
 
@@ -665,7 +694,8 @@ class Datawrapper:
         parent_id: str | int, optional
             The parent folder that the folder belongs to.
         team_id: str | int, optional
-            The team that the folder belongs to. If teamId is empty, the folder will belong to the user directly.
+            The team that the folder belongs to. If teamId is empty, the folder will
+            belong to the user directly.
 
         Returns
         -------
@@ -689,7 +719,9 @@ class Datawrapper:
 
         if response.ok:
             folder_info = response.json()
-            logger.debug(f"Folder {folder_info['name']} created with id {folder_info['id']}")
+            logger.debug(
+                f"Folder {folder_info['name']} created with id {folder_info['id']}"
+            )
             return folder_info
         else:
             msg = "Folder could not be created."
@@ -830,21 +862,18 @@ class Datawrapper:
         _header["accept"] = "*/*"
 
         url = f"{self._CHARTS_URL}/{chart_id}/copy"
-        response = r.post(
-            url=url,
-            headers=_header
-        )
+        response = r.post(url=url, headers=_header)
 
         if response.ok:
             copy_id = response.json()
-            logger.debug(f"Chart {chart_id} copied to {copy_id}")
+            logger.debug(f"Chart {chart_id} copied to {copy_id['id']}")
             return copy_id
         else:
             msg = "Chart could not be copied at the moment."
             logger.error(msg)
             raise Exception(msg)
 
-    def fork_chart(self, chart_id: str) -> str:
+    def fork_chart(self, chart_id: str) -> dict[Any, Any]:
         """Fork a chart, table, or map and create an editable copy.
 
         Parameters
@@ -861,17 +890,17 @@ class Datawrapper:
         _header["accept"] = "*/*"
 
         url = f"{self._CHARTS_URL}/{chart_id}/fork"
-        response = r.post(
-            url=url,
-            headers=_header
-        )
+        response = r.post(url=url, headers=_header)
 
         if response.ok:
-            fork_id = response.json()["id"]
-            logger.debug(f"Chart {chart_id} copied to {fork_id}")
-            return fork_id
+            fork = response.json()
+            logger.debug(f"Chart {chart_id} copied to {fork['id']}")
+            return fork
         else:
-            msg = "Chart could not be forked. If it's a chart you created, you should trying copying it instead."
+            msg = (
+                "Chart could not be forked. If it's a chart you created, ",
+                "you should trying copying it instead.",
+            )
             logger.error(msg)
             raise Exception(msg)
 
@@ -922,13 +951,15 @@ class Datawrapper:
         order : str, optional
             Result order (ascending or descending), by default "DESC"
         order_by : str, optional
-            Attribute to order by. One of createdAt, email, id, or name, by default "createdAt"
+            Attribute to order by. One of createdAt, email, id, or name,
+            by default "createdAt"
         limit : int, optional
             Maximum items to fetch, by default 25
         folder_id : str, optional
             ID of folder in Datawrapper.de where to list charts, by default ""
         team_id : str, optional
-            ID of the team where to list charts. The authenticated user must have access to this team, by default ""
+            ID of the team where to list charts. The authenticated user must have access
+            to this team, by default ""
 
         Returns
         -------
