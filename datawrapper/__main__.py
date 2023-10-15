@@ -662,7 +662,7 @@ class Datawrapper:
         Returns
         -------
         dict
-            A dictionaries containing the requested basemap's metadata.
+            A dictionary containing the requested basemap's metadata.
         """
         _header = self._auth_header
         _header["accept"] = "*/*"
@@ -693,7 +693,7 @@ class Datawrapper:
         Returns
         -------
         dict
-            A dictionaries containing the requested data.
+            A dictionary containing the requested data.
         """
         _header = self._auth_header
         _header["accept"] = "*/*"
