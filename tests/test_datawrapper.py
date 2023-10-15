@@ -24,7 +24,7 @@ def test_fork():
     source_id = "dZntB"
     fork_info = dw.fork_chart(source_id)
     assert isinstance(fork_info, dict)
-    assert source_id != fork_info['id']
+    assert source_id != fork_info["id"]
 
 
 def test_copy():

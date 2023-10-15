@@ -32,9 +32,7 @@ def test_folder_crud():
     second_folder_info = dw.create_folder(name="My second folder " + suffix)
 
     # Move the second folder into the first folder
-    dw.update_folder(
-        folder_id=second_folder_info["id"], parent_id=folder_info["id"]
-    )
+    dw.update_folder(folder_id=second_folder_info["id"], parent_id=folder_info["id"])
 
     # Get the folder's data with a fresh get_folder call
     second_folder_info = dw.get_folder(second_folder_info["id"])
@@ -43,7 +41,9 @@ def test_folder_crud():
     assert second_folder_info["parentId"] == folder_info["id"]
 
     # Change the name of the second folder
-    dw.update_folder(folder_id=second_folder_info["id"], name="My second folder (renamed)")
+    dw.update_folder(
+        folder_id=second_folder_info["id"], name="My second folder (renamed)"
+    )
 
     # Get it fresh and verify the change
     second_folder_info = dw.get_folder(second_folder_info["id"])
