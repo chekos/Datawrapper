@@ -354,6 +354,7 @@ class Datawrapper:
         """Retrieve the data stored for a specific chart, table or map,
         which is typically CSV.
 
+
         Parameters
         ----------
         chart_id : str
@@ -429,6 +430,7 @@ class Datawrapper:
     ) -> Any | None:
         """Updates a chart's title, theme, type, language,
         or location (folder/organization).
+        
 
         Parameters
         ----------
