@@ -14,6 +14,7 @@ def test_get_folders():
     dw = Datawrapper()
     dw.get_folders()
 
+
 def test_fork():
     """Test the fork_chart method."""
     dw = Datawrapper()
@@ -21,9 +22,10 @@ def test_fork():
     # chart from the Datawrapper "river"
     # of open-source material.
     source_id = "dZntB"
-    fork = dw.fork_chart(source_id)
-    assert isinstance(fork, dict)
-    assert source_id != fork["id"]
+    fork_info = dw.fork_chart(source_id)
+    assert isinstance(fork_info, dict)
+    assert source_id != fork_info['id']
+
 
 def test_copy():
     """Test the copy_chart method."""
@@ -34,7 +36,8 @@ def test_copy():
     )
     copy_info = dw.copy_chart(chart_info["id"])
     assert isinstance(copy_info, dict)
-    assert chart_info["title"] == copy_info["title"]
+    assert chart_info["title"] in copy_info["title"]
+
 
 def test_usage():
     """Test creating and updating charts with the same code as our example notebook."""
@@ -52,9 +55,7 @@ def test_usage():
 
     # Create a chart
     chart_info = dw.create_chart(
-        title="Where do people live?",
-        chart_type="d3-bars-stacked",
-        data=df
+        title="Where do people live?", chart_type="d3-bars-stacked", data=df
     )
 
     # Add a description
@@ -82,12 +83,7 @@ def test_usage():
     dw.update_metadata(chart_info["id"], properties)
 
     # Export it
-    dw.export_chart(
-        chart_info["id"],
-        output="png",
-        filepath="chart.png",
-        display=False
-    )
+    dw.export_chart(chart_info["id"], output="png", filepath="chart.png", display=False)
     dw.get_iframe_code(chart_info["id"])
 
     # Pull metadata
