@@ -44,6 +44,7 @@ class Datawrapper:
     _BASE_URL = "https://api.datawrapper.de"
     _CHARTS_URL = _BASE_URL + "/v3/charts"
     _PUBLISH_URL = _BASE_URL + "/charts"
+    _BASEMAPS_URL = _BASE_URL + "/v3/basemaps"
     _FOLDERS_URL = _BASE_URL + "/v3/folders"
 
     _ACCESS_TOKEN = os.getenv("DATAWRAPPER_ACCESS_TOKEN")
@@ -622,6 +623,26 @@ class Datawrapper:
             raise Exception(msg)
         else:
             msg = "Chart could not be exported."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def get_basemaps(self) -> list[dict[Any, Any]]:
+        """Get a list of the available basemaps.
+
+        Returns
+        -------
+        list[dict]
+            A list of dictionaries containing the basemaps available in your Datawrapper account.
+        """
+        response = r.get(
+            url=self._BASEMAPS_URL,
+            headers=self._auth_header,
+        )
+
+        if response.ok:
+            return response.json()
+        else:
+            msg = "Couldn't retrieve basemaps in your account."
             logger.error(msg)
             raise Exception(msg)
 
