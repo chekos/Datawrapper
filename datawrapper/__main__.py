@@ -650,7 +650,7 @@ class Datawrapper:
             raise Exception(msg)
 
     def get_basemap(self, basemap_id: str, wgs84: bool = False) -> dict[str, Any]:
-        """Get a list of the available basemaps.
+        """Get the metdata of the requested basemap.
 
         Parameters
         ----------
@@ -676,7 +676,37 @@ class Datawrapper:
         if response.ok:
             return response.json()
         else:
-            msg = "Couldn't retrieve basemaps in your account."
+            msg = "Couldn't retrieve basemap in your account."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def get_basemap_key(self, basemap_id: str, basemap_key: str) -> dict[str, Any]:
+        """Get the list of available values for a basemap's key.
+
+        Parameters
+        ----------
+        basemap_id : str
+            ID of basemap to get.
+        basemap_key : str
+            Metadata key of basemap to get.
+
+        Returns
+        -------
+        dict
+            A dictionaries containing the requested data.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        response = r.get(
+            url=f"{self._BASEMAPS_URL}/{basemap_id}/{basemap_key}",
+            headers=_header,
+        )
+
+        if response.ok:
+            return response.json()
+        else:
+            msg = "Couldn't retrieve basemap key in your account."
             logger.error(msg)
             raise Exception(msg)
 
