@@ -44,6 +44,7 @@ class Datawrapper:
     _BASE_URL = "https://api.datawrapper.de"
     _CHARTS_URL = _BASE_URL + "/v3/charts"
     _PUBLISH_URL = _BASE_URL + "/charts"
+    _BASEMAPS_URL = _BASE_URL + "/v3/basemaps"
     _FOLDERS_URL = _BASE_URL + "/v3/folders"
 
     _ACCESS_TOKEN = os.getenv("DATAWRAPPER_ACCESS_TOKEN")
@@ -622,6 +623,90 @@ class Datawrapper:
             raise Exception(msg)
         else:
             msg = "Chart could not be exported."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def get_basemaps(self) -> list[dict[str, Any]]:
+        """Get a list of the available basemaps.
+
+        Returns
+        -------
+        list[dict]
+            A list of dictionaries containing the basemaps available in your Datawrapper account.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        response = r.get(
+            url=self._BASEMAPS_URL,
+            headers=_header,
+        )
+
+        if response.ok:
+            return response.json()
+        else:
+            msg = "Couldn't retrieve basemaps in your account."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def get_basemap(self, basemap_id: str, wgs84: bool = False) -> dict[str, Any]:
+        """Get the metdata of the requested basemap.
+
+        Parameters
+        ----------
+        basemap_id : str
+            ID of basemap to get.
+        wgs84 : bool, optional
+            Whether to return the basemap in the WGS84 project, by default False
+
+        Returns
+        -------
+        dict
+            A dictionary containing the requested basemap's metadata.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        response = r.get(
+            url=f"{self._BASEMAPS_URL}/{basemap_id}",
+            headers=_header,
+            params={"wgs84": wgs84},
+        )
+
+        if response.ok:
+            return response.json()
+        else:
+            msg = "Couldn't retrieve basemap in your account."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def get_basemap_key(self, basemap_id: str, basemap_key: str) -> dict[str, Any]:
+        """Get the list of available values for a basemap's key.
+
+        Parameters
+        ----------
+        basemap_id : str
+            ID of basemap to get.
+        basemap_key : str
+            Metadata key of basemap to get.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the requested data.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        response = r.get(
+            url=f"{self._BASEMAPS_URL}/{basemap_id}/{basemap_key}",
+            headers=_header,
+        )
+
+        if response.ok:
+            return response.json()
+        else:
+            msg = "Couldn't retrieve basemap key in your account."
             logger.error(msg)
             raise Exception(msg)
 
