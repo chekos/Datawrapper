@@ -837,14 +837,14 @@ class Datawrapper:
 
         if response.ok:
             copy_id = response.json()
-            logger.debug(f"Chart {chart_id} copied to {copy_id}")
+            logger.debug(f"Chart {chart_id} copied to {copy_id['id']}")
             return copy_id
         else:
             msg = "Chart could not be copied at the moment."
             logger.error(msg)
             raise Exception(msg)
 
-    def fork_chart(self, chart_id: str) -> str:
+    def fork_chart(self, chart_id: str) -> dict[Any, Any]:
         """Fork a chart, table, or map and create an editable copy.
 
         Parameters
@@ -867,9 +867,9 @@ class Datawrapper:
         )
 
         if response.ok:
-            fork_id = response.json()["id"]
-            logger.debug(f"Chart {chart_id} copied to {fork_id}")
-            return fork_id
+            fork = response.json()
+            logger.debug(f"Chart {chart_id} copied to {fork['id']}")
+            return fork
         else:
             msg = "Chart could not be forked. If it's a chart you created, you should trying copying it instead."
             logger.error(msg)
