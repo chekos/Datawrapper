@@ -42,6 +42,7 @@ class Datawrapper:
     """
 
     _BASE_URL = "https://api.datawrapper.de"
+    _ME_URL = _BASE_URL + "/v3/me"
     _CHARTS_URL = _BASE_URL + "/v3/charts"
     _PUBLISH_URL = _BASE_URL + "/charts"
     _FOLDERS_URL = _BASE_URL + "/v3/folders"
@@ -62,7 +63,18 @@ class Datawrapper:
         self._access_token = access_token
         self._auth_header = {"Authorization": f"Bearer {access_token}"}
 
-    def account_info(self) -> dict[Any, Any] | None | Any:
+    def account_info(self) -> dict[str, Any]:
+        """A deprecated method for calling get_my_account."""
+        # Issue a deprecation warning
+        logger.warning(
+            "This method is deprecated and will be removed in a future version. "
+            "Use get_account_info instead."
+        )
+
+        # Use the newer method
+        return self.get_my_account()
+
+    def get_my_account(self) -> dict[str, Any]:
         """Access your account information.
 
         Returns
@@ -70,16 +82,17 @@ class Datawrapper:
         dict
             A dictionary containing your account information.
         """
-        account_info_response = r.get(
-            url=self._BASE_URL + "/v3/me", headers=self._auth_header
+        _header = self._auth_header
+        _header["content-type"] = "*/*"
+
+        response = r.get(
+            url=self._ME_URL,
+            headers=_header
         )
-        if account_info_response.status_code == 200:
-            return account_info_response.json()
+        if response.ok:
+            return response.json()
         else:
-            msg = (
-                "Couldn't find account. Make sure your credentials ",
-                "(access_code) are correct.",
-            )
+            msg = "Couldn't access account. Make sure your credentials are correct."
             logger.error(msg)
             raise Exception(msg)
 

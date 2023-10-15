@@ -45,7 +45,7 @@ def test_usage():
     dw = Datawrapper()
 
     # Get account info
-    dw.account_info()
+    dw.get_my_account()
 
     # Pull data
     df = pd.read_csv(
