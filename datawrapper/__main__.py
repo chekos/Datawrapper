@@ -83,7 +83,7 @@ class Datawrapper:
             A dictionary containing your account information.
         """
         _header = self._auth_header
-        _header["content-type"] = "*/*"
+        _header["accept"] = "*/*"
 
         response = r.get(
             url=self._ME_URL,
@@ -93,6 +93,211 @@ class Datawrapper:
             return response.json()
         else:
             msg = "Couldn't access account. Make sure your credentials are correct."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def update_my_account(
+        self,
+        name: str | None = None,
+        email: str | None = None,
+        role: str | None = None,
+        language: str | None = None,
+        password: str | None = None,
+        old_password: str | None = None,
+    ):
+        """Update your account information.
+
+        Parameters
+        ----------
+        name : str, optional
+            Your new name, by default None
+        email : str, optional
+            Your new email, by default None
+        role : str, optional
+            Your new role, by default None
+        language: str, optional
+            Your new language, by default None
+        password: str, optional
+            Your new, strong password, by default None
+        old_password: str, optional
+            Your previous password, by default None
+
+        Returns
+        -------
+        dict
+            A dictionary containing your updated account information.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+        _header["content-type"] = "application/json"
+
+        _query: dict[str, Any] = {}
+        if name:
+            _query["name"] = name
+        if email:
+            _query["email"] = email
+        if role:
+            _query["role"] = role
+        if language:
+            _query["language"] = language
+        if password and old_password:
+            _query["password"] = password
+            _query["oldPassword"] = old_password
+        if password and not old_password:
+            msg = "You must provide your old password to change it."
+            logger.error(msg)
+            raise Exception(msg)
+        if old_password and not password:
+            msg = "You must provide a new password to change it."
+            logger.error(msg)
+            raise Exception(msg)
+
+        response = r.patch(
+            url=self._ME_URL,
+            headers=_header,
+            data=json.dumps(_query),
+        )
+
+        if response.ok:
+            return response.json()
+        else:
+            msg = "Account could not be updated."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def update_my_settings(
+        self,
+        active_team: str | None = None,
+    ):
+        """Update your account information.
+
+        Parameters
+        ----------
+        active_team: str, optional
+            Your active team
+
+        Returns
+        -------
+        dict
+            The user settings dictionary following the change.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+        _header["content-type"] = "application/json"
+
+        _query: dict[str, Any] = {}
+        if active_team:
+            _query["activeTeam"] = active_team
+
+        if not _query:
+            msg = "No updates submitted."
+            logger.error(msg)
+            raise Exception(msg)
+
+        response = r.patch(
+            url=self._ME_URL + "/settings",
+            headers=_header,
+            data=json.dumps(_query),
+        )
+
+        if response.ok:
+            return response.json()
+        else:
+            msg = "Account could not be updated."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def get_my_recently_edited_charts(
+        self,
+        limit: str | int = 100,
+        offset: str | int = 0,
+        min_last_edit_step: str | int = 0, 
+    ) -> dict[str, Any]:
+        """Get a list of your recently edited charts.
+
+        Parameters
+        ----------
+        limit: str | int
+            Maximum items to fetch. Useful for pagination. 100 by default.
+        offset: str | int
+            Number of items to skip. Useful for pagination. Zero by default.
+        min_last_edit_step: str | int
+            Filter visualizations by the last editor step they've
+            been opened in (1=upload, 2=describe, 3=visualize, etc).
+            Zero by default.
+
+        Returns
+        -------
+        dict
+            A dictionary with the list of charts and metadata about the selection.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        _query: dict[str, Any] = {}
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+        if min_last_edit_step:
+            _query["minLastEditStep"] = min_last_edit_step
+
+        response = r.get(
+            url=self._ME_URL + "/recently-edited-charts",
+            headers=_header,
+            params=_query,
+        )
+        if response.ok:
+            return response.json()
+        else:
+            msg = "Couldn't access your recently edited charts."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def get_my_recently_published_charts(
+        self,
+        limit: str | int = 100,
+        offset: str | int = 0,
+        min_last_edit_step: str | int = 0, 
+    ) -> dict[str, Any]:
+        """Get a list of your recently published charts.
+
+        Parameters
+        ----------
+        limit: str | int
+            Maximum items to fetch. Useful for pagination. 100 by default.
+        offset: str | int
+            Number of items to skip. Useful for pagination. Zero by default.
+        min_last_edit_step: str | int
+            Filter visualizations by the last editor step they've
+            been opened in (1=upload, 2=describe, 3=visualize, etc).
+            Zero by default.
+
+        Returns
+        -------
+        dict
+            A dictionary with the list of charts and metadata about the selection.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        _query: dict[str, Any] = {}
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+        if min_last_edit_step:
+            _query["minLastEditStep"] = min_last_edit_step
+
+        response = r.get(
+            url=self._ME_URL + "/recently-published-charts",
+            headers=_header,
+            params=_query,
+        )
+        if response.ok:
+            return response.json()
+        else:
+            msg = "Couldn't access your recently edited charts."
             logger.error(msg)
             raise Exception(msg)
 
