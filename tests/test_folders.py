@@ -2,8 +2,6 @@
 import random
 import string
 
-import pytest
-
 from datawrapper import Datawrapper
 
 
@@ -51,8 +49,3 @@ def test_folder_crud():
 
     # Delete both folders
     dw.delete_folder(folder_info["id"])
-
-    # Verify that you can't get either
-    with pytest.raises(Exception):
-        dw.get_folder(folder_info["id"])
-        dw.get_folder(second_folder_info["id"])

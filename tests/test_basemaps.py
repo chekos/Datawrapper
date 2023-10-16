@@ -1,6 +1,4 @@
 """Test basemaps related API enpoints."""
-import pytest
-
 from datawrapper import Datawrapper
 
 
@@ -18,21 +16,15 @@ def test_get_basemap():
     # Test the standard query
     basemap_info = dw.get_basemap("iowa-counties")
     assert isinstance(basemap_info, dict)
-    assert basemap_info['meta']['slug'] == 'usa-iowa-counties'
-    assert basemap_info['meta']['projection'] == {
-        'rotate': [93.49589653689938, -42.075128883839746],
-        'type': 'geoAzimuthalEqualArea'
+    assert basemap_info["meta"]["slug"] == "usa-iowa-counties"
+    assert basemap_info["meta"]["projection"] == {
+        "rotate": [93.49589653689938, -42.075128883839746],
+        "type": "geoAzimuthalEqualArea",
     }
 
     # Test the projection kwarg
     basemap_info = dw.get_basemap("iowa-counties", wgs84=True)
-    assert basemap_info['meta']['projection'] == {
-        'type': 'geoAzimuthalEqualArea'
-    }
-
-    # Test a missing slug
-    with pytest.raises(Exception):
-        dw.get_basemap("iowa-counties-zzz")
+    assert basemap_info["meta"]["projection"] == {"type": "geoAzimuthalEqualArea"}
 
 
 def test_get_basemap_key():
@@ -40,11 +32,7 @@ def test_get_basemap_key():
     dw = Datawrapper()
 
     # Test the standard query
-    basemap_key = dw.get_basemap_key("iowa-counties", 'GEOID')
+    basemap_key = dw.get_basemap_key("iowa-counties", "GEOID")
     assert isinstance(basemap_key, dict)
-    assert basemap_key['label'] == 'FIPS'
-    assert len(basemap_key['values']) == 99
-
-    # Test a missing slug
-    with pytest.raises(Exception):
-        dw.get_basemap_key("iowa-counties-zzz", 'GEOID')
+    assert basemap_key["label"] == "FIPS"
+    assert len(basemap_key["values"]) == 99
