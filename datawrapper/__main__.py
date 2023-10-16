@@ -355,7 +355,6 @@ class Datawrapper:
         """Retrieve the data stored for a specific chart, table or map,
         which is typically CSV.
 
-
         Parameters
         ----------
         chart_id : str
@@ -431,7 +430,6 @@ class Datawrapper:
     ) -> Any | None:
         """Updates a chart's title, theme, type, language,
         or location (folder/organization).
-
 
         Parameters
         ----------
@@ -838,8 +836,8 @@ class Datawrapper:
 
         Returns
         -------
-        r.Response.content
-            The content of the requests.delete
+        dict
+            A dictionary with the folder's updated metadata
         """
         _header = self._auth_header
         _header["accept"] = "*/*"
@@ -881,7 +879,7 @@ class Datawrapper:
         Returns
         -------
         r.Response.content
-            The content of the requests.delete
+            The content of the requests.delete request
         """
         _header = self._auth_header
         _header["accept"] = "*/*"
