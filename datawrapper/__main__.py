@@ -88,10 +88,7 @@ class Datawrapper:
         _header = self._auth_header
         _header["accept"] = "*/*"
 
-        response = r.get(
-            url=self._ME_URL,
-            headers=_header
-        )
+        response = r.get(url=self._ME_URL, headers=_header)
         if response.ok:
             return response.json()
         else:
@@ -214,7 +211,7 @@ class Datawrapper:
         self,
         limit: str | int = 100,
         offset: str | int = 0,
-        min_last_edit_step: str | int = 0, 
+        min_last_edit_step: str | int = 0,
     ) -> dict[str, Any]:
         """Get a list of your recently edited charts.
 
@@ -261,7 +258,7 @@ class Datawrapper:
         self,
         limit: str | int = 100,
         offset: str | int = 0,
-        min_last_edit_step: str | int = 0, 
+        min_last_edit_step: str | int = 0,
     ) -> dict[str, Any]:
         """Get a list of your recently published charts.
 
@@ -305,10 +302,7 @@ class Datawrapper:
             raise Exception(msg)
 
     def get_themes(
-        self,
-        limit: str | int = 100,
-        offset: str | int = 0,
-        deleted: bool = False
+        self, limit: str | int = 100, offset: str | int = 0, deleted: bool = False
     ) -> dict[str, Any]:
         """Get a list of themes in your Datawrapper account.
 
@@ -1373,7 +1367,7 @@ class Datawrapper:
         _header = self._auth_header
         _header["accept"] = "*/*"
 
-        _query = {}
+        _query: dict[str, Any] = {}
         if search:
             _query["search"] = search
         if order:
@@ -1411,7 +1405,7 @@ class Datawrapper:
             Name of the team.
         default_theme : str, optional
             Default theme of charts made by the team, optional.
-        
+
         Returns
         -------
         dict
@@ -1447,7 +1441,7 @@ class Datawrapper:
         ----------
         team_id : str
             ID of team to get.
-        
+
         Returns
         -------
         dict
@@ -1486,7 +1480,7 @@ class Datawrapper:
             Name to change the team to.
         default_theme : str, optional
             Default theme of charts made by the team.
-        
+
         Returns
         -------
         dict
@@ -1522,14 +1516,14 @@ class Datawrapper:
             logger.error(msg)
             raise Exception(msg)
 
-    def delete_team(self, team_id: str) -> r.Response.content:
+    def delete_team(self, team_id: str):
         """Delete an existing team.
 
         Parameters
         ----------
         team_id : str
             ID of team to delete.
-        
+
         Returns
         -------
         r.Response.content

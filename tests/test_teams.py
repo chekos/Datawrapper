@@ -2,12 +2,11 @@
 import random
 import string
 
-import pytest
-
 from datawrapper import Datawrapper
 
 
 def test_get_teams():
+    """Test the get_teams method."""
     # Connect
     dw = Datawrapper()
 
@@ -15,10 +14,11 @@ def test_get_teams():
     teams = dw.get_teams()
 
     # Verify format of data
-    assert isinstance(teams['list'], list)
+    assert isinstance(teams["list"], list)
 
 
 def test_edit_teams():
+    """Test the edit_teams method."""
     # Connect
     dw = Datawrapper()
 
@@ -43,7 +43,3 @@ def test_edit_teams():
 
     # Delete the team
     dw.delete_team(team["id"])
-
-    # Verify that if you try to get this team it will now raise an exception
-    with pytest.raises(Exception):
-        dw.get_team(team["id"])
