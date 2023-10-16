@@ -352,8 +352,7 @@ class Datawrapper:
             raise Exception(msg)
 
     def chart_data(self, chart_id: str):
-        """Retrieve the data stored for a specific chart, table or map,
-        which is typically CSV.
+        """Retrieve the data stored for a specific chart, table or map, which is typically CSV.
 
         Parameters
         ----------
@@ -428,8 +427,7 @@ class Datawrapper:
         folder_id: str = "",
         organization_id: str = "",
     ) -> Any | None:
-        """Updates a chart's title, theme, type, language,
-        or location (folder/organization).
+        """Updates a chart's title, theme, type, language, folder or organization.
 
         Parameters
         ----------
