@@ -87,10 +87,7 @@ class Datawrapper:
         _header = self._auth_header
         _header["accept"] = "*/*"
 
-        response = r.get(
-            url=self._ME_URL,
-            headers=_header
-        )
+        response = r.get(url=self._ME_URL, headers=_header)
         if response.ok:
             return response.json()
         else:
@@ -213,7 +210,7 @@ class Datawrapper:
         self,
         limit: str | int = 100,
         offset: str | int = 0,
-        min_last_edit_step: str | int = 0, 
+        min_last_edit_step: str | int = 0,
     ) -> dict[str, Any]:
         """Get a list of your recently edited charts.
 
@@ -260,7 +257,7 @@ class Datawrapper:
         self,
         limit: str | int = 100,
         offset: str | int = 0,
-        min_last_edit_step: str | int = 0, 
+        min_last_edit_step: str | int = 0,
     ) -> dict[str, Any]:
         """Get a list of your recently published charts.
 
@@ -304,10 +301,7 @@ class Datawrapper:
             raise Exception(msg)
 
     def get_themes(
-        self,
-        limit: str | int = 100,
-        offset: str | int = 0,
-        deleted: bool = False
+        self, limit: str | int = 100, offset: str | int = 0, deleted: bool = False
     ) -> dict[str, Any]:
         """Get a list of themes in your Datawrapper account.
 

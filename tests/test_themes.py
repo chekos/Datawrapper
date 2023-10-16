@@ -7,7 +7,7 @@ def test_get_themes():
     dw = Datawrapper()
 
     one = dw.get_themes()
-    assert len(one['list']) > 0
+    assert len(one["list"]) > 0
 
     two = dw.get_themes(offset=2, limit=1)
-    assert one['list'][0] != two['list'][0]
+    assert one["list"][0] != two["list"][0]

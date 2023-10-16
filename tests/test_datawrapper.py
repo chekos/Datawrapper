@@ -1,6 +1,7 @@
 """Unit test package for datawrapper."""
-from datawrapper import Datawrapper
 import pandas as pd
+
+from datawrapper import Datawrapper
 
 
 def test_get_charts():
