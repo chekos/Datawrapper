@@ -46,6 +46,7 @@ class Datawrapper:
     _PUBLISH_URL = _BASE_URL + "/charts"
     _BASEMAPS_URL = _BASE_URL + "/v3/basemaps"
     _FOLDERS_URL = _BASE_URL + "/v3/folders"
+    _THEMES_URL = _BASE_URL + "/v3/themes"
 
     _ACCESS_TOKEN = os.getenv("DATAWRAPPER_ACCESS_TOKEN")
 
@@ -81,6 +82,50 @@ class Datawrapper:
                 "Couldn't find account. Make sure your credentials ",
                 "(access_code) are correct.",
             )
+            logger.error(msg)
+            raise Exception(msg)
+
+    def get_themes(
+        self,
+        limit: str | int = 100,
+        offset: str | int = 0,
+        deleted: bool = False
+    ) -> dict[str, Any]:
+        """Get a list of themes in your Datawrapper account.
+
+        Parameters
+        ----------
+        limit: str | int
+            Maximum items to fetch. Useful for pagination. Default 100.
+        offset: str | int
+            Number of items to skip. Useful for pagination. Default zero.
+        deleted: bool
+            Whether to include deleted themes
+
+        Returns
+        -------
+        dict
+            A dictionary containing the themes in your Datawrapper account.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        _query = {
+            "limit": limit,
+            "offset": offset,
+            "deleted": json.dumps(deleted),
+        }
+
+        response = r.get(
+            url=self._THEMES_URL,
+            headers=_header,
+            params=_query,
+        )
+
+        if response.ok:
+            return response.json()
+        else:
+            msg = "Couldn't retrieve themes in account."
             logger.error(msg)
             raise Exception(msg)
 
