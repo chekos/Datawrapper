@@ -47,6 +47,7 @@ class Datawrapper:
     _PUBLISH_URL = _BASE_URL + "/charts"
     _BASEMAPS_URL = _BASE_URL + "/v3/basemaps"
     _FOLDERS_URL = _BASE_URL + "/v3/folders"
+    _TEAMS_URL = _BASE_URL + "/v3/teams"
     _THEMES_URL = _BASE_URL + "/v3/themes"
 
     _ACCESS_TOKEN = os.getenv("DATAWRAPPER_ACCESS_TOKEN")
@@ -87,10 +88,7 @@ class Datawrapper:
         _header = self._auth_header
         _header["accept"] = "*/*"
 
-        response = r.get(
-            url=self._ME_URL,
-            headers=_header
-        )
+        response = r.get(url=self._ME_URL, headers=_header)
         if response.ok:
             return response.json()
         else:
@@ -213,7 +211,7 @@ class Datawrapper:
         self,
         limit: str | int = 100,
         offset: str | int = 0,
-        min_last_edit_step: str | int = 0, 
+        min_last_edit_step: str | int = 0,
     ) -> dict[str, Any]:
         """Get a list of your recently edited charts.
 
@@ -260,7 +258,7 @@ class Datawrapper:
         self,
         limit: str | int = 100,
         offset: str | int = 0,
-        min_last_edit_step: str | int = 0, 
+        min_last_edit_step: str | int = 0,
     ) -> dict[str, Any]:
         """Get a list of your recently published charts.
 
@@ -304,10 +302,7 @@ class Datawrapper:
             raise Exception(msg)
 
     def get_themes(
-        self,
-        limit: str | int = 100,
-        offset: str | int = 0,
-        deleted: bool = False
+        self, limit: str | int = 100, offset: str | int = 0, deleted: bool = False
     ) -> dict[str, Any]:
         """Get a list of themes in your Datawrapper account.
 
@@ -1338,5 +1333,214 @@ class Datawrapper:
             return get_charts_response.json()["list"]  # type: ignore
         else:
             msg = "Could not retrieve charts at this moment."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def get_teams(
+        self,
+        search: str | None = None,
+        order: str = "ASC",
+        order_by: str = "name",
+        limit: int = 100,
+        offset: int = 0,
+    ) -> dict[str, Any]:
+        """Get a list of teams in your Datawrapper account.
+
+        Parameters
+        ----------
+        search : str, optional
+            Search for teams with a specific name, by default no search filter is applied.
+        order : str, optional
+            Result order (ascending or descending), by default "ASC." Supply "DESC" for descending order.
+        order_by : str, optional
+            Attribute to order by. By default "name"
+        limit : int, optional
+            Maximum items to fetch, by default 100. Useful for pagination.
+        offset : int, optional
+            Offset for pagination, by default 0.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the teams in your Datawrapper account.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        _query: dict[str, Any] = {}
+        if search:
+            _query["search"] = search
+        if order:
+            _query["order"] = order
+        if order_by:
+            _query["orderBy"] = order_by
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+
+        response = r.get(
+            url=self._TEAMS_URL,
+            headers=_header,
+            params=_query,
+        )
+
+        if response.ok:
+            return response.json()
+        else:
+            msg = "Couldn't retrieve teams in your account."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def create_team(
+        self,
+        name: str,
+        default_theme: str | None = None,
+    ) -> dict[str, Any]:
+        """Create a new team.
+
+        Parameters
+        ----------
+        name : str
+            Name of the team.
+        default_theme : str, optional
+            Default theme of charts made by the team, optional.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the team's information.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+        _header["content-type"] = "application/json"
+
+        _query: dict[str, Any] = {"name": name}
+        if default_theme:
+            _query["defaultTheme"] = default_theme
+
+        response = r.post(
+            url=self._TEAMS_URL,
+            headers=_header,
+            data=json.dumps(_query),
+        )
+
+        if response.ok:
+            team_info = response.json()
+            logger.debug(f"Team {team_info['name']} created with id {team_info['id']}")
+            return team_info
+        else:
+            msg = "Team could not be created."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def get_team(self, team_id: str) -> dict[str, Any]:
+        """Get an existing team.
+
+        Parameters
+        ----------
+        team_id : str
+            ID of team to get.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the team's information.
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        response = r.get(
+            url=self._TEAMS_URL + f"/{team_id}",
+            headers=_header,
+        )
+
+        if response.ok:
+            team_info = response.json()
+            logger.debug(f"Team {team_info['name']} retrieved with id {team_id}")
+            return team_info
+        else:
+            msg = "Team could not be retrieved."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def update_team(
+        self,
+        team_id: str,
+        name: str | None = None,
+        default_theme: str | None = None,
+    ) -> dict[str, Any]:
+        """Update an existing team.
+
+        Parameters
+        ----------
+        team_id : str
+            ID of team to update.
+        name : str, optional
+            Name to change the team to.
+        default_theme : str, optional
+            Default theme of charts made by the team.
+
+        Returns
+        -------
+        dict
+            A dictionary with the team's updated metadata
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+        _header["content-type"] = "application/json"
+
+        _query = {}
+        if name:
+            _query["name"] = name
+        if default_theme:
+            _query["defaultTheme"] = default_theme
+
+        if not _query:
+            msg = "No parameters were supplied to update the team."
+            logger.error(msg)
+            raise Exception(msg)
+
+        response = r.patch(
+            url=self._TEAMS_URL + f"/{team_id}",
+            headers=_header,
+            data=json.dumps(_query),
+        )
+
+        if response.ok:
+            team_info = response.json()
+            logger.debug(f"Team {team_id} updated")
+            return team_info
+        else:
+            msg = "Team could not be updated."
+            logger.error(msg)
+            raise Exception(msg)
+
+    def delete_team(self, team_id: str):
+        """Delete an existing team.
+
+        Parameters
+        ----------
+        team_id : str
+            ID of team to delete.
+
+        Returns
+        -------
+        r.Response.content
+            The content of the requests.delete
+        """
+        _header = self._auth_header
+        _header["accept"] = "*/*"
+
+        response = r.delete(
+            url=self._TEAMS_URL + f"/{team_id}",
+            headers=_header,
+        )
+
+        if response.ok:
+            logger.debug(f"Team {team_id} deleted")
+            return response.content
+        else:
+            msg = "Team could not be deleted."
             logger.error(msg)
             raise Exception(msg)
