@@ -615,9 +615,7 @@ class Datawrapper:
             raise Exception(msg)
 
     def chart_data(self, chart_id: str):
-        """Retrieve the data stored for a specific chart, table or map,
-        which is typically CSV.
-
+        """Retrieve the data stored for a specific chart, table or map, which is typically CSV.
 
         Parameters
         ----------
@@ -692,9 +690,7 @@ class Datawrapper:
         folder_id: str = "",
         organization_id: str = "",
     ) -> Any | None:
-        """Updates a chart's title, theme, type, language,
-        or location (folder/organization).
-
+        """Updates a chart's title, theme, type, language, folder or organization.
 
         Parameters
         ----------
@@ -1101,8 +1097,8 @@ class Datawrapper:
 
         Returns
         -------
-        r.Response.content
-            The content of the requests.delete
+        dict
+            A dictionary with the folder's updated metadata
         """
         _header = self._auth_header
         _header["accept"] = "*/*"
@@ -1144,7 +1140,7 @@ class Datawrapper:
         Returns
         -------
         r.Response.content
-            The content of the requests.delete
+            The content of the requests.delete request
         """
         _header = self._auth_header
         _header["accept"] = "*/*"
