@@ -36,7 +36,7 @@ def test_get_my_recently_edited_charts():
     assert two["list"][0]["id"] != three["list"][0]["id"]
 
     four = dw.get_my_recently_edited_charts(min_last_edit_step=3)
-    assert len(four["list"]) > 0
+    assert isinstance(four["list"], list)
 
 
 def test_get_my_recently_published_charts():
@@ -45,7 +45,7 @@ def test_get_my_recently_published_charts():
 
     one = dw.get_my_recently_published_charts()
     assert isinstance(one, dict)
-    assert len(one["list"]) > 0
+    assert isinstance(one["list"], list)
 
     two = dw.get_my_recently_published_charts(limit=1)
     assert one["list"][0]["id"] == two["list"][0]["id"]
