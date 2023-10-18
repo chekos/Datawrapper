@@ -79,7 +79,7 @@ class Datawrapper:
             A dictionary of parameters to pass to the request, by default None
         timeout : int, optional
             The timeout for the request in seconds, by default 15
-        
+
         Returns
         -------
         dict
