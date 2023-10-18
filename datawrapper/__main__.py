@@ -26,6 +26,8 @@ import pandas as pd
 import requests as r
 from IPython.display import HTML, Image
 
+from .exceptions import FailedRequest
+
 logger = logging.getLogger(__name__)
 
 
@@ -66,6 +68,51 @@ class Datawrapper:
         self._access_token = access_token
         self._auth_header = {"Authorization": f"Bearer {access_token}"}
 
+    def get(self, url: str, params: dict | None = None, timeout: int = 15):
+        """Make a GET request to the Datawrapper API.
+
+        Parameters
+        ----------
+        url : str
+            The URL to request.
+        params : dict, optional
+            A dictionary of parameters to pass to the request, by default None
+        timeout : int, optional
+            The timeout for the request in seconds, by default 15
+
+        Returns
+        -------
+        dict
+            A dictionary containing the response from the API.
+        """
+        # Set headers
+        headers = self._auth_header
+        headers["accept"] = "*/*"
+
+        # Make the request
+        response = r.get(
+            url=url,
+            headers=headers,
+            params=params,
+            timeout=timeout,
+        )
+
+        # Check if the request was successful
+        if response.ok:
+            # Return the data as json if the mimetype is json
+            if "json" in response.headers["content-type"]:
+                return response.json()
+            # If it's a csv, read the text into a dataframe
+            elif "text/csv" in response.headers["content-type"]:
+                return pd.read_csv(StringIO(response.text))
+            # Otherwise just return the text
+            else:
+                return response.text
+        # If not, raise an exception
+        else:
+            logger.error(f"Request failed with status code {response.status_code}.")
+            raise FailedRequest(response)
+
     def account_info(self) -> dict[str, Any]:
         """A deprecated method for calling get_my_account."""
         # Issue a deprecation warning
@@ -85,16 +132,7 @@ class Datawrapper:
         dict
             A dictionary containing your account information.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-
-        response = r.get(url=self._ME_URL, headers=_header)
-        if response.ok:
-            return response.json()
-        else:
-            msg = "Couldn't access account. Make sure your credentials are correct."
-            logger.error(msg)
-            raise Exception(msg)
+        return self.get(self._ME_URL)
 
     def update_my_account(
         self,
@@ -231,9 +269,6 @@ class Datawrapper:
         dict
             A dictionary with the list of charts and metadata about the selection.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-
         _query: dict[str, Any] = {}
         if limit:
             _query["limit"] = limit
@@ -242,17 +277,10 @@ class Datawrapper:
         if min_last_edit_step:
             _query["minLastEditStep"] = min_last_edit_step
 
-        response = r.get(
-            url=self._ME_URL + "/recently-edited-charts",
-            headers=_header,
+        return self.get(
+            self._ME_URL + "/recently-edited-charts",
             params=_query,
         )
-        if response.ok:
-            return response.json()
-        else:
-            msg = "Couldn't access your recently edited charts."
-            logger.error(msg)
-            raise Exception(msg)
 
     def get_my_recently_published_charts(
         self,
@@ -278,9 +306,6 @@ class Datawrapper:
         dict
             A dictionary with the list of charts and metadata about the selection.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-
         _query: dict[str, Any] = {}
         if limit:
             _query["limit"] = limit
@@ -289,17 +314,10 @@ class Datawrapper:
         if min_last_edit_step:
             _query["minLastEditStep"] = min_last_edit_step
 
-        response = r.get(
-            url=self._ME_URL + "/recently-published-charts",
-            headers=_header,
+        return self.get(
+            self._ME_URL + "/recently-published-charts",
             params=_query,
         )
-        if response.ok:
-            return response.json()
-        else:
-            msg = "Couldn't access your recently edited charts."
-            logger.error(msg)
-            raise Exception(msg)
 
     def get_themes(
         self, limit: str | int = 100, offset: str | int = 0, deleted: bool = False
@@ -320,27 +338,16 @@ class Datawrapper:
         dict
             A dictionary containing the themes in your Datawrapper account.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-
         _query = {
             "limit": limit,
             "offset": offset,
             "deleted": json.dumps(deleted),
         }
 
-        response = r.get(
-            url=self._THEMES_URL,
-            headers=_header,
+        return self.get(
+            self._THEMES_URL,
             params=_query,
         )
-
-        if response.ok:
-            return response.json()
-        else:
-            msg = "Couldn't retrieve themes in account."
-            logger.error(msg)
-            raise Exception(msg)
 
     def add_data(self, chart_id: str, data: pd.DataFrame | str) -> r.Response:
         """Add data to a specified chart.
@@ -595,19 +602,7 @@ class Datawrapper:
         dict
             A dictionary containing the information of the chart, table, or map.
         """
-        chart_properties_response = r.get(
-            url=self._CHARTS_URL + f"/{chart_id}",
-            headers=self._auth_header,
-        )
-        if chart_properties_response.status_code == 200:
-            return chart_properties_response.json()
-        else:
-            msg = (
-                "Make sure you have the right id and authorization ",
-                "credentials (access_token).",
-            )
-            logger.error(msg)
-            raise Exception(msg)
+        return self.get(self._CHARTS_URL + f"/{chart_id}")
 
     def chart_data(self, chart_id: str):
         """Retrieve the data stored for a specific chart, table or map, which is typically CSV.
@@ -622,26 +617,7 @@ class Datawrapper:
         dict
             A dictionary containing the information of the chart, table, or map.
         """
-        # Request the data endpoint
-        response = r.get(
-            url=self._CHARTS_URL + f"/{chart_id}/data",
-            headers=self._auth_header,
-        )
-
-        # Check if the request was successful
-        assert (
-            response.ok
-        ), "Ensure you have the right id and authorization credentials (access_token)."
-
-        # Return the data as json if the mimetype is json
-        if "json" in response.headers["content-type"]:
-            return response.json()
-        # If it's a csv, read the text into a dataframe
-        elif "text/csv" in response.headers["content-type"]:
-            return pd.read_csv(StringIO(response.text))
-        # Otherwise just return the text
-        else:
-            return response.text
+        return self.get(self._CHARTS_URL + f"/{chart_id}/data")
 
     def update_metadata(self, chart_id: str, properties: dict[Any, Any]) -> Any | None:
         """Update a chart, table, or map's metadata.
@@ -888,20 +864,7 @@ class Datawrapper:
         list[dict]
             A list of dictionaries containing the basemaps available in your Datawrapper account.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-
-        response = r.get(
-            url=self._BASEMAPS_URL,
-            headers=_header,
-        )
-
-        if response.ok:
-            return response.json()
-        else:
-            msg = "Couldn't retrieve basemaps in your account."
-            logger.error(msg)
-            raise Exception(msg)
+        return self.get(self._BASEMAPS_URL)
 
     def get_basemap(self, basemap_id: str, wgs84: bool = False) -> dict[str, Any]:
         """Get the metdata of the requested basemap.
@@ -918,21 +881,10 @@ class Datawrapper:
         dict
             A dictionary containing the requested basemap's metadata.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-
-        response = r.get(
-            url=f"{self._BASEMAPS_URL}/{basemap_id}",
-            headers=_header,
+        return self.get(
+            f"{self._BASEMAPS_URL}/{basemap_id}",
             params={"wgs84": wgs84},
         )
-
-        if response.ok:
-            return response.json()
-        else:
-            msg = "Couldn't retrieve basemap in your account."
-            logger.error(msg)
-            raise Exception(msg)
 
     def get_basemap_key(self, basemap_id: str, basemap_key: str) -> dict[str, Any]:
         """Get the list of available values for a basemap's key.
@@ -949,20 +901,7 @@ class Datawrapper:
         dict
             A dictionary containing the requested data.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-
-        response = r.get(
-            url=f"{self._BASEMAPS_URL}/{basemap_id}/{basemap_key}",
-            headers=_header,
-        )
-
-        if response.ok:
-            return response.json()
-        else:
-            msg = "Couldn't retrieve basemap key in your account."
-            logger.error(msg)
-            raise Exception(msg)
+        return self.get(f"{self._BASEMAPS_URL}/{basemap_id}/{basemap_key}")
 
     def get_folders(self) -> dict[Any, Any] | None | Any:
         """Get a list of folders in your Datawrapper account.
@@ -973,20 +912,7 @@ class Datawrapper:
             A dictionary containing the folders in your Datawrapper account and their
             information.
         """
-        get_folders_response = r.get(
-            url=self._FOLDERS_URL,
-            headers=self._auth_header,
-        )
-
-        if get_folders_response.status_code == 200:
-            return get_folders_response.json()
-        else:
-            msg = (
-                "Couldn't retrieve folders in account. Make sure you have the right ",
-                "authorization credentials (access token).",
-            )
-            logger.error(msg)
-            raise Exception(msg)
+        return self.get(self._FOLDERS_URL)
 
     def get_folder(self, folder_id: str | int) -> dict[Any, Any]:
         """Get an existing folder.
@@ -1001,22 +927,7 @@ class Datawrapper:
         dict
             A dictionary containing the folder's information.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-
-        response = r.get(
-            url=self._FOLDERS_URL + f"/{folder_id}",
-            headers=_header,
-        )
-
-        if response.ok:
-            folder_info = response.json()
-            logger.debug(f"Folder {folder_info['name']} retrieved with id {folder_id}")
-            return folder_info
-        else:
-            msg = "Folder could not be retrieved."
-            logger.error(msg)
-            raise Exception(msg)
+        return self.get(self._FOLDERS_URL + f"/{folder_id}")
 
     def create_folder(
         self,
@@ -1305,11 +1216,7 @@ class Datawrapper:
         list
             List of charts.
         """
-
-        _url = self._CHARTS_URL
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-        _query = {}
+        _query: dict[str, Any] = {}
         if user_id:
             _query["userId"] = user_id
         if published:
@@ -1327,14 +1234,7 @@ class Datawrapper:
         if team_id:
             _query["teamId"] = team_id
 
-        get_charts_response = r.get(url=_url, headers=_header, params=_query)
-
-        if get_charts_response.status_code == 200:
-            return get_charts_response.json()["list"]  # type: ignore
-        else:
-            msg = "Could not retrieve charts at this moment."
-            logger.error(msg)
-            raise Exception(msg)
+        return self.get(self._CHARTS_URL, params=_query)
 
     def get_teams(
         self,
@@ -1364,9 +1264,6 @@ class Datawrapper:
         dict
             A dictionary containing the teams in your Datawrapper account.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-
         _query: dict[str, Any] = {}
         if search:
             _query["search"] = search
@@ -1379,18 +1276,7 @@ class Datawrapper:
         if offset:
             _query["offset"] = offset
 
-        response = r.get(
-            url=self._TEAMS_URL,
-            headers=_header,
-            params=_query,
-        )
-
-        if response.ok:
-            return response.json()
-        else:
-            msg = "Couldn't retrieve teams in your account."
-            logger.error(msg)
-            raise Exception(msg)
+        return self.get(self._TEAMS_URL, params=_query)
 
     def create_team(
         self,
@@ -1447,22 +1333,7 @@ class Datawrapper:
         dict
             A dictionary containing the team's information.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-
-        response = r.get(
-            url=self._TEAMS_URL + f"/{team_id}",
-            headers=_header,
-        )
-
-        if response.ok:
-            team_info = response.json()
-            logger.debug(f"Team {team_info['name']} retrieved with id {team_id}")
-            return team_info
-        else:
-            msg = "Team could not be retrieved."
-            logger.error(msg)
-            raise Exception(msg)
+        return self.get(self._TEAMS_URL + f"/{team_id}")
 
     def update_team(
         self,
