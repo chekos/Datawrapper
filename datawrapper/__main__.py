@@ -458,7 +458,7 @@ class Datawrapper:
         folder_id: str = "",
         organization_id: str = "",
         metadata: dict | None = None,
-    ) -> dict | None | Any:
+    ) -> dict:
         """Creates a new Datawrapper chart, table or map.
 
         You can pass a pandas DataFrame as a `data` argument to upload data.
@@ -919,7 +919,7 @@ class Datawrapper:
         """
         return self.get(f"{self._BASEMAPS_URL}/{basemap_id}/{basemap_key}")
 
-    def get_folders(self) -> dict | None | Any:
+    def get_folders(self) -> dict:
         """Get a list of folders in your Datawrapper account.
 
         Returns
