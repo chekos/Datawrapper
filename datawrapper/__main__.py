@@ -678,7 +678,7 @@ class Datawrapper:
         language: str = "",
         folder_id: str = "",
         organization_id: str = "",
-    ) -> dict:
+    ) -> dict | HTML:
         """Updates a chart's title, theme, type, language, folder or organization.
 
         Parameters
