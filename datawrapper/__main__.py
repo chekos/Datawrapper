@@ -246,7 +246,7 @@ class Datawrapper:
         language: str | None = None,
         password: str | None = None,
         old_password: str | None = None,
-    ):
+    ) -> dict:
         """Update your account information.
 
         Parameters
@@ -298,7 +298,7 @@ class Datawrapper:
     def update_my_settings(
         self,
         active_team: str | None = None,
-    ):
+    ) -> dict:
         """Update your account information.
 
         Parameters
@@ -551,7 +551,7 @@ class Datawrapper:
         number_append: str = "",
         number_format: str = "-",
         number_divisor: int = 0,
-    ) -> Any | None:
+    ) -> dict:
         """Update a chart's description.
 
         Parameters
@@ -652,7 +652,7 @@ class Datawrapper:
         """
         return self.get(self._CHARTS_URL + f"/{chart_id}/data")
 
-    def update_metadata(self, chart_id: str, properties: dict) -> Any | None:
+    def update_metadata(self, chart_id: str, properties: dict) -> dict:
         """Update a chart, table, or map's metadata.
 
         Example: https://developer.datawrapper.de/docs/creating-a-chart-new#edit-colors
@@ -678,7 +678,7 @@ class Datawrapper:
         language: str = "",
         folder_id: str = "",
         organization_id: str = "",
-    ) -> Any | None:
+    ) -> dict:
         """Updates a chart's title, theme, type, language, folder or organization.
 
         Parameters
@@ -1046,7 +1046,7 @@ class Datawrapper:
             logger.error(msg)
             raise Exception(msg)
 
-    def move_chart(self, chart_id: str, folder_id: str) -> Any | None:
+    def move_chart(self, chart_id: str, folder_id: str) -> dict:
         """Moves a chart, table, or map to a specified folder.
 
         Parameters
