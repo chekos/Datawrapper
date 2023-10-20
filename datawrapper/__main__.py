@@ -68,6 +68,37 @@ class Datawrapper:
         self._access_token = access_token
         self._auth_header = {"Authorization": f"Bearer {access_token}"}
 
+    def delete(self, url: str, timeout: int = 15) -> bool:
+        """Make a DELETE request to the Datawrapper API.
+
+        Parameters
+        ----------
+        url : str
+            The URL to request.
+        timeout : int, optional
+            The timeout for the request in seconds, by default 15
+
+        Returns
+        -------
+        bool
+            Whether the request was successful.
+        """
+        # Set the headers
+        headers = self._auth_header
+        headers["accept"] = "*/*"
+
+        # Make the request
+        response = r.delete(url, headers=headers)
+
+        # Handle the response
+        if response.ok:
+            return True
+        else:
+            logger.error(
+                f"Delete request failed with status code {response.status_code}."
+            )
+            raise FailedRequest(response)
+
     def get(self, url: str, params: dict | None = None, timeout: int = 15) -> Any:
         """Make a GET request to the Datawrapper API.
 
@@ -1016,7 +1047,7 @@ class Datawrapper:
             data=_query,
         )
 
-    def delete_folder(self, folder_id: str | int):
+    def delete_folder(self, folder_id: str | int) -> bool:
         """Delete an existing folder.
 
         Parameters
@@ -1026,25 +1057,10 @@ class Datawrapper:
 
         Returns
         -------
-        r.Response.content
-            The content of the requests.delete request
+        bool
+            True if the folder was deleted successfully.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-
-        url = self._FOLDERS_URL + f"/{folder_id}"
-        response = r.delete(
-            url=url,
-            headers=_header,
-        )
-
-        if response.ok:
-            logger.debug(f"Folder {folder_id} deleted")
-            return response.content
-        else:
-            msg = "Folder could not be deleted."
-            logger.error(msg)
-            raise Exception(msg)
+        return self.delete(f"{self._FOLDERS_URL }/{folder_id}")
 
     def move_chart(self, chart_id: str, folder_id: str) -> dict:
         """Moves a chart, table, or map to a specified folder.
@@ -1091,7 +1107,7 @@ class Datawrapper:
         """
         return self.post(f"{self._CHARTS_URL}/{chart_id}/fork")
 
-    def delete_chart(self, chart_id: str) -> r.Response.content:  # type: ignore
+    def delete_chart(self, chart_id: str) -> bool:
         """Deletes a specified chart, table or map.
 
         Parameters
@@ -1101,18 +1117,10 @@ class Datawrapper:
 
         Returns
         -------
-        r.Response.content
-            The content of the requests.delete
+        bool
+            True if the chart was deleted successfully.
         """
-
-        delete_chart_response = r.delete(
-            url=self._CHARTS_URL + f"/{chart_id}", headers=self._auth_header
-        )
-        if delete_chart_response.content:
-            return delete_chart_response.content
-        else:
-            logger.debug(f"Successfully deleted chart with id {chart_id}")
-            return None
+        return self.delete(f"{self._CHARTS_URL}/{chart_id}")
 
     def get_charts(
         self,
@@ -1297,7 +1305,7 @@ class Datawrapper:
             data=_query,
         )
 
-    def delete_team(self, team_id: str):
+    def delete_team(self, team_id: str) -> bool:
         """Delete an existing team.
 
         Parameters
@@ -1307,21 +1315,7 @@ class Datawrapper:
 
         Returns
         -------
-        r.Response.content
-            The content of the requests.delete
+        bool
+            True if team was deleted successfully.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-
-        response = r.delete(
-            url=self._TEAMS_URL + f"/{team_id}",
-            headers=_header,
-        )
-
-        if response.ok:
-            logger.debug(f"Team {team_id} deleted")
-            return response.content
-        else:
-            msg = "Team could not be deleted."
-            logger.error(msg)
-            raise Exception(msg)
+        return self.delete(f"{self._TEAMS_URL}/{team_id}")
