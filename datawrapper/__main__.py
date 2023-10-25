@@ -19,7 +19,7 @@ import logging
 import os
 from io import StringIO
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 import IPython
 import pandas as pd
@@ -68,7 +68,38 @@ class Datawrapper:
         self._access_token = access_token
         self._auth_header = {"Authorization": f"Bearer {access_token}"}
 
-    def get(self, url: str, params: dict | None = None, timeout: int = 15):
+    def delete(self, url: str, timeout: int = 15) -> bool:
+        """Make a DELETE request to the Datawrapper API.
+
+        Parameters
+        ----------
+        url : str
+            The URL to request.
+        timeout : int, optional
+            The timeout for the request in seconds, by default 15
+
+        Returns
+        -------
+        bool
+            Whether the request was successful.
+        """
+        # Set the headers
+        headers = self._auth_header
+        headers["accept"] = "*/*"
+
+        # Make the request
+        response = r.delete(url, headers=headers)
+
+        # Handle the response
+        if response.ok:
+            return True
+        else:
+            logger.error(
+                f"Delete request failed with status code {response.status_code}."
+            )
+            raise FailedRequest(response)
+
+    def get(self, url: str, params: dict | None = None, timeout: int = 15) -> Any:
         """Make a GET request to the Datawrapper API.
 
         Parameters
@@ -82,8 +113,8 @@ class Datawrapper:
 
         Returns
         -------
-        dict
-            A dictionary containing the response from the API.
+        Any
+            An object containing the response from the API.
         """
         # Set headers
         headers = self._auth_header
@@ -110,10 +141,114 @@ class Datawrapper:
                 return response.text
         # If not, raise an exception
         else:
-            logger.error(f"Request failed with status code {response.status_code}.")
+            logger.error(f"Get request failed with status code {response.status_code}.")
             raise FailedRequest(response)
 
-    def account_info(self) -> dict[str, Any]:
+    def patch(
+        self,
+        url: str,
+        data: dict | None = None,
+        timeout: int = 15,
+        extra_headers: dict | None = None,
+    ) -> dict:
+        """Make a PATCH request to the Datawrapper API.
+
+        Parameters
+        ----------
+        url : str
+            The URL to request.
+        data : dict
+            A dictionary of data to pass to the request, by default None
+        timeout : int, optional
+            The timeout for the request in seconds, by default 15
+        extra_headers : dict, optional
+            A dictionary of extra headers to pass to the request, by default None
+        """
+        # Set headers
+        headers = self._auth_header
+        headers["accept"] = "*/*"
+        headers["content-type"] = "application/json"
+
+        # Add extra headers if provided
+        if extra_headers:
+            headers.update(extra_headers)
+
+        # Set kwargs to post
+        kwargs = {"headers": headers, "timeout": timeout}
+
+        # Convert data to json
+        if data:
+            kwargs["data"] = json.dumps(data)
+
+        # Make the request
+        response = r.patch(url, **kwargs)
+
+        # Check if the request was successful
+        if response.ok:
+            # Return the data as json
+            return response.json()
+        # If not, raise an exception
+        else:
+            logger.error(
+                f"Patch request failed with status code {response.status_code}."
+            )
+            raise FailedRequest(response)
+
+    def post(
+        self,
+        url: str,
+        data: dict | None = None,
+        timeout: int = 15,
+        extra_headers: dict | None = None,
+    ) -> dict:
+        """Make a POST request to the Datawrapper API.
+
+        Parameters
+        ----------
+        url : str
+            The URL to request.
+        data : dict
+            A dictionary of data to pass to the request, by default None
+        timeout : int, optional
+            The timeout for the request in seconds, by default 15
+        extra_headers : dict, optional
+            A dictionary of extra headers to pass to the request, by default None
+
+        Returns
+        -------
+        dict
+            A dictionary containing the response from the API.
+        """
+        # Set headers
+        headers = self._auth_header
+        headers["accept"] = "*/*"
+
+        # Add extra headers if provided
+        if extra_headers:
+            headers.update(extra_headers)
+
+        # Set kwargs to post
+        kwargs = {"headers": headers, "timeout": timeout}
+
+        # Convert data to json
+        if data:
+            kwargs["data"] = json.dumps(data)
+
+        # Make the request
+        response = r.post(url, **kwargs)
+
+        # Check if the request was successful
+        if response.ok:
+            # Return the data as json
+            return response.json()
+        # If not, raise an exception
+        else:
+            logger.error(
+                f"Post request failed with status code {response.status_code}."
+            )
+            raise FailedRequest(response)
+
+    def account_info(self) -> dict:
         """A deprecated method for calling get_my_account."""
         # Issue a deprecation warning
         logger.warning(
@@ -124,7 +259,7 @@ class Datawrapper:
         # Use the newer method
         return self.get_my_account()
 
-    def get_my_account(self) -> dict[str, Any]:
+    def get_my_account(self) -> dict:
         """Access your account information.
 
         Returns
@@ -142,7 +277,7 @@ class Datawrapper:
         language: str | None = None,
         password: str | None = None,
         old_password: str | None = None,
-    ):
+    ) -> dict:
         """Update your account information.
 
         Parameters
@@ -165,11 +300,7 @@ class Datawrapper:
         dict
             A dictionary containing your updated account information.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-        _header["content-type"] = "application/json"
-
-        _query: dict[str, Any] = {}
+        _query: dict = {}
         if name:
             _query["name"] = name
         if email:
@@ -190,23 +321,15 @@ class Datawrapper:
             logger.error(msg)
             raise Exception(msg)
 
-        response = r.patch(
-            url=self._ME_URL,
-            headers=_header,
-            data=json.dumps(_query),
+        return self.patch(
+            self._ME_URL,
+            data=_query,
         )
-
-        if response.ok:
-            return response.json()
-        else:
-            msg = "Account could not be updated."
-            logger.error(msg)
-            raise Exception(msg)
 
     def update_my_settings(
         self,
         active_team: str | None = None,
-    ):
+    ) -> dict:
         """Update your account information.
 
         Parameters
@@ -219,11 +342,7 @@ class Datawrapper:
         dict
             The user settings dictionary following the change.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-        _header["content-type"] = "application/json"
-
-        _query: dict[str, Any] = {}
+        _query: dict = {}
         if active_team:
             _query["activeTeam"] = active_team
 
@@ -232,25 +351,17 @@ class Datawrapper:
             logger.error(msg)
             raise Exception(msg)
 
-        response = r.patch(
-            url=self._ME_URL + "/settings",
-            headers=_header,
-            data=json.dumps(_query),
+        return self.patch(
+            f"{self._ME_URL}/settings",
+            data=_query,
         )
-
-        if response.ok:
-            return response.json()
-        else:
-            msg = "Account could not be updated."
-            logger.error(msg)
-            raise Exception(msg)
 
     def get_my_recently_edited_charts(
         self,
         limit: str | int = 100,
         offset: str | int = 0,
         min_last_edit_step: str | int = 0,
-    ) -> dict[str, Any]:
+    ) -> dict:
         """Get a list of your recently edited charts.
 
         Parameters
@@ -269,7 +380,7 @@ class Datawrapper:
         dict
             A dictionary with the list of charts and metadata about the selection.
         """
-        _query: dict[str, Any] = {}
+        _query: dict = {}
         if limit:
             _query["limit"] = limit
         if offset:
@@ -287,7 +398,7 @@ class Datawrapper:
         limit: str | int = 100,
         offset: str | int = 0,
         min_last_edit_step: str | int = 0,
-    ) -> dict[str, Any]:
+    ) -> dict:
         """Get a list of your recently published charts.
 
         Parameters
@@ -306,7 +417,7 @@ class Datawrapper:
         dict
             A dictionary with the list of charts and metadata about the selection.
         """
-        _query: dict[str, Any] = {}
+        _query: dict = {}
         if limit:
             _query["limit"] = limit
         if offset:
@@ -321,7 +432,7 @@ class Datawrapper:
 
     def get_themes(
         self, limit: str | int = 100, offset: str | int = 0, deleted: bool = False
-    ) -> dict[str, Any]:
+    ) -> dict:
         """Get a list of themes in your Datawrapper account.
 
         Parameters
@@ -383,7 +494,7 @@ class Datawrapper:
             data=_data.encode("utf-8"),
         )
 
-    def refresh_data(self, chart_id: str) -> r.Response:
+    def refresh_data(self, chart_id: str) -> dict:
         """Fetch configured external data and add it to the chart.
 
         Parameters
@@ -393,16 +504,10 @@ class Datawrapper:
 
         Returns
         -------
-        requests.Response
-            A requests.Response
+        dict
+            A dictionary containing the chart's information.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-
-        return r.post(
-            url=f"{self._CHARTS_URL}/{chart_id}/data/refresh",
-            headers=_header,
-        )
+        return self.post(f"{self._CHARTS_URL}/{chart_id}/data/refresh")
 
     def create_chart(
         self,
@@ -411,8 +516,8 @@ class Datawrapper:
         data: pd.DataFrame | str | None = None,
         folder_id: str = "",
         organization_id: str = "",
-        metadata: dict[Any, Any] | None = None,
-    ) -> dict[Any, Any] | None | Any:
+        metadata: dict | None = None,
+    ) -> dict:
         """Creates a new Datawrapper chart, table or map.
 
         You can pass a pandas DataFrame as a `data` argument to upload data.
@@ -443,12 +548,8 @@ class Datawrapper:
         dict
             A dictionary containing the created chart's information.
         """
-
-        _header = self._auth_header
-        _header["content-type"] = "application/json"
-
+        # Set chart properties
         _data = {"title": title, "type": chart_type}
-
         if folder_id:
             _data["folderId"] = folder_id
         if organization_id:
@@ -456,33 +557,14 @@ class Datawrapper:
         if metadata:
             _data["metadata"] = metadata  # type: ignore
 
-        new_chart_response = r.post(
-            url=self._CHARTS_URL, headers=_header, data=json.dumps(_data)
+        # Create chart
+        chart_info = self.post(
+            self._CHARTS_URL,
+            data=_data,
+            extra_headers={"content-type": "application/json"},
         )
 
-        if (
-            chart_type == "d3-maps-choropleth"
-            or chart_type == "d3-maps-symbols"
-            or chart_type == "locator-map"
-        ):
-            logger.debug(
-                "\nNOTE: Maps need a valid basemap, set in properties -> visualize"
-            )
-            logger.debug(
-                (
-                    "Full list of valid maps can be retrieved with\n\n",
-                    "curl --request GET --url https://api.datawrapper.de/plugin/basemap\n",
-                )
-            )
-
-        if new_chart_response.status_code <= 201:
-            chart_info = new_chart_response.json()
-            logger.debug(f"New chart {chart_info['type']} created!")
-        else:
-            msg = f"Chart could not be created, check your authorization credentials (access token){', and that the folder_id is valid (i.e exists, and your account has access to it)' if folder_id else ''}"
-            logger.error(msg)
-            raise Exception(msg)
-
+        # Add data if provided
         if data is not None:
             self.add_data(chart_id=chart_info["id"], data=data)
 
@@ -500,7 +582,7 @@ class Datawrapper:
         number_append: str = "",
         number_format: str = "-",
         number_divisor: int = 0,
-    ) -> Any | None:
+    ) -> dict:
         """Update a chart's description.
 
         Parameters
@@ -526,10 +608,7 @@ class Datawrapper:
         number_divisor : str, optional
             A multiplier or divisor for the numbers
         """
-
-        _header = self._auth_header
-        _header["content-type"] = "application/json"
-        _data = {
+        _query = {
             "metadata": {
                 "describe": {
                     "source-name": source_name,
@@ -544,20 +623,12 @@ class Datawrapper:
                 }
             }
         }
-        update_description_response = r.patch(
-            url=self._CHARTS_URL + f"/{chart_id}",
-            headers=_header,
-            data=json.dumps(_data),
+        return self.patch(
+            f"{self._CHARTS_URL}/{chart_id}",
+            data=_query,
         )
-        if update_description_response.status_code == 200:
-            logger.debug("Chart updated!")
-            return None
-        else:
-            msg = f"Error. Status code: {update_description_response.status_code}"
-            logger.error(msg)
-            raise Exception(msg)
 
-    def publish_chart(self, chart_id: str, display: bool = True) -> Any | None:
+    def publish_chart(self, chart_id: str, display: bool = True) -> dict | HTML:
         """Publishes a chart, table or map.
 
         Parameters
@@ -566,30 +637,23 @@ class Datawrapper:
             ID of chart, table or map.
         display : bool, optional
             Display the published chart as output in notebook cell, by default True
+
+        Returns
+        -------
+        dict | HTML
+            Either a dictionary containing the published chart's information or an HTML
+            object displaying the chart.
         """
-
-        publish_chart_response = r.post(
-            url=f"{self._PUBLISH_URL}/{chart_id}/publish",
-            headers=self._auth_header,
-        )
-        if publish_chart_response.status_code <= 201:
-            publish_chart_info = publish_chart_response.json()
-            logger.debug(f"Chart published at {publish_chart_info['url']}")
-            if display:
-                iframe_code = publish_chart_info["data"]["metadata"]["publish"][
-                    "embed-codes"
-                ]["embed-method-iframe"]
-                return HTML(iframe_code)
-            else:
-                return None
+        chart_info = self.post(f"{self._PUBLISH_URL}/{chart_id}/publish")
+        if display:
+            iframe_code = chart_info["data"]["metadata"]["publish"]["embed-codes"][
+                "embed-method-iframe"
+            ]
+            return HTML(iframe_code)
         else:
-            msg = "Chart couldn't be published at this time."
-            logger.error(msg)
-            raise Exception(msg)
+            return chart_info
 
-    def chart_properties(
-        self, chart_id: str
-    ) -> dict[Any, Any] | None | Any | Iterable[Any]:
+    def chart_properties(self, chart_id: str) -> dict:
         """Retrieve information of a specific chart, table or map.
 
         Parameters
@@ -619,7 +683,7 @@ class Datawrapper:
         """
         return self.get(self._CHARTS_URL + f"/{chart_id}/data")
 
-    def update_metadata(self, chart_id: str, properties: dict[Any, Any]) -> Any | None:
+    def update_metadata(self, chart_id: str, properties: dict) -> dict:
         """Update a chart, table, or map's metadata.
 
         Example: https://developer.datawrapper.de/docs/creating-a-chart-new#edit-colors
@@ -631,25 +695,10 @@ class Datawrapper:
         properties : dict
             A python dictionary of properties to update.
         """
-        _header = self._auth_header
-        _header["content-type"] = "application/json"
-        _data = {"metadata": properties}
-
-        update_properties_response = r.patch(
-            url=self._CHARTS_URL + f"/{chart_id}",
-            headers=_header,
-            data=json.dumps(_data),
+        return self.patch(
+            f"{self._CHARTS_URL}/{chart_id}",
+            data={"metadata": properties},
         )
-        if update_properties_response.status_code == 200:
-            logger.debug("Chart's metadata updated!")
-            return None
-        else:
-            msg = f"Error. Status code: {update_properties_response.status_code}"
-            logger.error(msg)
-            text = json.loads(update_properties_response.text)
-            logger.debug("Message: ", text["message"])
-            logger.debug("Chart could not be updated.")
-            raise Exception(msg)
 
     def update_chart(
         self,
@@ -660,7 +709,7 @@ class Datawrapper:
         language: str = "",
         folder_id: str = "",
         organization_id: str = "",
-    ) -> Any | None:
+    ) -> dict | HTML:
         """Updates a chart's title, theme, type, language, folder or organization.
 
         Parameters
@@ -681,9 +730,6 @@ class Datawrapper:
         organization_id : str, optional
             New organization's ID, by default ""
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-        _header["content-type"] = "application/json"
         _query = {}
         if title:
             _query["title"] = title
@@ -698,18 +744,12 @@ class Datawrapper:
         if organization_id:
             _query["organizationId"] = organization_id
 
-        update_chart_response = r.patch(
-            url=self._CHARTS_URL + f"/{chart_id}",
-            headers=_header,
-            data=json.dumps(_query),
+        self.patch(
+            f"{self._CHARTS_URL}/{chart_id}",
+            data=_query,
         )
-        if update_chart_response.status_code == 200:
-            logger.debug(f"Chart with id {chart_id} updated!")
-            return self.publish_chart(chart_id)
-        else:
-            msg = "Chart could not be updated at the time."
-            logger.debug(msg)
-            raise Exception(msg)
+
+        return self.publish_chart(chart_id)
 
     def display_chart(self, chart_id: str) -> IPython.display.HTML:
         """Displays a datawrapper chart.
@@ -856,7 +896,7 @@ class Datawrapper:
             logger.error(msg)
             raise Exception(msg)
 
-    def get_basemaps(self) -> list[dict[str, Any]]:
+    def get_basemaps(self) -> list[dict]:
         """Get a list of the available basemaps.
 
         Returns
@@ -866,7 +906,7 @@ class Datawrapper:
         """
         return self.get(self._BASEMAPS_URL)
 
-    def get_basemap(self, basemap_id: str, wgs84: bool = False) -> dict[str, Any]:
+    def get_basemap(self, basemap_id: str, wgs84: bool = False) -> dict:
         """Get the metdata of the requested basemap.
 
         Parameters
@@ -886,7 +926,7 @@ class Datawrapper:
             params={"wgs84": wgs84},
         )
 
-    def get_basemap_key(self, basemap_id: str, basemap_key: str) -> dict[str, Any]:
+    def get_basemap_key(self, basemap_id: str, basemap_key: str) -> dict:
         """Get the list of available values for a basemap's key.
 
         Parameters
@@ -903,7 +943,7 @@ class Datawrapper:
         """
         return self.get(f"{self._BASEMAPS_URL}/{basemap_id}/{basemap_key}")
 
-    def get_folders(self) -> dict[Any, Any] | None | Any:
+    def get_folders(self) -> dict:
         """Get a list of folders in your Datawrapper account.
 
         Returns
@@ -914,7 +954,7 @@ class Datawrapper:
         """
         return self.get(self._FOLDERS_URL)
 
-    def get_folder(self, folder_id: str | int) -> dict[Any, Any]:
+    def get_folder(self, folder_id: str | int) -> dict:
         """Get an existing folder.
 
         Parameters
@@ -934,7 +974,7 @@ class Datawrapper:
         name: str,
         parent_id: str | int | None = None,
         team_id: str | int | None = None,
-    ) -> dict[Any, Any]:
+    ) -> dict:
         """Create a new folder.
 
         Parameters
@@ -952,31 +992,17 @@ class Datawrapper:
         dict
             A dictionary containing the folder's information.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-
-        _query: dict[str, Any] = {"name": name}
+        _query: dict = {"name": name}
         if parent_id:
             _query["parentId"] = parent_id
         if team_id:
             _query["teamId"] = team_id
 
-        response = r.post(
-            url=self._FOLDERS_URL,
-            headers=_header,
-            data=json.dumps(_query),
+        return self.post(
+            self._FOLDERS_URL,
+            data=_query,
+            extra_headers={"content-type": "application/json"},
         )
-
-        if response.ok:
-            folder_info = response.json()
-            logger.debug(
-                f"Folder {folder_info['name']} created with id {folder_info['id']}"
-            )
-            return folder_info
-        else:
-            msg = "Folder could not be created."
-            logger.error(msg)
-            raise Exception(msg)
 
     def update_folder(
         self,
@@ -985,7 +1011,7 @@ class Datawrapper:
         parent_id: str | int | None = None,
         team_id: str | int | None = None,
         user_id: str | int | None = None,
-    ) -> dict[Any, Any]:
+    ) -> dict:
         """Update an existing folder.
 
         Parameters
@@ -1006,10 +1032,7 @@ class Datawrapper:
         dict
             A dictionary with the folder's updated metadata
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-
-        _query: dict[str, Any] = {}
+        _query: dict = {}
         if name:
             _query["name"] = name
         if parent_id:
@@ -1019,23 +1042,12 @@ class Datawrapper:
         if user_id:
             _query["userId"] = user_id
 
-        url = self._FOLDERS_URL + f"/{folder_id}"
-        response = r.patch(
-            url=url,
-            headers=_header,
-            data=json.dumps(_query),
+        return self.patch(
+            f"{self._FOLDERS_URL}/{folder_id}",
+            data=_query,
         )
 
-        if response.ok:
-            folder_info = response.json()
-            logger.debug(f"Folder {folder_id} updated")
-            return folder_info
-        else:
-            msg = "Folder could not be updated."
-            logger.error(msg)
-            raise Exception(msg)
-
-    def delete_folder(self, folder_id: str | int):
+    def delete_folder(self, folder_id: str | int) -> bool:
         """Delete an existing folder.
 
         Parameters
@@ -1045,27 +1057,12 @@ class Datawrapper:
 
         Returns
         -------
-        r.Response.content
-            The content of the requests.delete request
+        bool
+            True if the folder was deleted successfully.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
+        return self.delete(f"{self._FOLDERS_URL }/{folder_id}")
 
-        url = self._FOLDERS_URL + f"/{folder_id}"
-        response = r.delete(
-            url=url,
-            headers=_header,
-        )
-
-        if response.ok:
-            logger.debug(f"Folder {folder_id} deleted")
-            return response.content
-        else:
-            msg = "Folder could not be deleted."
-            logger.error(msg)
-            raise Exception(msg)
-
-    def move_chart(self, chart_id: str, folder_id: str) -> Any | None:
+    def move_chart(self, chart_id: str, folder_id: str) -> dict:
         """Moves a chart, table, or map to a specified folder.
 
         Parameters
@@ -1075,27 +1072,12 @@ class Datawrapper:
         folder_id : str
             ID of folder to move visualization to.
         """
-
-        _header = self._auth_header
-        _header["content-type"] = "application/json"
-
-        _data = {"folderId": folder_id}
-
-        move_chart_response = r.patch(
+        return self.patch(
             url=self._CHARTS_URL + f"/{chart_id}",
-            headers=_header,
-            data=json.dumps(_data),
+            data={"folderId": folder_id},
         )
 
-        if move_chart_response.status_code == 200:
-            logger.debug(f"Chart moved to folder {folder_id}")
-            return None
-        else:
-            msg = "Chart could not be moved at the moment."
-            logger.error(msg)
-            raise Exception(msg)
-
-    def copy_chart(self, chart_id: str) -> dict[Any, Any]:
+    def copy_chart(self, chart_id: str) -> dict:
         """Copy one of your charts, tables, or maps and create a new editable copy.
 
         Parameters
@@ -1108,22 +1090,9 @@ class Datawrapper:
         dict
             A dictionary containing the information of the chart, table, or map.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
+        return self.post(f"{self._CHARTS_URL}/{chart_id}/copy")
 
-        url = f"{self._CHARTS_URL}/{chart_id}/copy"
-        response = r.post(url=url, headers=_header)
-
-        if response.ok:
-            copy_id = response.json()
-            logger.debug(f"Chart {chart_id} copied to {copy_id['id']}")
-            return copy_id
-        else:
-            msg = "Chart could not be copied at the moment."
-            logger.error(msg)
-            raise Exception(msg)
-
-    def fork_chart(self, chart_id: str) -> dict[Any, Any]:
+    def fork_chart(self, chart_id: str) -> dict:
         """Fork a chart, table, or map and create an editable copy.
 
         Parameters
@@ -1136,25 +1105,9 @@ class Datawrapper:
         dict
             A dictionary containing the information of the chart, table, or map.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
+        return self.post(f"{self._CHARTS_URL}/{chart_id}/fork")
 
-        url = f"{self._CHARTS_URL}/{chart_id}/fork"
-        response = r.post(url=url, headers=_header)
-
-        if response.ok:
-            fork = response.json()
-            logger.debug(f"Chart {chart_id} copied to {fork['id']}")
-            return fork
-        else:
-            msg = (
-                "Chart could not be forked. If it's a chart you created, ",
-                "you should trying copying it instead.",
-            )
-            logger.error(msg)
-            raise Exception(msg)
-
-    def delete_chart(self, chart_id: str) -> r.Response.content:  # type: ignore
+    def delete_chart(self, chart_id: str) -> bool:
         """Deletes a specified chart, table or map.
 
         Parameters
@@ -1164,18 +1117,10 @@ class Datawrapper:
 
         Returns
         -------
-        r.Response.content
-            The content of the requests.delete
+        bool
+            True if the chart was deleted successfully.
         """
-
-        delete_chart_response = r.delete(
-            url=self._CHARTS_URL + f"/{chart_id}", headers=self._auth_header
-        )
-        if delete_chart_response.content:
-            return delete_chart_response.content
-        else:
-            logger.debug(f"Successfully deleted chart with id {chart_id}")
-            return None
+        return self.delete(f"{self._CHARTS_URL}/{chart_id}")
 
     def get_charts(
         self,
@@ -1216,7 +1161,7 @@ class Datawrapper:
         list
             List of charts.
         """
-        _query: dict[str, Any] = {}
+        _query: dict = {}
         if user_id:
             _query["userId"] = user_id
         if published:
@@ -1243,7 +1188,7 @@ class Datawrapper:
         order_by: str = "name",
         limit: int = 100,
         offset: int = 0,
-    ) -> dict[str, Any]:
+    ) -> dict:
         """Get a list of teams in your Datawrapper account.
 
         Parameters
@@ -1264,7 +1209,7 @@ class Datawrapper:
         dict
             A dictionary containing the teams in your Datawrapper account.
         """
-        _query: dict[str, Any] = {}
+        _query: dict = {}
         if search:
             _query["search"] = search
         if order:
@@ -1282,7 +1227,7 @@ class Datawrapper:
         self,
         name: str,
         default_theme: str | None = None,
-    ) -> dict[str, Any]:
+    ) -> dict:
         """Create a new team.
 
         Parameters
@@ -1297,30 +1242,17 @@ class Datawrapper:
         dict
             A dictionary containing the team's information.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-        _header["content-type"] = "application/json"
-
-        _query: dict[str, Any] = {"name": name}
+        _query: dict = {"name": name}
         if default_theme:
             _query["defaultTheme"] = default_theme
 
-        response = r.post(
-            url=self._TEAMS_URL,
-            headers=_header,
-            data=json.dumps(_query),
+        return self.post(
+            self._TEAMS_URL,
+            data=_query,
+            extra_headers={"content-type": "application/json"},
         )
 
-        if response.ok:
-            team_info = response.json()
-            logger.debug(f"Team {team_info['name']} created with id {team_info['id']}")
-            return team_info
-        else:
-            msg = "Team could not be created."
-            logger.error(msg)
-            raise Exception(msg)
-
-    def get_team(self, team_id: str) -> dict[str, Any]:
+    def get_team(self, team_id: str) -> dict:
         """Get an existing team.
 
         Parameters
@@ -1340,7 +1272,7 @@ class Datawrapper:
         team_id: str,
         name: str | None = None,
         default_theme: str | None = None,
-    ) -> dict[str, Any]:
+    ) -> dict:
         """Update an existing team.
 
         Parameters
@@ -1357,10 +1289,6 @@ class Datawrapper:
         dict
             A dictionary with the team's updated metadata
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-        _header["content-type"] = "application/json"
-
         _query = {}
         if name:
             _query["name"] = name
@@ -1372,22 +1300,12 @@ class Datawrapper:
             logger.error(msg)
             raise Exception(msg)
 
-        response = r.patch(
-            url=self._TEAMS_URL + f"/{team_id}",
-            headers=_header,
-            data=json.dumps(_query),
+        return self.patch(
+            f"{self._TEAMS_URL}/{team_id}",
+            data=_query,
         )
 
-        if response.ok:
-            team_info = response.json()
-            logger.debug(f"Team {team_id} updated")
-            return team_info
-        else:
-            msg = "Team could not be updated."
-            logger.error(msg)
-            raise Exception(msg)
-
-    def delete_team(self, team_id: str):
+    def delete_team(self, team_id: str) -> bool:
         """Delete an existing team.
 
         Parameters
@@ -1397,21 +1315,7 @@ class Datawrapper:
 
         Returns
         -------
-        r.Response.content
-            The content of the requests.delete
+        bool
+            True if team was deleted successfully.
         """
-        _header = self._auth_header
-        _header["accept"] = "*/*"
-
-        response = r.delete(
-            url=self._TEAMS_URL + f"/{team_id}",
-            headers=_header,
-        )
-
-        if response.ok:
-            logger.debug(f"Team {team_id} deleted")
-            return response.content
-        else:
-            msg = "Team could not be deleted."
-            logger.error(msg)
-            raise Exception(msg)
+        return self.delete(f"{self._TEAMS_URL}/{team_id}")
