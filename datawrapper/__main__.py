@@ -1226,12 +1226,12 @@ class Datawrapper:
             extra_headers={"content-type": "application/json"},
         )
 
-    def delete_login_token(self, token_id: str) -> bool:
+    def delete_login_token(self, token_id: str | int) -> bool:
         """Deletes a login token.
 
         Parameters
         ----------
-        token_id : str
+        token_id : str | int
             ID of login token to delete.
 
         Returns
