@@ -49,6 +49,7 @@ class Datawrapper:
     _PUBLISH_URL = _BASE_URL + "/charts"
     _BASEMAPS_URL = _BASE_URL + "/v3/basemaps"
     _FOLDERS_URL = _BASE_URL + "/v3/folders"
+    _LOGIN_TOKENS_URL = _BASE_URL + "/v3/auth/login-tokens"
     _TEAMS_URL = _BASE_URL + "/v3/teams"
     _THEMES_URL = _BASE_URL + "/v3/themes"
 
@@ -1180,6 +1181,65 @@ class Datawrapper:
             _query["teamId"] = team_id
 
         return self.get(self._CHARTS_URL, params=_query)
+
+    def get_login_tokens(
+        self,
+        limit: int = 100,
+        offset: int = 0,
+    ) -> dict[str, Any]:
+        """Retrieves all login tokens associated to the current user.
+
+        Parameters
+        ----------
+        limit : int, optional
+            Maximum items to fetch, by default 100. Useful for pagination.
+        offset : int, optional
+            Offset for pagination, by default 0.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the login tokens for your Datawrapper account.
+        """
+        _query: dict[str, Any] = {}
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+
+        return self.get(self._LOGIN_TOKENS_URL, params=_query)
+
+    def create_login_token(
+        self,
+    ) -> dict:
+        """Creates a new login token to authenticate a user, for use in CMS integrations.
+
+        Login tokens are valid for five minutes and can only be used once.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the login token's information.
+        """
+        return self.post(
+            self._LOGIN_TOKENS_URL,
+            extra_headers={"content-type": "application/json"},
+        )
+
+    def delete_login_token(self, token_id: str) -> bool:
+        """Deletes a login token.
+
+        Parameters
+        ----------
+        token_id : str
+            ID of login token to delete.
+
+        Returns
+        -------
+        bool
+            True if the login token was deleted successfully.
+        """
+        return self.delete(f"{self._LOGIN_TOKENS_URL}/{token_id}")
 
     def get_teams(
         self,
