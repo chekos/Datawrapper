@@ -16,6 +16,9 @@ def test_login_tokens():
     # Verify that the created id is in the get list
     assert create["id"] in [token["id"] for token in get["list"]]
 
+    # Login with the token
+    dw.login(create["token"])
+
     # Delete the login token
     dw.delete_login_token(create["id"])
 

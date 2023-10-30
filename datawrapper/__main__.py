@@ -49,6 +49,7 @@ class Datawrapper:
     _PUBLISH_URL = _BASE_URL + "/charts"
     _BASEMAPS_URL = _BASE_URL + "/v3/basemaps"
     _FOLDERS_URL = _BASE_URL + "/v3/folders"
+    _LOGIN_URL = _BASE_URL + "/v3/auth/login"
     _LOGIN_TOKENS_URL = _BASE_URL + "/v3/auth/login-tokens"
     _TEAMS_URL = _BASE_URL + "/v3/teams"
     _THEMES_URL = _BASE_URL + "/v3/themes"
@@ -1240,6 +1241,23 @@ class Datawrapper:
             True if the login token was deleted successfully.
         """
         return self.delete(f"{self._LOGIN_TOKENS_URL}/{token_id}")
+
+    def login(self, token: str) -> str:
+        """Login using a one-time login token and redirect to the URL associated with the token.
+
+        For use in CMS integrations.
+
+        Parameters
+        ----------
+        token : str
+            Login token.
+
+        Returns
+        -------
+        str
+            The HTML of the page that the token redirects to.
+        """
+        return self.get(f"{self._LOGIN_URL}/{token}")
 
     def get_teams(
         self,
