@@ -53,6 +53,7 @@ class Datawrapper:
     _LOGIN_URL = _BASE_URL + "/v3/auth/login"
     _LOGIN_SCOPES_URL = _BASE_URL + "/v3/auth/token-scopes"
     _LOGIN_TOKENS_URL = _BASE_URL + "/v3/auth/login-tokens"
+    _OEMBED_URL = _BASE_URL + "/v3/oembed"
     _TEAMS_URL = _BASE_URL + "/v3/teams"
     _THEMES_URL = _BASE_URL + "/v3/themes"
 
@@ -1553,3 +1554,38 @@ class Datawrapper:
             True if team was deleted successfully.
         """
         return self.delete(f"{self._TEAMS_URL}/{team_id}")
+
+    def get_oembed(
+        self,
+        url: str,
+        max_width: int | None = None,
+        max_height: int | None = None,
+        iframe: bool | None = None,
+    ) -> dict:
+        """Get an oEmbed object for a chart, table, or map.
+
+        Parameters
+        ----------
+        url : str
+            URL of chart, table, or map.
+        max_width : int, optional
+            Maximum width of the oEmbed object, by default None
+        max_height : int, optional
+            Maximum height of the oEmbed object, by default None
+        iframe : bool, optional
+            Whether to return an iframe embed code, by default None, which will return a responsive embed.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the oEmbed object.
+        """
+        _query: dict = {"url": url, "format": "json"}
+        if max_width:
+            _query["maxwidth"] = max_width
+        if max_height:
+            _query["maxheight"] = max_height
+        if iframe:
+            _query["iframe"] = json.dumps(True)
+
+        return self.get(self._OEMBED_URL, params=_query)
