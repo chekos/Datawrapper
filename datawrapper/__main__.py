@@ -1983,3 +1983,114 @@ class Datawrapper:
             f"{self._USERS_URL}/{user_id}",
             data=_query,
         )
+
+    def update_settings(
+        self,
+        user_id: int | str,
+        active_team: str | None = None,
+    ) -> dict:
+        """Update your account information.
+
+        Parameters
+        ----------
+        active_team: str, optional
+            Your active team
+
+        Returns
+        -------
+        dict
+            The user settings dictionary following the change.
+        """
+        _query: dict = {}
+        if active_team:
+            _query["activeTeam"] = active_team
+
+        if not _query:
+            msg = "No updates submitted."
+            logger.error(msg)
+            raise Exception(msg)
+
+        return self.patch(
+            f"{self._USERS_URL}/{user_id}/settings",
+            data=_query,
+        )
+
+    def get_recently_edited_charts(
+        self,
+        user_id: int | str,
+        limit: int = 100,
+        offset: int = 0,
+        min_last_edit_step: str | int = 0,
+    ) -> dict:
+        """Get a list of your recently edited charts.
+
+        Parameters
+        ----------
+        user_id: int | str
+            ID of user to get recently edited charts for.
+        limit: str | int
+            Maximum items to fetch. Useful for pagination. 100 by default.
+        offset: str | int
+            Number of items to skip. Useful for pagination. Zero by default.
+        min_last_edit_step: str | int
+            Filter visualizations by the last editor step they've
+            been opened in (1=upload, 2=describe, 3=visualize, etc).
+            Zero by default.
+
+        Returns
+        -------
+        dict
+            A dictionary with the list of charts and metadata about the selection.
+        """
+        _query: dict = {}
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+        if min_last_edit_step:
+            _query["minLastEditStep"] = min_last_edit_step
+
+        return self.get(
+            self._USERS_URL + f"/{user_id}/recently-edited-charts",
+            params=_query,
+        )
+
+    def get_recently_published_charts(
+        self,
+        user_id: int | str,
+        limit: int = 100,
+        offset: int = 0,
+        min_last_edit_step: str | int = 0,
+    ) -> dict:
+        """Get a list of your recently published charts.
+
+        Parameters
+        ----------
+        user_id: int | str
+            ID of user to get recently published charts for.
+        limit: int
+            Maximum items to fetch. Useful for pagination. 100 by default.
+        offset: int
+            Number of items to skip. Useful for pagination. Zero by default.
+        min_last_edit_step: str | int
+            Filter visualizations by the last editor step they've
+            been opened in (1=upload, 2=describe, 3=visualize, etc).
+            Zero by default.
+
+        Returns
+        -------
+        dict
+            A dictionary with the list of charts and metadata about the selection.
+        """
+        _query: dict = {}
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+        if min_last_edit_step:
+            _query["minLastEditStep"] = min_last_edit_step
+
+        return self.get(
+            self._USERS_URL + f"/{user_id}/recently-published-charts",
+            params=_query,
+        )
