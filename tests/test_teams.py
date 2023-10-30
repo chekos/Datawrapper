@@ -16,6 +16,18 @@ def test_get_teams():
     # Verify format of data
     assert isinstance(teams["list"], list)
 
+    # Get members of the first team
+    members = dw.get_team_members(teams["list"][0]["id"])
+    assert isinstance(members["list"], list)
+
+    # Update team member
+    update = dw.update_team_member(
+        teams["list"][0]["id"],
+        members["list"][0]["id"],
+        "admin",
+    )
+    assert isinstance(update, bool) and update is True
+
 
 def test_edit_teams():
     """Test the edit_teams method."""
@@ -41,5 +53,14 @@ def test_edit_teams():
     # Verify that the name changed
     assert team["name"] == f"Test Team 2 {suffix}"
 
+    # Invite a user to the team
+    invite = dw.send_invite(
+        team["id"],
+        "foo@example.com",
+        "member",
+    )
+    assert invite is True
+
     # Delete the team
-    dw.delete_team(team["id"])
+    delete = dw.delete_team(team["id"])
+    assert delete is True

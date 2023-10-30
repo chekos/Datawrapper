@@ -44,13 +44,20 @@ class Datawrapper:
     """
 
     _BASE_URL = "https://api.datawrapper.de"
+    _API_TOKEN_URL = _BASE_URL + "/v3/auth/tokens"
     _ME_URL = _BASE_URL + "/v3/me"
     _CHARTS_URL = _BASE_URL + "/v3/charts"
     _PUBLISH_URL = _BASE_URL + "/charts"
     _BASEMAPS_URL = _BASE_URL + "/v3/basemaps"
     _FOLDERS_URL = _BASE_URL + "/v3/folders"
+    _LOGIN_URL = _BASE_URL + "/v3/auth/login"
+    _LOGIN_SCOPES_URL = _BASE_URL + "/v3/auth/token-scopes"
+    _LOGIN_TOKENS_URL = _BASE_URL + "/v3/auth/login-tokens"
+    _OEMBED_URL = _BASE_URL + "/v3/oembed"
+    _RIVER_URL = _BASE_URL + "/v3/river"
     _TEAMS_URL = _BASE_URL + "/v3/teams"
     _THEMES_URL = _BASE_URL + "/v3/themes"
+    _USERS_URL = _BASE_URL + "/v3/users"
 
     _ACCESS_TOKEN = os.getenv("DATAWRAPPER_ACCESS_TOKEN")
 
@@ -200,7 +207,7 @@ class Datawrapper:
         data: dict | None = None,
         timeout: int = 15,
         extra_headers: dict | None = None,
-    ) -> dict:
+    ) -> dict | bool:
         """Make a POST request to the Datawrapper API.
 
         Parameters
@@ -240,12 +247,65 @@ class Datawrapper:
         # Check if the request was successful
         if response.ok:
             # Return the data as json
-            return response.json()
+            if response.text:
+                return response.json()
+            else:
+                return True
         # If not, raise an exception
         else:
             logger.error(
                 f"Post request failed with status code {response.status_code}."
             )
+            raise FailedRequest(response)
+
+    def put(
+        self,
+        url: str,
+        data: dict | None = None,
+        timeout: int = 15,
+        extra_headers: dict | None = None,
+    ) -> bool:
+        """Make a PUT request to the Datawrapper API.
+
+        Parameters
+        ----------
+        url : str
+            The URL to request.
+        data : dict
+            A dictionary of data to pass to the request, by default None
+        timeout : int, optional
+            The timeout for the request in seconds, by default 15
+        extra_headers : dict, optional
+            A dictionary of extra headers to pass to the request, by default None
+
+        Returns
+        -------
+        bool
+            Whether the request was successful.
+        """
+        # Set headers
+        headers = self._auth_header
+        headers["accept"] = "*/*"
+
+        # Add extra headers if provided
+        if extra_headers:
+            headers.update(extra_headers)
+
+        # Set kwargs to post
+        kwargs = {"headers": headers, "timeout": timeout}
+
+        # Convert data to json
+        if data:
+            kwargs["data"] = json.dumps(data)
+
+        # Make the request
+        response = r.put(url, **kwargs)
+
+        # Handle the response
+        if response.ok:
+            return True
+        else:
+            logger.error(f"Put request failed with status code {response.status_code}.")
             raise FailedRequest(response)
 
     def account_info(self) -> dict:
@@ -507,7 +567,9 @@ class Datawrapper:
         dict
             A dictionary containing the chart's information.
         """
-        return self.post(f"{self._CHARTS_URL}/{chart_id}/data/refresh")
+        response = self.post(f"{self._CHARTS_URL}/{chart_id}/data/refresh")
+        assert isinstance(response, dict)
+        return response
 
     def create_chart(
         self,
@@ -563,6 +625,7 @@ class Datawrapper:
             data=_data,
             extra_headers={"content-type": "application/json"},
         )
+        assert isinstance(chart_info, dict)
 
         # Add data if provided
         if data is not None:
@@ -645,6 +708,7 @@ class Datawrapper:
             object displaying the chart.
         """
         chart_info = self.post(f"{self._PUBLISH_URL}/{chart_id}/publish")
+        assert isinstance(chart_info, dict)
         if display:
             iframe_code = chart_info["data"]["metadata"]["publish"]["embed-codes"][
                 "embed-method-iframe"
@@ -998,11 +1062,13 @@ class Datawrapper:
         if team_id:
             _query["teamId"] = team_id
 
-        return self.post(
+        response = self.post(
             self._FOLDERS_URL,
             data=_query,
             extra_headers={"content-type": "application/json"},
         )
+        assert isinstance(response, dict)
+        return response
 
     def update_folder(
         self,
@@ -1090,7 +1156,9 @@ class Datawrapper:
         dict
             A dictionary containing the information of the chart, table, or map.
         """
-        return self.post(f"{self._CHARTS_URL}/{chart_id}/copy")
+        response = self.post(f"{self._CHARTS_URL}/{chart_id}/copy")
+        assert isinstance(response, dict)
+        return response
 
     def fork_chart(self, chart_id: str) -> dict:
         """Fork a chart, table, or map and create an editable copy.
@@ -1105,7 +1173,9 @@ class Datawrapper:
         dict
             A dictionary containing the information of the chart, table, or map.
         """
-        return self.post(f"{self._CHARTS_URL}/{chart_id}/fork")
+        response = self.post(f"{self._CHARTS_URL}/{chart_id}/fork")
+        assert isinstance(response, dict)
+        return response
 
     def delete_chart(self, chart_id: str) -> bool:
         """Deletes a specified chart, table or map.
@@ -1181,6 +1251,188 @@ class Datawrapper:
 
         return self.get(self._CHARTS_URL, params=_query)
 
+    def get_api_tokens(self, limit: int = 100, offset: int = 0) -> dict[str, Any]:
+        """Retrieves all API tokens associated to the current user.
+
+        Response will not include full tokens for security reasons. Requires scope `auth:read`.
+
+        Parameters
+        ----------
+        limit : int, optional
+            Maximum items to fetch, by default 100. Useful for pagination.
+        offset : int, optional
+            Offset for pagination, by default 0.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the API tokens for your Datawrapper account.
+        """
+        _query: dict[str, Any] = {}
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+
+        return self.get(self._API_TOKEN_URL, params=_query)
+
+    def create_api_token(self, comment: str, scopes: list) -> dict:
+        """Create a new API Token.
+
+        Make sure to save the token somewhere, since you won't be able to see it again. Requires scope `auth:write`.
+
+        Parameters
+        ----------
+        comment : str
+            Comment to describe the API token. Tip: Use something to remember where this specific token is used.
+        scopes : list
+            List of scopes for the API token.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the API token's information.
+        """
+        response = self.post(
+            self._API_TOKEN_URL,
+            data={"comment": comment, "scopes": scopes},
+            extra_headers={"content-type": "application/json"},
+        )
+        assert isinstance(response, dict)
+        return response
+
+    def update_api_token(
+        self, id: str | int, comment: str, scopes: list | None = None
+    ) -> bool:
+        """Updates an existing API token.
+
+        Parameters
+        ----------
+        id : str | int
+            ID of API token to update.
+        comment : str
+            Comment to describe the API token. Tip: Use something to remember where this specific token is used.
+        scopes : list, optional
+            List of scopes for the API token.
+
+        Returns
+        -------
+        bool
+            True if the API token was updated successfully.
+        """
+        _query: dict = {"comment": comment}
+        if scopes:
+            _query["scopes"] = scopes
+
+        return self.put(
+            f"{self._API_TOKEN_URL}/{id}",
+            data=_query,
+            extra_headers={"content-type": "application/json"},
+        )
+
+    def delete_api_token(self, token_id: str | int) -> bool:
+        """Deletes an API token.
+
+        Parameters
+        ----------
+        token_id : str | int
+            ID of API token to delete.
+
+        Returns
+        -------
+        bool
+            True if the API token was deleted successfully.
+        """
+        return self.delete(f"{self._API_TOKEN_URL}/{token_id}")
+
+    def get_login_tokens(
+        self,
+        limit: int = 100,
+        offset: int = 0,
+    ) -> dict[str, Any]:
+        """Retrieves all login tokens associated to the current user.
+
+        Parameters
+        ----------
+        limit : int, optional
+            Maximum items to fetch, by default 100. Useful for pagination.
+        offset : int, optional
+            Offset for pagination, by default 0.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the login tokens for your Datawrapper account.
+        """
+        _query: dict[str, Any] = {}
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+
+        return self.get(self._LOGIN_TOKENS_URL, params=_query)
+
+    def create_login_token(
+        self,
+    ) -> dict:
+        """Creates a new login token to authenticate a user, for use in CMS integrations.
+
+        Login tokens are valid for five minutes and can only be used once.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the login token's information.
+        """
+        response = self.post(
+            self._LOGIN_TOKENS_URL,
+            extra_headers={"content-type": "application/json"},
+        )
+        assert isinstance(response, dict)
+        return response
+
+    def delete_login_token(self, token_id: str | int) -> bool:
+        """Deletes a login token.
+
+        Parameters
+        ----------
+        token_id : str | int
+            ID of login token to delete.
+
+        Returns
+        -------
+        bool
+            True if the login token was deleted successfully.
+        """
+        return self.delete(f"{self._LOGIN_TOKENS_URL}/{token_id}")
+
+    def login(self, token: str) -> str:
+        """Login using a one-time login token and redirect to the URL associated with the token.
+
+        For use in CMS integrations.
+
+        Parameters
+        ----------
+        token : str
+            Login token.
+
+        Returns
+        -------
+        str
+            The HTML of the page that the token redirects to.
+        """
+        return self.get(f"{self._LOGIN_URL}/{token}")
+
+    def get_token_scopes(self) -> list:
+        """Get the scopes that are available to the current user.
+
+        Returns
+        -------
+        list
+            A list containing the scopes available to the current user.
+        """
+        return self.get(self._LOGIN_SCOPES_URL)
+
     def get_teams(
         self,
         search: str | None = None,
@@ -1246,11 +1498,13 @@ class Datawrapper:
         if default_theme:
             _query["defaultTheme"] = default_theme
 
-        return self.post(
+        response = self.post(
             self._TEAMS_URL,
             data=_query,
             extra_headers={"content-type": "application/json"},
         )
+        assert isinstance(response, dict)
+        return response
 
     def get_team(self, team_id: str) -> dict:
         """Get an existing team.
@@ -1266,6 +1520,51 @@ class Datawrapper:
             A dictionary containing the team's information.
         """
         return self.get(self._TEAMS_URL + f"/{team_id}")
+
+    def get_team_members(
+        self,
+        team_id: str,
+        search: str | None = None,
+        order: str = "ASC",
+        order_by: str = "name",
+        limit: int = 100,
+        offset: int = 0,
+    ) -> dict:
+        """Get a list of members in a team.
+
+        Parameters
+        ----------
+        team_id : str
+            ID of team to get members for.
+        search : str, optional
+            Search for members with a specific name, by default no search filter is applied.
+        order : str, optional
+            Result order (ascending or descending), by default "ASC." Supply "DESC" for descending order.
+        order_by : str, optional
+            Attribute to order by. By default "name"
+        limit : int, optional
+            Maximum items to fetch, by default 100. Useful for pagination.
+        offset : int, optional
+            Offset for pagination, by default 0.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the members in the team.
+        """
+        _query: dict = {}
+        if search:
+            _query["search"] = search
+        if order:
+            _query["order"] = order
+        if order_by:
+            _query["orderBy"] = order_by
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+
+        return self.get(f"{self._TEAMS_URL}/{team_id}/members", params=_query)
 
     def update_team(
         self,
@@ -1305,6 +1604,29 @@ class Datawrapper:
             data=_query,
         )
 
+    def update_team_member(self, team_id: str, user_id: str, role: str) -> bool:
+        """Update a team member's role.
+
+        Parameters
+        ----------
+        team_id : str
+            ID of team to update.
+        user_id : str
+            ID of user to update.
+        role : str
+            Role to assign to user. One of owner, admin, or member.
+
+        Returns
+        -------
+        bool
+            True if the team member was updated successfully.
+        """
+        return self.put(
+            f"{self._TEAMS_URL}/{team_id}/members/{user_id}/status",
+            data={"status": role},
+            extra_headers={"content-type": "application/json"},
+        )
+
     def delete_team(self, team_id: str) -> bool:
         """Delete an existing team.
 
@@ -1319,3 +1641,456 @@ class Datawrapper:
             True if team was deleted successfully.
         """
         return self.delete(f"{self._TEAMS_URL}/{team_id}")
+
+    def remove_team_member(self, team_id: str, user_id: str) -> bool:
+        """Remove a member from a team.
+
+        Parameters
+        ----------
+        team_id : str
+            ID of team to remove member from.
+        user_id : str
+            ID of user to remove from team.
+
+        Returns
+        -------
+        bool
+            True if the member was removed successfully.
+        """
+        return self.delete(f"{self._TEAMS_URL}/{team_id}/members/{user_id}")
+
+    def send_invite(self, team_id: str, email: str, role: str) -> bool:
+        """Invite a user to a team.
+
+        Requires scope team:write.
+
+        Parameters
+        ----------
+        team_id : str
+            ID of team to invite user to.
+        email : str
+            Email of user to invite.
+        role : str
+            Role to assign to user. One of owner, admin, or member.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the invitation's information.
+        """
+        response = self.post(
+            f"{self._TEAMS_URL}/{team_id}/invites",
+            data={"email": email, "role": role},
+            extra_headers={"content-type": "application/json"},
+        )
+        assert isinstance(response, bool)
+        return response
+
+    def accept_invite(self, team_id: str, invite_token: str) -> bool:
+        """Accept an invitation to a team.
+
+        Parameters
+        ----------
+        team_id : str
+            ID of team to accept invitation to.
+        invite_token : str
+            Token of invitation to accept.
+
+        Returns
+        -------
+        bool
+            True if the invitation was accepted successfully.
+        """
+        response = self.post(f"{self._TEAMS_URL}/{team_id}/invites/{invite_token}")
+        assert isinstance(response, bool)
+        return response
+
+    def reject_invite(self, team_id: str, invite_token: str) -> bool:
+        """Reject an invitation to a team.
+
+        Parameters
+        ----------
+        team_id : str
+            ID of team to accept invitation to.
+        invite_token : str
+            Token of invitation to accept.
+
+        Returns
+        -------
+        bool
+            True if the invitation was rejected successfully.
+        """
+        return self.delete(f"{self._TEAMS_URL}/{team_id}/invites/{invite_token}")
+
+    def get_oembed(
+        self,
+        url: str,
+        max_width: int | None = None,
+        max_height: int | None = None,
+        iframe: bool | None = None,
+    ) -> dict:
+        """Get an oEmbed object for a chart, table, or map.
+
+        Parameters
+        ----------
+        url : str
+            URL of chart, table, or map.
+        max_width : int, optional
+            Maximum width of the oEmbed object, by default None
+        max_height : int, optional
+            Maximum height of the oEmbed object, by default None
+        iframe : bool, optional
+            Whether to return an iframe embed code, by default None, which will return a responsive embed.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the oEmbed object.
+        """
+        _query: dict = {"url": url, "format": "json"}
+        if max_width:
+            _query["maxwidth"] = max_width
+        if max_height:
+            _query["maxheight"] = max_height
+        if iframe:
+            _query["iframe"] = json.dumps(True)
+
+        return self.get(self._OEMBED_URL, params=_query)
+
+    def get_river(
+        self,
+        approved: bool | None = None,
+        limit: int = 100,
+        offset: int = 0,
+        search: str | None = None,
+    ) -> dict:
+        """Search and filter a list of your River charts.
+
+        Parameters
+        ----------
+        approved : bool, optional
+            Filter by approved status, by default None
+        limit : int
+            Maximum items to fetch, by default 100
+        offset : int
+            Offset for pagination, by default 0
+        search : str, optional
+            Search for charts with a specific title, by default None
+
+        Returns
+        -------
+        dict
+            A dictionary containing the River charts.
+        """
+        _query: dict = {}
+        if approved:
+            _query["approved"] = json.dumps(approved)
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+        if search:
+            _query["search"] = search
+
+        return self.get(self._RIVER_URL, params=_query)
+
+    def get_river_chart(self, chart_id: str) -> dict:
+        """Get a River chart by ID.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of River chart to get.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the River chart.
+        """
+        return self.get(self._RIVER_URL + f"/{chart_id}")
+
+    def update_river_chart(
+        self,
+        chart_id: str,
+        description: str,
+        attribution: int,
+        byline: str,
+        tags: list[str],
+        forkable: bool,
+    ) -> bool:
+        """Update a River chart's approved status.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of River chart to update.
+        description : str
+            Description of the River chart.
+        attribution : int
+            Attribution of the River chart.
+        byline : str
+            Byline of the River chart.
+        tags : list[str]
+            Tags of the River chart.
+        forkable : bool
+            Whether the River chart is forkable.
+
+        Returns
+        -------
+        bool
+            True if the River chart was updated successfully.
+        """
+        _query: dict = {
+            "description": description,
+            "attribution": attribution,
+            "byline": byline,
+            "tags": tags,
+            "forkable": json.dumps(forkable),
+        }
+
+        return self.put(
+            f"{self._RIVER_URL}/{chart_id}",
+            data=_query,
+            extra_headers={"content-type": "application/json"},
+        )
+
+    def get_users(
+        self,
+        team_id: str | None = None,
+        search: str | None = None,
+        order: str = "ASC",
+        order_by: str = "id",
+        limit: int = 100,
+        offset: int = 0,
+    ) -> dict:
+        """Get a list of users in your Datawrapper account.
+
+        Parameters
+        ----------
+        team_id : str, optional
+            ID of team to get users for, by default None
+        search : str, optional
+            Search for users with a specific name, by default None
+        order : str, optional
+            Result order (ascending or descending), by default "ASC." Supply "DESC" for descending order.
+        order_by : str, optional
+            Attribute to order by. By default "id"
+        limit : int, optional
+            Maximum items to fetch, by default 100. Useful for pagination.
+        offset : int, optional
+            Offset for pagination, by default 0.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the users in your Datawrapper account.
+        """
+        _query: dict = {}
+        if team_id:
+            _query["teamId"] = team_id
+        if search:
+            _query["search"] = search
+        if order:
+            _query["order"] = order
+        if order_by:
+            _query["orderBy"] = order_by
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+
+        return self.get(self._USERS_URL, params=_query)
+
+    def get_user(self, user_id: str) -> dict:
+        """Get an existing user.
+
+        Parameters
+        ----------
+        user_id : str
+            ID of user to get.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the user's information.
+        """
+        return self.get(f"{self._USERS_URL}/{user_id}")
+
+    def update_user(
+        self,
+        user_id: str,
+        name: str | None = None,
+        email: str | None = None,
+        role: str | None = None,
+        language: str | None = None,
+        activate_token: str | None = None,
+        password: str | None = None,
+        old_password: str | None = None,
+    ):
+        """Update an existing user.
+
+        Parameters
+        ----------
+        user_id : str
+            ID of user to update.
+        name : str, optional
+            Name to change the user to.
+        email : str, optional
+            Email to change the user to.
+        role : str, optional
+            Role to change the user to. One of owner, admin, or member.
+        language : str, optional
+            Language to change the user preference to.
+        activate_token : str, optional
+            Activate token, typically used to unset it when activating user.
+        password : str, optional
+            Password to change the user to.
+        old_password : str, optional
+            Old password to change the user to.
+
+        Returns
+        -------
+        dict
+            A dictionary with the user's updated metadata
+        """
+        _query: dict = {}
+        if name:
+            _query["name"] = name
+        if email:
+            _query["email"] = email
+        if role:
+            _query["role"] = role
+        if language:
+            _query["language"] = language
+        if activate_token:
+            _query["activateToken"] = activate_token
+        if password:
+            _query["password"] = password
+        if old_password:
+            _query["oldPassword"] = old_password
+
+        if not _query:
+            msg = "No parameters were supplied to update the user."
+            logger.error(msg)
+            raise Exception(msg)
+
+        if (password and not old_password) or (old_password and not password):
+            msg = "You must supply the old password to change the password."
+            logger.error(msg)
+            raise Exception(msg)
+
+        return self.patch(
+            f"{self._USERS_URL}/{user_id}",
+            data=_query,
+        )
+
+    def update_settings(
+        self,
+        user_id: int | str,
+        active_team: str | None = None,
+    ) -> dict:
+        """Update your account information.
+
+        Parameters
+        ----------
+        active_team: str, optional
+            Your active team
+
+        Returns
+        -------
+        dict
+            The user settings dictionary following the change.
+        """
+        _query: dict = {}
+        if active_team:
+            _query["activeTeam"] = active_team
+
+        if not _query:
+            msg = "No updates submitted."
+            logger.error(msg)
+            raise Exception(msg)
+
+        return self.patch(
+            f"{self._USERS_URL}/{user_id}/settings",
+            data=_query,
+        )
+
+    def get_recently_edited_charts(
+        self,
+        user_id: int | str,
+        limit: int = 100,
+        offset: int = 0,
+        min_last_edit_step: str | int = 0,
+    ) -> dict:
+        """Get a list of your recently edited charts.
+
+        Parameters
+        ----------
+        user_id: int | str
+            ID of user to get recently edited charts for.
+        limit: str | int
+            Maximum items to fetch. Useful for pagination. 100 by default.
+        offset: str | int
+            Number of items to skip. Useful for pagination. Zero by default.
+        min_last_edit_step: str | int
+            Filter visualizations by the last editor step they've
+            been opened in (1=upload, 2=describe, 3=visualize, etc).
+            Zero by default.
+
+        Returns
+        -------
+        dict
+            A dictionary with the list of charts and metadata about the selection.
+        """
+        _query: dict = {}
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+        if min_last_edit_step:
+            _query["minLastEditStep"] = min_last_edit_step
+
+        return self.get(
+            self._USERS_URL + f"/{user_id}/recently-edited-charts",
+            params=_query,
+        )
+
+    def get_recently_published_charts(
+        self,
+        user_id: int | str,
+        limit: int = 100,
+        offset: int = 0,
+        min_last_edit_step: str | int = 0,
+    ) -> dict:
+        """Get a list of your recently published charts.
+
+        Parameters
+        ----------
+        user_id: int | str
+            ID of user to get recently published charts for.
+        limit: int
+            Maximum items to fetch. Useful for pagination. 100 by default.
+        offset: int
+            Number of items to skip. Useful for pagination. Zero by default.
+        min_last_edit_step: str | int
+            Filter visualizations by the last editor step they've
+            been opened in (1=upload, 2=describe, 3=visualize, etc).
+            Zero by default.
+
+        Returns
+        -------
+        dict
+            A dictionary with the list of charts and metadata about the selection.
+        """
+        _query: dict = {}
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+        if min_last_edit_step:
+            _query["minLastEditStep"] = min_last_edit_step
+
+        return self.get(
+            self._USERS_URL + f"/{user_id}/recently-published-charts",
+            params=_query,
+        )
