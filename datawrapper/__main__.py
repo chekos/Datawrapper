@@ -57,6 +57,7 @@ class Datawrapper:
     _RIVER_URL = _BASE_URL + "/v3/river"
     _TEAMS_URL = _BASE_URL + "/v3/teams"
     _THEMES_URL = _BASE_URL + "/v3/themes"
+    _USERS_URL = _BASE_URL + "/v3/users"
 
     _ACCESS_TOKEN = os.getenv("DATAWRAPPER_ACCESS_TOKEN")
 
@@ -1852,3 +1853,65 @@ class Datawrapper:
             data=_query,
             extra_headers={"content-type": "application/json"},
         )
+
+    def get_users(
+        self,
+        team_id: str | None = None,
+        search: str | None = None,
+        order: str = "ASC",
+        order_by: str = "id",
+        limit: int = 100,
+        offset: int = 0,
+    ) -> dict:
+        """Get a list of users in your Datawrapper account.
+
+        Parameters
+        ----------
+        team_id : str, optional
+            ID of team to get users for, by default None
+        search : str, optional
+            Search for users with a specific name, by default None
+        order : str, optional
+            Result order (ascending or descending), by default "ASC." Supply "DESC" for descending order.
+        order_by : str, optional
+            Attribute to order by. By default "id"
+        limit : int, optional
+            Maximum items to fetch, by default 100. Useful for pagination.
+        offset : int, optional
+            Offset for pagination, by default 0.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the users in your Datawrapper account.
+        """
+        _query: dict = {}
+        if team_id:
+            _query["teamId"] = team_id
+        if search:
+            _query["search"] = search
+        if order:
+            _query["order"] = order
+        if order_by:
+            _query["orderBy"] = order_by
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+
+        return self.get(self._USERS_URL, params=_query)
+
+    def get_user(self, user_id: str) -> dict:
+        """Get an existing user.
+
+        Parameters
+        ----------
+        user_id : str
+            ID of user to get.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the user's information.
+        """
+        return self.get(f"{self._USERS_URL}/{user_id}")
