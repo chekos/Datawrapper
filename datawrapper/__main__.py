@@ -553,7 +553,7 @@ class Datawrapper:
             data=_data.encode("utf-8"),
         )
 
-    def refresh_data(self, chart_id: str) -> dict | bool:
+    def refresh_data(self, chart_id: str) -> dict:
         """Fetch configured external data and add it to the chart.
 
         Parameters
@@ -566,7 +566,9 @@ class Datawrapper:
         dict
             A dictionary containing the chart's information.
         """
-        return self.post(f"{self._CHARTS_URL}/{chart_id}/data/refresh")
+        response = self.post(f"{self._CHARTS_URL}/{chart_id}/data/refresh")
+        assert isinstance(response, dict)
+        return response
 
     def create_chart(
         self,
@@ -576,7 +578,7 @@ class Datawrapper:
         folder_id: str = "",
         organization_id: str = "",
         metadata: dict | None = None,
-    ) -> dict | bool:
+    ) -> dict:
         """Creates a new Datawrapper chart, table or map.
 
         You can pass a pandas DataFrame as a `data` argument to upload data.
@@ -1632,9 +1634,7 @@ class Datawrapper:
         bool
             True if the invitation was rejected successfully.
         """
-        response = self.delete(f"{self._TEAMS_URL}/{team_id}/invites/{invite_token}")
-        assert isinstance(response, bool)
-        return response
+        return self.delete(f"{self._TEAMS_URL}/{team_id}/invites/{invite_token}")
 
     def get_oembed(
         self,
