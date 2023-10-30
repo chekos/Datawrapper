@@ -21,3 +21,7 @@ def test_get_river():
     chart = dw.get_river_chart(river[0]["id"])
     assert isinstance(chart, dict)
     assert "id" in chart
+
+    # Test some different parameters
+    dw.get_river(approved=True)
+    dw.get_river(approved=True, search="test")
