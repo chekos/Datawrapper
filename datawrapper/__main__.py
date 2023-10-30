@@ -1627,3 +1627,18 @@ class Datawrapper:
             _query["search"] = search
 
         return self.get(self._RIVER_URL, params=_query)
+
+    def get_river_chart(self, chart_id: str) -> dict:
+        """Get a River chart by ID.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of River chart to get.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the River chart.
+        """
+        return self.get(self._RIVER_URL + f"/{chart_id}")

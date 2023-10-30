@@ -16,3 +16,8 @@ def test_get_river():
     assert isinstance(river[0], dict)
     assert "id" in river[0]
     assert "title" in river[0]
+
+    # Test the get_river_chart function too
+    chart = dw.get_river_chart(river[0]["id"])
+    assert isinstance(chart, dict)
+    assert "id" in chart
