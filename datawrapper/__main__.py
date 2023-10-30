@@ -301,9 +301,7 @@ class Datawrapper:
         if response.ok:
             return True
         else:
-            logger.error(
-                f"Delete request failed with status code {response.status_code}."
-            )
+            logger.error(f"Put request failed with status code {response.status_code}.")
             raise FailedRequest(response)
 
     def account_info(self) -> dict:
@@ -1642,3 +1640,48 @@ class Datawrapper:
             A dictionary containing the River chart.
         """
         return self.get(self._RIVER_URL + f"/{chart_id}")
+
+    def update_river_chart(
+        self,
+        chart_id: str,
+        description: str,
+        attribution: int,
+        byline: str,
+        tags: list[str],
+        forkable: bool,
+    ) -> bool:
+        """Update a River chart's approved status.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of River chart to update.
+        description : str
+            Description of the River chart.
+        attribution : int
+            Attribution of the River chart.
+        byline : str
+            Byline of the River chart.
+        tags : list[str]
+            Tags of the River chart.
+        forkable : bool
+            Whether the River chart is forkable.
+
+        Returns
+        -------
+        bool
+            True if the River chart was updated successfully.
+        """
+        _query: dict = {
+            "description": description,
+            "attribution": attribution,
+            "byline": byline,
+            "tags": tags,
+            "forkable": json.dumps(forkable),
+        }
+
+        return self.put(
+            f"{self._RIVER_URL}/{chart_id}",
+            data=_query,
+            extra_headers={"content-type": "application/json"},
+        )
