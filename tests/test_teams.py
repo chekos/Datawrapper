@@ -41,5 +41,14 @@ def test_edit_teams():
     # Verify that the name changed
     assert team["name"] == f"Test Team 2 {suffix}"
 
+    # Invite a user to the team
+    invite = dw.send_invite(
+        team["id"],
+        "foo@example.com",
+        "member",
+    )
+    assert invite is True
+
     # Delete the team
-    dw.delete_team(team["id"])
+    delete = dw.delete_team(team["id"])
+    assert delete is True

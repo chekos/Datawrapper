@@ -206,7 +206,7 @@ class Datawrapper:
         data: dict | None = None,
         timeout: int = 15,
         extra_headers: dict | None = None,
-    ) -> dict:
+    ) -> dict | bool:
         """Make a POST request to the Datawrapper API.
 
         Parameters
@@ -246,7 +246,10 @@ class Datawrapper:
         # Check if the request was successful
         if response.ok:
             # Return the data as json
-            return response.json()
+            if response.text:
+                return response.json()
+            else:
+                return True
         # If not, raise an exception
         else:
             logger.error(
@@ -550,7 +553,7 @@ class Datawrapper:
             data=_data.encode("utf-8"),
         )
 
-    def refresh_data(self, chart_id: str) -> dict:
+    def refresh_data(self, chart_id: str) -> dict | bool:
         """Fetch configured external data and add it to the chart.
 
         Parameters
@@ -573,7 +576,7 @@ class Datawrapper:
         folder_id: str = "",
         organization_id: str = "",
         metadata: dict | None = None,
-    ) -> dict:
+    ) -> dict | bool:
         """Creates a new Datawrapper chart, table or map.
 
         You can pass a pandas DataFrame as a `data` argument to upload data.
@@ -619,6 +622,7 @@ class Datawrapper:
             data=_data,
             extra_headers={"content-type": "application/json"},
         )
+        assert isinstance(chart_info, dict)
 
         # Add data if provided
         if data is not None:
@@ -684,7 +688,7 @@ class Datawrapper:
             data=_query,
         )
 
-    def publish_chart(self, chart_id: str, display: bool = True) -> dict | HTML:
+    def publish_chart(self, chart_id: str, display: bool = True) -> dict | bool | HTML:
         """Publishes a chart, table or map.
 
         Parameters
@@ -701,6 +705,7 @@ class Datawrapper:
             object displaying the chart.
         """
         chart_info = self.post(f"{self._PUBLISH_URL}/{chart_id}/publish")
+        assert isinstance(chart_info, dict)
         if display:
             iframe_code = chart_info["data"]["metadata"]["publish"]["embed-codes"][
                 "embed-method-iframe"
@@ -1054,11 +1059,13 @@ class Datawrapper:
         if team_id:
             _query["teamId"] = team_id
 
-        return self.post(
+        response = self.post(
             self._FOLDERS_URL,
             data=_query,
             extra_headers={"content-type": "application/json"},
         )
+        assert isinstance(response, dict)
+        return response
 
     def update_folder(
         self,
@@ -1146,7 +1153,9 @@ class Datawrapper:
         dict
             A dictionary containing the information of the chart, table, or map.
         """
-        return self.post(f"{self._CHARTS_URL}/{chart_id}/copy")
+        response = self.post(f"{self._CHARTS_URL}/{chart_id}/copy")
+        assert isinstance(response, dict)
+        return response
 
     def fork_chart(self, chart_id: str) -> dict:
         """Fork a chart, table, or map and create an editable copy.
@@ -1161,7 +1170,9 @@ class Datawrapper:
         dict
             A dictionary containing the information of the chart, table, or map.
         """
-        return self.post(f"{self._CHARTS_URL}/{chart_id}/fork")
+        response = self.post(f"{self._CHARTS_URL}/{chart_id}/fork")
+        assert isinstance(response, dict)
+        return response
 
     def delete_chart(self, chart_id: str) -> bool:
         """Deletes a specified chart, table or map.
@@ -1279,11 +1290,13 @@ class Datawrapper:
         dict
             A dictionary containing the API token's information.
         """
-        return self.post(
+        response = self.post(
             self._API_TOKEN_URL,
             data={"comment": comment, "scopes": scopes},
             extra_headers={"content-type": "application/json"},
         )
+        assert isinstance(response, dict)
+        return response
 
     def update_api_token(
         self, id: str | int, comment: str, scopes: list | None = None
@@ -1368,10 +1381,12 @@ class Datawrapper:
         dict
             A dictionary containing the login token's information.
         """
-        return self.post(
+        response = self.post(
             self._LOGIN_TOKENS_URL,
             extra_headers={"content-type": "application/json"},
         )
+        assert isinstance(response, dict)
+        return response
 
     def delete_login_token(self, token_id: str | int) -> bool:
         """Deletes a login token.
@@ -1480,11 +1495,13 @@ class Datawrapper:
         if default_theme:
             _query["defaultTheme"] = default_theme
 
-        return self.post(
+        response = self.post(
             self._TEAMS_URL,
             data=_query,
             extra_headers={"content-type": "application/json"},
         )
+        assert isinstance(response, dict)
+        return response
 
     def get_team(self, team_id: str) -> dict:
         """Get an existing team.
@@ -1553,6 +1570,71 @@ class Datawrapper:
             True if team was deleted successfully.
         """
         return self.delete(f"{self._TEAMS_URL}/{team_id}")
+
+    def send_invite(self, team_id: str, email: str, role: str) -> bool:
+        """Invite a user to a team.
+
+        Requires scope team:write.
+
+        Parameters
+        ----------
+        team_id : str
+            ID of team to invite user to.
+        email : str
+            Email of user to invite.
+        role : str
+            Role to assign to user. One of owner, admin, or member.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the invitation's information.
+        """
+        response = self.post(
+            f"{self._TEAMS_URL}/{team_id}/invites",
+            data={"email": email, "role": role},
+            extra_headers={"content-type": "application/json"},
+        )
+        assert isinstance(response, bool)
+        return response
+
+    def accept_invite(self, team_id: str, invite_token: str) -> bool:
+        """Accept an invitation to a team.
+
+        Parameters
+        ----------
+        team_id : str
+            ID of team to accept invitation to.
+        invite_token : str
+            Token of invitation to accept.
+
+        Returns
+        -------
+        bool
+            True if the invitation was accepted successfully.
+        """
+        response = self.post(f"{self._TEAMS_URL}/{team_id}/invites/{invite_token}")
+        assert isinstance(response, bool)
+        return response
+
+    def reject_invite(self, team_id: str, invite_token: str) -> bool:
+        """Reject an invitation to a team.
+
+        Parameters
+        ----------
+        team_id : str
+            ID of team to accept invitation to.
+        invite_token : str
+            Token of invitation to accept.
+
+        Returns
+        -------
+        bool
+            True if the invitation was rejected successfully.
+        """
+        response = self.delete(f"{self._TEAMS_URL}/{team_id}/invites/{invite_token}")
+        assert isinstance(response, bool)
+        return response
 
     def get_oembed(
         self,
