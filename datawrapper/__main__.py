@@ -54,6 +54,7 @@ class Datawrapper:
     _LOGIN_SCOPES_URL = _BASE_URL + "/v3/auth/token-scopes"
     _LOGIN_TOKENS_URL = _BASE_URL + "/v3/auth/login-tokens"
     _OEMBED_URL = _BASE_URL + "/v3/oembed"
+    _RIVER_URL = _BASE_URL + "/v3/river"
     _TEAMS_URL = _BASE_URL + "/v3/teams"
     _THEMES_URL = _BASE_URL + "/v3/themes"
 
@@ -1589,3 +1590,40 @@ class Datawrapper:
             _query["iframe"] = json.dumps(True)
 
         return self.get(self._OEMBED_URL, params=_query)
+
+    def get_river(
+        self,
+        approved: bool | None = None,
+        limit: int = 100,
+        offset: int = 0,
+        search: str | None = None,
+    ) -> dict:
+        """Search and filter a list of your River charts.
+
+        Parameters
+        ----------
+        approved : bool, optional
+            Filter by approved status, by default None
+        limit : int
+            Maximum items to fetch, by default 100
+        offset : int
+            Offset for pagination, by default 0
+        search : str, optional
+            Search for charts with a specific title, by default None
+
+        Returns
+        -------
+        dict
+            A dictionary containing the River charts.
+        """
+        _query: dict = {}
+        if approved:
+            _query["approved"] = json.dumps(approved)
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+        if search:
+            _query["search"] = search
+
+        return self.get(self._RIVER_URL, params=_query)
