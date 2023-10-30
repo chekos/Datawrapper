@@ -44,6 +44,7 @@ class Datawrapper:
     """
 
     _BASE_URL = "https://api.datawrapper.de"
+    _API_TOKEN_URL = _BASE_URL + "/v3/auth/tokens"
     _ME_URL = _BASE_URL + "/v3/me"
     _CHARTS_URL = _BASE_URL + "/v3/charts"
     _PUBLISH_URL = _BASE_URL + "/charts"
@@ -1183,6 +1184,31 @@ class Datawrapper:
             _query["teamId"] = team_id
 
         return self.get(self._CHARTS_URL, params=_query)
+
+    def get_api_tokens(self, limit: int = 100, offset: int = 0) -> dict[str, Any]:
+        """Retrieves all API tokens associated to the current user.
+
+        Response will not include full tokens for security reasons. Requires scope `auth:read`.
+
+        Parameters
+        ----------
+        limit : int, optional
+            Maximum items to fetch, by default 100. Useful for pagination.
+        offset : int, optional
+            Offset for pagination, by default 0.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the API tokens for your Datawrapper account.
+        """
+        _query: dict[str, Any] = {}
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+
+        return self.get(self._API_TOKEN_URL, params=_query)
 
     def get_login_tokens(
         self,
