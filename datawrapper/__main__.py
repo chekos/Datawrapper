@@ -1520,6 +1520,51 @@ class Datawrapper:
         """
         return self.get(self._TEAMS_URL + f"/{team_id}")
 
+    def get_team_members(
+        self,
+        team_id: str,
+        search: str | None = None,
+        order: str = "ASC",
+        order_by: str = "name",
+        limit: int = 100,
+        offset: int = 0,
+    ) -> dict:
+        """Get a list of members in a team.
+
+        Parameters
+        ----------
+        team_id : str
+            ID of team to get members for.
+        search : str, optional
+            Search for members with a specific name, by default no search filter is applied.
+        order : str, optional
+            Result order (ascending or descending), by default "ASC." Supply "DESC" for descending order.
+        order_by : str, optional
+            Attribute to order by. By default "name"
+        limit : int, optional
+            Maximum items to fetch, by default 100. Useful for pagination.
+        offset : int, optional
+            Offset for pagination, by default 0.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the members in the team.
+        """
+        _query: dict = {}
+        if search:
+            _query["search"] = search
+        if order:
+            _query["order"] = order
+        if order_by:
+            _query["orderBy"] = order_by
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+
+        return self.get(f"{self._TEAMS_URL}/{team_id}/members", params=_query)
+
     def update_team(
         self,
         team_id: str,

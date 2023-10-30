@@ -16,6 +16,10 @@ def test_get_teams():
     # Verify format of data
     assert isinstance(teams["list"], list)
 
+    # Get members of the first team
+    members = dw.get_team_members(teams["list"][0]["id"])
+    assert isinstance(members["list"], list)
+
 
 def test_edit_teams():
     """Test the edit_teams method."""
