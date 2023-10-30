@@ -252,6 +252,58 @@ class Datawrapper:
             )
             raise FailedRequest(response)
 
+    def put(
+        self,
+        url: str,
+        data: dict | None = None,
+        timeout: int = 15,
+        extra_headers: dict | None = None,
+    ) -> bool:
+        """Make a PUT request to the Datawrapper API.
+
+        Parameters
+        ----------
+        url : str
+            The URL to request.
+        data : dict
+            A dictionary of data to pass to the request, by default None
+        timeout : int, optional
+            The timeout for the request in seconds, by default 15
+        extra_headers : dict, optional
+            A dictionary of extra headers to pass to the request, by default None
+
+        Returns
+        -------
+        bool
+            Whether the request was successful.
+        """
+        # Set headers
+        headers = self._auth_header
+        headers["accept"] = "*/*"
+
+        # Add extra headers if provided
+        if extra_headers:
+            headers.update(extra_headers)
+
+        # Set kwargs to post
+        kwargs = {"headers": headers, "timeout": timeout}
+
+        # Convert data to json
+        if data:
+            kwargs["data"] = json.dumps(data)
+
+        # Make the request
+        response = r.put(url, **kwargs)
+
+        # Handle the response
+        if response.ok:
+            return True
+        else:
+            logger.error(
+                f"Delete request failed with status code {response.status_code}."
+            )
+            raise FailedRequest(response)
+
     def account_info(self) -> dict:
         """A deprecated method for calling get_my_account."""
         # Issue a deprecation warning
@@ -1209,6 +1261,73 @@ class Datawrapper:
             _query["offset"] = offset
 
         return self.get(self._API_TOKEN_URL, params=_query)
+
+    def create_api_token(self, comment: str, scopes: list) -> dict:
+        """Create a new API Token.
+
+        Make sure to save the token somewhere, since you won't be able to see it again. Requires scope `auth:write`.
+
+        Parameters
+        ----------
+        comment : str
+            Comment to describe the API token. Tip: Use something to remember where this specific token is used.
+        scopes : list
+            List of scopes for the API token.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the API token's information.
+        """
+        return self.post(
+            self._API_TOKEN_URL,
+            data={"comment": comment, "scopes": scopes},
+            extra_headers={"content-type": "application/json"},
+        )
+
+    def update_api_token(
+        self, id: str | int, comment: str, scopes: list | None = None
+    ) -> bool:
+        """Updates an existing API token.
+
+        Parameters
+        ----------
+        id : str | int
+            ID of API token to update.
+        comment : str
+            Comment to describe the API token. Tip: Use something to remember where this specific token is used.
+        scopes : list, optional
+            List of scopes for the API token.
+
+        Returns
+        -------
+        bool
+            True if the API token was updated successfully.
+        """
+        _query: dict = {"comment": comment}
+        if scopes:
+            _query["scopes"] = scopes
+
+        return self.put(
+            f"{self._API_TOKEN_URL}/{id}",
+            data=_query,
+            extra_headers={"content-type": "application/json"},
+        )
+
+    def delete_api_token(self, token_id: str | int) -> bool:
+        """Deletes an API token.
+
+        Parameters
+        ----------
+        token_id : str | int
+            ID of API token to delete.
+
+        Returns
+        -------
+        bool
+            True if the API token was deleted successfully.
+        """
+        return self.delete(f"{self._API_TOKEN_URL}/{token_id}")
 
     def get_login_tokens(
         self,
