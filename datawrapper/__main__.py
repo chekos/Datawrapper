@@ -1603,6 +1603,29 @@ class Datawrapper:
             data=_query,
         )
 
+    def update_team_member(self, team_id: str, user_id: str, role: str) -> bool:
+        """Update a team member's role.
+
+        Parameters
+        ----------
+        team_id : str
+            ID of team to update.
+        user_id : str
+            ID of user to update.
+        role : str
+            Role to assign to user. One of owner, admin, or member.
+
+        Returns
+        -------
+        bool
+            True if the team member was updated successfully.
+        """
+        return self.put(
+            f"{self._TEAMS_URL}/{team_id}/members/{user_id}/status",
+            data={"status": role},
+            extra_headers={"content-type": "application/json"},
+        )
+
     def delete_team(self, team_id: str) -> bool:
         """Delete an existing team.
 

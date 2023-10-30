@@ -20,6 +20,14 @@ def test_get_teams():
     members = dw.get_team_members(teams["list"][0]["id"])
     assert isinstance(members["list"], list)
 
+    # Update team member
+    update = dw.update_team_member(
+        teams["list"][0]["id"],
+        members["list"][0]["id"],
+        "admin",
+    )
+    assert isinstance(update, bool) and update is True
+
 
 def test_edit_teams():
     """Test the edit_teams method."""
