@@ -50,6 +50,7 @@ class Datawrapper:
     _BASEMAPS_URL = _BASE_URL + "/v3/basemaps"
     _FOLDERS_URL = _BASE_URL + "/v3/folders"
     _LOGIN_URL = _BASE_URL + "/v3/auth/login"
+    _LOGIN_SCOPES_URL = _BASE_URL + "/v3/auth/token-scopes"
     _LOGIN_TOKENS_URL = _BASE_URL + "/v3/auth/login-tokens"
     _TEAMS_URL = _BASE_URL + "/v3/teams"
     _THEMES_URL = _BASE_URL + "/v3/themes"
@@ -1258,6 +1259,16 @@ class Datawrapper:
             The HTML of the page that the token redirects to.
         """
         return self.get(f"{self._LOGIN_URL}/{token}")
+
+    def get_token_scopes(self) -> list:
+        """Get the scopes that are available to the current user.
+
+        Returns
+        -------
+        list
+            A list containing the scopes available to the current user.
+        """
+        return self.get(self._LOGIN_SCOPES_URL)
 
     def get_teams(
         self,
