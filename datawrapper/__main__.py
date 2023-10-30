@@ -1641,6 +1641,23 @@ class Datawrapper:
         """
         return self.delete(f"{self._TEAMS_URL}/{team_id}")
 
+    def remove_team_member(self, team_id: str, user_id: str) -> bool:
+        """Remove a member from a team.
+
+        Parameters
+        ----------
+        team_id : str
+            ID of team to remove member from.
+        user_id : str
+            ID of user to remove from team.
+
+        Returns
+        -------
+        bool
+            True if the member was removed successfully.
+        """
+        return self.delete(f"{self._TEAMS_URL}/{team_id}/members/{user_id}")
+
     def send_invite(self, team_id: str, email: str, role: str) -> bool:
         """Invite a user to a team.
 
