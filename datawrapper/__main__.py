@@ -1915,3 +1915,71 @@ class Datawrapper:
             A dictionary containing the user's information.
         """
         return self.get(f"{self._USERS_URL}/{user_id}")
+
+    def update_user(
+        self,
+        user_id: str,
+        name: str | None = None,
+        email: str | None = None,
+        role: str | None = None,
+        language: str | None = None,
+        activate_token: str | None = None,
+        password: str | None = None,
+        old_password: str | None = None,
+    ):
+        """Update an existing user.
+
+        Parameters
+        ----------
+        user_id : str
+            ID of user to update.
+        name : str, optional
+            Name to change the user to.
+        email : str, optional
+            Email to change the user to.
+        role : str, optional
+            Role to change the user to. One of owner, admin, or member.
+        language : str, optional
+            Language to change the user preference to.
+        activate_token : str, optional
+            Activate token, typically used to unset it when activating user.
+        password : str, optional
+            Password to change the user to.
+        old_password : str, optional
+            Old password to change the user to.
+
+        Returns
+        -------
+        dict
+            A dictionary with the user's updated metadata
+        """
+        _query: dict = {}
+        if name:
+            _query["name"] = name
+        if email:
+            _query["email"] = email
+        if role:
+            _query["role"] = role
+        if language:
+            _query["language"] = language
+        if activate_token:
+            _query["activateToken"] = activate_token
+        if password:
+            _query["password"] = password
+        if old_password:
+            _query["oldPassword"] = old_password
+
+        if not _query:
+            msg = "No parameters were supplied to update the user."
+            logger.error(msg)
+            raise Exception(msg)
+
+        if (password and not old_password) or (old_password and not password):
+            msg = "You must supply the old password to change the password."
+            logger.error(msg)
+            raise Exception(msg)
+
+        return self.patch(
+            f"{self._USERS_URL}/{user_id}",
+            data=_query,
+        )
