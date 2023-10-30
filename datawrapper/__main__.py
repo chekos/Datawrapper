@@ -690,7 +690,7 @@ class Datawrapper:
             data=_query,
         )
 
-    def publish_chart(self, chart_id: str, display: bool = True) -> dict | bool | HTML:
+    def publish_chart(self, chart_id: str, display: bool = True) -> dict | HTML:
         """Publishes a chart, table or map.
 
         Parameters
