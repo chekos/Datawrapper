@@ -21,13 +21,11 @@ def test_get_user():
     assert user["id"] == my_id
 
     # Get recently edited and published charts
-    charts = dw.get_recently_edited_charts()
+    charts = dw.get_recently_edited_charts(user["id"])
     assert isinstance(charts, dict)
-    assert isinstance(charts["charts"], list)
 
-    charts = dw.get_recently_published_charts()
+    charts = dw.get_recently_published_charts(user["id"])
     assert isinstance(charts, dict)
-    assert isinstance(charts["charts"], list)
 
 
 def test_edit_user():

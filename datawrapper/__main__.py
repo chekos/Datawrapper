@@ -654,7 +654,7 @@ class Datawrapper:
         assert isinstance(obj, dict)
 
         # Add data, if provided
-        if data:
+        if data is not None:
             self.add_data(chart_id=obj["id"], data=data)
 
         # Return the result
@@ -734,7 +734,7 @@ class Datawrapper:
             _query["metadata"] = metadata
 
         # If there's nothing there to update, raise an exception
-        if not _query and not data:
+        if not _query and data is None:
             msg = "No updates submitted."
             logger.error(msg)
             raise InvalidRequest(msg)
@@ -1005,7 +1005,7 @@ class Datawrapper:
             "transparent": transparent,
         }
 
-        response = self.get(
+        content = self.get(
             f"{self._CHARTS_URL}/{chart_id}/export/{output}", params=_query
         )
 
@@ -1015,7 +1015,7 @@ class Datawrapper:
 
         # Write the file to the file path
         with open(_filepath, "wb") as fh:
-            fh.write(response.content)
+            fh.write(content)
 
         # Display the image if requested
         if display:
@@ -1102,6 +1102,7 @@ class Datawrapper:
         return self.put(
             f"{self._CHARTS_URL}/{chart_id}/data",
             data=_data.encode("utf-8"),
+            extra_headers={"content-type": "text/csv"},
             dump_data=False,
         )
 
