@@ -1062,7 +1062,7 @@ class Datawrapper:
         dict
             A dictionary containing the information of the chart, table, or map.
         """
-        return self.get(self._CHARTS_URL + f"/{chart_id}/data")
+        return self.get(f"{self._CHARTS_URL}/{chart_id}/data")
 
     def chart_data(self, chart_id: str):
         """A deprecated method of the get_data method."""
