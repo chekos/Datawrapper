@@ -21,7 +21,7 @@ def test_get_my_recently_edited_charts():
 
     one = dw.get_my_recently_edited_charts()
     assert isinstance(one, dict)
-    assert isinstance(one['list'], list)
+    assert isinstance(one["list"], list)
 
     two = dw.get_my_recently_edited_charts(limit=1)
     assert isinstance(two["list"], list)
