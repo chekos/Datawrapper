@@ -47,7 +47,7 @@ def local_version(version):
 
 setup(
     name="datawrapper",
-    description="A light-weight python wrapper for the Datawrapper API",
+    description="A lightweight Python wrapper for the Datawrapper API",
     long_description=read("README.md"),
     long_description_content_type="text/markdown",
     author="chekos",
