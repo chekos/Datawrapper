@@ -54,7 +54,7 @@ def test_locator_map_points():
     dw.update_chart(obj["id"], metadata=metadata)
 
     # Add markers
-    point_markers = {
+    data = {
         "markers": [
             {
                 "type": "point",
@@ -80,8 +80,9 @@ def test_locator_map_points():
             }
         ]
     }
-    data = json.dumps(point_markers)
-    dw.add_data(obj["id"], data)
+
+    # Post it
+    dw.add_json(obj["id"], data)
 
 
 def test_locator_map_areas():
@@ -95,19 +96,12 @@ def test_locator_map_areas():
         "locator-map",
     )
 
-    # Set map metadata
-    dw.update_chart(
-        obj["id"],
-        metadata={
-            "data": {"json": True},
-        },
-    )
+    # Open markers
+    with open("./tests/area_markers.json") as f:
+        data = json.load(f)
 
     # Add markers
-    with open("./tests/area_markers.json") as f:
-        area_markers = json.load(f)
-    data = json.dumps(area_markers)
-    dw.add_data(obj["id"], data)
+    dw.add_json(obj["id"], data)
 
 
 def test_locator_map_lines():
@@ -121,16 +115,8 @@ def test_locator_map_lines():
         "locator-map",
     )
 
-    # Set map metadata
-    dw.update_chart(
-        obj["id"],
-        metadata={
-            "data": {"json": True},
-        },
-    )
-
     # Add markers
-    line_markers = {
+    data = {
         "markers": [
             {
                 "id": "m1",
@@ -155,5 +141,4 @@ def test_locator_map_lines():
             }
         ]
     }
-    data = json.dumps(line_markers)
-    dw.add_data(obj["id"], data)
+    dw.add_json(obj["id"], data)
