@@ -556,6 +556,65 @@ class Datawrapper:
     # Charts methods
     #
 
+    def get_charts(
+        self,
+        user_id: str = "",
+        published: bool = True,
+        search: str = "",
+        order: str = "DESC",
+        order_by: str = "createdAt",
+        limit: int = 25,
+        folder_id: int | None = None,
+        team_id: str = "",
+    ) -> None | list[Any]:
+        """Retrieves a list of charts by User
+
+        Parameters
+        ----------
+        user_id : str, optional
+            ID of the user to fetch charts for, by default ""
+        published : bool, optional
+            Flag to filter resutls by publish status, by default True
+        search : str, optional
+            Search for charts with a specific title, by default ""
+        order : str, optional
+            Result order (ascending or descending), by default "DESC"
+        order_by : str, optional
+            Attribute to order by. One of createdAt, email, id, or name,
+            by default "createdAt"
+        limit : int, optional
+            Maximum items to fetch, by default 25
+        folder_id : int, optional
+            ID of folder in Datawrapper.de where to list charts, by default ""
+        team_id : str, optional
+            ID of the team where to list charts. The authenticated user must have access
+            to this team, by default ""
+
+        Returns
+        -------
+        list
+            List of charts.
+        """
+        _query: dict = {}
+        if user_id:
+            _query["userId"] = user_id
+        if published:
+            _query["published"] = json.dumps(published)
+        if search:
+            _query["search"] = search
+        if order:
+            _query["order"] = order
+        if order_by:
+            _query["orderBy"] = order_by
+        if limit:
+            _query["limit"] = str(limit)
+        if folder_id:
+            _query["folderId"] = folder_id
+        if team_id:
+            _query["teamId"] = team_id
+
+        return self.get(self._CHARTS_URL, params=_query)
+
     def get_chart(self, chart_id: str) -> dict:
         """Retrieve information of a specific chart, table or map.
 
@@ -914,6 +973,21 @@ class Datawrapper:
         assert isinstance(response, dict)
         return response
 
+    def move_chart(self, chart_id: int, folder_id: int) -> dict:
+        """Moves a chart, table, or map to a specified folder.
+
+        Parameters
+        ----------
+        chart_id : int
+            ID of chart, table, or map.
+        folder_id : int
+            ID of folder to move visualization to.
+        """
+        return self.patch(
+            f"{self._CHARTS_URL}/{chart_id}",
+            data={"folderId": folder_id},
+        )
+
     def publish_chart(self, chart_id: str, display: bool = False) -> dict | HTML:
         """Publishes a chart, table or map.
 
@@ -1123,16 +1197,134 @@ class Datawrapper:
         assert isinstance(response, dict)
         return response
 
-    def account_info(self) -> dict:
-        """A deprecated method for calling get_my_account."""
-        # Issue a deprecation warning
-        logger.warning(
-            "This method is deprecated and will be removed in a future version. "
-            "Use get_account_info instead."
+    #
+    # Folder methods
+    #
+
+    def get_folders(self) -> dict:
+        """Get a list of folders in your Datawrapper account.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the folders in your Datawrapper account and their
+            information.
+        """
+        return self.get(self._FOLDERS_URL)
+
+    def get_folder(self, folder_id: int) -> dict:
+        """Get an existing folder.
+
+        Parameters
+        ----------
+        folder_id : int
+            ID of folder to get.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the folder's information.
+        """
+        return self.get(self._FOLDERS_URL + f"/{folder_id}")
+
+    def create_folder(
+        self,
+        name: str,
+        parent_id: int | None = None,
+        team_id: int | None = None,
+    ) -> dict:
+        """Create a new folder.
+
+        Parameters
+        ----------
+        name: str
+            Name of the folder to be created.
+        parent_id: int, optional
+            The parent folder that the folder belongs to.
+        team_id: int, optional
+            The team that the folder belongs to. If teamId is empty, the folder will
+            belong to the user directly.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the folder's information.
+        """
+        _query: dict = {"name": name}
+        if parent_id:
+            _query["parentId"] = parent_id
+        if team_id:
+            _query["teamId"] = team_id
+
+        response = self.post(
+            self._FOLDERS_URL,
+            data=_query,
+            extra_headers={"content-type": "application/json"},
+        )
+        assert isinstance(response, dict)
+        return response
+
+    def update_folder(
+        self,
+        folder_id: str | int,
+        name: str | None = None,
+        parent_id: int | None = None,
+        team_id: int | None = None,
+        user_id: int | None = None,
+    ) -> dict:
+        """Update an existing folder.
+
+        Parameters
+        ----------
+        folder_id : str | int
+            ID of folder to update.
+        name: str, optional
+            Name to change the folder to.
+        parent_id: int, optional
+            The parent folder where this folder is stored.
+        team_id: int, optional
+            The team that the folder belongs to.
+        user_id: int, optional
+            The user that the folder belongs to.
+
+        Returns
+        -------
+        dict
+            A dictionary with the folder's updated metadata
+        """
+        _query: dict = {}
+        if name:
+            _query["name"] = name
+        if parent_id:
+            _query["parentId"] = parent_id
+        if team_id:
+            _query["teamId"] = team_id
+        if user_id:
+            _query["userId"] = user_id
+
+        return self.patch(
+            f"{self._FOLDERS_URL}/{folder_id}",
+            data=_query,
         )
 
-        # Use the newer method
-        return self.get_my_account()
+    def delete_folder(self, folder_id: int) -> bool:
+        """Delete an existing folder.
+
+        Parameters
+        ----------
+        folder_id : int
+            ID of folder to delete.
+
+        Returns
+        -------
+        bool
+            True if the folder was deleted successfully.
+        """
+        return self.delete(f"{self._FOLDERS_URL }/{folder_id}")
+
+    #
+    # "Me" methods
+    #
 
     def get_my_account(self) -> dict:
         """Access your account information.
@@ -1143,6 +1335,17 @@ class Datawrapper:
             A dictionary containing your account information.
         """
         return self.get(self._ME_URL)
+
+    def account_info(self) -> dict:
+        """A deprecated method for calling get_my_account."""
+        # Issue a deprecation warning
+        logger.warning(
+            "This method is deprecated and will be removed in a future version. "
+            "Use get_account_info instead."
+        )
+
+        # Use the newer method
+        return self.get_my_account()
 
     def update_my_account(
         self,
@@ -1233,19 +1436,19 @@ class Datawrapper:
 
     def get_my_recently_edited_charts(
         self,
-        limit: str | int = 100,
-        offset: str | int = 0,
+        limit: int = 100,
+        offset: int = 0,
         min_last_edit_step: str | int = 0,
     ) -> dict:
         """Get a list of your recently edited charts.
 
         Parameters
         ----------
-        limit: str | int
+        limit: int
             Maximum items to fetch. Useful for pagination. 100 by default.
-        offset: str | int
+        offset: int
             Number of items to skip. Useful for pagination. Zero by default.
-        min_last_edit_step: str | int
+        min_last_edit_step: int
             Filter visualizations by the last editor step they've
             been opened in (1=upload, 2=describe, 3=visualize, etc).
             Zero by default.
@@ -1270,19 +1473,19 @@ class Datawrapper:
 
     def get_my_recently_published_charts(
         self,
-        limit: str | int = 100,
-        offset: str | int = 0,
-        min_last_edit_step: str | int = 0,
+        limit: int = 100,
+        offset: int = 0,
+        min_last_edit_step: int = 0,
     ) -> dict:
         """Get a list of your recently published charts.
 
         Parameters
         ----------
-        limit: str | int
+        limit: int
             Maximum items to fetch. Useful for pagination. 100 by default.
-        offset: str | int
+        offset: int
             Number of items to skip. Useful for pagination. Zero by default.
-        min_last_edit_step: str | int
+        min_last_edit_step: int
             Filter visualizations by the last editor step they've
             been opened in (1=upload, 2=describe, 3=visualize, etc).
             Zero by default.
@@ -1305,16 +1508,160 @@ class Datawrapper:
             params=_query,
         )
 
+    #
+    # Oembed methods
+    #
+
+    def get_oembed(
+        self,
+        url: str,
+        max_width: int | None = None,
+        max_height: int | None = None,
+        iframe: bool | None = None,
+    ) -> dict:
+        """Get an oEmbed object for a chart, table, or map.
+
+        Parameters
+        ----------
+        url : str
+            URL of chart, table, or map.
+        max_width : int, optional
+            Maximum width of the oEmbed object, by default None
+        max_height : int, optional
+            Maximum height of the oEmbed object, by default None
+        iframe : bool, optional
+            Whether to return an iframe embed code, by default None, which will return a responsive embed.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the oEmbed object.
+        """
+        _query: dict = {"url": url, "format": "json"}
+        if max_width:
+            _query["maxwidth"] = max_width
+        if max_height:
+            _query["maxheight"] = max_height
+        if iframe:
+            _query["iframe"] = json.dumps(True)
+
+        return self.get(self._OEMBED_URL, params=_query)
+
+    #
+    # River methods
+    #
+
+    def get_river(
+        self,
+        approved: bool | None = None,
+        limit: int = 100,
+        offset: int = 0,
+        search: str | None = None,
+    ) -> dict:
+        """Search and filter a list of your River charts.
+
+        Parameters
+        ----------
+        approved : bool, optional
+            Filter by approved status, by default None
+        limit : int
+            Maximum items to fetch, by default 100
+        offset : int
+            Offset for pagination, by default 0
+        search : str, optional
+            Search for charts with a specific title, by default None
+
+        Returns
+        -------
+        dict
+            A dictionary containing the River charts.
+        """
+        _query: dict = {}
+        if approved:
+            _query["approved"] = json.dumps(approved)
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+        if search:
+            _query["search"] = search
+
+        return self.get(self._RIVER_URL, params=_query)
+
+    def get_river_chart(self, chart_id: str) -> dict:
+        """Get a River chart by ID.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of River chart to get.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the River chart.
+        """
+        return self.get(self._RIVER_URL + f"/{chart_id}")
+
+    def update_river_chart(
+        self,
+        chart_id: str,
+        description: str,
+        attribution: int,
+        byline: str,
+        tags: list[str],
+        forkable: bool,
+    ) -> bool:
+        """Update a River chart's approved status.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of River chart to update.
+        description : str
+            Description of the River chart.
+        attribution : int
+            Attribution of the River chart.
+        byline : str
+            Byline of the River chart.
+        tags : list[str]
+            Tags of the River chart.
+        forkable : bool
+            Whether the River chart is forkable.
+
+        Returns
+        -------
+        bool
+            True if the River chart was updated successfully.
+        """
+        _query: dict = {
+            "description": description,
+            "attribution": attribution,
+            "byline": byline,
+            "tags": tags,
+            "forkable": json.dumps(forkable),
+        }
+
+        return self.put(
+            f"{self._RIVER_URL}/{chart_id}",
+            data=_query,
+            extra_headers={"content-type": "application/json"},
+        )
+
+    #
+    # Theme methods
+    #
+
     def get_themes(
-        self, limit: str | int = 100, offset: str | int = 0, deleted: bool = False
+        self, limit: int = 100, offset: int = 0, deleted: bool = False
     ) -> dict:
         """Get a list of themes in your Datawrapper account.
 
         Parameters
         ----------
-        limit: str | int
+        limit: int
             Maximum items to fetch. Useful for pagination. Default 100.
-        offset: str | int
+        offset: int
             Number of items to skip. Useful for pagination. Default zero.
         deleted: bool
             Whether to include deleted themes
@@ -1335,200 +1682,9 @@ class Datawrapper:
             params=_query,
         )
 
-    def get_folders(self) -> dict:
-        """Get a list of folders in your Datawrapper account.
-
-        Returns
-        -------
-        dict
-            A dictionary containing the folders in your Datawrapper account and their
-            information.
-        """
-        return self.get(self._FOLDERS_URL)
-
-    def get_folder(self, folder_id: str | int) -> dict:
-        """Get an existing folder.
-
-        Parameters
-        ----------
-        folder_id : str | int
-            ID of folder to get.
-
-        Returns
-        -------
-        dict
-            A dictionary containing the folder's information.
-        """
-        return self.get(self._FOLDERS_URL + f"/{folder_id}")
-
-    def create_folder(
-        self,
-        name: str,
-        parent_id: str | int | None = None,
-        team_id: str | int | None = None,
-    ) -> dict:
-        """Create a new folder.
-
-        Parameters
-        ----------
-        name: str
-            Name of the folder to be created.
-        parent_id: str | int, optional
-            The parent folder that the folder belongs to.
-        team_id: str | int, optional
-            The team that the folder belongs to. If teamId is empty, the folder will
-            belong to the user directly.
-
-        Returns
-        -------
-        dict
-            A dictionary containing the folder's information.
-        """
-        _query: dict = {"name": name}
-        if parent_id:
-            _query["parentId"] = parent_id
-        if team_id:
-            _query["teamId"] = team_id
-
-        response = self.post(
-            self._FOLDERS_URL,
-            data=_query,
-            extra_headers={"content-type": "application/json"},
-        )
-        assert isinstance(response, dict)
-        return response
-
-    def update_folder(
-        self,
-        folder_id: str | int,
-        name: str | None = None,
-        parent_id: str | int | None = None,
-        team_id: str | int | None = None,
-        user_id: str | int | None = None,
-    ) -> dict:
-        """Update an existing folder.
-
-        Parameters
-        ----------
-        folder_id : str | int
-            ID of folder to update.
-        name: str, optional
-            Name to change the folder to.
-        parent_id: str | int, optional
-            The parent folder where this folder is stored.
-        team_id: str | int, optional
-            The team that the folder belongs to.
-        user_id: str | int, optional
-            The user that the folder belongs to.
-
-        Returns
-        -------
-        dict
-            A dictionary with the folder's updated metadata
-        """
-        _query: dict = {}
-        if name:
-            _query["name"] = name
-        if parent_id:
-            _query["parentId"] = parent_id
-        if team_id:
-            _query["teamId"] = team_id
-        if user_id:
-            _query["userId"] = user_id
-
-        return self.patch(
-            f"{self._FOLDERS_URL}/{folder_id}",
-            data=_query,
-        )
-
-    def delete_folder(self, folder_id: str | int) -> bool:
-        """Delete an existing folder.
-
-        Parameters
-        ----------
-        folder_id : str | int
-            ID of folder to delete.
-
-        Returns
-        -------
-        bool
-            True if the folder was deleted successfully.
-        """
-        return self.delete(f"{self._FOLDERS_URL }/{folder_id}")
-
-    def move_chart(self, chart_id: str, folder_id: str) -> dict:
-        """Moves a chart, table, or map to a specified folder.
-
-        Parameters
-        ----------
-        chart_id : str
-            ID of chart, table, or map.
-        folder_id : str
-            ID of folder to move visualization to.
-        """
-        return self.patch(
-            url=self._CHARTS_URL + f"/{chart_id}",
-            data={"folderId": folder_id},
-        )
-
-    def get_charts(
-        self,
-        user_id: str = "",
-        published: str = "true",
-        search: str = "",
-        order: str = "DESC",
-        order_by: str = "createdAt",
-        limit: int = 25,
-        folder_id: str = "",
-        team_id: str = "",
-    ) -> None | list[Any]:
-        """Retrieves a list of charts by User
-
-        Parameters
-        ----------
-        user_id : str, optional
-            ID of the user to fetch charts for, by default ""
-        published : str, optional
-            Flag to filter resutls by publish status, by default "true"
-        search : str, optional
-            Search for charts with a specific title, by default ""
-        order : str, optional
-            Result order (ascending or descending), by default "DESC"
-        order_by : str, optional
-            Attribute to order by. One of createdAt, email, id, or name,
-            by default "createdAt"
-        limit : int, optional
-            Maximum items to fetch, by default 25
-        folder_id : str, optional
-            ID of folder in Datawrapper.de where to list charts, by default ""
-        team_id : str, optional
-            ID of the team where to list charts. The authenticated user must have access
-            to this team, by default ""
-
-        Returns
-        -------
-        list
-            List of charts.
-        """
-        _query: dict = {}
-        if user_id:
-            _query["userId"] = user_id
-        if published:
-            _query["published"] = published
-        if search:
-            _query["search"] = search
-        if order:
-            _query["order"] = order
-        if order_by:
-            _query["orderBy"] = order_by
-        if limit:
-            _query["limit"] = str(limit)
-        if folder_id:
-            _query["folderId"] = folder_id
-        if team_id:
-            _query["teamId"] = team_id
-
-        return self.get(self._CHARTS_URL, params=_query)
+    #
+    # Team methods
+    #
 
     def get_teams(
         self,
@@ -1819,137 +1975,9 @@ class Datawrapper:
         """
         return self.delete(f"{self._TEAMS_URL}/{team_id}/invites/{invite_token}")
 
-    def get_oembed(
-        self,
-        url: str,
-        max_width: int | None = None,
-        max_height: int | None = None,
-        iframe: bool | None = None,
-    ) -> dict:
-        """Get an oEmbed object for a chart, table, or map.
-
-        Parameters
-        ----------
-        url : str
-            URL of chart, table, or map.
-        max_width : int, optional
-            Maximum width of the oEmbed object, by default None
-        max_height : int, optional
-            Maximum height of the oEmbed object, by default None
-        iframe : bool, optional
-            Whether to return an iframe embed code, by default None, which will return a responsive embed.
-
-        Returns
-        -------
-        dict
-            A dictionary containing the oEmbed object.
-        """
-        _query: dict = {"url": url, "format": "json"}
-        if max_width:
-            _query["maxwidth"] = max_width
-        if max_height:
-            _query["maxheight"] = max_height
-        if iframe:
-            _query["iframe"] = json.dumps(True)
-
-        return self.get(self._OEMBED_URL, params=_query)
-
-    def get_river(
-        self,
-        approved: bool | None = None,
-        limit: int = 100,
-        offset: int = 0,
-        search: str | None = None,
-    ) -> dict:
-        """Search and filter a list of your River charts.
-
-        Parameters
-        ----------
-        approved : bool, optional
-            Filter by approved status, by default None
-        limit : int
-            Maximum items to fetch, by default 100
-        offset : int
-            Offset for pagination, by default 0
-        search : str, optional
-            Search for charts with a specific title, by default None
-
-        Returns
-        -------
-        dict
-            A dictionary containing the River charts.
-        """
-        _query: dict = {}
-        if approved:
-            _query["approved"] = json.dumps(approved)
-        if limit:
-            _query["limit"] = limit
-        if offset:
-            _query["offset"] = offset
-        if search:
-            _query["search"] = search
-
-        return self.get(self._RIVER_URL, params=_query)
-
-    def get_river_chart(self, chart_id: str) -> dict:
-        """Get a River chart by ID.
-
-        Parameters
-        ----------
-        chart_id : str
-            ID of River chart to get.
-
-        Returns
-        -------
-        dict
-            A dictionary containing the River chart.
-        """
-        return self.get(self._RIVER_URL + f"/{chart_id}")
-
-    def update_river_chart(
-        self,
-        chart_id: str,
-        description: str,
-        attribution: int,
-        byline: str,
-        tags: list[str],
-        forkable: bool,
-    ) -> bool:
-        """Update a River chart's approved status.
-
-        Parameters
-        ----------
-        chart_id : str
-            ID of River chart to update.
-        description : str
-            Description of the River chart.
-        attribution : int
-            Attribution of the River chart.
-        byline : str
-            Byline of the River chart.
-        tags : list[str]
-            Tags of the River chart.
-        forkable : bool
-            Whether the River chart is forkable.
-
-        Returns
-        -------
-        bool
-            True if the River chart was updated successfully.
-        """
-        _query: dict = {
-            "description": description,
-            "attribution": attribution,
-            "byline": byline,
-            "tags": tags,
-            "forkable": json.dumps(forkable),
-        }
-
-        return self.put(
-            f"{self._RIVER_URL}/{chart_id}",
-            data=_query,
-            extra_headers={"content-type": "application/json"},
-        )
+    #
+    # User methods
+    #
 
     def get_users(
         self,
