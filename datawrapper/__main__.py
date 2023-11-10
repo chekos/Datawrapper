@@ -1180,6 +1180,37 @@ class Datawrapper:
             dump_data=False,
         )
 
+    def add_json(self, chart_id: str, data: Any) -> bool:
+        """Add JSON data to a specified chart.
+
+        Can be used to add point, area and line markers to a locator map or other chart.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table or map to add data to.
+        data : Any
+            JSON data to add to the chart.
+
+        Returns
+        -------
+        bool
+            True if the data was added successfully.
+        """
+        # Set the chart metadata to accept JSON data
+        self.update_chart(
+            chart_id=chart_id,
+            metadata={
+                "data": {"json": True},
+            },
+        )
+
+        # Dump the provided data as a JSON string
+        json_data = json.dumps(data)
+
+        # Post it to the chart via the add_data method
+        return self.add_data(chart_id, json_data)
+
     def refresh_data(self, chart_id: str) -> dict:
         """Fetch configured external data and add it to the chart.
 
