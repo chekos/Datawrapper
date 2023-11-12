@@ -1025,6 +1025,21 @@ class Datawrapper:
             logger.debug(f"File exported at {_filepath}")
             return _filepath
 
+    def get_chart_display_urls(self, chart_id: str) -> list[dict]:
+        """Get the URLs for the published chart, table or map.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table, or map.
+
+        Returns
+        -------
+        list[dict]
+            A list of dictionaries containing the URLs for the published chart, table, or map.
+        """
+        return self.get(f"{self._CHARTS_URL}/{chart_id}/display-urls")
+
     def get_iframe_code(self, chart_id: str, responsive: bool = False) -> str:
         """Returns a chart, table, or map's iframe embed code.
 
