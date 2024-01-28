@@ -936,10 +936,10 @@ class Datawrapper:
             IFrame displaying the chart.
         """
         obj = self.get_chart(chart_id)
-        iframe = obj["metadata"]["publish"]["embed-codes"]["embed-method-iframe"]
-        width = obj["metadata"]["publish"]['embed-width']
-        height = obj["metadata"]["publish"]['embed-height']
-        return IFrame(iframe, width=width, height=height)
+        src = obj["publicUrl"]
+        width = obj["metadata"]["publish"]["embed-width"]
+        height = obj["metadata"]["publish"]["embed-height"]
+        return IFrame(src, width=width, height=height)
 
     def copy_chart(self, chart_id: str) -> dict:
         """Copy one of your charts, tables, or maps and create a new editable copy.
@@ -1009,12 +1009,10 @@ class Datawrapper:
         obj = self.post(f"{self._CHARTS_URL}/{chart_id}/publish")
         assert isinstance(obj, dict)
         if display:
-            iframe = obj["data"]["metadata"]["publish"]["embed-codes"][
-                "embed-method-iframe"
-            ]
-            width = obj["data"]["metadata"]["publish"]['embed-width']
-            height = obj["data"]["metadata"]["publish"]['embed-height']
-            return IFrame(iframe, width=width, height=height)
+            src = obj["data"]["publicUrl"]
+            width = obj["data"]["metadata"]["publish"]["embed-width"]
+            height = obj["data"]["metadata"]["publish"]["embed-height"]
+            return IFrame(src, width=width, height=height)
         else:
             return obj
 
