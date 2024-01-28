@@ -937,7 +937,9 @@ class Datawrapper:
         """
         obj = self.get_chart(chart_id)
         iframe = obj["metadata"]["publish"]["embed-codes"]["embed-method-iframe"]
-        return IFrame(iframe)
+        width = obj["metadata"]["publish"]['embed-width']
+        height = obj["metadata"]["publish"]['embed-height']
+        return IFrame(iframe, width=width, height=height)
 
     def copy_chart(self, chart_id: str) -> dict:
         """Copy one of your charts, tables, or maps and create a new editable copy.
@@ -1010,7 +1012,9 @@ class Datawrapper:
             iframe = obj["data"]["metadata"]["publish"]["embed-codes"][
                 "embed-method-iframe"
             ]
-            return IFrame(iframe)
+            width = obj["data"]["metadata"]["publish"]['embed-width']
+            height = obj["data"]["metadata"]["publish"]['embed-height']
+            return IFrame(iframe, width=width, height=height)
         else:
             return obj
 
