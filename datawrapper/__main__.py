@@ -904,8 +904,7 @@ class Datawrapper:
             raise InvalidRequest(msg)
 
         # Update the chart using the update_chart method
-        metadata = {"metadata": {"describe": _query}}
-        return self.update_chart(chart_id, metadata=metadata)
+        return self.update_chart(chart_id, metadata={"describe": _query})
 
     def delete_chart(self, chart_id: str) -> bool:
         """Deletes a chart, table or map.
