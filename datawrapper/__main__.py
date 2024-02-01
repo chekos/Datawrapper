@@ -10,7 +10,7 @@ from typing import Any
 
 import pandas as pd
 import requests as r
-from IPython.display import HTML, Image
+from IPython.display import IFrame, Image
 
 from .exceptions import FailedRequest, InvalidRequest
 
@@ -922,7 +922,7 @@ class Datawrapper:
         """
         return self.delete(f"{self._CHARTS_URL}/{chart_id}")
 
-    def display_chart(self, chart_id: str) -> HTML:
+    def display_chart(self, chart_id: str) -> IFrame:
         """Displays a datawrapper chart.
 
         Parameters
@@ -932,12 +932,14 @@ class Datawrapper:
 
         Returns
         -------
-        IPython.display.HTML
-            HTML displaying the chart.
+        IPython.display.IFrame
+            IFrame displaying the chart.
         """
         obj = self.get_chart(chart_id)
-        iframe = obj["metadata"]["publish"]["embed-codes"]["embed-method-iframe"]
-        return HTML(iframe)
+        src = obj["publicUrl"]
+        width = obj["metadata"]["publish"]["embed-width"]
+        height = obj["metadata"]["publish"]["embed-height"]
+        return IFrame(src, width=width, height=height)
 
     def copy_chart(self, chart_id: str) -> dict:
         """Copy one of your charts, tables, or maps and create a new editable copy.
@@ -988,7 +990,7 @@ class Datawrapper:
             data={"folderId": folder_id},
         )
 
-    def publish_chart(self, chart_id: str, display: bool = False) -> dict | HTML:
+    def publish_chart(self, chart_id: str, display: bool = False) -> dict | IFrame:
         """Publishes a chart, table or map.
 
         Parameters
@@ -1000,17 +1002,17 @@ class Datawrapper:
 
         Returns
         -------
-        dict | HTML
-            Either a dictionary containing the published chart's information or an HTML
+        dict | IFrame
+            Either a dictionary containing the published chart's information or an IFrame
             object displaying the chart.
         """
         obj = self.post(f"{self._CHARTS_URL}/{chart_id}/publish")
         assert isinstance(obj, dict)
         if display:
-            iframe = obj["data"]["metadata"]["publish"]["embed-codes"][
-                "embed-method-iframe"
-            ]
-            return HTML(iframe)
+            src = obj["data"]["publicUrl"]
+            width = obj["data"]["metadata"]["publish"]["embed-width"]
+            height = obj["data"]["metadata"]["publish"]["embed-height"]
+            return IFrame(src, width=width, height=height)
         else:
             return obj
 
