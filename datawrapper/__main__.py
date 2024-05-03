@@ -203,7 +203,7 @@ class Datawrapper:
         self,
         url: str,
         data: dict | None = None,
-        timeout: int = 15,
+        timeout: int = 30,
         extra_headers: dict | None = None,
     ) -> dict | bool:
         """Make a POST request to the Datawrapper API.
