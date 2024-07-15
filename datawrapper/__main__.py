@@ -809,7 +809,7 @@ class Datawrapper:
             obj = self.get_chart(chart_id)
 
         # Add data, if provided
-        if data:
+        if data is not None:
             self.add_data(chart_id=obj["id"], data=data)
 
         # Return the result
