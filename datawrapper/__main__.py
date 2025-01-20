@@ -16,7 +16,6 @@ from .exceptions import FailedRequest, InvalidRequest
 
 logger = logging.getLogger(__name__)
 
-
 class Datawrapper:
     """Handles working with the Datawrapper API.
 
@@ -1248,16 +1247,51 @@ class Datawrapper:
     # Folder methods
     #
 
-    def get_folders(self) -> dict:
+    def get_folders(self, charts=True, timeout: int = 30) -> dict:
         """Get a list of folders in your Datawrapper account.
+
+        Parameters
+        ----------
+        charts : bool, optional
+            Whether to include chart metadata in the dictionary, default True.
+        
+        timeout : int, optional
+            The timeout for the request in seconds, default 30.
 
         Returns
         -------
         dict
-            A dictionary containing the folders in your Datawrapper account and their
-            information.
+            A dictionary containing the folders in your Datawrapper account and 
+            their information.
         """
-        return self.get(self._FOLDERS_URL)
+        folders_dict = self.get(self._FOLDERS_URL, timeout = timeout)
+        if not charts:
+            def filter_folders(folder_dict: dict) -> list:
+                filtered = []
+                for folder in folder_dict.get("folders", []):  
+                    if not folder.get("name"): 
+                        continue
+                    filtered_folder = {
+                        "id": folder["id"],
+                        "name": folder["name"],
+                        "folders": filter_folders(folder)  # Recursively filter subfolders
+                    }
+                    filtered.append(filtered_folder)
+                return filtered
+
+            filtered_folders_dict = {"list": []}  # Keep the original structure
+            for folder in folders_dict.get("list", []):  
+                if not folder.get("name"):  
+                    continue
+
+                filtered_folders_dict["list"].append({
+                    "id": folder["id"],
+                    "name": folder["name"],
+                    "folders": filter_folders(folder)  # Process subfolders
+                })
+
+            return filtered_folders_dict
+        return folders_dict
 
     def get_folder(self, folder_id: int) -> dict:
         """Get an existing folder.
@@ -1273,6 +1307,40 @@ class Datawrapper:
             A dictionary containing the folder's information.
         """
         return self.get(self._FOLDERS_URL + f"/{folder_id}")
+    
+    @staticmethod
+    def get_folder_by_name(folders_dict: dict, folder_name: str) -> str | None:
+        """Recursively search for folders by name and return its ID.
+        
+        Search is case-insensitive partial match.
+
+        Parameters
+        ----------
+        folders_dict : dict
+            A dictionary containing the folders to search in (from 'get_folders' method).
+
+        folder_name : str
+            A *partial or full name* of the folder to search for (substring match).
+
+        Returns
+        -------
+        dict
+            A dictionary containing the folder's information.
+        """
+        for folder in folders_dict.get("list", []):  # Ensure we access "list"
+            if not isinstance(folder, dict):  
+                continue
+
+            if folder_name.lower() in folder.get("name", "").lower():  # Check if the name contains the target text
+                return folder["id"]
+
+            # Recursively search in subfolders
+            if "folders" in folder and isinstance(folder["folders"], list): 
+                folder_id = Datawrapper.get_folder_by_name({"list": folder["folders"]}, folder_name)  
+                if folder_id is not None:
+                    return folder_id
+
+        return None 
 
     def create_folder(
         self,
