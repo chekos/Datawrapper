@@ -62,7 +62,11 @@ class Datawrapper:
         """
 
         self._access_token = access_token
-        self._auth_header = {"Authorization": f"Bearer {access_token}"}
+
+    def _get_auth_header(self) -> dict:
+        """Get the authentication header for the Datawrapper API.
+        """
+        return {"Authorization": f"Bearer {self._access_token}"}
 
     #
     # Web request methods
@@ -84,7 +88,7 @@ class Datawrapper:
             Whether the request was successful.
         """
         # Set the headers
-        headers = self._auth_header
+        headers = self._get_auth_header()
         headers["accept"] = "*/*"
 
         # Make the request
@@ -117,7 +121,7 @@ class Datawrapper:
             An object containing the response from the API.
         """
         # Set headers
-        headers = self._auth_header
+        headers = self._get_auth_header()
         headers["accept"] = "*/*"
 
         # Make the request
@@ -170,7 +174,7 @@ class Datawrapper:
             A dictionary containing the response from the API.
         """
         # Set headers
-        headers = self._auth_header
+        headers = self._get_auth_header()
         headers["accept"] = "*/*"
         headers["content-type"] = "application/json"
 
@@ -226,7 +230,7 @@ class Datawrapper:
             successful but did not return any data.
         """
         # Set headers
-        headers = self._auth_header
+        headers = self._get_auth_header()
         headers["accept"] = "*/*"
 
         # Add extra headers if provided
@@ -286,7 +290,7 @@ class Datawrapper:
             Whether the request was successful.
         """
         # Set headers
-        headers = self._auth_header
+        headers = self._get_auth_header()
         headers["accept"] = "*/*"
 
         # Add extra headers if provided
