@@ -65,6 +65,11 @@ class Datawrapper:
 
     def _get_auth_header(self) -> dict:
         """Get the authentication header for the Datawrapper API.
+
+        Returns
+        -------
+        dict
+            The authentication header for the Datawrapper API.
         """
         return {"Authorization": f"Bearer {self._access_token}"}
 
