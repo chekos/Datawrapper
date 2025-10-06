@@ -838,6 +838,7 @@ class Datawrapper:
         number_append: str | None = None,
         number_format: str | None = None,
         number_divisor: int | None = None,
+        hide_title: bool = False,
     ) -> dict:
         """Update a chart's description attributes
 
@@ -865,6 +866,8 @@ class Datawrapper:
             The format number
         number_divisor : str, optional
             A multiplier or divisor for the numbers
+        hide_title : bool
+            Whether or not to hide the chart title
 
         Returns
         -------
@@ -877,7 +880,7 @@ class Datawrapper:
             If no updates are submitted.
         """
         # Load the query with the provided parameters
-        _query: dict[str, Any] = {}
+        _query: dict[str, Any] = {"hide-title": hide_title}
         if source_name:
             _query["source-name"] = source_name
         if source_url:
