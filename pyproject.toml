@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools >= 61.0", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "datawrapper"
+dynamic = ["version"]
+requires-python = ">=3.9.0"
+dependencies = [
+    'exceptiongroup; python_version<"3.11"',
+    "importlib_metadata",
+    "rich",
+    "requests",
+    "pandas",
+    "ipython",
+]
+authors = [
+  { name="checkos", email="chekos@tacosdedatos.com" },
+  { name="Ben Welsh", email="b@palewi.re"}
+]
+description = "A lightweight Python wrapper for the Datawrapper API"
+license = {text = "MIT"}
+readme = "README.md"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit",
+    "setuptools-scm",
+]
+test = [
+    "pytest",
+    "pytest-cov",
+    "pytest-mock",
+    "pytest-asyncio",
+    "pytest-timeout",
+    "pytest-xdist",
+    "pytest-env",
+]
+docs = [
+    "sphinx",
+    "sphinx-autobuild",
+    "sphinxcontrib-mermaid",
+    "myst-parser",
+]
+mypy = [
+    "mypy",
+]
+
+[project.urls]
+Documentation = "https://github.com/chekos/datawrapper"
+Maintainer = "https://github.com/chekos/"
+Source = "https://github.com/chekos/datawrapper"
+Issues = "https://github.com/chekos/datawrapper/issues/"
+
+[tool.setuptools]
+packages = ["datawrapper"]
+
+[tool.setuptools_scm]

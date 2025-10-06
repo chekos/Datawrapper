@@ -15,89 +15,78 @@ jobs:
     steps:
       - id: checkout
         name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - id: setup-python
-        name: Setup Python
-        uses: actions/setup-python@v4
+      - id: check-ruff
+        name: Check with Ruff
+        uses: astral-sh/ruff-action@v3
         with:
-          python-version: '3.10'
-          cache: 'pipenv'
+          args: 'check --exit-zero --verbose'
 
-      - id: install-pipenv
-        name: Install pipenv
-        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-        shell: bash
-
-      - id: install-python-dependencies
-        name: Install Python dependencies
-        run: pipenv sync --dev
-        shell: bash
-
-      - id: lint
-        name: Lint Python code
-        run: pipenv run flake8 ./datawrapper --verbose
-        shell: bash
+      - id: format-ruff
+        name: Format with Ruff
+        uses: astral-sh/ruff-action@v3
+        with:
+          args: 'format --check --verbose'
 
   mypy-python:
-    name: Static-types check
+    name: Check Python static typing
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v5
 
-      - id: setup-python
-        name: Setup Python
-        uses: actions/setup-python@v4
+      - id: install-uv
+        name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version: '3.10'
-          cache: 'pipenv'
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: '**/pyproject.toml'
 
-      - id: install-pipenv
-        name: Install pipenv
-        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-        shell: bash
+      - id: install-python
+        name: Install Python
+        run: uv python install 3.13
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv sync --dev
-        shell: bash
+        run: uv sync --extra mypy
 
       - id: mypy
         name: Run mypy
-        run: pipenv run mypy ./datawrapper --ignore-missing-imports --verbose
-        shell: bash
+        run: uv run mypy ./ --ignore-missing-imports
 
   test-python:
     name: Test Python code
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python: ['3.8', '3.9', '3.10', '3.11']
+        python: ['3.10', '3.11', '3.12', '3.13']
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - id: setup-python
-        name: Setup Python
-        uses: actions/setup-python@v4
+      - id: install-uv
+        name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version: '${{ matrix.python }}'
-          cache: 'pipenv'
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: '**/pyproject.toml'
 
-      - id: install-pipenv
-        name: Install pipenv
-        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-        shell: bash
+      - id: install-python
+        name: Install Python
+        run: uv python install ${{ matrix.python }}
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: pipenv install --dev --python=${{ matrix.python }} --skip-lock
+        run: uv sync --extra test --python ${{ matrix.python }}
         shell: bash
 
       - id: tests
         name: Run tests
-        run: pipenv run python -m pytest --cov -sv
+        run: uv run pytest --cov -sv
         shell: bash
 
   build:
@@ -106,38 +95,23 @@ jobs:
     needs: [test-python]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - id: setup-python
-        name: Setup Python
-        uses: actions/setup-python@v4
+      - id: install-uv
+        name: Install uv
+        uses: astral-sh/setup-uv@v6
         with:
-          python-version: '3.10'
-          cache: 'pipenv'
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: '**/pyproject.toml'
 
-      - id: install-pipenv
-        name: Install pipenv
-        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
-        shell: bash
+      - id: install-python
+        name: Install Python
+        run: uv python install 3.13
 
-      - id: install-python-dependencies
-        name: Install Python dependencies
-        run: pipenv install --dev --deploy
-        shell: bash
-
-      - id: build-source
-        name: Build source release
-        run: pipenv run python setup.py sdist
-        shell: bash
-
-      - id: build-binary
-        name: Build binary release
-        run: pipenv run python setup.py bdist_wheel
-        shell: bash
-
-      - id: check
-        name: Check release
-        run: pipenv run twine check dist/*
+      - id: build
+        name: Build releases
+        run: uv build --sdist --wheel
         shell: bash
 
       - id: save
