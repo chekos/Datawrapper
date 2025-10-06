@@ -1,4 +1,5 @@
 """Test River functions."""
+
 from datawrapper import Datawrapper
 
 

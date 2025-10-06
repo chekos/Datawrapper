@@ -1,4 +1,5 @@
 """Test the token scope functions."""
+
 from datawrapper import Datawrapper
 
 

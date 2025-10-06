@@ -1,4 +1,5 @@
 """Unit test package for datawrapper."""
+
 import pandas as pd
 
 from datawrapper import Datawrapper

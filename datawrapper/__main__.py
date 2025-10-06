@@ -1,4 +1,5 @@
 """A lightweight Python wrapper for the Datawrapper API."""
+
 from __future__ import annotations
 
 import json
@@ -1352,7 +1353,7 @@ class Datawrapper:
         bool
             True if the folder was deleted successfully.
         """
-        return self.delete(f"{self._FOLDERS_URL }/{folder_id}")
+        return self.delete(f"{self._FOLDERS_URL}/{folder_id}")
 
     #
     # "Me" methods

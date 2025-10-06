@@ -57,6 +57,7 @@ docs = [
 ]
 mypy = [
     "mypy",
+    "types-requests",
 ]
 
 [project.urls]

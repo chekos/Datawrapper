@@ -1,4 +1,5 @@
 """Test themes related API enpoints."""
+
 from datawrapper import Datawrapper
 
 
