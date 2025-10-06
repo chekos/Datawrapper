@@ -22,12 +22,14 @@ jobs:
         uses: astral-sh/ruff-action@v3
         with:
           args: 'check --exit-zero --verbose'
+          src: './datawrapper'
 
       - id: format-ruff
         name: Format with Ruff
         uses: astral-sh/ruff-action@v3
         with:
           args: 'format --check --verbose'
+          src: './datawrapper'
 
   mypy-python:
     name: Check Python static typing
