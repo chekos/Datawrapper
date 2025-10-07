@@ -27,11 +27,14 @@ def test_get_river():
     dw.get_river(approved=True)
     dw.get_river(approved=True, search="test")
 
+    # Get a chart we own
+    chart = dw.get_charts()["list"][0]
+
     # Update a river chart
+    chart_id = chart["id"]
     update = dw.update_river_chart(
-        "U4z8y",
+        chart_id,
         description="Test description",
-        attribution=1,
         byline="Test byline",
         tags=["test"],
         forkable=True,
@@ -39,5 +42,5 @@ def test_get_river():
     assert update is True
 
     # Verify that the river chart was updated
-    chart = dw.get_river_chart("U4z8y")
+    chart = dw.get_river_chart(chart_id)
     assert chart["description"] == "Test description"

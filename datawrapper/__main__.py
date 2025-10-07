@@ -13,7 +13,7 @@ import pandas as pd
 import requests as r
 from IPython.display import IFrame, Image
 
-from .exceptions import FailedRequest, InvalidRequest
+from .exceptions import FailedRequestError, InvalidRequestError
 
 logger = logging.getLogger(__name__)
 
@@ -94,11 +94,8 @@ class Datawrapper:
         # Handle the response
         if response.ok:
             return True
-        else:
-            logger.error(
-                f"Delete request failed with status code {response.status_code}."
-            )
-            raise FailedRequest(response)
+        logger.error(f"Delete request failed with status code {response.status_code}.")
+        raise FailedRequestError(response)
 
     def get(self, url: str, params: dict | None = None, timeout: int = 15) -> Any:
         """Make a GET request to the Datawrapper API.
@@ -135,15 +132,13 @@ class Datawrapper:
             if "json" in response.headers["content-type"]:
                 return response.json()
             # If it's a csv, read the text into a dataframe
-            elif "text/csv" in response.headers["content-type"]:
+            if "text/csv" in response.headers["content-type"]:
                 return pd.read_csv(StringIO(response.text))
             # Otherwise just return the content
-            else:
-                return response.content
+            return response.content
         # If not, raise an exception
-        else:
-            logger.error(f"Get request failed with status code {response.status_code}.")
-            raise FailedRequest(response)
+        logger.error(f"Get request failed with status code {response.status_code}.")
+        raise FailedRequestError(response)
 
     def patch(
         self,
@@ -194,11 +189,8 @@ class Datawrapper:
             # Return the data as json
             return response.json()
         # If not, raise an exception
-        else:
-            logger.error(
-                f"Patch request failed with status code {response.status_code}."
-            )
-            raise FailedRequest(response)
+        logger.error(f"Patch request failed with status code {response.status_code}.")
+        raise FailedRequestError(response)
 
     def post(
         self,
@@ -249,14 +241,10 @@ class Datawrapper:
             # Return the data as json
             if response.text:
                 return response.json()
-            else:
-                return True
+            return True
         # If not, raise an exception
-        else:
-            logger.error(
-                f"Post request failed with status code {response.status_code}."
-            )
-            raise FailedRequest(response)
+        logger.error(f"Post request failed with status code {response.status_code}.")
+        raise FailedRequestError(response)
 
     def put(
         self,
@@ -310,9 +298,8 @@ class Datawrapper:
         # Handle the response
         if response.ok:
             return True
-        else:
-            logger.error(f"Put request failed with status code {response.status_code}.")
-            raise FailedRequest(response)
+        logger.error(f"Put request failed with status code {response.status_code}.")
+        raise FailedRequestError(response)
 
     #
     # Login token actions
@@ -769,7 +756,7 @@ class Datawrapper:
 
         Raises
         ------
-        InvalidRequest
+        InvalidRequestError
             If no updates are submitted.
         """
         # Load the query with the provided parameters
@@ -797,7 +784,7 @@ class Datawrapper:
         if not _query and data is None:
             msg = "No updates submitted."
             logger.error(msg)
-            raise InvalidRequest(msg)
+            raise InvalidRequestError(msg)
 
         # Update the chart
         if _query:
@@ -874,7 +861,7 @@ class Datawrapper:
 
         Raises
         ------
-        InvalidRequest
+        InvalidRequestError
             If no updates are submitted.
         """
         # Load the query with the provided parameters
@@ -902,7 +889,7 @@ class Datawrapper:
         if not _query:
             msg = "No updates submitted."
             logger.error(msg)
-            raise InvalidRequest(msg)
+            raise InvalidRequestError(msg)
 
         # Update the chart using the update_chart method
         return self.update_chart(chart_id, metadata={"describe": _query})
@@ -1013,8 +1000,7 @@ class Datawrapper:
             width = obj["data"]["metadata"]["publish"]["embed-width"]
             height = obj["data"]["metadata"]["publish"]["embed-height"]
             return IFrame(src, width=width, height=height)
-        else:
-            return obj
+        return obj
 
     def export_chart(
         self,
@@ -1097,9 +1083,8 @@ class Datawrapper:
         if display:
             return Image(_filepath)
         # Otherwise return the file path
-        else:
-            logger.debug(f"File exported at {_filepath}")
-            return _filepath
+        logger.debug(f"File exported at {_filepath}")
+        return _filepath
 
     def get_iframe_code(self, chart_id: str, responsive: bool = False) -> str:
         """Returns a chart, table, or map's iframe embed code.
@@ -1640,7 +1625,6 @@ class Datawrapper:
         self,
         chart_id: str,
         description: str,
-        attribution: int,
         byline: str,
         tags: list[str],
         forkable: bool,
@@ -1653,8 +1637,6 @@ class Datawrapper:
             ID of River chart to update.
         description : str
             Description of the River chart.
-        attribution : int
-            Attribution of the River chart.
         byline : str
             Byline of the River chart.
         tags : list[str]
@@ -1669,7 +1651,6 @@ class Datawrapper:
         """
         _query: dict = {
             "description": description,
-            "attribution": attribution,
             "byline": byline,
             "tags": tags,
             "forkable": json.dumps(forkable),

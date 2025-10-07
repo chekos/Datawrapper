@@ -70,3 +70,51 @@ Issues = "https://github.com/chekos/datawrapper/issues/"
 packages = ["datawrapper"]
 
 [tool.setuptools_scm]
+
+[tool.ruff]
+exclude = [
+    ".ipynb_checkpoints",
+    ".ruff_cache",
+    ".venv",
+    "docs",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle
+    "F",    # pyflakes
+    "B",    # flake8-bugbear
+    "W",    # pycodestyle warnings
+    "I",    # isort - import sorting
+    "UP",   # pyupgrade - modern Python idioms
+    "N",    # pep8-naming - naming conventions
+    "Q",    # flake8-quotes - quote consistency
+]
+ignore = [
+    "D100",
+    "D104",
+    "E203",
+    "E501",
+    "D400",
+    "D401",
+    "D202"
+]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint.isort]
+known-first-party = ["datawrapper"]
+force-single-line = false
+
+[tool.pytest.ini_options]
+addopts = "-p no:warnings --cov=datawrapper --cov-branch -cov-report=term-missing:skip-covered --cov-context=test -n auto --timeout=60"
+testpaths = ["tests"]
+python_files = "test_*.py"
+
+[tool.coverage.run]
+source = ["datawrapper"]
+relative_files = true
+omit = [
+    "*/__pycache__/*",
+]

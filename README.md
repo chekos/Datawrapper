@@ -35,19 +35,7 @@ A lightweight Python wrapper for the Datawrapper API
 ## Installation
 
 ```bash
-pip install -U datawrapper
-```
-
-or `pipenv`
-
-```bash
-pipenv install datawrapper
-```
-
-or install with `Poetry`
-
-```bash
-poetry add datawrapper
+uv install datawrapper
 ```
 
 ### Contributing
@@ -56,14 +44,21 @@ Clone the repository. Move into the directory on your terminal.
 
 Install dependencies for development.
 
-```sh
-pipenv install --dev
+```bash
+uv install --all-extras
 ```
 
 Install pre-commit to run a battery of automatic quick fixes against your work.
 
-```sh
-pipenv run pre-commit install
+```bash
+uv run pre-commit install
+uv run pre-commit install
+```
+
+Run tests with
+
+```bash
+uv run pytest
 ```
 
 ## 📈 Releases

@@ -1,11 +1,11 @@
 import pytest
 
 from datawrapper import Datawrapper
-from datawrapper.exceptions import FailedRequest
+from datawrapper.exceptions import FailedRequestError
 
 
 def test_get_failed_request():
-    """Test that FailedRequest is imported correctly."""
+    """Test that FailedRequestError is imported correctly."""
     dw = Datawrapper(access_token="test")
-    with pytest.raises(FailedRequest):
+    with pytest.raises(FailedRequestError):
         dw.get_my_account()
