@@ -1,5 +1,3 @@
-# Welcome to `datawrapper`'s documentation!
-
 ```{include} ../README.md
 ```
 
@@ -9,20 +7,7 @@
 maxdepth: 2
 caption: User guide
 ---
-user-guide/installation.md
 user-guide/usage.md
+user-guide/api.md
+user-guide/contributing.md
 ```
-
-```{toctree}
----
-maxdepth: 2
-caption: About the project
----
-about/API.md
-about/contributing.md
-about/authors.md
-about/history.md
-```
-# Indices and tables
-
-* {ref}`genindex`

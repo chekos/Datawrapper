@@ -196,7 +196,7 @@ class Datawrapper:
         self,
         url: str,
         data: dict | None = None,
-        timeout: int = 15,
+        timeout: int = 30,
         extra_headers: dict | None = None,
     ) -> dict | bool:
         """Make a POST request to the Datawrapper API.
@@ -797,7 +797,7 @@ class Datawrapper:
             obj = self.get_chart(chart_id)
 
         # Add data, if provided
-        if data:
+        if data is not None:
             self.add_data(chart_id=obj["id"], data=data)
 
         # Return the result
@@ -826,6 +826,7 @@ class Datawrapper:
         number_append: str | None = None,
         number_format: str | None = None,
         number_divisor: int | None = None,
+        hide_title: bool = False,
     ) -> dict:
         """Update a chart's description attributes
 
@@ -853,6 +854,8 @@ class Datawrapper:
             The format number
         number_divisor : str, optional
             A multiplier or divisor for the numbers
+        hide_title : bool
+            Whether or not to hide the chart title
 
         Returns
         -------
@@ -865,7 +868,7 @@ class Datawrapper:
             If no updates are submitted.
         """
         # Load the query with the provided parameters
-        _query: dict[str, Any] = {}
+        _query: dict[str, Any] = {"hide-title": hide_title}
         if source_name:
             _query["source-name"] = source_name
         if source_url:
@@ -1085,6 +1088,21 @@ class Datawrapper:
         # Otherwise return the file path
         logger.debug(f"File exported at {_filepath}")
         return _filepath
+
+    def get_chart_display_urls(self, chart_id: str) -> list[dict]:
+        """Get the URLs for the published chart, table or map.
+
+        Parameters
+        ----------
+        chart_id : str
+            ID of chart, table, or map.
+
+        Returns
+        -------
+        list[dict]
+            A list of dictionaries containing the URLs for the published chart, table, or map.
+        """
+        return self.get(f"{self._CHARTS_URL}/{chart_id}/display-urls")
 
     def get_iframe_code(self, chart_id: str, responsive: bool = False) -> str:
         """Returns a chart, table, or map's iframe embed code.
