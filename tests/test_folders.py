@@ -1,4 +1,5 @@
 """Test folder related API enpoints."""
+
 import random
 import string
 

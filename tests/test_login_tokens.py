@@ -1,4 +1,5 @@
 """Test the login token functions."""
+
 from datawrapper import Datawrapper
 
 

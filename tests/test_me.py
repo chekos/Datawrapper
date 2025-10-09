@@ -1,4 +1,5 @@
 """Test methods that use the /me endpoint."""
+
 from datawrapper import Datawrapper
 
 

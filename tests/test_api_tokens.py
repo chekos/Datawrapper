@@ -1,4 +1,5 @@
 """Test the API token functions."""
+
 from datawrapper import Datawrapper
 
 

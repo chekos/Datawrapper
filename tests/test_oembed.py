@@ -1,4 +1,5 @@
 """Test oembed functions."""
+
 from datawrapper import Datawrapper
 
 

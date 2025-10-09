@@ -24,10 +24,33 @@ A lightweight Python wrapper for the Datawrapper API
 ## Installation
 
 ```bash
-pipenv install datawrapper
+uv install datawrapper
 ```
 
-## Releases
+### Contributing
+
+Clone the repository. Move into the directory on your terminal.
+
+Install dependencies for development.
+
+```bash
+uv install --all-extras
+```
+
+Install pre-commit to run a battery of automatic quick fixes against your work.
+
+```bash
+uv run pre-commit install
+uv run pre-commit install
+```
+
+Run tests with
+
+```bash
+uv run pytest
+```
+
+## 📈 Releases
 
 You can see the list of available releases on the [GitHub Releases](https://github.com/chekos/datawrapper/releases) page.
 

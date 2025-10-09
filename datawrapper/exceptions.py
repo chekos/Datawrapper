@@ -1,7 +1,7 @@
 """Custom exceptions for the datawrapper package."""
 
 
-class FailedRequest(Exception):
+class FailedRequestError(Exception):
     """Custom exception for failed API requests."""
 
     def __init__(self, response):
@@ -10,7 +10,7 @@ class FailedRequest(Exception):
         super().__init__(msg)
 
 
-class InvalidRequest(Exception):
+class InvalidRequestError(Exception):
     """Custom exception for invalid API requests."""
 
     def __init__(self, message):

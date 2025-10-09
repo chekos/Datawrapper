@@ -1,4 +1,5 @@
 """Test the user methods."""
+
 from datawrapper import Datawrapper
 
 

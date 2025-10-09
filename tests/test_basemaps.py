@@ -1,4 +1,5 @@
 """Test basemaps related API enpoints."""
+
 from datawrapper import Datawrapper
 
 
