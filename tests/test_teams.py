@@ -18,17 +18,16 @@ def test_get_teams():
     assert isinstance(teams["list"], list)
 
     # Get members of the first team
-    members = dw.get_team_members(teams["list"][1]["id"])
+    members = dw.get_team_members(teams["list"][0]["id"])
     assert isinstance(members["list"], list)
 
-    # Update team member status to 'admin'
+    # Update team member
     update = dw.update_team_member(
         teams["list"][0]["id"],
         members["list"][0]["id"],
         "admin",
     )
-    assert isinstance(update, dict)
-    assert update.get("status") == "admin"
+    assert isinstance(update, bool) and update is True
 
 
 def test_edit_teams():
