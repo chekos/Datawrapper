@@ -12,6 +12,7 @@ dependencies = [
     "rich",
     "requests",
     "pandas",
+    "pydantic",
     "ipython",
 ]
 authors = [
@@ -48,6 +49,10 @@ test = [
     "pytest-timeout",
     "pytest-xdist",
     "pytest-env",
+    "factory-boy",
+    "faker",
+    "responses",
+    "freezegun",
 ]
 docs = [
     "sphinx",
@@ -58,6 +63,7 @@ docs = [
 mypy = [
     "mypy",
     "types-requests",
+    "pydantic-settings",
 ]
 
 [project.urls]
@@ -107,14 +113,68 @@ docstring-code-format = true
 known-first-party = ["datawrapper"]
 force-single-line = false
 
+[tool.mypy]
+plugins = ["pydantic.mypy"]
+
 [tool.pytest.ini_options]
-addopts = "-p no:warnings --cov=datawrapper --cov-branch -cov-report=term-missing:skip-covered --cov-context=test -n auto --timeout=60"
 testpaths = ["tests"]
-python_files = "test_*.py"
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--verbose",
+    "--strict-markers",
+    "--cov=datawrapper",
+    "--cov-report=term-missing",
+    "--cov-report=html",
+    "--cov-report=xml",
+    "--tb=short",
+    "--maxfail=1",
+]
+markers = [
+    "unit: Unit tests (fast, isolated)",
+    "integration: Integration tests (component interaction)",
+    "functional: Functional tests (end-to-end)",
+    "api: API tests (external dependencies)",
+    "slow: Slow running tests",
+    "smoke: Smoke tests for CI/CD",
+]
+filterwarnings = [
+    "error",
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning",
+]
 
 [tool.coverage.run]
 source = ["datawrapper"]
-relative_files = true
+branch = true
+parallel = true
 omit = [
-    "*/__pycache__/*",
+    "*/tests/*",
+    "*/test_*.py",
 ]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if __name__ == .__main__.:",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+]
+precision = 2
+show_missing = true
+skip_covered = false
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+[tool.pytest-timeout]
+timeout = 300
+timeout_method = "thread"
+timeout_func_only = false
