@@ -46,7 +46,9 @@ class Datawrapper:
     )  #: The endpoint for login tokens
     _OEMBED_URL = _BASE_URL + "/v3/oembed"  #: The endpoint for oembed methods
     _RIVER_URL = _BASE_URL + "/v3/river"  #: The endpoint for river methods
-    _TEAMS_URL = _BASE_URL + "/v3/teams"  #: The endpoint for team methods
+    _WORKSPACES_URL = (
+        _BASE_URL + "/v3/workspaces"
+    )  #: The endpoint for workspace methods
     _THEMES_URL = _BASE_URL + "/v3/themes"  #: The endpoint for theme methods
     _USERS_URL = _BASE_URL + "/v3/users"  #: The endpoint for user methods
 
@@ -78,7 +80,13 @@ class Datawrapper:
     # Web request methods
     #
 
-    def delete(self, url: str, timeout: int = 15) -> bool:
+    def delete(
+        self,
+        url: str,
+        timeout: int = 15,
+        data: dict | None = None,
+        extra_headers: dict | None = None,
+    ) -> bool:
         """Make a DELETE request to the Datawrapper API.
 
         Parameters
@@ -87,6 +95,10 @@ class Datawrapper:
             The URL to request.
         timeout : int, optional
             The timeout for the request in seconds, by default 15
+        data : dict, optional
+            A dictionary of data to pass to the request, by default None
+        extra_headers : dict, optional
+            A dictionary of extra headers to pass to the request, by default None
 
         Returns
         -------
@@ -97,8 +109,19 @@ class Datawrapper:
         headers = self._get_auth_header()
         headers["accept"] = "*/*"
 
+        # Add extra headers if provided
+        if extra_headers:
+            headers.update(extra_headers)
+
+        # Set kwargs
+        kwargs = {"headers": headers, "timeout": timeout}
+
+        # Add data if provided
+        if data:
+            kwargs["json"] = data
+
         # Make the request
-        response = r.delete(url, headers=headers)
+        response = r.delete(url, **kwargs)
 
         # Handle the response
         if response.ok:
@@ -1724,10 +1747,10 @@ class Datawrapper:
         )
 
     #
-    # Team methods
+    # Workspace methods
     #
 
-    def get_teams(
+    def get_workspaces(
         self,
         search: str | None = None,
         order: str = "ASC",
@@ -1735,25 +1758,25 @@ class Datawrapper:
         limit: int = 100,
         offset: int = 0,
     ) -> dict:
-        """Get a list of teams in your Datawrapper account.
+        """Get a list of workspaces in your Datawrapper account.
 
         Parameters
         ----------
         search : str, optional
-            Search for teams with a specific name, by default no search filter is applied.
+            Search for a workspace name or slug including this term, by default None
         order : str, optional
             Result order (ascending or descending), by default "ASC." Supply "DESC" for descending order.
         order_by : str, optional
-            Attribute to order by. By default "name"
+            Attribute to order by. One of "name", "slug", or "created_at". By default "name"
         limit : int, optional
             Maximum items to fetch, by default 100. Useful for pagination.
         offset : int, optional
-            Offset for pagination, by default 0.
+            Number of items to skip, by default 0. Useful for pagination.
 
         Returns
         -------
         dict
-            A dictionary containing the teams in your Datawrapper account.
+            A dictionary containing the workspaces in your Datawrapper account.
         """
         _query: dict = {}
         if search:
@@ -1767,44 +1790,294 @@ class Datawrapper:
         if offset:
             _query["offset"] = offset
 
-        return self.get(self._TEAMS_URL, params=_query)
+        return self.get(self._WORKSPACES_URL, params=_query)
 
-    def create_team(
-        self,
-        name: str,
-        default_theme: str | None = None,
-    ) -> dict:
-        """Create a new team.
+    def get_workspace(self, workspace_slug: str) -> dict:
+        """Get an existing workspace by its slug.
 
         Parameters
         ----------
-        name : str
-            Name of the team.
-        default_theme : str, optional
-            Default theme of charts made by the team, optional.
+        workspace_slug : str
+            Slug of workspace to get.
 
         Returns
         -------
         dict
-            A dictionary containing the team's information.
+            A dictionary containing the workspace's information.
+        """
+        return self.get(f"{self._WORKSPACES_URL}/{workspace_slug}")
+
+    def create_workspace(
+        self,
+        name: str,
+        slug: str | None = None,
+    ) -> dict:
+        """Create a new workspace.
+
+        Parameters
+        ----------
+        name : str
+            Name of the workspace to be created (2-100 characters).
+        slug : str, optional
+            Slug for the workspace (2-100 characters). If not provided,
+            will be auto-generated from the name.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the workspace's information.
         """
         _query: dict = {"name": name}
-        if default_theme:
-            _query["defaultTheme"] = default_theme
+        if slug:
+            _query["slug"] = slug
 
         response = self.post(
-            self._TEAMS_URL,
+            self._WORKSPACES_URL,
             data=_query,
             extra_headers={"content-type": "application/json"},
         )
         assert isinstance(response, dict)
         return response
 
-    def get_team(self, team_id: str) -> dict:
-        """Get an existing team.
+    def update_workspace(
+        self,
+        workspace_slug: str,
+        name: str | None = None,
+        slug: str | None = None,
+        settings: dict | None = None,
+        secrets: dict | None = None,
+        color: str | None = None,
+    ) -> dict:
+        """Update an existing workspace.
 
         Parameters
         ----------
+        workspace_slug : str
+            Slug of workspace to update.
+        name : str, optional
+            New name for the workspace.
+        slug : str, optional
+            New slug for the workspace.
+        settings : dict, optional
+            Settings object for the workspace.
+        secrets : dict, optional
+            Secrets object for the workspace.
+        color : str, optional
+            Color for the workspace.
+
+        Returns
+        -------
+        dict
+            A dictionary with the workspace's updated metadata.
+
+        Raises
+        ------
+        Exception
+            If no parameters are supplied to update the workspace.
+        """
+        _query: dict = {}
+        if name:
+            _query["name"] = name
+        if slug:
+            _query["slug"] = slug
+        if settings:
+            _query["settings"] = settings
+        if secrets:
+            _query["secrets"] = secrets
+        if color:
+            _query["color"] = color
+
+        if not _query:
+            msg = "No parameters were supplied to update the workspace."
+            logger.error(msg)
+            raise Exception(msg)
+
+        return self.patch(
+            f"{self._WORKSPACES_URL}/{workspace_slug}",
+            data=_query,
+        )
+
+    def delete_workspace(self, workspace_slug: str) -> bool:
+        """Delete an existing workspace.
+
+        Parameters
+        ----------
+        workspace_slug : str
+            Slug of workspace to delete.
+
+        Returns
+        -------
+        bool
+            True if the workspace was deleted successfully.
+        """
+        return self.delete(f"{self._WORKSPACES_URL}/{workspace_slug}")
+
+    def get_workspace_members(
+        self,
+        workspace_slug: str,
+        search: str | None = None,
+        order: str = "ASC",
+        order_by: str = "name",
+        limit: int = 100,
+        offset: int = 0,
+        role: str | None = None,
+        include_invites: bool = False,
+    ) -> dict:
+        """Get a list of members in a workspace.
+
+        Parameters
+        ----------
+        workspace_slug : str
+            Slug of workspace to get members for.
+        search : str, optional
+            Search for a user email or name including this term.
+        order : str, optional
+            Result order (ascending or descending), by default "ASC."
+        order_by : str, optional
+            Attribute to order by. One of "name", "visCount", "lastSeen", or "role". By default "name"
+        limit : int, optional
+            Maximum items to fetch, by default 100. Useful for pagination.
+        offset : int, optional
+            Number of items to skip, by default 0. Useful for pagination.
+        role : str, optional
+            Filter by workspace role. One of "member", "manager", or "admin".
+        include_invites : bool, optional
+            Include pending invites, by default False.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the members in the workspace.
+        """
+        _query: dict = {}
+        if search:
+            _query["search"] = search
+        if order:
+            _query["order"] = order
+        if order_by:
+            _query["orderBy"] = order_by
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+        if role:
+            _query["role"] = role
+        if include_invites:
+            _query["includeInvites"] = include_invites
+
+        return self.get(
+            f"{self._WORKSPACES_URL}/{workspace_slug}/members", params=_query
+        )
+
+    def update_workspace_members(
+        self,
+        workspace_slug: str,
+        member_ids: list[int],
+        role: str,
+    ) -> bool:
+        """Update workspace members' roles.
+
+        Parameters
+        ----------
+        workspace_slug : str
+            Slug of workspace to update members for.
+        member_ids : list[int]
+            Array of member user IDs to update.
+        role : str
+            New role to assign to the members. One of "member", "manager", or "admin".
+
+        Returns
+        -------
+        bool
+            True if the workspace members were updated successfully.
+        """
+        _query = {
+            "memberIds": member_ids,
+            "role": role,
+        }
+
+        return self.patch(
+            f"{self._WORKSPACES_URL}/{workspace_slug}/members",
+            data=_query,
+        )
+
+    def remove_workspace_members(
+        self,
+        workspace_slug: str,
+        member_ids: list[int],
+    ) -> bool:
+        """Remove members from a workspace.
+
+        Parameters
+        ----------
+        workspace_slug : str
+            Slug of workspace to remove members from.
+        member_ids : list[int]
+            Array of member user IDs to remove.
+
+        Returns
+        -------
+        bool
+            True if the members were removed successfully.
+        """
+        return self.delete(
+            f"{self._WORKSPACES_URL}/{workspace_slug}/members",
+            data={"memberIds": member_ids},
+            extra_headers={"content-type": "application/json"},
+        )
+
+    def get_workspace_teams(
+        self,
+        workspace_slug: str,
+        search: str | None = None,
+        order: str = "ASC",
+        order_by: str = "name",
+        limit: int = 100,
+        offset: int = 0,
+    ) -> dict:
+        """Get a list of teams in a workspace.
+
+        Parameters
+        ----------
+        workspace_slug : str
+            Slug of workspace to get teams for.
+        search : str, optional
+            Search for a team name or id including this term.
+        order : str, optional
+            Result order (ascending or descending), by default "ASC."
+        order_by : str, optional
+            Attribute to order by. One of "name" or "createdAt". By default "name"
+        limit : int, optional
+            Maximum items to fetch, by default 100. Useful for pagination.
+        offset : int, optional
+            Number of items to skip, by default 0. Useful for pagination.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the teams in the workspace.
+        """
+        _query: dict = {}
+        if search:
+            _query["search"] = search
+        if order:
+            _query["order"] = order
+        if order_by:
+            _query["orderBy"] = order_by
+        if limit:
+            _query["limit"] = limit
+        if offset:
+            _query["offset"] = offset
+
+        return self.get(f"{self._WORKSPACES_URL}/{workspace_slug}/teams", params=_query)
+
+    def get_workspace_team(self, workspace_slug: str, team_id: str) -> dict:
+        """Get a team within a workspace.
+
+        Parameters
+        ----------
+        workspace_slug : str
+            Slug of workspace the team belongs to.
         team_id : str
             ID of team to get.
 
@@ -1813,38 +2086,179 @@ class Datawrapper:
         dict
             A dictionary containing the team's information.
         """
-        return self.get(self._TEAMS_URL + f"/{team_id}")
+        return self.get(f"{self._WORKSPACES_URL}/{workspace_slug}/teams/{team_id}")
 
-    def get_team_members(
+    def create_workspace_team(
         self,
+        workspace_slug: str,
+        name: str,
+        is_private: bool = False,
+        icon: str | None = None,
+    ) -> dict:
+        """Create a new team in a workspace.
+
+        Parameters
+        ----------
+        workspace_slug : str
+            Slug of workspace to create team in.
+        name : str
+            Name of the team to be created.
+        is_private : bool, optional
+            Whether the team should be private, by default False.
+        icon : str, optional
+            Icon for the team (one of 183 available icons).
+
+        Returns
+        -------
+        dict
+            A dictionary containing the team's information.
+        """
+        _query: dict = {"name": name, "isPrivate": is_private}
+        if icon:
+            _query["icon"] = icon
+
+        response = self.post(
+            f"{self._WORKSPACES_URL}/{workspace_slug}/teams",
+            data=_query,
+            extra_headers={"content-type": "application/json"},
+        )
+        assert isinstance(response, dict)
+        return response
+
+    def update_workspace_team(
+        self,
+        workspace_slug: str,
+        team_id: str,
+        name: str | None = None,
+        is_private: bool | None = None,
+        settings: dict | None = None,
+        secrets: dict | None = None,
+        icon: str | None = None,
+    ) -> dict:
+        """Update a team within a workspace.
+
+        Parameters
+        ----------
+        workspace_slug : str
+            Slug of workspace the team belongs to.
+        team_id : str
+            ID of team to update.
+        name : str, optional
+            New name for the team.
+        is_private : bool, optional
+            Whether the team should be private.
+        settings : dict, optional
+            Settings object for the team.
+        secrets : dict, optional
+            Secrets object for the team.
+        icon : str, optional
+            Icon for the team.
+
+        Returns
+        -------
+        dict
+            A dictionary with the team's updated metadata.
+
+        Raises
+        ------
+        Exception
+            If no parameters are supplied to update the team.
+        """
+        _query: dict = {}
+        if name:
+            _query["name"] = name
+        if is_private is not None:
+            _query["isPrivate"] = is_private
+        if settings:
+            _query["settings"] = settings
+        if secrets:
+            _query["secrets"] = secrets
+        if icon:
+            _query["icon"] = icon
+
+        if not _query:
+            msg = "No parameters were supplied to update the team."
+            logger.error(msg)
+            raise Exception(msg)
+
+        return self.patch(
+            f"{self._WORKSPACES_URL}/{workspace_slug}/teams/{team_id}",
+            data=_query,
+        )
+
+    def delete_workspace_team(
+        self,
+        workspace_slug: str,
+        team_id: str,
+        migration_team_id: str | None = None,
+    ) -> bool:
+        """Delete a team within a workspace.
+
+        Parameters
+        ----------
+        workspace_slug : str
+            Slug of workspace the team belongs to.
+        team_id : str
+            ID of team to delete.
+        migration_team_id : str, optional
+            Target team ID for migrating team content. If not provided,
+            content will be migrated to the user's archive.
+
+        Returns
+        -------
+        bool
+            True if the team was deleted successfully.
+        """
+        _data = {}
+        if migration_team_id:
+            _data["migrationTeamId"] = migration_team_id
+
+        return self.delete(
+            f"{self._WORKSPACES_URL}/{workspace_slug}/teams/{team_id}",
+            data=_data if _data else None,
+            extra_headers={"content-type": "application/json"} if _data else None,
+        )
+
+    def get_workspace_team_members(
+        self,
+        workspace_slug: str,
         team_id: str,
         search: str | None = None,
         order: str = "ASC",
         order_by: str = "name",
         limit: int = 100,
         offset: int = 0,
+        role: str | None = None,
+        include_invites: bool = False,
     ) -> dict:
-        """Get a list of members in a team.
+        """Get a list of members in a workspace team.
 
         Parameters
         ----------
+        workspace_slug : str
+            Slug of workspace the team belongs to.
         team_id : str
             ID of team to get members for.
         search : str, optional
-            Search for members with a specific name, by default no search filter is applied.
+            Search for a user email or name including this term.
         order : str, optional
-            Result order (ascending or descending), by default "ASC." Supply "DESC" for descending order.
+            Result order (ascending or descending), by default "ASC."
         order_by : str, optional
-            Attribute to order by. By default "name"
+            Attribute to order by. One of "name", "visCount", "lastSeen",
+            "workspaceRole", or "role". By default "name"
         limit : int, optional
             Maximum items to fetch, by default 100. Useful for pagination.
         offset : int, optional
-            Offset for pagination, by default 0.
+            Number of items to skip, by default 0. Useful for pagination.
+        role : str, optional
+            Filter by team role. One of "manager" or "member".
+        include_invites : bool, optional
+            Include pending invites for this team, by default False.
 
         Returns
         -------
         dict
-            A dictionary containing the members in the team.
+            A dictionary containing the members in the workspace team.
         """
         _query: dict = {}
         if search:
@@ -1857,164 +2271,118 @@ class Datawrapper:
             _query["limit"] = limit
         if offset:
             _query["offset"] = offset
+        if role:
+            _query["role"] = role
+        if include_invites:
+            _query["includeInvites"] = include_invites
 
-        return self.get(f"{self._TEAMS_URL}/{team_id}/members", params=_query)
+        return self.get(
+            f"{self._WORKSPACES_URL}/{workspace_slug}/teams/{team_id}/members",
+            params=_query,
+        )
 
-    def update_team(
+    def add_workspace_team_members(
         self,
+        workspace_slug: str,
         team_id: str,
-        name: str | None = None,
-        default_theme: str | None = None,
-    ) -> dict:
-        """Update an existing team.
+        user_ids: list[int],
+        role: str = "member",
+    ) -> bool:
+        """Add one or multiple users to a workspace team.
 
         Parameters
         ----------
+        workspace_slug : str
+            Slug of workspace the team belongs to.
         team_id : str
-            ID of team to update.
-        name : str, optional
-            Name to change the team to.
-        default_theme : str, optional
-            Default theme of charts made by the team.
+            ID of team to add users to.
+        user_ids : list[int]
+            Array of user IDs to add to the team.
+        role : str, optional
+            Role to assign to the users in the team. One of "manager" or "member".
+            By default "member".
 
         Returns
         -------
-        dict
-            A dictionary with the team's updated metadata
+        bool
+            True if the users were added successfully.
         """
-        _query = {}
-        if name:
-            _query["name"] = name
-        if default_theme:
-            _query["defaultTheme"] = default_theme
+        _query = {
+            "userIds": user_ids,
+            "role": role,
+        }
 
-        if not _query:
-            msg = "No parameters were supplied to update the team."
-            logger.error(msg)
-            raise Exception(msg)
+        response = self.post(
+            f"{self._WORKSPACES_URL}/{workspace_slug}/teams/{team_id}/members",
+            data=_query,
+            extra_headers={"content-type": "application/json"},
+        )
+        assert isinstance(response, bool)
+        return response
+
+    def update_workspace_team_members(
+        self,
+        workspace_slug: str,
+        team_id: str,
+        member_ids: list[int],
+        role: str = "member",
+    ) -> bool:
+        """Modify the role of users in a workspace team.
+
+        Parameters
+        ----------
+        workspace_slug : str
+            Slug of workspace the team belongs to.
+        team_id : str
+            ID of team to update members in.
+        member_ids : list[int]
+            IDs of the users to modify in the team.
+        role : str, optional
+            Role to assign to the users in the team. One of "manager" or "member".
+            By default "member".
+
+        Returns
+        -------
+        bool
+            True if the members were updated successfully.
+        """
+        _query = {
+            "memberIds": member_ids,
+            "role": role,
+        }
 
         return self.patch(
-            f"{self._TEAMS_URL}/{team_id}",
+            f"{self._WORKSPACES_URL}/{workspace_slug}/teams/{team_id}/members",
             data=_query,
         )
 
-    def update_team_member(self, team_id: str, user_id: str, role: str) -> bool:
-        """Update a team member's role.
+    def remove_workspace_team_members(
+        self,
+        workspace_slug: str,
+        team_id: str,
+        member_ids: list[int],
+    ) -> bool:
+        """Remove multiple users from a workspace team.
 
         Parameters
         ----------
+        workspace_slug : str
+            Slug of workspace the team belongs to.
         team_id : str
-            ID of team to update.
-        user_id : str
-            ID of user to update.
-        role : str
-            Role to assign to user. One of owner, admin, or member.
+            ID of team to remove users from.
+        member_ids : list[int]
+            IDs of the users to remove from the team.
 
         Returns
         -------
         bool
-            True if the team member was updated successfully.
+            True if the members were removed successfully.
         """
-        return self.put(
-            f"{self._TEAMS_URL}/{team_id}/members/{user_id}/status",
-            data={"status": role},
+        return self.delete(
+            f"{self._WORKSPACES_URL}/{workspace_slug}/teams/{team_id}/members",
+            data={"memberIds": member_ids},
             extra_headers={"content-type": "application/json"},
         )
-
-    def delete_team(self, team_id: str) -> bool:
-        """Delete an existing team.
-
-        Parameters
-        ----------
-        team_id : str
-            ID of team to delete.
-
-        Returns
-        -------
-        bool
-            True if team was deleted successfully.
-        """
-        return self.delete(f"{self._TEAMS_URL}/{team_id}")
-
-    def remove_team_member(self, team_id: str, user_id: str) -> bool:
-        """Remove a member from a team.
-
-        Parameters
-        ----------
-        team_id : str
-            ID of team to remove member from.
-        user_id : str
-            ID of user to remove from team.
-
-        Returns
-        -------
-        bool
-            True if the member was removed successfully.
-        """
-        return self.delete(f"{self._TEAMS_URL}/{team_id}/members/{user_id}")
-
-    def send_invite(self, team_id: str, email: str, role: str) -> bool:
-        """Invite a user to a team.
-
-        Requires scope team:write.
-
-        Parameters
-        ----------
-        team_id : str
-            ID of team to invite user to.
-        email : str
-            Email of user to invite.
-        role : str
-            Role to assign to user. One of owner, admin, or member.
-
-        Returns
-        -------
-        dict
-            A dictionary containing the invitation's information.
-        """
-        response = self.post(
-            f"{self._TEAMS_URL}/{team_id}/invites",
-            data={"email": email, "role": role},
-            extra_headers={"content-type": "application/json"},
-        )
-        assert isinstance(response, bool)
-        return response
-
-    def accept_invite(self, team_id: str, invite_token: str) -> bool:
-        """Accept an invitation to a team.
-
-        Parameters
-        ----------
-        team_id : str
-            ID of team to accept invitation to.
-        invite_token : str
-            Token of invitation to accept.
-
-        Returns
-        -------
-        bool
-            True if the invitation was accepted successfully.
-        """
-        response = self.post(f"{self._TEAMS_URL}/{team_id}/invites/{invite_token}")
-        assert isinstance(response, bool)
-        return response
-
-    def reject_invite(self, team_id: str, invite_token: str) -> bool:
-        """Reject an invitation to a team.
-
-        Parameters
-        ----------
-        team_id : str
-            ID of team to accept invitation to.
-        invite_token : str
-            Token of invitation to accept.
-
-        Returns
-        -------
-        bool
-            True if the invitation was rejected successfully.
-        """
-        return self.delete(f"{self._TEAMS_URL}/{team_id}/invites/{invite_token}")
 
     #
     # User methods
