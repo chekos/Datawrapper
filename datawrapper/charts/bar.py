@@ -3,8 +3,8 @@ from typing import Any, Literal
 import pandas as pd
 from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
-from datawrapper.charts.annos import RangeAnnotation, TextAnnotation
-from datawrapper.charts.base import BaseChart
+from .annos import RangeAnnotation, TextAnnotation
+from .base import BaseChart
 
 
 class BarOverlay(BaseModel):

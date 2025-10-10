@@ -4,7 +4,7 @@ from typing import Any, Literal
 import pandas as pd
 from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 
-from datawrapper import Datawrapper
+from datawrapper.__main__ import Datawrapper
 
 
 class Annotate(BaseModel):

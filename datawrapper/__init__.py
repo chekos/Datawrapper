@@ -11,17 +11,16 @@ try:
 except PackageNotFoundError:  # pragma: no cover
     __version__ = "unknown"
 
-from datawrapper.charts.annos import (
-    ConnectorLine,
-    RangeAnnotation,
-    TextAnnotation,
-)
-from datawrapper.charts.bar import BarChart, BarOverlay
-from datawrapper.charts.base import (
+from datawrapper.charts import (
     Annotate,
+    BarChart,
+    BarOverlay,
     BaseChart,
     ColumnFormat,
+    ConnectorLine,
     Describe,
+    RangeAnnotation,
+    TextAnnotation,
     Transform,
 )
 
