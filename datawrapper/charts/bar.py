@@ -604,7 +604,13 @@ class BarChart(BaseChart):
         
         # Annotations
         init_data["highlighted_series"] = visualize.get("highlighted-series", [])
-        init_data["text_annotations"] = visualize.get("text-annotations", [])
-        init_data["range_annotations"] = visualize.get("range-annotations", [])
+        
+        # Handle text-annotations: convert empty dict to empty list
+        text_annos = visualize.get("text-annotations", [])
+        init_data["text_annotations"] = [] if isinstance(text_annos, dict) and not text_annos else text_annos
+        
+        # Handle range-annotations: convert empty dict to empty list
+        range_annos = visualize.get("range-annotations", [])
+        init_data["range_annotations"] = [] if isinstance(range_annos, dict) and not range_annos else range_annos
         
         return init_data

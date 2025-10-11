@@ -1,6 +1,7 @@
 from .annos import ConnectorLine, RangeAnnotation, TextAnnotation
 from .bar import BarChart, BarOverlay
 from .base import Annotate, BaseChart, ColumnFormat, Describe, Transform
+from .column import ColumnChart
 
 __all__ = (
     "ConnectorLine",
@@ -13,4 +14,5 @@ __all__ = (
     "BaseChart",
     "BarOverlay",
     "BarChart",
+    "ColumnChart",
 )

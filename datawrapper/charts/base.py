@@ -840,7 +840,7 @@ class BaseChart(BaseModel):
 
     @classmethod
     def _from_api(
-        cls, chart_metadata: dict[str, Any], chart_data: str
+        cls, chart_metadata: dict[str, Any], csv_data: str
     ) -> dict[str, Any]:
         """Parse Datawrapper API response into model initialization data.
         
@@ -849,7 +849,7 @@ class BaseChart(BaseModel):
         
         Args:
             chart_metadata: The JSON response from the chart metadata endpoint
-            chart_data: The CSV data from the chart data endpoint
+            csv_data: The CSV data from the chart data endpoint
         
         Returns:
             Dictionary that can be used to initialize the model
@@ -857,7 +857,7 @@ class BaseChart(BaseModel):
         metadata = chart_metadata.get("metadata", {})
         
         # Parse CSV data into DataFrame
-        data_df = pd.read_csv(StringIO(chart_data))
+        data_df = pd.read_csv(StringIO(csv_data))
         
         # Extract common fields
         describe = metadata.get("describe", {})
@@ -869,6 +869,11 @@ class BaseChart(BaseModel):
         visualize_sharing = visualize.get("sharing", {})
         
         # Build base initialization dict
+        # Handle column-format: convert empty dict to empty list
+        data_metadata = metadata.get("data", {})
+        if "column-format" in data_metadata and isinstance(data_metadata["column-format"], dict) and not data_metadata["column-format"]:
+            data_metadata["column-format"] = []
+        
         init_data = {
             # Chart type and basic info
             "chart_type": chart_metadata.get("type"),
@@ -878,7 +883,7 @@ class BaseChart(BaseModel):
             
             # Data
             "data": data_df,
-            "transformations": metadata.get("data", {}),
+            "transformations": data_metadata,
             
             # Description
             "intro": describe.get("intro", ""),

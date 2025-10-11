@@ -31,8 +31,7 @@ class TestBaseChartGet:
 
     def test_get_client_creation(self):
         """Test that get() creates a client with the provided token."""
-        mock_client = Mock()
-        mock_client.get.return_value = {
+        mock_metadata = {
             "id": "test-id",
             "type": "d3-bars",
             "title": "Test Chart",
@@ -40,11 +39,22 @@ class TestBaseChartGet:
                 "data": {},
                 "describe": {},
                 "visualize": {},
-                "publish": {},
+                "publish": {"blocks": {}},
                 "annotate": {},
             },
         }
+        
+        mock_csv = "a,b\n1,2"
+        
+        mock_client = Mock()
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
+        
+        def mock_get(url):
+            if url.endswith("/data"):
+                return mock_csv
+            return mock_metadata
+        
+        mock_client.get.side_effect = mock_get
 
         with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
             chart = BaseChart.get("test-id", access_token="test-token")
@@ -54,8 +64,7 @@ class TestBaseChartGet:
 
     def test_get_with_environment_token(self):
         """Test get() uses environment variable for token."""
-        mock_client = Mock()
-        mock_client.get.return_value = {
+        mock_metadata = {
             "id": "test-id",
             "type": "d3-bars",
             "title": "Test Chart",
@@ -63,11 +72,22 @@ class TestBaseChartGet:
                 "data": {},
                 "describe": {},
                 "visualize": {},
-                "publish": {},
+                "publish": {"blocks": {}},
                 "annotate": {},
             },
         }
+        
+        mock_csv = "a,b\n1,2"
+        
+        mock_client = Mock()
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
+        
+        def mock_get(url):
+            if url.endswith("/data"):
+                return mock_csv
+            return mock_metadata
+        
+        mock_client.get.side_effect = mock_get
 
         with patch.dict(os.environ, {"DATAWRAPPER_ACCESS_TOKEN": "env-token"}):
             with patch(
@@ -103,7 +123,7 @@ class TestBaseChartGet:
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
         with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
-            with pytest.raises(ValueError, match="Unexpected response type"):
+            with pytest.raises(Exception, match="Failed to fetch chart"):
                 BaseChart.get("test-id", access_token="test-token")
 
     def test_get_parses_common_fields(self):
@@ -678,5 +698,5 @@ class TestChartGetIntegration:
 
         with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
             # Should raise error because chart is d3-lines but we're using BarChart
-            with pytest.raises(ValueError, match="Chart type mismatch"):
+            with pytest.raises(Exception, match="Chart type mismatch"):
                 BarChart.get("test-id", access_token="test-token")

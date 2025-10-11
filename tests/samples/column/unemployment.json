@@ -1,0 +1,352 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "4W1MA",
+        "language": "en-AP",
+        "theme": "datawrapper",
+        "chartHash": "cdc07111abce92d13a4b06f58a2c9e5f",
+        "id": "4W1MA",
+        "type": "column-chart",
+        "title": "Figure 4. Nowcast estimates for 2020Q1-2020Q3 and projections for working-hour losses in 2020Q4, world (percentage)",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": true,
+        "metadata": {
+          "data": {
+            "changes": {
+              "1c1c1c1c1c": {
+                "row": 4,
+                "time": 1599559954431,
+                "value": "Q4/2020",
+                "column": 0,
+                "ignored": false,
+                "previous": null,
+                "id": "1c1c1c1c1c",
+                "_index": 0
+              },
+              "1d1d1d1d1d": {
+                "row": 6,
+                "time": 1599559959485,
+                "value": "Q4/2020",
+                "column": 0,
+                "ignored": false,
+                "previous": null,
+                "id": "1d1d1d1d1d",
+                "_index": 1
+              },
+              "1e1e1e1e1e": {
+                "row": 4,
+                "time": 1599560067029,
+                "value": "Q4/2020 (Baseline)",
+                "column": 0,
+                "ignored": false,
+                "previous": "Q4/2020",
+                "id": "1e1e1e1e1e",
+                "_index": 2
+              },
+              "1f1f1f1f1f": {
+                "row": 5,
+                "time": 1599560074834,
+                "value": "Q4/2020 (Optimistic)",
+                "column": 0,
+                "ignored": false,
+                "previous": "Q4/2020",
+                "id": "1f1f1f1f1f",
+                "_index": 3
+              },
+              "1g1g1g1g1g": {
+                "row": 6,
+                "time": 1599560082397,
+                "value": "Q4/2020 (Pessimistic)",
+                "column": 0,
+                "ignored": false,
+                "previous": "Q4/2020",
+                "id": "1g1g1g1g1g",
+                "_index": 4
+              }
+            },
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "",
+            "source-url": "",
+            "intro": "",
+            "byline": "",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": ""
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [
+              "Q4/2020 (Baseline)",
+              "Q4/2020 (Optimistic)",
+              "Q4/2020 (Pessimistic)"
+            ],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false
+            },
+            "x-grid": "off",
+            "y-grid": "on",
+            "scale-y": "linear",
+            "sort-by": "first",
+            "category": "direct",
+            "labeling": "right",
+            "color-key": true,
+            "base-color": 0,
+            "fill-below": false,
+            "grid-lines": true,
+            "bar-padding": 60,
+            "label-space": 30,
+            "line-dashes": {},
+            "line-widths": {},
+            "sort-values": false,
+            "valueLabels": {
+              "show": "always",
+              "enabled": true,
+              "placement": "outside"
+            },
+            "yAxisLabels": {
+              "enabled": true,
+              "alignment": "left",
+              "placement": "outside"
+            },
+            "custom-range": [
+              "",
+              ""
+            ],
+            "custom-ticks": "",
+            "fill-between": false,
+            "grid-lines-x": {
+              "type": "ticks",
+              "enabled": false
+            },
+            "label-colors": false,
+            "label-margin": 0,
+            "line-symbols": false,
+            "custom-colors": null,
+            "interpolation": "linear",
+            "reverse-order": false,
+            "rotate-labels": "off",
+            "show-tooltips": true,
+            "x-grid-format": "YYYY",
+            "x-tick-format": "YYYY",
+            "y-grid-format": "0.0",
+            "y-grid-labels": "auto",
+            "absolute-scale": false,
+            "categoryLabels": {
+              "enabled": true,
+              "position": "direct"
+            },
+            "chart-type-set": true,
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-range-y": [
+              "",
+              ""
+            ],
+            "custom-ticks-x": "",
+            "custom-ticks-y": "",
+            "negative-color": false,
+            "series-padding": 60,
+            "connector-lines": true,
+            "line-symbols-on": "both",
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "line-symbols-size": 3.5,
+            "line-value-labels": false,
+            "line-symbols-shape": "circle",
+            "y-grid-label-align": "left",
+            "line-symbols-opacity": 1,
+            "area-fill-color-below": "#cccccc",
+            "tooltip-number-format": "0,0.[00]",
+            "area-fill-color-between": "#cccccc",
+            "line-symbols-shape-multiple": {},
+            "range-annotations": {},
+            "text-annotations": {},
+            "overlays": {},
+            "negativeColor": {
+              "enabled": false,
+              "value": "#E31A1C"
+            },
+            "totalsLabels": false,
+            "xGridAlignment": "baseline",
+            "color-by-column": false,
+            "show-color-key": false,
+            "stack-color-legend": false,
+            "reverse-color-legend": false,
+            "color-category": {
+              "map": {},
+              "palette": [],
+              "categoryOrder": [],
+              "categoryLabels": {},
+              "excludeFromKey": []
+            },
+            "plotHeightFixed": 228,
+            "plotHeightRatio": 0.5,
+            "plotHeightMode": "fixed",
+            "disable-tabs": true,
+            "compare": {
+              "enabled": false,
+              "differenceLabel": true
+            }
+          },
+          "axes": {
+            "column": "Estimate"
+          },
+          "publish": {
+            "embed-width": 600,
+            "embed-height": 392,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": false,
+              "download-image": false,
+              "edit-in-datawrapper": false
+            },
+            "export-pdf": {},
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Figure 4. Nowcast estimates for 2020Q1-2020Q3 and projections for working-hour losses in 2020Q4, world (percentage)\" aria-label=\"chart\" id=\"datawrapper-chart-1kvHa\" src=\"https://datawrapper.dwcdn.net/1kvHa/2/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"600\" height=\"400\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Figure 4. Nowcast estimates for 2020Q1-2020Q3 and projections for working-hour losses in 2020Q4, world (percentage)\" aria-label=\"chart\" id=\"datawrapper-chart-1kvHa\" src=\"https://datawrapper.dwcdn.net/1kvHa/2/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"400\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"])for(var e in a.data[\"datawrapper-height\"]){var t=document.getElementById(\"datawrapper-chart-\"+e)||document.querySelector(\"iframe[src*='\"+e+\"']\");t&&(t.style.height=a.data[\"datawrapper-height\"][e]+\"px\")}}))}();\n</script>"
+            },
+            "chart-height": 228,
+            "show-in-river": false
+          },
+          "annotate": {
+            "notes": "Note: See Technical Annex 2 for further details on the scenarios used to obtain these projections."
+          },
+          "custom": {
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T15:14:30.000Z",
+        "lastModifiedAt": "2025-10-11T15:14:31.000Z",
+        "forkedFrom": "1kvHa",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "data": {
+            "upload-method": {
+              "__@t$__": "54089215745-1"
+            }
+          },
+          "visualize": {
+            "negativeColor": {
+              "enabled": {
+                "__@t$__": "54089215745-1"
+              },
+              "value": {
+                "__@t$__": "54089215745-1"
+              }
+            },
+            "totalsLabels": {
+              "__@t$__": "54089215745-1"
+            },
+            "xGridAlignment": {
+              "__@t$__": "54089215745-1"
+            },
+            "color-by-column": {
+              "__@t$__": "54089215745-1"
+            },
+            "show-color-key": {
+              "__@t$__": "54089215745-1"
+            },
+            "stack-color-legend": {
+              "__@t$__": "54089215745-1"
+            },
+            "reverse-color-legend": {
+              "__@t$__": "54089215745-1"
+            },
+            "color-category": {
+              "map": {
+                "__@t$__": "54089215745-1"
+              },
+              "palette": {
+                "__@t$__": "54089215745-1"
+              },
+              "categoryOrder": {
+                "__@t$__": "54089215745-1"
+              },
+              "categoryLabels": {
+                "__@t$__": "54089215745-1"
+              },
+              "excludeFromKey": {
+                "__@t$__": "54089215745-1"
+              }
+            },
+            "plotHeightFixed": {
+              "__@t$__": "54089215745-1"
+            },
+            "plotHeightRatio": {
+              "__@t$__": "54089215745-1"
+            },
+            "plotHeightMode": {
+              "__@t$__": "54089215745-1"
+            },
+            "disable-tabs": {
+              "__@t$__": "54089215745-1"
+            },
+            "compare": {
+              "enabled": {
+                "__@t$__": "54089215745-1"
+              },
+              "differenceLabel": {
+                "__@t$__": "54089215745-1"
+              }
+            },
+            "custom-colors": {
+              "__@t$__": "54089215745-1"
+            }
+          },
+          "axes": {
+            "column": {
+              "__@t$__": "54089215745-1"
+            }
+          },
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089215745-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089215745-1"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089215745-2"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-2"
+  },
+  "data": "0-0"
+}

@@ -1,0 +1,445 @@
+from typing import Any, Literal
+
+import pandas as pd
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
+
+from .annos import RangeAnnotation, TextAnnotation
+from .base import BaseChart
+
+
+class ColumnChart(BaseChart):
+    """A base class for the Datawrapper API's column chart."""
+
+    model_config = ConfigDict(
+        populate_by_name=True,
+        strict=True,
+        json_schema_extra={
+            "examples": [
+                {
+                    "chart-type": "column-chart",
+                    "title": "Unemployment Rate Over Time",
+                    "source_name": "Bureau of Labor Statistics",
+                    "data": pd.DataFrame(
+                        {
+                            "date": ["2020/01", "2020/02", "2020/03"],
+                            "Value": [4.0, 3.8, 4.5],
+                        }
+                    ),
+                    "y_grid": True,
+                    "value_labels": "always",
+                }
+            ]
+        },
+    )
+
+    #: The type of datawrapper chart to create
+    chart_type: Literal["column-chart"] = Field(
+        default="column-chart",
+        alias="chart-type",
+        description="The type of datawrapper chart to create",
+    )
+
+    #
+    # Horizontal axis (X-axis)
+    #
+
+    #: The custom range for the x axis
+    custom_range_x: list[Any] = Field(
+        default_factory=lambda: ["", ""],
+        alias="custom-range-x",
+        description="The custom range for the x axis",
+    )
+
+    #: The custom ticks for the x axis
+    custom_ticks_x: list[Any] = Field(
+        default_factory=list,
+        alias="custom-ticks-x",
+        description="The custom ticks for the x axis",
+    )
+
+    #: The formatting for the x grid labels
+    x_grid_format: str = Field(
+        default="auto",
+        alias="x-grid-format",
+        description="The formatting for the x grid labels",
+    )
+
+    #: Whether to show the x grid
+    x_grid: Literal["off", "ticks", "lines"] = Field(
+        default="off",
+        alias="x-grid",
+        description="Whether to show the x grid",
+    )
+
+    #
+    # Vertical axis (Y-axis)
+    #
+
+    #: The custom range for the y axis
+    custom_range_y: list[Any] = Field(
+        default_factory=lambda: ["", ""],
+        alias="custom-range-y",
+        description="The custom range for the y axis",
+    )
+
+    #: The custom ticks for the y axis
+    custom_ticks_y: list[Any] = Field(
+        default_factory=list,
+        alias="custom-ticks-y",
+        description="The custom ticks for the y axis",
+    )
+
+    #: The formatting for the y grid labels
+    y_grid_format: str = Field(
+        default="",
+        alias="y-grid-format",
+        description="The formatting for the y grid labels",
+    )
+
+    #: Whether to show the y grid lines
+    y_grid: bool = Field(
+        default=True,
+        alias="y-grid",
+        description="Whether to show the y grid lines",
+    )
+
+    #: The labeling of the y grid labels
+    y_grid_labels: Literal["inside", "outside", "off"] = Field(
+        default="outside",
+        alias="y-grid-labels",
+        description="The labeling of the y grid labels",
+    )
+
+    #: Which side to put the y-axis labels on
+    y_grid_label_align: Literal["left", "right"] = Field(
+        default="left",
+        alias="y-grid-label-align",
+        description="Which side to put the y-axis labels on",
+    )
+
+    #
+    # Appearance
+    #
+
+    #: The base color for the chart
+    base_color: str | int = Field(
+        default="#4682b4",
+        alias="base-color",
+        description="The base color for the chart",
+    )
+
+    #: The negative color to use, if you want one
+    negative_color: str | None = Field(
+        default=None,
+        alias="negative-color",
+        description="The negative color to use, if you want one",
+    )
+
+    #: A mapping of layer names to colors
+    color_category: dict[str, str] = Field(
+        default_factory=dict,
+        alias="color-category",
+        description="A mapping of layer names to colors",
+    )
+
+    #: Dictionary mapping category names to their display labels in the color legend
+    category_labels: dict[str, str] = Field(
+        default_factory=dict,
+        alias="category-labels",
+        description="Dictionary mapping category names to their display labels in the color legend",
+    )
+
+    #: List defining the order in which categories appear in the chart and legend
+    category_order: list[str] = Field(
+        default_factory=list,
+        alias="category-order",
+        description="List defining the order in which categories appear in the chart and legend",
+    )
+
+    #: The padding between bars as a percentage of the bar width
+    bar_padding: int = Field(
+        default=30,
+        alias="bar-padding",
+        description="The padding between bars as a percentage of the bar width",
+    )
+
+    #: How to set the plot height
+    plot_height_mode: Literal["ratio", "fixed"] = Field(
+        default="fixed",
+        alias="plot-height-mode",
+        description="How to set the plot height",
+    )
+
+    #: The fixed height of the plot
+    plot_height_fixed: int = Field(
+        default=300,
+        alias="plot-height-fixed",
+        description="The fixed height of the plot",
+    )
+
+    #: The ratio of the plot height
+    plot_height_ratio: float = Field(
+        default=0.5,
+        alias="plot-height-ratio",
+        description="The ratio of the plot height",
+    )
+
+    #
+    # Labels
+    #
+
+    #: Whether or not to show the color key above the chart
+    show_color_key: bool = Field(
+        default=False,
+        alias="show-color-key",
+        description="Whether or not to show the color key above the chart",
+    )
+
+    #: How to format the value labels
+    value_labels_format: str = Field(
+        default="",
+        alias="value-labels-format",
+        description="How to format the value labels. Customization options can be found at https://academy.datawrapper.de/article/207-custom-number-formats-that-you-can-display-in-datawrapper",
+    )
+
+    #: Whether or not to show value labels
+    value_labels: Literal["hover", "always", "off"] = Field(
+        default="hover",
+        alias="value-labels",
+        description="Whether or not to show value labels",
+    )
+
+    #: Where to place the value labels
+    value_labels_placement: Literal["inside", "outside", "below"] = Field(
+        default="outside",
+        alias="value-labels-placement",
+        description="Where to place the value labels",
+    )
+
+    #
+    # Annotations
+    #
+
+    #: A list of text annotations to display on the chart
+    text_annotations: list[TextAnnotation | dict[Any, Any]] = Field(
+        default_factory=list,
+        alias="text-annotations",
+        description="A list of text annotations to display on the chart",
+    )
+
+    #: A list of range annotations to display on the chart
+    range_annotations: list[RangeAnnotation | dict[Any, Any]] = Field(
+        default_factory=list,
+        alias="range-annotations",
+        description="A list of range annotations to display on the chart",
+    )
+
+    @model_serializer
+    def serialize_model(self) -> dict:
+        """Serialize the model to a dictionary."""
+        # Call the parent class's serialize_model method
+        model = super().serialize_model()
+
+        # Add chart specific properties
+        model["metadata"]["visualize"].update(
+            {
+                # Horizontal axis
+                "custom-range-x": self.custom_range_x,
+                "custom-ticks-x": ",".join(str(tick) for tick in self.custom_ticks_x),
+                "x-grid-format": self.x_grid_format,
+                "grid-lines-x": {
+                    "type": "" if self.x_grid == "off" else self.x_grid,
+                    "enabled": self.x_grid != "off",
+                },
+                # Vertical axis
+                "custom-range": self.custom_range_y,
+                "custom-ticks": ",".join(str(tick) for tick in self.custom_ticks_y),
+                "y-grid-format": self.y_grid_format,
+                "grid-lines": self.y_grid,
+                "yAxisLabels": {
+                    "enabled": self.y_grid_labels != "off",
+                    "alignment": self.y_grid_label_align,
+                    "placement": ""
+                    if self.y_grid_labels == "off"
+                    else self.y_grid_labels,
+                },
+                # Appearance
+                "base-color": self.base_color,
+                "negativeColor": {
+                    "value": self.negative_color if self.negative_color else "#E31A1C",
+                    "enabled": self.negative_color is not None,
+                },
+                "bar-padding": self.bar_padding,
+                "color-category": {
+                    "map": self.color_category,
+                    **({} if not self.category_labels else {"categoryLabels": self.category_labels}),
+                    **({} if not self.category_order else {"categoryOrder": self.category_order}),
+                },
+                "color-by-column": bool(self.color_category),
+                "plotHeightMode": self.plot_height_mode,
+                "plotHeightFixed": self.plot_height_fixed,
+                "plotHeightRatio": self.plot_height_ratio,
+                # Labels
+                "show-color-key": self.show_color_key,
+                "valueLabels": {
+                    "show": "" if self.value_labels == "off" else self.value_labels,
+                    "format": self.value_labels_format,
+                    "enabled": self.value_labels != "off",
+                    "placement": self.value_labels_placement,
+                },
+                # Annotations
+                "text-annotations": [],
+                "range-annotations": [],
+            }
+        )
+
+        # Add text annotations, if any
+        for ta_obj in self.text_annotations:
+            if isinstance(ta_obj, dict):
+                ta_dict = TextAnnotation.model_validate(ta_obj).serialize_model()
+            elif isinstance(ta_obj, TextAnnotation):
+                ta_dict = ta_obj.serialize_model()
+            else:
+                raise ValueError(
+                    "Text annotations must be TextAnnotation objects or dicts"
+                )
+            model["metadata"]["visualize"]["text-annotations"].append(ta_dict)
+
+        # Add range annotations, if any
+        for ra_obj in self.range_annotations:
+            if isinstance(ra_obj, dict):
+                ra_dict = RangeAnnotation.model_validate(ra_obj).serialize_model()
+            elif isinstance(ra_obj, RangeAnnotation):
+                ra_dict = ra_obj.serialize_model()
+            else:
+                raise ValueError(
+                    "Range annotations must be RangeAnnotation objects or dicts"
+                )
+            model["metadata"]["visualize"]["range-annotations"].append(ra_dict)
+
+        # Return the serialized data
+        return model
+
+    @classmethod
+    def _from_api(
+        cls, chart_metadata: dict[str, Any], chart_data: str
+    ) -> dict[str, Any]:
+        """Parse Datawrapper API response including column chart specific fields.
+        
+        Args:
+            chart_metadata: The JSON response from the chart metadata endpoint
+            chart_data: The CSV data from the chart data endpoint
+        
+        Returns:
+            Dictionary that can be used to initialize the ColumnChart model
+        """
+        # Call parent to get base fields
+        init_data = super()._from_api(chart_metadata, chart_data)
+        
+        # Extract column-specific sections
+        metadata = chart_metadata.get("metadata", {})
+        visualize = metadata.get("visualize", {})
+        
+        # Horizontal axis (X-axis)
+        init_data["custom_range_x"] = visualize.get("custom-range-x", ["", ""])
+        
+        # Parse custom ticks X (comes as comma-separated string)
+        ticks_x_str = visualize.get("custom-ticks-x", "")
+        if ticks_x_str:
+            init_data["custom_ticks_x"] = [
+                float(x.strip()) if x.strip() else x.strip()
+                for x in ticks_x_str.split(",")
+            ]
+        else:
+            init_data["custom_ticks_x"] = []
+        
+        init_data["x_grid_format"] = visualize.get("x-grid-format", "auto")
+        
+        # Parse grid-lines-x
+        grid_lines_x = visualize.get("grid-lines-x", {})
+        if isinstance(grid_lines_x, dict):
+            enabled = grid_lines_x.get("enabled", False)
+            grid_type = grid_lines_x.get("type", "")
+            init_data["x_grid"] = grid_type if enabled else "off"
+        else:
+            init_data["x_grid"] = "off"
+        
+        # Vertical axis (Y-axis)
+        init_data["custom_range_y"] = visualize.get("custom-range", ["", ""])
+        
+        # Parse custom ticks Y (comes as comma-separated string)
+        ticks_y_str = visualize.get("custom-ticks", "")
+        if ticks_y_str:
+            init_data["custom_ticks_y"] = [
+                float(x.strip()) if x.strip() else x.strip()
+                for x in ticks_y_str.split(",")
+            ]
+        else:
+            init_data["custom_ticks_y"] = []
+        
+        init_data["y_grid_format"] = visualize.get("y-grid-format", "")
+        init_data["y_grid"] = visualize.get("grid-lines", True)
+        
+        # Parse yAxisLabels
+        y_axis_labels = visualize.get("yAxisLabels", {})
+        if isinstance(y_axis_labels, dict):
+            enabled = y_axis_labels.get("enabled", True)
+            placement = y_axis_labels.get("placement", "outside")
+            init_data["y_grid_labels"] = placement if enabled else "off"
+            init_data["y_grid_label_align"] = y_axis_labels.get("alignment", "left")
+        else:
+            init_data["y_grid_labels"] = "outside"
+            init_data["y_grid_label_align"] = "left"
+        
+        # Appearance
+        init_data["base_color"] = visualize.get("base-color", "#4682b4")
+        
+        # Parse negativeColor
+        negative_color_obj = visualize.get("negativeColor", {})
+        if isinstance(negative_color_obj, dict):
+            enabled = negative_color_obj.get("enabled", False)
+            color_value = negative_color_obj.get("value", "#E31A1C")
+            init_data["negative_color"] = color_value if enabled else None
+        else:
+            init_data["negative_color"] = None
+        
+        # Parse color-category (complex nested structure)
+        color_category_obj = visualize.get("color-category", {})
+        if isinstance(color_category_obj, dict):
+            init_data["color_category"] = color_category_obj.get("map", {})
+            init_data["category_labels"] = color_category_obj.get("categoryLabels", {})
+            init_data["category_order"] = color_category_obj.get("categoryOrder", [])
+        else:
+            init_data["color_category"] = {}
+            init_data["category_labels"] = {}
+            init_data["category_order"] = []
+        
+        init_data["bar_padding"] = visualize.get("bar-padding", 30)
+        init_data["plot_height_mode"] = visualize.get("plotHeightMode", "fixed")
+        init_data["plot_height_fixed"] = visualize.get("plotHeightFixed", 300)
+        init_data["plot_height_ratio"] = visualize.get("plotHeightRatio", 0.5)
+        
+        # Labels
+        init_data["show_color_key"] = visualize.get("show-color-key", False)
+        
+        # Parse valueLabels
+        value_labels_obj = visualize.get("valueLabels", {})
+        if isinstance(value_labels_obj, dict):
+            enabled = value_labels_obj.get("enabled", False)
+            show = value_labels_obj.get("show", "hover")
+            init_data["value_labels"] = show if enabled else "off"
+            init_data["value_labels_format"] = value_labels_obj.get("format", "")
+            init_data["value_labels_placement"] = value_labels_obj.get("placement", "outside")
+        else:
+            init_data["value_labels"] = "hover"
+            init_data["value_labels_format"] = ""
+            init_data["value_labels_placement"] = "outside"
+        
+        # Annotations - handle empty dicts → empty lists
+        text_annos = visualize.get("text-annotations", [])
+        init_data["text_annotations"] = [] if isinstance(text_annos, dict) and not text_annos else text_annos
+        
+        range_annos = visualize.get("range-annotations", [])
+        init_data["range_annotations"] = [] if isinstance(range_annos, dict) and not range_annos else range_annos
+        
+        return init_data
