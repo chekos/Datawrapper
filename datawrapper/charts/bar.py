@@ -507,3 +507,104 @@ class BarChart(BaseChart):
 
         # Return the serialized data
         return model
+
+    @classmethod
+    def _from_api(
+        cls, chart_metadata: dict[str, Any], chart_data: str
+    ) -> dict[str, Any]:
+        """Parse Datawrapper API response including bar chart specific fields.
+        
+        Args:
+            chart_metadata: The JSON response from the chart metadata endpoint
+            chart_data: The CSV data from the chart data endpoint
+        
+        Returns:
+            Dictionary that can be used to initialize the BarChart model
+        """
+        # Call parent to get base fields
+        init_data = super()._from_api(chart_metadata, chart_data)
+        
+        # Extract bar-specific sections
+        metadata = chart_metadata.get("metadata", {})
+        visualize = metadata.get("visualize", {})
+        axes = metadata.get("axes", {})
+        
+        # Labels
+        init_data["label_column"] = axes.get("labels", "")
+        init_data["label_alignment"] = visualize.get("label-alignment", "left")
+        init_data["block_labels"] = visualize.get("block-labels", False)
+        init_data["show_value_labels"] = visualize.get("show-value-labels", True)
+        init_data["value_label_alignment"] = visualize.get("value-label-alignment", "left")
+        init_data["value_label_format"] = visualize.get("value-label-format", "")
+        init_data["swap_labels"] = visualize.get("swap-labels", False)
+        
+        # Replace flags
+        replace_flags_obj = visualize.get("replace-flags", {})
+        if isinstance(replace_flags_obj, dict):
+            enabled = replace_flags_obj.get("enabled", False)
+            flag_type = replace_flags_obj.get("type", "")
+            init_data["replace_flags"] = flag_type if enabled else "off"
+        else:
+            init_data["replace_flags"] = "off"
+        
+        init_data["show_color_key"] = visualize.get("show-color-key", False)
+        init_data["stack_color_legend"] = visualize.get("stack-color-legend", False)
+        
+        # Horizontal axis
+        init_data["bar_column"] = axes.get("bars", "")
+        init_data["custom_range"] = visualize.get("custom-range", ["", ""])
+        init_data["force_grid"] = visualize.get("force-grid", False)
+        
+        # Parse custom grid lines (comes as comma-separated string)
+        grid_lines_str = visualize.get("custom-grid-lines", "")
+        if grid_lines_str:
+            init_data["custom_grid_lines"] = [
+                float(x.strip()) if x.strip() else x.strip() 
+                for x in grid_lines_str.split(",")
+            ]
+        else:
+            init_data["custom_grid_lines"] = []
+        
+        init_data["tick_position"] = visualize.get("tick-position", "top")
+        init_data["axis_label_format"] = visualize.get("axis-label-format", "")
+        
+        # Appearance
+        init_data["base_color"] = visualize.get("base-color", "#4682b4")
+        init_data["color_column"] = axes.get("colors", "")
+        
+        # Parse color-category (complex nested structure)
+        color_category_obj = visualize.get("color-category", {})
+        if isinstance(color_category_obj, dict):
+            init_data["color_category"] = color_category_obj.get("map", {})
+            init_data["exclude_from_color_key"] = color_category_obj.get("excludeFromKey", [])
+            init_data["category_labels"] = color_category_obj.get("categoryLabels", {})
+            init_data["category_order"] = color_category_obj.get("categoryOrder", [])
+        else:
+            init_data["color_category"] = {}
+            init_data["exclude_from_color_key"] = []
+            init_data["category_labels"] = {}
+            init_data["category_order"] = []
+        
+        init_data["rules"] = visualize.get("rules", False)
+        init_data["thick"] = visualize.get("thick", False)
+        init_data["background"] = visualize.get("background", False)
+        
+        # Sorting and grouping
+        init_data["sort_bars"] = visualize.get("sort-bars", False)
+        init_data["reverse_order"] = visualize.get("reverse-order", False)
+        init_data["group_by_column"] = axes.get("groups", "")
+        init_data["show_group_labels"] = visualize.get("show-group-labels", True)
+        init_data["show_category_labels"] = visualize.get("show-category-labels", True)
+        
+        # Overlays (list of BarOverlay objects)
+        overlays_list = visualize.get("overlays", [])
+        init_data["overlays"] = [
+            BarOverlay.model_validate(overlay) for overlay in overlays_list
+        ]
+        
+        # Annotations
+        init_data["highlighted_series"] = visualize.get("highlighted-series", [])
+        init_data["text_annotations"] = visualize.get("text-annotations", [])
+        init_data["range_annotations"] = visualize.get("range-annotations", [])
+        
+        return init_data

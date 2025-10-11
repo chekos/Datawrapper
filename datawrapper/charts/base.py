@@ -1,4 +1,5 @@
 import os
+from io import StringIO
 from typing import Any, Literal
 
 import pandas as pd
@@ -776,3 +777,134 @@ class BaseChart(BaseModel):
 
         # Return the obj
         return dw_obj
+
+    @classmethod
+    def get(cls, chart_id: str, access_token: str | None = None) -> "BaseChart":
+        """Fetch an existing chart from the Datawrapper API.
+
+        Args:
+            chart_id: The ID of the chart to fetch
+            access_token: Optional Datawrapper API access token.
+                        If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+
+        Returns:
+            An instance of the chart class with data populated from the API.
+
+        Raises:
+            ValueError: If no access token is available or chart type doesn't match.
+            Exception: If the API request fails.
+        """
+        # Create a temporary instance to use _get_client
+        temp_instance = cls.__new__(cls)
+        temp_instance._client = None
+        client = temp_instance._get_client(access_token)
+        
+        try:
+            # Fetch chart metadata
+            response = client.get(f"{client._CHARTS_URL}/{chart_id}")
+            
+            if not isinstance(response, dict):
+                raise ValueError(f"Unexpected response type from API: {type(response)}")
+            
+            # Verify chart type matches if this is a subclass
+            chart_type = response.get("type")
+            if hasattr(cls, "model_fields") and "chart_type" in cls.model_fields:
+                # Check if this subclass has a specific chart_type constraint
+                field_info = cls.model_fields["chart_type"]
+                if hasattr(field_info.annotation, "__args__"):
+                    # This is a Literal type with specific allowed values
+                    allowed_types = field_info.annotation.__args__
+                    if chart_type not in allowed_types:
+                        raise ValueError(
+                            f"Chart type mismatch: expected one of {allowed_types}, got '{chart_type}'. "
+                            f"Use BaseChart.get() or the correct chart class."
+                        )
+            
+            # Fetch chart data
+            data_response = client.get(f"{client._CHARTS_URL}/{chart_id}/data")
+            
+        except Exception as e:
+            raise Exception(
+                f"Failed to fetch chart from Datawrapper API. Error: {str(e)}"
+            ) from e
+        
+        # Parse the response into our model
+        parsed_data = cls._from_api(response, data_response)
+        
+        # Create instance and set chart_id and client
+        instance = cls(**parsed_data)
+        instance.chart_id = chart_id
+        instance._client = client
+        
+        return instance
+
+    @classmethod
+    def _from_api(
+        cls, chart_metadata: dict[str, Any], chart_data: str
+    ) -> dict[str, Any]:
+        """Parse Datawrapper API response into model initialization data.
+        
+        This base implementation handles common fields. Subclasses should override
+        _parse_visualize_metadata to handle chart-specific visualize settings.
+        
+        Args:
+            chart_metadata: The JSON response from the chart metadata endpoint
+            chart_data: The CSV data from the chart data endpoint
+        
+        Returns:
+            Dictionary that can be used to initialize the model
+        """
+        metadata = chart_metadata.get("metadata", {})
+        
+        # Parse CSV data into DataFrame
+        data_df = pd.read_csv(StringIO(chart_data))
+        
+        # Extract common fields
+        describe = metadata.get("describe", {})
+        annotate = metadata.get("annotate", {})
+        publish = metadata.get("publish", {})
+        publish_blocks = publish.get("blocks", {})
+        publish_logo = publish_blocks.get("logo", {})
+        visualize = metadata.get("visualize", {})
+        visualize_sharing = visualize.get("sharing", {})
+        
+        # Build base initialization dict
+        init_data = {
+            # Chart type and basic info
+            "chart_type": chart_metadata.get("type"),
+            "title": chart_metadata.get("title", ""),
+            "theme": chart_metadata.get("theme", ""),
+            "language": chart_metadata.get("language", "en-US"),
+            
+            # Data
+            "data": data_df,
+            "transformations": metadata.get("data", {}),
+            
+            # Description
+            "intro": describe.get("intro", ""),
+            "notes": annotate.get("notes", ""),
+            "source_name": describe.get("source-name", ""),
+            "source_url": describe.get("source-url", ""),
+            "byline": describe.get("byline", ""),
+            "aria_description": describe.get("aria-description", ""),
+            "hide_title": describe.get("hide-title", False),
+            
+            # Layout/Publish
+            "auto_dark_mode": publish.get("autoDarkMode", False),
+            "dark_mode_invert": visualize.get("dark-mode-invert", True),
+            "get_the_data": publish_blocks.get("get-the-data", False),
+            "download_image": publish_blocks.get("download-image", False),
+            "download_pdf": publish_blocks.get("download-pdf", False),
+            "download_svg": publish_blocks.get("download-svg", False),
+            "embed": publish_blocks.get("embed", False),
+            "force_attribution": publish.get("force-attribution", False),
+            "share_buttons": visualize_sharing.get("enabled", False),
+            "share_url": visualize_sharing.get("url", ""),
+            "logo": publish_logo.get("enabled", False),
+            "logo_id": publish_logo.get("id", ""),
+            
+            # Custom
+            "custom": metadata.get("custom", {}),
+        }
+        
+        return init_data
