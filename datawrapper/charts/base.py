@@ -330,13 +330,14 @@ class BaseChart(BaseModel):
 
     #: The type of datawrapper chart to create
     chart_type: Literal[
+        "column-chart",
         "d3-lines",
         "d3-area",
         "d3-arrow-plot",
         "d3-bars",
         "d3-scatter-plot",
         "locator-map",
-        "column-chart",
+        "multiple-columns",
     ] = Field(alias="chart-type", description="The type of datawrapper chart to create")
 
     #

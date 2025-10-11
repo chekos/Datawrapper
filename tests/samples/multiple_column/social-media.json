@@ -1,0 +1,292 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "RmEKw",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "95765e311aec3d462a249922820c560c",
+        "id": "RmEKw",
+        "type": "multiple-columns",
+        "title": "YouTube, Facebook, LinkedIn, and WhatsApp are more popular among 30-49 year olds than younger users",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {},
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-order": [
+              0,
+              7,
+              1,
+              3,
+              8,
+              2,
+              10,
+              9,
+              4,
+              5,
+              6,
+              11
+            ],
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "Pew Research",
+            "source-url": "https://www.pewresearch.org/internet/fact-sheet/social-media/",
+            "intro": "U.S. adults who say they \"ever use\" selected social networks, by age group.",
+            "byline": "",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": ""
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "url": "https://www.datawrapper.de/_/RmEKw",
+              "auto": false
+            },
+            "sort": {
+              "by": "start",
+              "enabled": true,
+              "reverse": false
+            },
+            "lines": {},
+            "panels": {
+              "Reddit": {},
+              "TikTok": {},
+              "YouTube": {},
+              "Facebook": {},
+              "LinkedIn": {},
+              "WhatsApp": {},
+              "Instagram": {},
+              "X (formerly Twitter)": {}
+            },
+            "x-grid": "off",
+            "y-grid": "on",
+            "compare": {
+              "enabled": false,
+              "differenceLabel": true
+            },
+            "scale-y": "linear",
+            "sort-by": "first",
+            "category": "direct",
+            "overlays": {},
+            "color-key": true,
+            "base-color": 0,
+            "grid-lines": "show",
+            "gridLayout": "fixedCount",
+            "highlights": [
+              {
+                "element": {
+                  "key": "30-49"
+                },
+                "settings": {
+                  "showValue": true
+                }
+              },
+              {
+                "element": {
+                  "key": "18-29"
+                },
+                "settings": {
+                  "showValue": true
+                }
+              }
+            ],
+            "bar-padding": 10,
+            "label-space": 30,
+            "sort-values": false,
+            "valueLabels": {
+              "show": "always",
+              "enabled": true,
+              "placement": "inside",
+              "preventOverlap": true
+            },
+            "yAxisLabels": {
+              "enabled": true,
+              "alignment": "left",
+              "placement": "outside"
+            },
+            "custom-range": [
+              "",
+              ""
+            ],
+            "custom-ticks": "",
+            "disable-tabs": true,
+            "grid-lines-x": {
+              "type": "ticks",
+              "enabled": false
+            },
+            "label-colors": false,
+            "label-margin": 0,
+            "totalsLabels": false,
+            "interpolation": "linear",
+            "negativeColor": {
+              "value": "#E31A1C",
+              "enabled": false
+            },
+            "reverse-order": false,
+            "rotate-labels": "auto",
+            "show-tooltips": true,
+            "x-grid-format": "auto",
+            "x-grid-labels": "on",
+            "y-grid-format": "0.[0]%",
+            "y-grid-labels": "inside",
+            "absolute-scale": false,
+            "categoryLabels": {
+              "enabled": true,
+              "position": "direct"
+            },
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "Reddit": "#f86c45",
+                "TikTok": "#00ada5",
+                "YouTube": "#b81909",
+                "Facebook": "#002490",
+                "LinkedIn": "#2c63bc",
+                "Snapchat": "#ffbb00",
+                "WhatsApp": "#2d9d18",
+                "Instagram": "#e83364",
+                "Pinterest": "#d32e2e",
+                "X (formerly Twitter)": "#494949"
+              },
+              "palette": [],
+              "categoryOrder": [],
+              "categoryLabels": {},
+              "excludeFromKey": [
+                "Ages 18-29",
+                "30-49",
+                "50-64",
+                "65+",
+                "10",
+                "2",
+                "1",
+                "&lt;1"
+              ]
+            },
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-range-y": [
+              "",
+              "100"
+            ],
+            "custom-ticks-x": "",
+            "custom-ticks-y": "",
+            "plotHeightMode": "fixed",
+            "series-padding": 60,
+            "show-color-key": true,
+            "xGridAlignment": "baseline",
+            "color-by-column": false,
+            "connector-lines": true,
+            "gridColumnCount": 4,
+            "plotHeightFixed": 300,
+            "plotHeightRatio": 0.5,
+            "colorPanelTitles": false,
+            "panelSortIndexes": {},
+            "text-annotations": {},
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "gridRowHeightMode": "fixed",
+            "range-annotations": {},
+            "gridColumnMinWidth": 200,
+            "gridRowHeightFixed": 140,
+            "gridRowHeightRatio": 1,
+            "independentYScales": false,
+            "stack-color-legend": false,
+            "value-label-colors": true,
+            "y-grid-label-align": "left",
+            "reverse-color-legend": false,
+            "syncMultipleTooltips": true,
+            "xGridLabelAllColumns": false,
+            "yGridLabelAllColumns": false,
+            "gridColumnCountMobile": 2,
+            "independentYScalesRounded": true
+          },
+          "axes": {
+            "column": "Facebook"
+          },
+          "publish": {
+            "embed-width": 640,
+            "embed-height": 553,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"YouTube, Facebook, LinkedIn, and WhatsApp are more popular among 30-49 year olds than younger users\" aria-label=\"Multiple Columns\" id=\"datawrapper-chart-tjoCO\" src=\"https://datawrapper.dwcdn.net/tjoCO/1/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"640\" height=\"587\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"YouTube, Facebook, LinkedIn, and WhatsApp are more popular among 30-49 year olds than younger users\" aria-label=\"Multiple Columns\" id=\"datawrapper-chart-tjoCO\" src=\"https://datawrapper.dwcdn.net/tjoCO/1/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"587\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:587px\" id=\"datawrapper-vis-tjoCO\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/tjoCO/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-tjoCO\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/tjoCO/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "autoDarkMode": false,
+            "chart-height": 411
+          },
+          "annotate": {
+            "notes": "Survey of U.S. adults conducted Feb. 1-June 10, 2024."
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T19:49:02.000Z",
+        "lastModifiedAt": "2025-10-11T19:49:02.000Z",
+        "forkedFrom": "tjoCO",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089271292-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089271292-1"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089271292-2"
+            },
+            "chart-height": {
+              "__@t$__": "54089271292-3"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-3"
+  },
+  "data": "0-0"
+}

@@ -5,6 +5,7 @@ from .bar import BarChart, BarOverlay
 from .base import Annotate, BaseChart, ColumnFormat, Describe, Transform
 from .column import ColumnChart
 from .line import AreaFill, Line, LineChart, LineSymbol, LineValueLabel
+from .multiple_column import MultipleColumnChart
 
 __all__ = (
     "ConnectorLine",
@@ -25,4 +26,5 @@ __all__ = (
     "AreaFill",
     "AreaChart",
     "ArrowChart",
+    "MultipleColumnChart",
 )

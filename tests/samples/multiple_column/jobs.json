@@ -1,0 +1,285 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "uv63X",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "a49f1068b0021b3d2841ef0bc2b87321",
+        "id": "uv63X",
+        "type": "multiple-columns",
+        "title": "Manufacturing construction has seen the highest growth",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {},
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-order": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              7,
+              6,
+              9,
+              8
+            ],
+            "column-format": {
+              "Office": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "auto",
+                "number-divisor": 0,
+                "number-prepend": "$"
+              },
+              "Lodging": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "auto",
+                "number-divisor": 0,
+                "number-prepend": "$"
+              },
+              "Religious": {
+                "type": "auto",
+                "ignore": true,
+                "number-append": "",
+                "number-format": "auto",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Commercial": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "auto",
+                "number-divisor": 0,
+                "number-prepend": "$"
+              },
+              "Educational": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "auto",
+                "number-divisor": 0,
+                "number-prepend": "$"
+              },
+              "Health care": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "auto",
+                "number-divisor": 0,
+                "number-prepend": "$"
+              },
+              "Manufacturing": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "auto",
+                "number-divisor": 0,
+                "number-prepend": "$"
+              },
+              "Public safety": {
+                "type": "auto",
+                "ignore": true,
+                "number-append": "",
+                "number-format": "auto",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Amusement and recreation": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "auto",
+                "number-divisor": 0,
+                "number-prepend": ""
+              }
+            },
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "census.gov via Statista",
+            "source-url": "https://www.statista.com/statistics/559079/nonresidential-construction-spending-in-the-united-states-by-segment/",
+            "intro": "Non-residential construction spending in the United States from 2012 to 2023, selected categories. ",
+            "byline": "",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": ""
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "url": "https://www.datawrapper.de/_/uv63X",
+              "auto": false
+            },
+            "sort": {
+              "by": "end",
+              "enabled": false,
+              "reverse": false
+            },
+            "lines": {},
+            "panels": {
+              "Manufacturing": {}
+            },
+            "x-grid": "off",
+            "y-grid": "off",
+            "scale-y": "linear",
+            "overlays": {},
+            "base-color": "#809cae",
+            "gridLayout": "fixedCount",
+            "highlights": [],
+            "bar-padding": 26,
+            "valueLabels": {
+              "enabled": true,
+              "placement": "outside",
+              "preventOverlap": true
+            },
+            "label-colors": false,
+            "label-margin": 0,
+            "interpolation": "linear",
+            "negativeColor": {
+              "value": "#E31A1C",
+              "enabled": false
+            },
+            "reverse-order": false,
+            "rotate-labels": "auto",
+            "show-tooltips": true,
+            "x-grid-format": "auto",
+            "x-grid-labels": "on",
+            "y-grid-format": "0.[0]a",
+            "y-grid-labels": "off",
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "Manufacturing": "#2d1780"
+              },
+              "categoryOrder": [],
+              "categoryLabels": {},
+              "excludeFromKey": []
+            },
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-range-y": [
+              "",
+              ""
+            ],
+            "custom-ticks-x": "",
+            "custom-ticks-y": "",
+            "plotHeightMode": "fixed",
+            "show-color-key": true,
+            "xGridAlignment": "baseline",
+            "color-by-column": false,
+            "connector-lines": true,
+            "gridColumnCount": 3,
+            "plotHeightFixed": 300,
+            "plotHeightRatio": 0.5,
+            "colorPanelTitles": false,
+            "panelSortIndexes": {},
+            "text-annotations": {},
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "gridRowHeightMode": "fixed",
+            "range-annotations": {},
+            "gridColumnMinWidth": 200,
+            "gridRowHeightFixed": 122,
+            "gridRowHeightRatio": 1,
+            "independentYScales": false,
+            "stack-color-legend": false,
+            "value-label-colors": true,
+            "y-grid-label-align": "left",
+            "syncMultipleTooltips": true,
+            "xGridLabelAllColumns": false,
+            "yGridLabelAllColumns": false,
+            "gridColumnCountMobile": 3,
+            "independentYScalesRounded": true
+          },
+          "axes": {},
+          "publish": {
+            "embed-width": 421,
+            "embed-height": 517,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Manufacturing construction has seen the highest growth\" aria-label=\"Multiple Columns\" id=\"datawrapper-chart-Zb8AE\" src=\"https://datawrapper.dwcdn.net/Zb8AE/1/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"421\" height=\"519\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Manufacturing construction has seen the highest growth\" aria-label=\"Multiple Columns\" id=\"datawrapper-chart-Zb8AE\" src=\"https://datawrapper.dwcdn.net/Zb8AE/1/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"519\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:519px\" id=\"datawrapper-vis-Zb8AE\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/Zb8AE/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-Zb8AE\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/Zb8AE/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "autoDarkMode": false,
+            "chart-height": 378
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T19:53:28.000Z",
+        "lastModifiedAt": "2025-10-11T19:53:29.000Z",
+        "forkedFrom": "Zb8AE",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089262622-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089262622-1"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089262622-2"
+            },
+            "chart-height": {
+              "__@t$__": "54089262622-3"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-3"
+  },
+  "data": "0-0"
+}

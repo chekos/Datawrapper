@@ -1,0 +1,407 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "9EUrQ",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "d53871b3cda443e29e149ced3640c1a3",
+        "id": "9EUrQ",
+        "type": "multiple-columns",
+        "title": "UK Government spending as shares of GDP",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {},
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "IFS",
+            "source-url": "https://ifs.org.uk/taxlab/taxlab-key-questions/what-does-government-spend-money",
+            "intro": "",
+            "byline": "",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": ""
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "url": "https://www.datawrapper.de/_/9EUrQ",
+              "auto": false
+            },
+            "sort": {
+              "by": "end",
+              "enabled": true,
+              "reverse": false
+            },
+            "lines": {},
+            "panels": {
+              "Health": {},
+              "Defence": {},
+              "Education": {},
+              "Transport": {
+                "showOnMobile": false,
+                "showOnDesktop": false
+              },
+              "Overseas aid": {
+                "showOnMobile": false,
+                "showOnDesktop": false
+              },
+              "Long-term care": {
+                "showOnMobile": false,
+                "showOnDesktop": false
+              },
+              "Net debt interest": {
+                "showOnMobile": false,
+                "showOnDesktop": false
+              },
+              "Public order & safety": {
+                "showOnMobile": false,
+                "showOnDesktop": false
+              },
+              "Social security (pensioners)": {
+                "showOnMobile": false,
+                "showOnDesktop": false
+              },
+              "Housing & community amenities": {
+                "showOnMobile": false,
+                "showOnDesktop": false
+              },
+              "Social security (working-age\n& children)": {
+                "showOnMobile": false,
+                "showOnDesktop": false
+              }
+            },
+            "x-grid": "on",
+            "y-grid": "on",
+            "scale-y": "linear",
+            "overlays": {},
+            "base-color": "#c56f3f",
+            "gridLayout": "fixedCount",
+            "highlights": [
+              {
+                "element": {
+                  "key": "2020",
+                  "column": "Health"
+                },
+                "settings": {
+                  "showValue": true
+                }
+              },
+              {
+                "element": {
+                  "key": "2021",
+                  "column": "Health"
+                },
+                "settings": {
+                  "showValue": false
+                }
+              },
+              {
+                "element": {
+                  "key": "2022",
+                  "column": "Health"
+                },
+                "settings": {
+                  "showValue": false
+                }
+              },
+              {
+                "element": {
+                  "key": "2009",
+                  "column": "Education"
+                },
+                "settings": {
+                  "showValue": true
+                }
+              },
+              {
+                "element": {
+                  "key": "1984",
+                  "column": "Defence"
+                },
+                "settings": {
+                  "showValue": true
+                }
+              },
+              {
+                "element": {
+                  "key": "2022",
+                  "column": "Defence"
+                },
+                "settings": {
+                  "showValue": true
+                }
+              },
+              {
+                "element": {
+                  "key": "2022",
+                  "column": "Education"
+                },
+                "settings": {
+                  "showValue": true
+                }
+              }
+            ],
+            "bar-padding": 27,
+            "valueLabels": {
+              "enabled": false,
+              "placement": "outside",
+              "preventOverlap": true
+            },
+            "label-colors": false,
+            "label-margin": 0,
+            "interpolation": "linear",
+            "negativeColor": {
+              "value": "#E31A1C",
+              "enabled": false
+            },
+            "reverse-order": false,
+            "rotate-labels": "auto",
+            "show-tooltips": true,
+            "x-grid-format": "auto",
+            "x-grid-labels": "on",
+            "y-grid-format": "0.[0]%",
+            "y-grid-labels": "inside",
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "Health": "#5161a1",
+                "Defence": "#bc1812",
+                "Education": "#e77d01"
+              },
+              "categoryOrder": [],
+              "categoryLabels": {},
+              "excludeFromKey": [
+                ""
+              ]
+            },
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-range-y": [
+              "0",
+              "10"
+            ],
+            "custom-ticks-x": "1970, 1980, 1990, 2000, 2010, 2020",
+            "custom-ticks-y": "0,5,10",
+            "plotHeightMode": "fixed",
+            "show-color-key": true,
+            "xGridAlignment": "baseline",
+            "color-by-column": false,
+            "connector-lines": true,
+            "gridColumnCount": 1,
+            "plotHeightFixed": 300,
+            "plotHeightRatio": 0.5,
+            "colorPanelTitles": false,
+            "panelSortIndexes": {},
+            "text-annotations": {
+              "OuxekId1tS": {
+                "bg": true,
+                "dx": 0,
+                "dy": 0,
+                "id": "OuxekId1tS",
+                "bold": true,
+                "size": 14,
+                "text": "Health spending in 2020/21 was £179 billion higher than pre-pandemic plans.",
+                "align": "br",
+                "color": "#54619c",
+                "width": 79.1673666095069,
+                "italic": false,
+                "position": {
+                  "x": "2015/10/18 22:40",
+                  "y": "8.2027",
+                  "plot": "Health"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": true,
+                "showInAllPlots": false,
+                "_index": 0
+              },
+              "mQ3_Dnpncq": {
+                "bg": true,
+                "dx": 0,
+                "dy": 0,
+                "id": "mQ3_Dnpncq",
+                "bold": true,
+                "size": 14,
+                "text": "Defense spending fell to 2.2% in 2022, down from 4.6% in 1984.",
+                "align": "tl",
+                "color": "#c71e1d",
+                "width": 57.051895405610814,
+                "italic": false,
+                "position": {
+                  "x": "1989/06/21 10:02",
+                  "y": "6.7510",
+                  "plot": "Defence"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": true,
+                "showInAllPlots": false,
+                "_index": 1
+              },
+              "Xq4FVQBE-J": {
+                "bg": true,
+                "dx": 0,
+                "dy": 0,
+                "id": "Xq4FVQBE-J",
+                "bold": true,
+                "size": 14,
+                "text": "Education spending as a share of GDP peaked in 2009 and has declined since.",
+                "align": "br",
+                "color": "#d86320",
+                "width": 51.7184529854482,
+                "italic": false,
+                "position": {
+                  "x": "2005/09/22 08:23",
+                  "y": "6.4723",
+                  "plot": "Education"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": true,
+                "showInAllPlots": false,
+                "_index": 2
+              }
+            },
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "gridRowHeightMode": "fixed",
+            "range-annotations": {},
+            "gridColumnMinWidth": 200,
+            "gridRowHeightFixed": 149,
+            "gridRowHeightRatio": 1,
+            "independentYScales": false,
+            "stack-color-legend": false,
+            "value-label-colors": true,
+            "y-grid-label-align": "left",
+            "syncMultipleTooltips": true,
+            "xGridLabelAllColumns": false,
+            "yGridLabelAllColumns": false,
+            "gridColumnCountMobile": 1,
+            "independentYScalesRounded": true
+          },
+          "axes": {},
+          "publish": {
+            "embed-width": 421,
+            "embed-height": 735,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"UK Government spending as shares of GDP\" aria-label=\"Multiple Columns\" id=\"datawrapper-chart-eaJlM\" src=\"https://datawrapper.dwcdn.net/eaJlM/1/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"421\" height=\"738\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"UK Government spending as shares of GDP\" aria-label=\"Multiple Columns\" id=\"datawrapper-chart-eaJlM\" src=\"https://datawrapper.dwcdn.net/eaJlM/1/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"738\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:738px\" id=\"datawrapper-vis-eaJlM\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/eaJlM/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-eaJlM\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/eaJlM/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "autoDarkMode": false,
+            "chart-height": 640
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T19:51:10.000Z",
+        "lastModifiedAt": "2025-10-11T19:51:10.000Z",
+        "forkedFrom": "eaJlM",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089265487-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089265487-1"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089265487-2"
+            },
+            "chart-height": {
+              "__@t$__": "54089265487-3"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-3"
+  },
+  "data": "0-0"
+}
