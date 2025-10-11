@@ -1,0 +1,289 @@
+from typing import Any, Literal
+
+import pandas as pd
+from pydantic import BaseModel, ConfigDict, Field, model_serializer
+
+from .base import BaseChart
+
+
+class ArrowChart(BaseChart):
+    """A base class for the Datawrapper API's arrow chart."""
+
+    model_config = ConfigDict(
+        populate_by_name=True,
+        strict=True,
+        json_schema_extra={
+            "examples": [
+                {
+                    "chart-type": "d3-arrow-plot",
+                    "title": "Population Change by Region",
+                    "source_name": "Census Bureau",
+                    "data": pd.DataFrame(
+                        {
+                            "Region": ["North", "South", "East", "West"],
+                            "2020": [100, 150, 120, 90],
+                            "2023": [110, 160, 115, 95],
+                        }
+                    ),
+                    "axis_start": "2020",
+                    "axis_end": "2023",
+                    "thick_arrows": True,
+                }
+            ]
+        },
+    )
+
+    #: The type of datawrapper chart to create
+    chart_type: Literal["d3-arrow-plot"] = Field(
+        default="d3-arrow-plot",
+        alias="chart-type",
+        description="The type of datawrapper chart to create",
+    )
+
+    #
+    # Customize arrows
+    #
+
+    #: A mapping of layer names to colors
+    color_category: dict[str, str] = Field(
+        default_factory=dict,
+        alias="color-category",
+        description="A mapping of layer names to colors",
+    )
+
+    #: Thicken the arrows
+    thick_arrows: bool = Field(
+        default=True,
+        alias="thick-arrows",
+        description="Thicken the arrows",
+    )
+
+    #: Show the y-axis grid lines
+    y_grid: str = Field(
+        default="on",
+        alias="y-grid",
+        description="Show the y-axis grid lines",
+    )
+
+    #: Whether to replace country codes with flags
+    replace_flags: Literal["off", "4x3", "1x1", "circle"] = Field(
+        default="off",
+        alias="replace-flags",
+        description="Whether to replace country codes with flags",
+    )
+
+    #
+    # Sorting & ordering
+    #
+
+    #: Whether to sort the ranges
+    sort_ranges: bool = Field(
+        default=False,
+        alias="sort-ranges",
+        description="Whether to sort the ranges",
+    )
+
+    #: How to sort the ranges
+    sort_by: Literal["end", "start", "difference", "change"] = Field(
+        default="end",
+        alias="sort-by",
+        description="How to sort the ranges",
+    )
+
+    #: Reverse the order of the ranges
+    reverse_order: bool = Field(
+        default=False,
+        alias="reverse-order",
+        description="Reverse the order of the ranges",
+    )
+
+    #
+    # Labels & formatting
+    #
+
+    #: The number format for value labels
+    value_label_format: str = Field(
+        default="",
+        alias="value-label-format",
+        description="The number format for value labels. Customization options can be found at https://academy.datawrapper.de/article/207-custom-number-formats-that-you-can-display-in-datawrapper",
+    )
+
+    #: The field you want to use for the value labels
+    range_value_labels: str = Field(
+        default="",
+        alias="range-value-labels",
+        description="The field you want to use for the value labels",
+    )
+
+    #
+    # Axes
+    #
+
+    #: The custom range for the x axis
+    custom_range: list[Any] = Field(
+        default_factory=lambda: ["", ""],
+        alias="custom-range",
+        description="The custom range for the x axis",
+    )
+
+    #: The type of range on the x-axis
+    range_extent: Literal["nice", "custom", "data"] = Field(
+        default="nice",
+        alias="range-extent",
+        description="The type of range on the x-axis",
+    )
+
+    #: The column that arrows should start at
+    axis_start: str = Field(
+        default="",
+        alias="axis-start",
+        description="The column that arrows should start at",
+    )
+
+    #: The column that arrows should end at
+    axis_end: str = Field(
+        default="",
+        alias="axis-end",
+        description="The column that arrows should end at",
+    )
+
+    #
+    # Features
+    #
+
+    #: Enables the color-by-column feature
+    color_by_column: bool = Field(
+        default=False,
+        alias="color-by-column",
+        description="Enables the color-by-column feature",
+    )
+
+    #: Label on the first arrow that shows column names
+    arrow_key: bool = Field(
+        default=False,
+        alias="arrow-key",
+        description="Label on the first arrow that shows column names",
+    )
+
+    #: Enables the group-by-column feature, works with "Group" field
+    group_by_column: bool = Field(
+        default=False,
+        alias="group-by-column",
+        description="Enables the group-by-column feature, works with 'Group' field",
+    )
+
+    @model_serializer
+    def serialize_model(self) -> dict:
+        """Serialize the model to a dictionary."""
+        # Call the parent class's serialize_model method
+        model = super().serialize_model()
+
+        # Add chart specific properties to visualize section
+        model["metadata"]["visualize"].update(
+            {
+                "y-grid": self.y_grid,
+                "reverse-order": self.reverse_order,
+                "thick-arrows": self.thick_arrows,
+                "color-category": {"map": self.color_category},
+                "range-value-labels": self.range_value_labels,
+                "sort-range": {
+                    "by": self.sort_by,
+                    "enabled": self.sort_ranges,
+                },
+                "custom-range": self.custom_range,
+                "range-extent": self.range_extent,
+                "value-label-format": self.value_label_format,
+                "color-by-column": self.color_by_column,
+                "group-by-column": self.group_by_column,
+                "replace-flags": {
+                    "enabled": self.replace_flags != "off",
+                    "type": self.replace_flags if self.replace_flags != "off" else "",
+                    "style": self.replace_flags if self.replace_flags != "off" else "",
+                },
+                "show-arrow-key": self.arrow_key,
+            }
+        )
+
+        # Add axes section (separate from visualize)
+        model["metadata"]["axes"] = {
+            "start": self.axis_start,
+            "end": self.axis_end,
+        }
+
+        # Return the serialized data
+        return model
+
+    @classmethod
+    def _from_api(
+        cls, chart_metadata: dict[str, Any], chart_data: str
+    ) -> dict[str, Any]:
+        """Parse Datawrapper API response including arrow chart specific fields.
+
+        Args:
+            chart_metadata: The JSON response from the chart metadata endpoint
+            chart_data: The CSV data from the chart data endpoint
+
+        Returns:
+            Dictionary that can be used to initialize the ArrowChart model
+        """
+        # Call parent to get base fields
+        init_data = super(ArrowChart, cls)._from_api(chart_metadata, chart_data)
+
+        # Extract arrow-specific sections
+        metadata = chart_metadata.get("metadata", {})
+        visualize = metadata.get("visualize", {})
+        axes = metadata.get("axes", {})
+
+        # Customize arrows
+        init_data["y_grid"] = visualize.get("y-grid", "on")
+        init_data["reverse_order"] = visualize.get("reverse-order", False)
+        init_data["thick_arrows"] = visualize.get("thick-arrows", True)
+
+        # Parse color-category
+        color_category_obj = visualize.get("color-category", {})
+        if isinstance(color_category_obj, dict):
+            init_data["color_category"] = color_category_obj.get("map", {})
+        else:
+            init_data["color_category"] = {}
+
+        # Labels & formatting
+        init_data["range_value_labels"] = visualize.get("range-value-labels", "")
+        init_data["value_label_format"] = visualize.get("value-label-format", "")
+
+        # Sorting & ordering
+        sort_range_obj = visualize.get("sort-range", {})
+        if isinstance(sort_range_obj, dict):
+            init_data["sort_by"] = sort_range_obj.get("by", "end")
+            init_data["sort_ranges"] = sort_range_obj.get("enabled", False)
+        else:
+            init_data["sort_by"] = "end"
+            init_data["sort_ranges"] = False
+
+        # Parse replace-flags
+        replace_flags_obj = visualize.get("replace-flags", {})
+        if isinstance(replace_flags_obj, dict):
+            if replace_flags_obj.get("enabled", False):
+                # Use type or style field (they should be the same)
+                flag_type = replace_flags_obj.get("type") or replace_flags_obj.get(
+                    "style", "4x3"
+                )
+                init_data["replace_flags"] = flag_type
+            else:
+                init_data["replace_flags"] = "off"
+        else:
+            init_data["replace_flags"] = "off"
+
+        # Axes
+        init_data["custom_range"] = visualize.get("custom-range", ["", ""])
+        init_data["range_extent"] = visualize.get("range-extent", "nice")
+
+        # Parse axes section
+        init_data["axis_start"] = axes.get("start", "")
+        init_data["axis_end"] = axes.get("end", "")
+
+        # Features
+        init_data["color_by_column"] = visualize.get("color-by-column", False)
+        init_data["group_by_column"] = visualize.get("group-by-column", False)
+        init_data["arrow_key"] = visualize.get("show-arrow-key", False)
+
+        return init_data

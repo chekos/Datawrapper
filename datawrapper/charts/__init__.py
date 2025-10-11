@@ -1,5 +1,6 @@
 from .annos import ConnectorLine, RangeAnnotation, TextAnnotation
 from .area import AreaChart
+from .arrow import ArrowChart
 from .bar import BarChart, BarOverlay
 from .base import Annotate, BaseChart, ColumnFormat, Describe, Transform
 from .column import ColumnChart
@@ -23,4 +24,5 @@ __all__ = (
     "LineValueLabel",
     "AreaFill",
     "AreaChart",
+    "ArrowChart",
 )

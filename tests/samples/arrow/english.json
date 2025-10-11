@@ -1,0 +1,378 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "ftl23",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "135e906a80687a03caffc493da5b015f",
+        "id": "ftl23",
+        "type": "d3-arrow-plot",
+        "title": "Italians, Russians, and South Koreans all speak English with moderate proficiency.",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {},
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-order": [
+              0,
+              2,
+              1,
+              3
+            ],
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "",
+            "source-url": "",
+            "intro": "Test results and EPI Proficiency Bands of Education First (EF), 2020 and 2022.",
+            "byline": "",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": "",
+            "hide-title": false
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false
+            },
+            "lines": {},
+            "rules": false,
+            "thick": false,
+            "x-grid": "off",
+            "y-grid": "on",
+            "scale-y": "linear",
+            "overlays": {},
+            "sort-bars": false,
+            "background": false,
+            "base-color": "#2e2e2e",
+            "force-grid": false,
+            "range-ends": {
+              "shape": "circle",
+              "enabled": true
+            },
+            "sort-range": {
+              "by": "start",
+              "enabled": false
+            },
+            "base-color2": "#2d3034",
+            "range-color": "gradient",
+            "swap-labels": false,
+            "block-labels": false,
+            "custom-range": [
+              "",
+              ""
+            ],
+            "label-colors": false,
+            "label-margin": 0,
+            "range-extent": "nice",
+            "thick-arrows": false,
+            "interpolation": "linear",
+            "negativeColor": {
+              "value": "#E31A1C",
+              "enabled": false
+            },
+            "replace-flags": {
+              "style": "4x3",
+              "enabled": false
+            },
+            "reverse-order": false,
+            "show-tooltips": true,
+            "tick-position": "bottom",
+            "x-grid-format": "auto",
+            "y-grid-format": "auto",
+            "y-grid-labels": "auto",
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "Moderate proficiency": "#00ad94",
+                "Low or very low proficiency": "#ffb033",
+                "High or very high English proficiency": "#4c5bd7"
+              },
+              "palette": [],
+              "categoryOrder": [],
+              "categoryLabels": {},
+              "excludeFromKey": []
+            },
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-range-y": [
+              "",
+              ""
+            ],
+            "custom-ticks-x": "",
+            "custom-ticks-y": "",
+            "plotHeightMode": "fixed",
+            "show-arrow-key": true,
+            "show-color-key": false,
+            "color-by-column": true,
+            "connector-lines": true,
+            "group-by-column": true,
+            "highlight-range": false,
+            "label-alignment": "left",
+            "plotHeightFixed": 300,
+            "plotHeightRatio": 0.5,
+            "text-annotations": {
+              "BrFc9_IFnX": {
+                "bg": true,
+                "dx": 0,
+                "dy": 0,
+                "id": "BrFc9_IFnX",
+                "bold": false,
+                "size": 13,
+                "text": "<b>Similar to a higher B2/lower C1 level.</b> On average, people can read a newspaper or give a presentation.",
+                "align": "tr",
+                "color": "#4c5bd7",
+                "width": 39.06697343313581,
+                "italic": false,
+                "position": {
+                  "x": "544.2264",
+                  "group": "High or very high English proficiency",
+                  "rowIndex": 0,
+                  "rowOffset": -5
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": true,
+                "_index": 0
+              },
+              "K2OjG_DiZv": {
+                "bg": true,
+                "dx": 0,
+                "dy": 0,
+                "id": "K2OjG_DiZv",
+                "bold": false,
+                "size": 13,
+                "text": "<b>Similar to a lower B2 level.</b> On average, people can write professional emails on familiar subjects.",
+                "align": "tl",
+                "color": "#00ad94",
+                "width": 31.514530498391853,
+                "italic": false,
+                "position": {
+                  "x": "555.9897",
+                  "group": "Moderate proficiency",
+                  "rowIndex": 0,
+                  "rowOffset": -8
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": true,
+                "_index": 1
+              },
+              "SuSzmFy5xP": {
+                "bg": true,
+                "dx": 0,
+                "dy": 0,
+                "id": "SuSzmFy5xP",
+                "bold": false,
+                "size": 13,
+                "text": "<b>Similar to the B1 level.</b> On average, people can do small talk and find their way as tourists.",
+                "align": "bl",
+                "color": "#e77d01",
+                "width": 35.339993738080956,
+                "italic": false,
+                "position": {
+                  "x": "503.7627",
+                  "group": "Low or very low proficiency",
+                  "rowIndex": 4,
+                  "rowOffset": 7
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": true,
+                "_index": 2
+              }
+            },
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "custom-grid-lines": "",
+            "date-label-format": "YYYY",
+            "fixed-range-color": "#cccccc",
+            "range-annotations": {
+              "YmlmV51flR": {
+                "id": "YmlmV51flR",
+                "type": "x",
+                "color": "#ffb033",
+                "display": "range",
+                "isValid": true,
+                "opacity": 11,
+                "position": {
+                  "x0": "400",
+                  "x1": "500",
+                  "group": "Low or very low proficiency"
+                },
+                "strokeType": "solid",
+                "strokeWidth": 1,
+                "showInAllPlots": false,
+                "_index": 0
+              },
+              "bFPFuVQ8D8": {
+                "id": "bFPFuVQ8D8",
+                "type": "x",
+                "color": "#00ad94",
+                "display": "range",
+                "isValid": true,
+                "opacity": 11,
+                "position": {
+                  "x0": "500",
+                  "x1": "550",
+                  "group": "Moderate proficiency"
+                },
+                "strokeType": "solid",
+                "strokeWidth": 1,
+                "showInAllPlots": false,
+                "_index": 1
+              },
+              "32lPTLTpId": {
+                "id": "32lPTLTpId",
+                "type": "x",
+                "color": "#4c5bd7",
+                "display": "range",
+                "isValid": true,
+                "opacity": 11,
+                "position": {
+                  "x0": "550",
+                  "x1": "650",
+                  "group": "High or very high English proficiency"
+                },
+                "strokeType": "solid",
+                "strokeWidth": 1,
+                "showInAllPlots": false,
+                "_index": 2
+              }
+            },
+            "show-group-labels": true,
+            "show-value-labels": true,
+            "range-value-labels": "diff",
+            "stack-color-legend": false,
+            "value-label-colors": true,
+            "value-label-format": "0,0.[00]",
+            "y-grid-label-align": "left",
+            "compact-group-labels": false,
+            "show-category-labels": true,
+            "value-label-alignment": "left",
+            "value-label-visibility": "always"
+          },
+          "axes": {
+            "colors": "Proficiency",
+            "groups": "Proficiency"
+          },
+          "publish": {
+            "embed-width": 560,
+            "embed-height": 622,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Italians, Russians, and South Koreans all speak English with moderate proficiency.\" aria-label=\"Arrow Plot\" id=\"datawrapper-chart-0tEbU\" src=\"https://datawrapper.dwcdn.net/0tEbU/1/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"560\" height=\"644\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Italians, Russians, and South Koreans all speak English with moderate proficiency.\" aria-label=\"Arrow Plot\" id=\"datawrapper-chart-0tEbU\" src=\"https://datawrapper.dwcdn.net/0tEbU/1/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"644\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data[\"datawrapper-height\"][t]+\"px\";r.style.height=d}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:644px\" id=\"datawrapper-vis-0tEbU\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/0tEbU/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-0tEbU\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/0tEbU/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "chart-height": 451
+          },
+          "annotate": {
+            "notes": "The 2022 data is based on results from more than 2,100,000 test takers around the world who took the EF Standard English Test (EF SET) or one of the EF English placement tests in 2021; the 2020 data is based on results from 2019. The median age of the test takers was 25."
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T18:05:58.000Z",
+        "lastModifiedAt": "2025-10-11T18:05:59.000Z",
+        "forkedFrom": "0tEbU",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089269616-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089269616-1"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089269616-2"
+            },
+            "chart-height": {
+              "__@t$__": "54089269616-3"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-3"
+  },
+  "data": "0-0"
+}

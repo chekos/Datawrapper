@@ -1,0 +1,554 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "JMU83",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "1c5f3e136b51914238cdba0e7d82516c",
+        "id": "JMU83",
+        "type": "d3-arrow-plot",
+        "title": "Northern Europe and China are role models for EV adoption",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {
+              "IfS-WkVDCi": {
+                "id": "IfS-WkVDCi",
+                "row": 1,
+                "time": 1729164104983,
+                "value": "<b style=\"color:#c3389c\">Norway</b>",
+                "column": 0,
+                "ignored": false,
+                "previous": "Norway",
+                "_index": 0
+              },
+              "pifjYSOQnq": {
+                "id": "pifjYSOQnq",
+                "row": 8,
+                "time": 1729164111466,
+                "value": "<b style=\"color:#c3389c\">Netherlands</b>",
+                "column": 0,
+                "ignored": false,
+                "previous": "Netherlands",
+                "_index": 1
+              },
+              "ZF9StcNP_G": {
+                "id": "ZF9StcNP_G",
+                "row": 20,
+                "time": 1729164116170,
+                "value": "<b style=\"color:#c3389c\">United States</b>",
+                "column": 0,
+                "ignored": false,
+                "previous": "United States",
+                "_index": 2
+              },
+              "pB7pwqCRwh": {
+                "id": "pB7pwqCRwh",
+                "row": 16,
+                "time": 1729164123906,
+                "value": "<b style=\"color:#c3389c\">China</b>",
+                "column": 0,
+                "ignored": false,
+                "previous": "China",
+                "_index": 3
+              },
+              "f5exnznztC": {
+                "id": "f5exnznztC",
+                "row": 1,
+                "time": 1729164133088,
+                "value": "Europe",
+                "column": 3,
+                "ignored": false,
+                "previous": "Northern Europe",
+                "_index": 4
+              },
+              "vQw6lwQ0h5": {
+                "id": "vQw6lwQ0h5",
+                "row": 2,
+                "time": 1729164134097,
+                "value": "Europe",
+                "column": 3,
+                "ignored": false,
+                "previous": "Northern Europe",
+                "_index": 5
+              },
+              "HfYEkH0sGT": {
+                "id": "HfYEkH0sGT",
+                "row": 3,
+                "time": 1729164134342,
+                "value": "Europe",
+                "column": 3,
+                "ignored": false,
+                "previous": "Northern Europe",
+                "_index": 6
+              },
+              "qu0K0vWV5C": {
+                "id": "qu0K0vWV5C",
+                "row": 4,
+                "time": 1729164134591,
+                "value": "Europe",
+                "column": 3,
+                "ignored": false,
+                "previous": "Rest of Europe",
+                "_index": 7
+              },
+              "oMy2-utcjF": {
+                "id": "oMy2-utcjF",
+                "row": 5,
+                "time": 1729164134816,
+                "value": "Europe",
+                "column": 3,
+                "ignored": false,
+                "previous": "Rest of Europe",
+                "_index": 8
+              },
+              "yPAa9JXWCj": {
+                "id": "yPAa9JXWCj",
+                "row": 6,
+                "time": 1729164135319,
+                "value": "Europe",
+                "column": 3,
+                "ignored": false,
+                "previous": "Rest of Europe",
+                "_index": 9
+              },
+              "GzQUrdTFJp": {
+                "id": "GzQUrdTFJp",
+                "row": 7,
+                "time": 1729164135561,
+                "value": "Europe",
+                "column": 3,
+                "ignored": false,
+                "previous": "Rest of Europe",
+                "_index": 10
+              },
+              "iRCQYGtLSW": {
+                "id": "iRCQYGtLSW",
+                "row": 8,
+                "time": 1729164135827,
+                "value": "Europe",
+                "column": 3,
+                "ignored": false,
+                "previous": "Rest of Europe",
+                "_index": 11
+              },
+              "SbjL4VgxsB": {
+                "id": "SbjL4VgxsB",
+                "row": 9,
+                "time": 1729164136106,
+                "value": "Europe",
+                "column": 3,
+                "ignored": false,
+                "previous": "Rest of Europe",
+                "_index": 12
+              },
+              "kCUaRSV0xR": {
+                "id": "kCUaRSV0xR",
+                "row": 10,
+                "time": 1729164136390,
+                "value": "Europe",
+                "column": 3,
+                "ignored": false,
+                "previous": "Rest of Europe",
+                "_index": 13
+              },
+              "P2UUY5XOu-": {
+                "id": "P2UUY5XOu-",
+                "row": 11,
+                "time": 1729164136658,
+                "value": "Europe",
+                "column": 3,
+                "ignored": false,
+                "previous": "Rest of Europe",
+                "_index": 14
+              },
+              "I7uH3v8B5x": {
+                "id": "I7uH3v8B5x",
+                "row": 12,
+                "time": 1729164136947,
+                "value": "Europe",
+                "column": 3,
+                "ignored": false,
+                "previous": "Rest of Europe",
+                "_index": 15
+              },
+              "0M24uwAiKA": {
+                "id": "0M24uwAiKA",
+                "row": 13,
+                "time": 1729164137177,
+                "value": "Europe",
+                "column": 3,
+                "ignored": false,
+                "previous": "Rest of Europe",
+                "_index": 16
+              },
+              "JpbkP-PZlu": {
+                "id": "JpbkP-PZlu",
+                "row": 14,
+                "time": 1729164137472,
+                "value": "Europe",
+                "column": 3,
+                "ignored": false,
+                "previous": "Rest of Europe",
+                "_index": 17
+              },
+              "h4wKqTTyX3": {
+                "id": "h4wKqTTyX3",
+                "row": 15,
+                "time": 1729164137793,
+                "value": "Europe",
+                "column": 3,
+                "ignored": false,
+                "previous": "Rest of Europe",
+                "_index": 18
+              }
+            },
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "Our World in Data",
+            "source-url": "https://ourworldindata.org/electric-car-sales",
+            "intro": "Share of new cars sold that are electric (EV), 2013 and 2023. Electric cars include fully battery-electric and plug-in hybrids.",
+            "byline": "",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": "",
+            "hide-title": false
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "url": "https://www.datawrapper.de/_/JMU83",
+              "auto": false
+            },
+            "lines": {},
+            "rules": false,
+            "thick": false,
+            "x-grid": "off",
+            "y-grid": "on",
+            "scale-y": "linear",
+            "overlays": {},
+            "sort-bars": false,
+            "background": false,
+            "base-color": "#bcbcbc",
+            "force-grid": false,
+            "range-ends": {
+              "shape": "circle",
+              "enabled": true
+            },
+            "sort-range": {
+              "by": "end",
+              "enabled": true
+            },
+            "base-color2": 3,
+            "range-color": "fixed",
+            "swap-labels": false,
+            "block-labels": false,
+            "custom-range": [
+              "0",
+              "100"
+            ],
+            "label-colors": false,
+            "label-margin": 0,
+            "range-extent": "nice",
+            "thick-arrows": true,
+            "interpolation": "linear",
+            "negativeColor": {
+              "value": "#E31A1C",
+              "enabled": false
+            },
+            "replace-flags": {
+              "style": "4x3",
+              "enabled": false
+            },
+            "reverse-order": true,
+            "show-tooltips": true,
+            "tick-position": "bottom",
+            "x-grid-format": "auto",
+            "y-grid-format": "auto",
+            "y-grid-labels": "auto",
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "China": "#c3389c",
+                "Norway": "#c3389c",
+                "Netherlands": "#c3389c",
+                "United States": "#c3389c",
+                "<b style=\"color:#c3389c\">China</b>": "#c3389c",
+                "<b style=\"color:#c3389c\">Norway</b>": "#c3389c",
+                "<b style=\"color:#c3389c\">Netherlands</b>": "#c3389c",
+                "<b style=\"color:#c3389c\">United States</b>": "#c3389c"
+              },
+              "palette": [],
+              "categoryOrder": [],
+              "categoryLabels": {},
+              "excludeFromKey": []
+            },
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-range-y": [
+              "",
+              ""
+            ],
+            "custom-ticks-x": "",
+            "custom-ticks-y": "",
+            "plotHeightMode": "fixed",
+            "show-arrow-key": true,
+            "show-color-key": false,
+            "color-by-column": true,
+            "connector-lines": true,
+            "group-by-column": true,
+            "highlight-range": false,
+            "label-alignment": "left",
+            "plotHeightFixed": 300,
+            "plotHeightRatio": 0.5,
+            "text-annotations": {
+              "fa3kJF8Ttb": {
+                "bg": true,
+                "dx": 0,
+                "dy": 0,
+                "id": "fa3kJF8Ttb",
+                "bold": false,
+                "size": 13,
+                "text": "Only 7% of new car sales were non-EVs in 2023.",
+                "align": "tl",
+                "color": "#b44398",
+                "width": 15.353858456617427,
+                "italic": false,
+                "position": {
+                  "x": "85.4267",
+                  "group": "Europe",
+                  "rowIndex": 1,
+                  "rowOffset": -4
+                },
+                "underline": false,
+                "showMobile": false,
+                "showDesktop": false,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": true,
+                "_index": 0
+              },
+              "tLzoSNd9XS": {
+                "bg": true,
+                "dx": 0,
+                "dy": 0,
+                "id": "tLzoSNd9XS",
+                "bold": false,
+                "size": 13,
+                "text": "Some blame the lack of charging stations for the slow U.S. growth.",
+                "align": "tl",
+                "color": "#b44398",
+                "width": 77.52750751551234,
+                "italic": false,
+                "position": {
+                  "x": "17.7705",
+                  "group": "Americas",
+                  "rowIndex": 1,
+                  "rowOffset": -5
+                },
+                "underline": false,
+                "showMobile": false,
+                "showDesktop": false,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": true,
+                "_index": 1
+              },
+              "RLEtd1mqHn": {
+                "bg": true,
+                "dx": 0,
+                "dy": 0,
+                "id": "RLEtd1mqHn",
+                "bold": false,
+                "size": 13,
+                "text": "In 2013, the Netherlands had a higher EV share (5.5%) than most northern European countries, but <b>growth lagged behind</b>.",
+                "align": "tl",
+                "color": "#b44398",
+                "width": 40.37496112666049,
+                "italic": false,
+                "position": {
+                  "x": "45.7662",
+                  "group": "Europe",
+                  "rowIndex": 7,
+                  "rowOffset": -6
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": true,
+                "_index": 2
+              },
+              "zKOn4naK2B": {
+                "bg": true,
+                "dx": 0,
+                "dy": 0,
+                "id": "zKOn4naK2B",
+                "bold": false,
+                "size": 13,
+                "text": "China's momentum is huge: \nEVs jumped from <b>6% of new cars in 2020</b> to 38% in just 3 years.",
+                "align": "tl",
+                "color": "#b44398",
+                "width": 36.58388496453264,
+                "italic": false,
+                "position": {
+                  "x": "16.9929",
+                  "group": "Asia",
+                  "rowIndex": 1,
+                  "rowOffset": 2
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": true,
+                "_index": 3
+              }
+            },
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "custom-grid-lines": "",
+            "date-label-format": "YYYY",
+            "fixed-range-color": "#cccccc",
+            "range-annotations": {},
+            "show-group-labels": true,
+            "show-value-labels": true,
+            "range-value-labels": "end",
+            "stack-color-legend": false,
+            "value-label-colors": true,
+            "value-label-format": "0.[0]%",
+            "y-grid-label-align": "left",
+            "compact-group-labels": false,
+            "show-category-labels": true,
+            "value-label-alignment": "left",
+            "value-label-visibility": "always"
+          },
+          "axes": {
+            "colors": "Country",
+            "groups": "Continent"
+          },
+          "publish": {
+            "embed-width": 640,
+            "embed-height": 582,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Northern Europe and China are role models for EV adoption\" aria-label=\"Arrow Plot\" id=\"datawrapper-chart-JahOj\" src=\"https://datawrapper.dwcdn.net/JahOj/1/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"640\" height=\"603\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Northern Europe and China are role models for EV adoption\" aria-label=\"Arrow Plot\" id=\"datawrapper-chart-JahOj\" src=\"https://datawrapper.dwcdn.net/JahOj/1/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"603\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data[\"datawrapper-height\"][t]+\"px\";r.style.height=d}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:603px\" id=\"datawrapper-vis-JahOj\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/JahOj/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-JahOj\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/JahOj/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "autoDarkMode": false,
+            "chart-height": 469
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T18:05:51.000Z",
+        "lastModifiedAt": "2025-10-11T18:05:51.000Z",
+        "forkedFrom": "JahOj",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089215765-1"
+            },
+            "chart-height": {
+              "__@t$__": "54089215765-2"
+            }
+          },
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089215765-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089215765-1"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-2"
+  },
+  "data": "0-0"
+}
