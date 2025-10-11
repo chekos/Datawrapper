@@ -31,6 +31,7 @@ from datawrapper.charts import (
     TextAnnotation,
     Transform,
 )
+from datawrapper.flags import get_country_flag
 
 from .__main__ import Datawrapper
 
@@ -54,4 +55,5 @@ __all__ = [
     "TextAnnotation",
     "RangeAnnotation",
     "ConnectorLine",
+    "get_country_flag",
 ]
