@@ -78,3 +78,4 @@ You can add this script to your CI/CD pipeline:
   env:
     DATAWRAPPER_ACCESS_TOKEN: ${{ secrets.DATAWRAPPER_ACCESS_TOKEN }}
   continue-on-error: true  # Don't fail the build if cleanup fails
+```
