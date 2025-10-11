@@ -5,7 +5,6 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pandas as pd
-import pytest
 
 from datawrapper import ColumnChart
 
@@ -14,14 +13,14 @@ from datawrapper import ColumnChart
 def load_sample_json(filename: str) -> dict:
     """Load a sample JSON file from tests/samples/column directory."""
     samples_dir = Path(__file__).parent.parent / "samples" / "column"
-    with open(samples_dir / filename, "r") as f:
+    with open(samples_dir / filename) as f:
         return json.load(f)
 
 
 def load_sample_csv(filename: str) -> str:
     """Load a sample CSV file from tests/samples/column directory."""
     samples_dir = Path(__file__).parent.parent / "samples" / "column"
-    with open(samples_dir / filename, "r") as f:
+    with open(samples_dir / filename) as f:
         return f.read()
 
 
@@ -96,7 +95,9 @@ class TestColumnChartCreation:
         serialized = chart.serialize_model()
 
         assert serialized["metadata"]["visualize"]["negativeColor"]["enabled"] is True
-        assert serialized["metadata"]["visualize"]["negativeColor"]["value"] == "#FF0000"
+        assert (
+            serialized["metadata"]["visualize"]["negativeColor"]["value"] == "#FF0000"
+        )
 
     def test_serialize_without_negative_color(self):
         """Test serializing with negative color disabled."""
@@ -247,10 +248,16 @@ class TestColumnChartGet:
 
             # Verify chart type
             assert chart.chart_type == "column-chart"
-            assert chart.title == "Figure 4. Nowcast estimates for 2020Q1-2020Q3 and projections for working-hour losses in 2020Q4, world (percentage)"
+            assert (
+                chart.title
+                == "Figure 4. Nowcast estimates for 2020Q1-2020Q3 and projections for working-hour losses in 2020Q4, world (percentage)"
+            )
 
             # Verify description fields
-            assert chart.notes == "Note: See Technical Annex 2 for further details on the scenarios used to obtain these projections."
+            assert (
+                chart.notes
+                == "Note: See Technical Annex 2 for further details on the scenarios used to obtain these projections."
+            )
 
             # Verify axis configuration
             assert chart.x_grid == "off"
@@ -526,7 +533,10 @@ class TestColumnChartCategoryLabels:
         color_category = serialized["metadata"]["visualize"]["color-category"]
 
         assert color_category["map"] == {"Series A": "#FF0000", "Series B": "#00FF00"}
-        assert color_category["categoryLabels"] == {"Series A": "First Series", "Series B": "Second Series"}
+        assert color_category["categoryLabels"] == {
+            "Series A": "First Series",
+            "Series B": "Second Series",
+        }
 
     def test_serialize_with_category_order(self):
         """Test serializing with category order."""
@@ -592,6 +602,9 @@ class TestColumnChartCategoryLabels:
         with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
             chart = ColumnChart.get("test-id", access_token="test-token")
 
-            assert chart.color_category == {"Series A": "#FF0000", "Series B": "#00FF00"}
+            assert chart.color_category == {
+                "Series A": "#FF0000",
+                "Series B": "#00FF00",
+            }
             assert chart.category_labels == {"Series A": "First", "Series B": "Second"}
             assert chart.category_order == ["Series B", "Series A"]

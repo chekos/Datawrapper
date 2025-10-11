@@ -332,6 +332,7 @@ class BaseChart(BaseModel):
     chart_type: Literal[
         "d3-lines",
         "d3-area",
+        "d3-arrow-plot",
         "d3-bars",
         "d3-scatter-plot",
         "locator-map",
@@ -497,7 +498,7 @@ class BaseChart(BaseModel):
     def __init__(self, **data):
         """Initialize the BaseChart with private attributes."""
         super().__init__(**data)
-        self._client: Datawrapper | None = None
+        self._client = None
 
     def _get_client(self, access_token: str | None = None) -> Datawrapper:
         """Get or create a Datawrapper client instance."""
@@ -798,14 +799,14 @@ class BaseChart(BaseModel):
         temp_instance = cls.__new__(cls)
         temp_instance._client = None
         client = temp_instance._get_client(access_token)
-        
+
         try:
             # Fetch chart metadata
             response = client.get(f"{client._CHARTS_URL}/{chart_id}")
-            
+
             if not isinstance(response, dict):
                 raise ValueError(f"Unexpected response type from API: {type(response)}")
-            
+
             # Verify chart type matches if this is a subclass
             chart_type = response.get("type")
             if hasattr(cls, "model_fields") and "chart_type" in cls.model_fields:
@@ -813,52 +814,51 @@ class BaseChart(BaseModel):
                 field_info = cls.model_fields["chart_type"]
                 if hasattr(field_info.annotation, "__args__"):
                     # This is a Literal type with specific allowed values
+                    assert field_info.annotation
                     allowed_types = field_info.annotation.__args__
                     if chart_type not in allowed_types:
                         raise ValueError(
                             f"Chart type mismatch: expected one of {allowed_types}, got '{chart_type}'. "
                             f"Use BaseChart.get() or the correct chart class."
                         )
-            
+
             # Fetch chart data
             data_response = client.get(f"{client._CHARTS_URL}/{chart_id}/data")
-            
+
         except Exception as e:
             raise Exception(
                 f"Failed to fetch chart from Datawrapper API. Error: {str(e)}"
             ) from e
-        
+
         # Parse the response into our model
         parsed_data = cls._from_api(response, data_response)
-        
+
         # Create instance and set chart_id and client
         instance = cls(**parsed_data)
         instance.chart_id = chart_id
         instance._client = client
-        
+
         return instance
 
     @classmethod
-    def _from_api(
-        cls, chart_metadata: dict[str, Any], csv_data: str
-    ) -> dict[str, Any]:
+    def _from_api(cls, chart_metadata: dict[str, Any], csv_data: str) -> dict[str, Any]:
         """Parse Datawrapper API response into model initialization data.
-        
+
         This base implementation handles common fields. Subclasses should override
         _parse_visualize_metadata to handle chart-specific visualize settings.
-        
+
         Args:
             chart_metadata: The JSON response from the chart metadata endpoint
             csv_data: The CSV data from the chart data endpoint
-        
+
         Returns:
             Dictionary that can be used to initialize the model
         """
         metadata = chart_metadata.get("metadata", {})
-        
+
         # Parse CSV data into DataFrame
         data_df = pd.read_csv(StringIO(csv_data))
-        
+
         # Extract common fields
         describe = metadata.get("describe", {})
         annotate = metadata.get("annotate", {})
@@ -867,11 +867,13 @@ class BaseChart(BaseModel):
         publish_logo = publish_blocks.get("logo", {})
         visualize = metadata.get("visualize", {})
         visualize_sharing = visualize.get("sharing", {})
-        
+
         # Build base initialization dict
         # Handle column-format: convert dict to list
         data_metadata = metadata.get("data", {})
-        if "column-format" in data_metadata and isinstance(data_metadata["column-format"], dict):
+        if "column-format" in data_metadata and isinstance(
+            data_metadata["column-format"], dict
+        ):
             # Convert dict format (column_name -> config) to list format
             column_format_dict = data_metadata["column-format"]
             if column_format_dict:
@@ -881,18 +883,16 @@ class BaseChart(BaseModel):
                 ]
             else:
                 data_metadata["column-format"] = []
-        
+
         init_data = {
             # Chart type and basic info
             "chart_type": chart_metadata.get("type"),
             "title": chart_metadata.get("title", ""),
             "theme": chart_metadata.get("theme", ""),
             "language": chart_metadata.get("language", "en-US"),
-            
             # Data
             "data": data_df,
             "transformations": data_metadata,
-            
             # Description
             "intro": describe.get("intro", ""),
             "notes": annotate.get("notes", ""),
@@ -901,7 +901,6 @@ class BaseChart(BaseModel):
             "byline": describe.get("byline", ""),
             "aria_description": describe.get("aria-description", ""),
             "hide_title": describe.get("hide-title", False),
-            
             # Layout/Publish
             "auto_dark_mode": publish.get("autoDarkMode", False),
             "dark_mode_invert": visualize.get("dark-mode-invert", True),
@@ -915,9 +914,8 @@ class BaseChart(BaseModel):
             "share_url": visualize_sharing.get("url", ""),
             "logo": publish_logo.get("enabled", False),
             "logo_id": publish_logo.get("id", ""),
-            
             # Custom
             "custom": metadata.get("custom", {}),
         }
-        
+
         return init_data

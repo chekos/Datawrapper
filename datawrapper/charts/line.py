@@ -628,6 +628,7 @@ class LineChart(BaseChart):
 
             # Generate a unique ID for the fill
             import uuid
+
             fill_id = str(uuid.uuid4()).replace("-", "")[:10]
 
             model["metadata"]["visualize"]["custom-area-fills"][fill_id] = {
@@ -652,6 +653,7 @@ class LineChart(BaseChart):
                 )
             # Generate a unique ID for the annotation
             import uuid
+
             anno_id = str(uuid.uuid4()).replace("-", "")[:10]
             model["metadata"]["visualize"]["text-annotations"][anno_id] = ta_dict
 
@@ -667,6 +669,7 @@ class LineChart(BaseChart):
                 )
             # Generate a unique ID for the annotation
             import uuid
+
             anno_id = str(uuid.uuid4()).replace("-", "")[:10]
             model["metadata"]["visualize"]["range-annotations"][anno_id] = ra_dict
 
@@ -687,7 +690,7 @@ class LineChart(BaseChart):
             Dictionary that can be used to initialize the LineChart model
         """
         # Call parent to get base fields
-        init_data = super(LineChart, cls)._from_api(chart_metadata, chart_data)
+        init_data = super()._from_api(chart_metadata, chart_data)
 
         # Extract line-specific sections
         metadata = chart_metadata.get("metadata", {})
@@ -768,27 +771,29 @@ class LineChart(BaseChart):
                         "max_inner_labels": value_labels_obj.get("maxInnerLabels", 0),
                     }
 
-                    init_data["lines"].append({
-                        "column": line_name,  # Add the column name from the dict key
-                        "title": line_config.get("title", ""),
-                        "interpolation": line_config.get("interpolation", "linear"),
-                        "width": line_config.get("width", "style1"),
-                        "dash": line_config.get("dash"),
-                        "color_key": line_config.get("colorKey", False),
-                        "direct_label": line_config.get("directLabel", False),
-                        "outline": line_config.get("bgStroke", False),
-                        "symbols": symbols,
-                        "value_labels": value_labels,
-                        "connect_missing_points": line_config.get(
-                            "connectMissingPoints", False
-                        ),
-                    })
+                    init_data["lines"].append(
+                        {
+                            "column": line_name,  # Add the column name from the dict key
+                            "title": line_config.get("title", ""),
+                            "interpolation": line_config.get("interpolation", "linear"),
+                            "width": line_config.get("width", "style1"),
+                            "dash": line_config.get("dash"),
+                            "color_key": line_config.get("colorKey", False),
+                            "direct_label": line_config.get("directLabel", False),
+                            "outline": line_config.get("bgStroke", False),
+                            "symbols": symbols,
+                            "value_labels": value_labels,
+                            "connect_missing_points": line_config.get(
+                                "connectMissingPoints", False
+                            ),
+                        }
+                    )
 
         # Parse area fills
         area_fills_obj = visualize.get("custom-area-fills", {})
         init_data["area_fills"] = []
         if isinstance(area_fills_obj, dict):
-            for fill_id, fill_config in area_fills_obj.items():
+            for _fill_id, fill_config in area_fills_obj.items():
                 if isinstance(fill_config, dict):
                     init_data["area_fills"].append(
                         {
@@ -826,12 +831,20 @@ class LineChart(BaseChart):
         # Annotations - handle empty dicts → empty lists
         text_annos = visualize.get("text-annotations", {})
         init_data["text_annotations"] = (
-            [] if isinstance(text_annos, dict) and not text_annos else list(text_annos.values()) if isinstance(text_annos, dict) else text_annos
+            []
+            if isinstance(text_annos, dict) and not text_annos
+            else list(text_annos.values())
+            if isinstance(text_annos, dict)
+            else text_annos
         )
 
         range_annos = visualize.get("range-annotations", {})
         init_data["range_annotations"] = (
-            [] if isinstance(range_annos, dict) and not range_annos else list(range_annos.values()) if isinstance(range_annos, dict) else range_annos
+            []
+            if isinstance(range_annos, dict) and not range_annos
+            else list(range_annos.values())
+            if isinstance(range_annos, dict)
+            else range_annos
         )
 
         return init_data

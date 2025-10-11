@@ -15,14 +15,14 @@ from datawrapper import BarChart, BaseChart
 def load_sample_json(filename: str) -> dict:
     """Load a sample JSON file from tests/samples/bar directory."""
     samples_dir = Path(__file__).parent.parent / "samples" / "bar"
-    with open(samples_dir / filename, "r") as f:
+    with open(samples_dir / filename) as f:
         return json.load(f)
 
 
 def load_sample_csv(filename: str) -> str:
     """Load a sample CSV file from tests/samples/bar directory."""
     samples_dir = Path(__file__).parent.parent / "samples" / "bar"
-    with open(samples_dir / filename, "r") as f:
+    with open(samples_dir / filename) as f:
         return f.read()
 
 
@@ -43,17 +43,17 @@ class TestBaseChartGet:
                 "annotate": {},
             },
         }
-        
+
         mock_csv = "a,b\n1,2"
-        
+
         mock_client = Mock()
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
-        
+
         def mock_get(url):
             if url.endswith("/data"):
                 return mock_csv
             return mock_metadata
-        
+
         mock_client.get.side_effect = mock_get
 
         with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
@@ -76,17 +76,17 @@ class TestBaseChartGet:
                 "annotate": {},
             },
         }
-        
+
         mock_csv = "a,b\n1,2"
-        
+
         mock_client = Mock()
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
-        
+
         def mock_get(url):
             if url.endswith("/data"):
                 return mock_csv
             return mock_metadata
-        
+
         mock_client.get.side_effect = mock_get
 
         with patch.dict(os.environ, {"DATAWRAPPER_ACCESS_TOKEN": "env-token"}):
@@ -287,7 +287,10 @@ class TestBarChartGet:
 
             # Verify chart type
             assert chart.chart_type == "d3-bars"
-            assert chart.title == "European countries with lowest &amp; highest voter turnout"
+            assert (
+                chart.title
+                == "European countries with lowest &amp; highest voter turnout"
+            )
 
             # Verify description fields
             assert chart.source_name == "Parties & Elections, 2024"
@@ -666,7 +669,10 @@ class TestChartGetIntegration:
             # Verify update was called
             mock_client.patch.assert_called_once()
             call_args = mock_client.patch.call_args
-            assert call_args[0][0] == "https://api.datawrapper.de/v3/charts/existing-chart-id"
+            assert (
+                call_args[0][0]
+                == "https://api.datawrapper.de/v3/charts/existing-chart-id"
+            )
             assert call_args[1]["data"]["title"] == "Updated Title"
 
     def test_chart_type_mismatch_error(self):

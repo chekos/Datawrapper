@@ -5,7 +5,6 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pandas as pd
-import pytest
 
 from datawrapper import ArrowChart
 
@@ -14,14 +13,14 @@ from datawrapper import ArrowChart
 def load_sample_json(filename: str) -> dict:
     """Load a sample JSON file from tests/samples/arrow directory."""
     samples_dir = Path(__file__).parent.parent / "samples" / "arrow"
-    with open(samples_dir / filename, "r") as f:
+    with open(samples_dir / filename) as f:
         return json.load(f)
 
 
 def load_sample_csv(filename: str) -> str:
     """Load a sample CSV file from tests/samples/arrow directory."""
     samples_dir = Path(__file__).parent.parent / "samples" / "arrow"
-    with open(samples_dir / filename, "r") as f:
+    with open(samples_dir / filename) as f:
         return f.read()
 
 
@@ -91,7 +90,9 @@ class TestArrowChartCreation:
         """Test serializing with flag replacement."""
         chart = ArrowChart(
             title="Test",
-            data=pd.DataFrame({"Country": ["US", "UK"], "2020": [10, 20], "2023": [15, 25]}),
+            data=pd.DataFrame(
+                {"Country": ["US", "UK"], "2020": [10, 20], "2023": [15, 25]}
+            ),
             axis_start="2020",
             axis_end="2023",
             replace_flags="4x3",
@@ -212,7 +213,10 @@ class TestArrowChartGet:
 
             # Verify chart type and title
             assert chart.chart_type == "d3-arrow-plot"
-            assert chart.title == "Far fewer babies share the most popular names now than in 1950"
+            assert (
+                chart.title
+                == "Far fewer babies share the most popular names now than in 1950"
+            )
 
             # Verify axes
             assert chart.axis_start == "1950"
@@ -430,7 +434,9 @@ class TestArrowChartIntegration:
             "metadata": serialized["metadata"],
         }
 
-        mock_csv = "Region,2020,2023\nNorth,100,110\nSouth,150,160\nEast,120,115\nWest,90,95"
+        mock_csv = (
+            "Region,2020,2023\nNorth,100,110\nSouth,150,160\nEast,120,115\nWest,90,95"
+        )
 
         def mock_get(url):
             if url.endswith("/data"):

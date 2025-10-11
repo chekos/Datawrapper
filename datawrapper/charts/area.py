@@ -1,7 +1,7 @@
 from typing import Any, Literal
 
 import pandas as pd
-from pydantic import BaseModel, ConfigDict, Field, model_serializer
+from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
@@ -368,7 +368,7 @@ class AreaChart(BaseChart):
             Dictionary that can be used to initialize the AreaChart model
         """
         # Call parent to get base fields
-        init_data = super(AreaChart, cls)._from_api(chart_metadata, chart_data)
+        init_data = super()._from_api(chart_metadata, chart_data)
 
         # Extract area-specific sections
         metadata = chart_metadata.get("metadata", {})
@@ -410,18 +410,16 @@ class AreaChart(BaseChart):
 
         # Customize areas
         init_data["base_color"] = visualize.get("base-color", "#4682b4")
-        
+
         # Parse area_opacity (may come as string or float)
         area_opacity_val = visualize.get("area-opacity", 0.8)
         init_data["area_opacity"] = float(area_opacity_val) if area_opacity_val else 0.8
-        
+
         init_data["interpolation"] = visualize.get("interpolation", "linear")
         init_data["sort_areas"] = visualize.get("sort-areas", "keep")
         init_data["stack_areas"] = visualize.get("stack-areas", False)
         init_data["stack_to_100"] = visualize.get("stack-to-100", False)
-        init_data["area_separator_lines"] = visualize.get(
-            "area-separator-lines", False
-        )
+        init_data["area_separator_lines"] = visualize.get("area-separator-lines", False)
         init_data["area_separator_color"] = visualize.get(
             "area-separator-color", "#4682b4"
         )

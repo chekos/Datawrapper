@@ -1,9 +1,9 @@
 country	Austria	Canada	France	Germany	Japan	Netherlands	New Zealand	Spain	Sweden	Switzerland	United Kingdom	United States
-1875			0.1									
-1880			0.1									
-1885			0.1									
-1890			0.1									
-1895			0.1									
+1875			0.1
+1880			0.1
+1885			0.1
+1890			0.1
+1895			0.1
 1900			0.2									0.1
 1901			0.2									0.1
 1902			0.2									0.1
@@ -119,4 +119,4 @@ country	Austria	Canada	France	Germany	Japan	Netherlands	New Zealand	Spain	Sweden
 2012				4.2	4.9	1.5					3.4	3.5
 2013				4.1	4.9						3.2	3.3
 2014				4.1	4.5						3.0	3.2
-2015				4.2	4.6							
+2015				4.2	4.6

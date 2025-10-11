@@ -1,7 +1,7 @@
 from typing import Any, Literal
 
 import pandas as pd
-from pydantic import BaseModel, ConfigDict, Field, model_serializer
+from pydantic import ConfigDict, Field, model_serializer
 
 from .base import BaseChart
 
@@ -227,7 +227,7 @@ class ArrowChart(BaseChart):
             Dictionary that can be used to initialize the ArrowChart model
         """
         # Call parent to get base fields
-        init_data = super(ArrowChart, cls)._from_api(chart_metadata, chart_data)
+        init_data = super()._from_api(chart_metadata, chart_data)
 
         # Extract arrow-specific sections
         metadata = chart_metadata.get("metadata", {})

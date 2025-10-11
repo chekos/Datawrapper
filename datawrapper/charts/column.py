@@ -1,7 +1,7 @@
 from typing import Any, Literal
 
 import pandas as pd
-from pydantic import BaseModel, ConfigDict, Field, model_serializer
+from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
@@ -272,8 +272,16 @@ class ColumnChart(BaseChart):
                 "bar-padding": self.bar_padding,
                 "color-category": {
                     "map": self.color_category,
-                    **({} if not self.category_labels else {"categoryLabels": self.category_labels}),
-                    **({} if not self.category_order else {"categoryOrder": self.category_order}),
+                    **(
+                        {}
+                        if not self.category_labels
+                        else {"categoryLabels": self.category_labels}
+                    ),
+                    **(
+                        {}
+                        if not self.category_order
+                        else {"categoryOrder": self.category_order}
+                    ),
                 },
                 "color-by-column": bool(self.color_category),
                 "plotHeightMode": self.plot_height_mode,
@@ -325,24 +333,24 @@ class ColumnChart(BaseChart):
         cls, chart_metadata: dict[str, Any], chart_data: str
     ) -> dict[str, Any]:
         """Parse Datawrapper API response including column chart specific fields.
-        
+
         Args:
             chart_metadata: The JSON response from the chart metadata endpoint
             chart_data: The CSV data from the chart data endpoint
-        
+
         Returns:
             Dictionary that can be used to initialize the ColumnChart model
         """
         # Call parent to get base fields
         init_data = super()._from_api(chart_metadata, chart_data)
-        
+
         # Extract column-specific sections
         metadata = chart_metadata.get("metadata", {})
         visualize = metadata.get("visualize", {})
-        
+
         # Horizontal axis (X-axis)
         init_data["custom_range_x"] = visualize.get("custom-range-x", ["", ""])
-        
+
         # Parse custom ticks X (comes as comma-separated string)
         ticks_x_str = visualize.get("custom-ticks-x", "")
         if ticks_x_str:
@@ -352,9 +360,9 @@ class ColumnChart(BaseChart):
             ]
         else:
             init_data["custom_ticks_x"] = []
-        
+
         init_data["x_grid_format"] = visualize.get("x-grid-format", "auto")
-        
+
         # Parse grid-lines-x
         grid_lines_x = visualize.get("grid-lines-x", {})
         if isinstance(grid_lines_x, dict):
@@ -363,10 +371,10 @@ class ColumnChart(BaseChart):
             init_data["x_grid"] = grid_type if enabled else "off"
         else:
             init_data["x_grid"] = "off"
-        
+
         # Vertical axis (Y-axis)
         init_data["custom_range_y"] = visualize.get("custom-range", ["", ""])
-        
+
         # Parse custom ticks Y (comes as comma-separated string)
         ticks_y_str = visualize.get("custom-ticks", "")
         if ticks_y_str:
@@ -376,10 +384,10 @@ class ColumnChart(BaseChart):
             ]
         else:
             init_data["custom_ticks_y"] = []
-        
+
         init_data["y_grid_format"] = visualize.get("y-grid-format", "")
         init_data["y_grid"] = visualize.get("grid-lines", True)
-        
+
         # Parse yAxisLabels
         y_axis_labels = visualize.get("yAxisLabels", {})
         if isinstance(y_axis_labels, dict):
@@ -390,10 +398,10 @@ class ColumnChart(BaseChart):
         else:
             init_data["y_grid_labels"] = "outside"
             init_data["y_grid_label_align"] = "left"
-        
+
         # Appearance
         init_data["base_color"] = visualize.get("base-color", "#4682b4")
-        
+
         # Parse negativeColor
         negative_color_obj = visualize.get("negativeColor", {})
         if isinstance(negative_color_obj, dict):
@@ -402,7 +410,7 @@ class ColumnChart(BaseChart):
             init_data["negative_color"] = color_value if enabled else None
         else:
             init_data["negative_color"] = None
-        
+
         # Parse color-category (complex nested structure)
         color_category_obj = visualize.get("color-category", {})
         if isinstance(color_category_obj, dict):
@@ -413,15 +421,15 @@ class ColumnChart(BaseChart):
             init_data["color_category"] = {}
             init_data["category_labels"] = {}
             init_data["category_order"] = []
-        
+
         init_data["bar_padding"] = visualize.get("bar-padding", 30)
         init_data["plot_height_mode"] = visualize.get("plotHeightMode", "fixed")
         init_data["plot_height_fixed"] = visualize.get("plotHeightFixed", 300)
         init_data["plot_height_ratio"] = visualize.get("plotHeightRatio", 0.5)
-        
+
         # Labels
         init_data["show_color_key"] = visualize.get("show-color-key", False)
-        
+
         # Parse valueLabels
         value_labels_obj = visualize.get("valueLabels", {})
         if isinstance(value_labels_obj, dict):
@@ -429,17 +437,23 @@ class ColumnChart(BaseChart):
             show = value_labels_obj.get("show", "hover")
             init_data["value_labels"] = show if enabled else "off"
             init_data["value_labels_format"] = value_labels_obj.get("format", "")
-            init_data["value_labels_placement"] = value_labels_obj.get("placement", "outside")
+            init_data["value_labels_placement"] = value_labels_obj.get(
+                "placement", "outside"
+            )
         else:
             init_data["value_labels"] = "hover"
             init_data["value_labels_format"] = ""
             init_data["value_labels_placement"] = "outside"
-        
+
         # Annotations - handle empty dicts → empty lists
         text_annos = visualize.get("text-annotations", [])
-        init_data["text_annotations"] = [] if isinstance(text_annos, dict) and not text_annos else text_annos
-        
+        init_data["text_annotations"] = (
+            [] if isinstance(text_annos, dict) and not text_annos else text_annos
+        )
+
         range_annos = visualize.get("range-annotations", [])
-        init_data["range_annotations"] = [] if isinstance(range_annos, dict) and not range_annos else range_annos
-        
+        init_data["range_annotations"] = (
+            [] if isinstance(range_annos, dict) and not range_annos else range_annos
+        )
+
         return init_data

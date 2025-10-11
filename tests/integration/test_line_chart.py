@@ -5,7 +5,6 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pandas as pd
-import pytest
 
 from datawrapper import LineChart
 
@@ -14,14 +13,14 @@ from datawrapper import LineChart
 def load_sample_json(filename: str) -> dict:
     """Load a sample JSON file from tests/samples/line directory."""
     samples_dir = Path(__file__).parent.parent / "samples" / "line"
-    with open(samples_dir / filename, "r") as f:
+    with open(samples_dir / filename) as f:
         return json.load(f)
 
 
 def load_sample_csv(filename: str) -> str:
     """Load a sample CSV file from tests/samples/line directory."""
     samples_dir = Path(__file__).parent.parent / "samples" / "line"
-    with open(samples_dir / filename, "r") as f:
+    with open(samples_dir / filename) as f:
         return f.read()
 
 
@@ -197,7 +196,9 @@ class TestLineChartGet:
             assert chart.base_color == 5
 
             # Verify lines configuration
-            new_line = next((line for line in chart.lines if line.column == "new"), None)
+            new_line = next(
+                (line for line in chart.lines if line.column == "new"), None
+            )
             assert new_line is not None
             assert new_line.width == "style3"
             assert new_line.direct_label is False
@@ -251,7 +252,9 @@ class TestLineChartGet:
             assert chart.value_label_colors is True
 
             # Verify individual line configurations
-            btc_line = next((line for line in chart.lines if line.column == "BTC"), None)
+            btc_line = next(
+                (line for line in chart.lines if line.column == "BTC"), None
+            )
             assert btc_line is not None
             assert btc_line.width == "style0"
             assert btc_line.direct_label is True
@@ -342,7 +345,9 @@ class TestLineChartGet:
         with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
             chart = LineChart.get("test-id", access_token="test-token")
 
-            series1_line = next((line for line in chart.lines if line.column == "series1"), None)
+            series1_line = next(
+                (line for line in chart.lines if line.column == "series1"), None
+            )
             assert series1_line is not None
             symbols = series1_line.symbols
             assert symbols.enabled is True

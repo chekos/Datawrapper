@@ -5,7 +5,6 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pandas as pd
-import pytest
 
 from datawrapper import AreaChart
 
@@ -14,14 +13,14 @@ from datawrapper import AreaChart
 def load_sample_json(filename: str) -> dict:
     """Load a sample JSON file from tests/samples/area directory."""
     samples_dir = Path(__file__).parent.parent / "samples" / "area"
-    with open(samples_dir / filename, "r") as f:
+    with open(samples_dir / filename) as f:
         return json.load(f)
 
 
 def load_sample_csv(filename: str) -> str:
     """Load a sample CSV file from tests/samples/area directory."""
     samples_dir = Path(__file__).parent.parent / "samples" / "area"
-    with open(samples_dir / filename, "r") as f:
+    with open(samples_dir / filename) as f:
         return f.read()
 
 
@@ -124,7 +123,9 @@ class TestAreaChartCreation:
 
         assert serialized["metadata"]["visualize"]["show-tooltips"] is True
         assert serialized["metadata"]["visualize"]["tooltip-x-format"] == "YYYY"
-        assert serialized["metadata"]["visualize"]["tooltip-number-format"] == "0,0.[00]"
+        assert (
+            serialized["metadata"]["visualize"]["tooltip-number-format"] == "0,0.[00]"
+        )
 
     def test_serialize_with_annotations(self):
         """Test serializing with text and range annotations."""
@@ -152,7 +153,9 @@ class TestAreaChartCreation:
 
         # Annotations should be dicts with generated IDs
         assert isinstance(serialized["metadata"]["visualize"]["text-annotations"], dict)
-        assert isinstance(serialized["metadata"]["visualize"]["range-annotations"], dict)
+        assert isinstance(
+            serialized["metadata"]["visualize"]["range-annotations"], dict
+        )
         assert len(serialized["metadata"]["visualize"]["text-annotations"]) == 1
         assert len(serialized["metadata"]["visualize"]["range-annotations"]) == 1
 
