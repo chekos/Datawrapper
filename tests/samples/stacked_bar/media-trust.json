@@ -1,0 +1,207 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "j4JDS",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "6417b9b8223ecb4741765f7f46597d94",
+        "id": "j4JDS",
+        "type": "d3-bars-stacked",
+        "title": "Trust in Media Reporting",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {},
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "charset-fixed": true,
+            "column-format": {
+              "Low trust": {
+                "number-divisor": "-2"
+              },
+              "No answer": {
+                "number-divisor": "-2"
+              },
+              "High trust": {
+                "number-divisor": "-2"
+              },
+              "Very low trust": {
+                "number-divisor": "-2"
+              },
+              "Very high trust": {
+                "number-divisor": "-2"
+              }
+            },
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "Infratest dimap",
+            "source-url": "http://www.infratest-dimap.de/umfragen-analysen/bundesweit/umfragen/aktuell/wenig-vertrauen-in-medienberichterstattung/",
+            "intro": "Trust in Media Reporting regarding widely reported topics of 2015",
+            "byline": "",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": "",
+            "hide-title": false
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "url": "",
+              "auto": true
+            },
+            "rules": true,
+            "thick": true,
+            "x-grid": "off",
+            "sort-by": "Low trust",
+            "overlays": {},
+            "sort-bars": true,
+            "background": false,
+            "base-color": 2,
+            "force-grid": false,
+            "swap-labels": false,
+            "block-labels": true,
+            "custom-range": [
+              "",
+              ""
+            ],
+            "range-extent": "nice",
+            "thick-arrows": false,
+            "negativeColor": {
+              "value": "#E31A1C",
+              "enabled": false
+            },
+            "replace-flags": {
+              "style": "4x3",
+              "enabled": false
+            },
+            "reverse-order": true,
+            "tick-position": "top",
+            "totals-labels": false,
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "Low trust": "#ff6954",
+                "No answer": "#e8e8e8",
+                "High trust": "#719aae",
+                "Very low trust": "#c71e1d",
+                "Very high trust": "#15607a"
+              },
+              "palette": [],
+              "categoryOrder": [],
+              "categoryLabels": {},
+              "excludeFromKey": []
+            },
+            "show-color-key": true,
+            "color-by-column": true,
+            "group-by-column": false,
+            "label-alignment": "left",
+            "value-label-row": false,
+            "text-annotations": {},
+            "value-label-mode": "diverging",
+            "axis-label-format": "",
+            "custom-area-fills": {},
+            "custom-grid-lines": "",
+            "date-label-format": "YYYY",
+            "range-annotations": {},
+            "show-group-labels": true,
+            "show-value-labels": true,
+            "stack-percentages": true,
+            "stack-color-legend": false,
+            "value-label-format": "0%",
+            "compact-group-labels": false,
+            "show-category-labels": true,
+            "value-label-alignment": "left",
+            "totals-labels-position": "before",
+            "value-label-visibility": "always"
+          },
+          "axes": {},
+          "publish": {
+            "embed-width": 548,
+            "embed-height": 343,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {
+              "unit": "mm",
+              "scale": 1,
+              "width": 145,
+              "height": 91,
+              "include": "full",
+              "colorMode": "rgb",
+              "fullVectorMode": true
+            },
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Trust in Media Reporting\" aria-label=\"Stacked Bars\" id=\"datawrapper-chart-yAViP\" src=\"https://datawrapper.dwcdn.net/yAViP/5/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"548\" height=\"339\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Trust in Media Reporting\" aria-label=\"Stacked Bars\" id=\"datawrapper-chart-yAViP\" src=\"https://datawrapper.dwcdn.net/yAViP/5/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"339\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:339px\" id=\"datawrapper-vis-yAViP\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/yAViP/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-yAViP\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/yAViP/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "chart-height": 247
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T20:20:33.000Z",
+        "lastModifiedAt": "2025-10-11T20:20:34.000Z",
+        "forkedFrom": "yAViP",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089259928-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089259928-1"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089259928-2"
+            },
+            "chart-height": {
+              "__@t$__": "54089259928-3"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-3"
+  },
+  "data": "0-0"
+}

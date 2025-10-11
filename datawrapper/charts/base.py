@@ -331,10 +331,11 @@ class BaseChart(BaseModel):
     #: The type of datawrapper chart to create
     chart_type: Literal[
         "column-chart",
-        "d3-lines",
         "d3-area",
         "d3-arrow-plot",
         "d3-bars",
+        "d3-bars-stacked",
+        "d3-lines",
         "d3-scatter-plot",
         "locator-map",
         "multiple-columns",
@@ -858,7 +859,8 @@ class BaseChart(BaseModel):
         metadata = chart_metadata.get("metadata", {})
 
         # Parse CSV data into DataFrame
-        data_df = pd.read_csv(StringIO(csv_data))
+        # Use sep=None with engine='python' to auto-detect delimiter (comma or tab)
+        data_df = pd.read_csv(StringIO(csv_data), sep=None, engine="python")
 
         # Extract common fields
         describe = metadata.get("describe", {})

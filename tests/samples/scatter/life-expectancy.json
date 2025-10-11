@@ -1,0 +1,495 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "g9N3W",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "55e6676307389a861a052acdacbb5a82",
+        "id": "g9N3W",
+        "type": "d3-scatter-plot",
+        "title": "Every country has a higher life expectancy now than in 1800",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {
+              "qw089czcgg": {
+                "id": "qw089czcgg",
+                "row": 0,
+                "time": 1554380779043,
+                "value": "Life expectancy in years",
+                "column": 2,
+                "ignored": false,
+                "_index": 0
+              },
+              "j5ahmue5dp": {
+                "id": "j5ahmue5dp",
+                "row": 0,
+                "time": 1554380784884,
+                "value": "Income (GDP per capita)",
+                "column": 3,
+                "ignored": false,
+                "_index": 1
+              }
+            },
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "Gapminder",
+            "source-url": "https://www.gapminder.org/data/",
+            "intro": "Gross domestic product per person adjusted for differences in purchasing power (in international 2011 dollars) vs life expectacy of newborns, for selected countries in 1800 and 2015. The size of the circle shows the population of the countries.",
+            "byline": "Lisa Charlotte Muth, Datawrapper",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": "",
+            "hide-title": false
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "auto": true
+            },
+            "size": "dynamic",
+            "shape": "fixed",
+            "x-pos": "bottom",
+            "y-pos": "left",
+            "symbol": [],
+            "x-axis": {
+              "log": true,
+              "range": [
+                200,
+                ""
+              ],
+              "ticks": []
+            },
+            "x-grid": "off",
+            "y-axis": {
+              "log": false,
+              "range": [
+                0,
+                94
+              ],
+              "ticks": []
+            },
+            "y-grid": "on",
+            "opacity": 0.97,
+            "scale-y": "linear",
+            "tooltip": {
+              "body": "<table>\n  <tr>\n    <td>Life expectancy: &emsp; </td>\n    <td>GDP per capita:</td>\n  </tr>\n  <tr>\n    <td><b>{{ health }} years</b></td>\n    <td><b>{{ gdp }} Dollar</b></td>\n  </b>\n</tr>\n</table>\n",
+              "title": "<big>{{ country }}</big> in <big>{{ FORMAT(year, \"YYYY\") }}</big>",
+              "legacy": {
+                "body": "<table>\n  <tr>\n    <td>Life expectancy: &emsp; </td>\n    <td>GDP per capita:</td>\n  </tr>\n  <tr>\n    <td><b>{{ health }} years</b></td>\n    <td><b>{{ gdp }} Dollar</b></td>\n  </b>\n</tr>\n</table>\n",
+                "title": "<big>{{ country }}</big> in <big>{{ year }}</big>",
+                "fields": {
+                  "gdp": "gdp",
+                  "year": "year",
+                  "health": "health",
+                  "year_a": "year_a",
+                  "country": "country",
+                  "continent": "continent",
+                  "countries": "countries",
+                  "population": "population"
+                }
+              },
+              "sticky": false,
+              "enabled": true,
+              "migrated": true
+            },
+            "labeling": "right",
+            "loess-bw": 0.75,
+            "max-size": 71.09,
+            "outlines": false,
+            "overlays": {},
+            "x-format": "0a",
+            "y-format": "0a",
+            "add-labels": [],
+            "base-color": "#afafaf",
+            "fixed-size": 5.64,
+            "loess-iter": 0,
+            "regression": false,
+            "auto-labels": false,
+            "custom-lines": "220,1.5,220,45,1000000,45,1000000,1.5 @color:grey @opacity:0.1\n220,46,220,92,1000000,92,1000000,46 @color:grey @opacity:0.1\n\n\n1925,53.8,603,28.21@color:grey @opacity:0.1\n10620,78,667,35.4@color:grey @opacity:0.1\n13434,76.4,716,28.82@color:grey @opacity:0.1\n7615,59.6,618,26.98@color:grey @opacity:0.1\n21049,76.4,757,33.54@color:grey @opacity:0.1\n17344,76.5,1507,33.2@color:grey @opacity:0.1\n7763,74.7,514,34@color:grey @opacity:0.1\n37138,75.72,833,34.42@color:grey @opacity:0.1\n44056,82.3,815,34.05@color:grey @opacity:0.1\n44401,81.3,1848,34.4@color:grey @opacity:0.1\n16986,72.9,775,29.17@color:grey @opacity:0.1\n22818,73.7,1445,35.18@color:grey @opacity:0.1\n44138,79.1,1235,30.3@color:grey @opacity:0.1\n3161,70.4,876,25.5@color:grey @opacity:0.1\n12984,75.7,913,32.12@color:grey @opacity:0.1\n17415,71,608,36.2@color:grey @opacity:0.1\n41240,80.5,2412,40@color:grey @opacity:0.1\n8501,71.7,579,26.5@color:grey @opacity:0.1\n1830,62.3,597,31@color:grey @opacity:0.1\n7983,72.7,629,28.8@color:grey @opacity:0.1\n6295,73.2,854,33@color:grey @opacity:0.1\n9833,78.9,669,35.1@color:grey @opacity:0.1\n17196,58.7,397,33.6@color:grey @opacity:0.1\n15441,74.4,1109,32@color:grey @opacity:0.1\n73003,77.1,1512,29.2@color:grey @opacity:0.1\n16371,74.8,1089,35.8@color:grey @opacity:0.1\n1654,60.9,480,29.2@color:grey @opacity:0.1\n777,61.4,418,31.5@color:grey @opacity:0.1\n3267,69.4,903,35@color:grey @opacity:0.1\n2897,59.4,626,28.75@color:grey @opacity:0.1\n43294,81.7,1314,39@color:grey @opacity:0.1\n6514,72.9,529,33.8@color:grey @opacity:0.1\n599,49.6,424,30@color:grey @opacity:0.1\n2191,57.4,418,30.9@color:grey @opacity:0.1\n22465,79.4,1026,32@color:grey @opacity:0.1\n13334,76.2,985,32@color:#B10615 @width:2\n12761,78,963,32@color:grey @opacity:0.1\n1472,68.1,696,32.1@color:grey @opacity:0.1\n809,60.8,485,31.6@color:grey @opacity:0.1\n6220,61.5,575,32.7@color:grey @opacity:0.1\n14132,80.3,775,30.21@color:grey @opacity:0.1\n3491,59.1,812,31.16@color:grey @opacity:0.1\n21291,78.2,864,32.2@color:grey @opacity:0.1\n29797,81.8,853,38.5@color:grey @opacity:0.1\n29437,78.8,1915,34.95@color:grey @opacity:0.1\n43495,80.4,2013,37.41@color:grey @opacity:0.1\n3139,63.8,752,29.9@color:grey @opacity:0.1\n12837,75.3,667,29.9@color:grey @opacity:0.1\n10996,75.9,529,32.9@color:grey @opacity:0.1\n11031,71.5,791,33@color:grey @opacity:0.1\n7776,74.9,974,28.7@color:grey @opacity:0.1\n31087,61,356,29.8@color:grey @opacity:0.1\n1129,60.7,532,30.2@color:grey @opacity:0.1\n26812,77.8,938,36.14@color:grey @opacity:0.1\n1520,65.2,523,29.7@color:grey @opacity:0.1\n7925,65.8,785,26.1@color:grey @opacity:0.1\n38923,80.9,1244,36.57@color:grey @opacity:0.1\n37599,81.8,1803,33.97@color:grey @opacity:0.1\n18627,65.9,390,30.6@color:grey @opacity:0.1\n1644,68.1,813,28.8@color:grey @opacity:0.1\n7474,72.9,543,31.87@color:grey @opacity:0.1\n44053,80.8,1639,38.37@color:grey @opacity:0.1\n4099,65.3,696,28@color:grey @opacity:0.1\n25430,81,1371,36.6@color:grey @opacity:0.1\n27763,72.1,393,33.87@color:grey @opacity:0.1\n11593,71.5,959,31.4@color:grey @opacity:0.1\n7279,72.6,857,25.8@color:grey @opacity:0.1\n1225,59.1,450,29.5@color:grey @opacity:0.1\n1386,55.6,777,32@color:grey @opacity:0.1\n6816,66.8,1214,31.12@color:grey @opacity:0.1\n1710,64.3,633,29@color:grey @opacity:0.1\n4270,73,675,33.9@color:grey @opacity:0.1\n53874,83.73,1007,34.9@color:grey @opacity:0.1\n24200,76.7,1249,36@color:grey @opacity:0.1\n42182,83.3,926,42.85@color:grey @opacity:0.1\n5903,67.2,1052,25.44@color:#1A637B @width:2\n10504,71.1,994,30@color:grey @opacity:0.1\n15573,74.6,977,25.6@color:grey @opacity:0.1\n14646,67.4,970,31.2@color:grey @opacity:0.1\n47758,81.7,1447,38.3@color:grey @opacity:0.1\n31590,82.1,879,32@color:grey @opacity:0.1\n33297,82.2,2225,29.69@color:grey @opacity:0.1\n8606,75,1170,34.2@color:grey @opacity:0.1\n36162,83.2,1050,36.4@color:grey @opacity:0.1\n11752,78.5,976,31.7@color:grey @opacity:0.1\n23468,70.2,1140,26.2@color:grey @opacity:0.1\n2898,65.1,854,25.5@color:grey @opacity:0.1\n1824,63,551,24.9@color:grey @opacity:0.1\n82633,80.3,1097,26@color:grey @opacity:0.1\n3245,69.8,508,23.94@color:grey @opacity:0.1\n5212,67.1,864,31.9@color:grey @opacity:0.1\n23282,75.4,751,33@color:grey @opacity:0.1\n17050,78.9,1081,29.7@color:grey @opacity:0.1\n2598,47.1,393,32.8@color:grey @opacity:0.1\n958,63.2,797,31.1@color:grey @opacity:0.1\n17261,74.1,1050,33.1@color:grey @opacity:0.1\n26665,75.2,1270,28.9@color:grey @opacity:0.1\n88314,82.2,1453,36.9@color:grey @opacity:0.1\n148374,80.82,992,34.7@color:grey @opacity:0.1\n12547,76.5,690,36.1@color:grey @opacity:0.1\n1400,63.5,573,30.5@color:grey @opacity:0.1\n799,60.5,350,30.3@color:grey @opacity:0.1\n24320,75.3,997,30.6@color:grey @opacity:0.1\n14408,80,842,32.65@color:grey @opacity:0.1\n1684,60.2,603,26.41@color:grey @opacity:0.1\n30265,82.1,781,28.7@color:grey @opacity:0.1\n3877,69.7,527,32@color:grey @opacity:0.1\n18350,74.5,940,28.7@color:grey @opacity:0.1\n16850,75.9,1379,26.9@color:grey @opacity:0.1\n3510,68.9,518,26.7@color:grey @opacity:0.1\n4896,73.9,621,33.15@color:grey @opacity:0.1\n11819,67.1,592,31.8@color:grey @opacity:0.1\n14833,77.2,1057,35.4@color:grey @opacity:0.1\n7319,74.6,715,33.1@color:grey @opacity:0.1\n1176,57.1,390,30.28@color:grey @opacity:0.1\n4012,68,840,30.8@color:grey @opacity:0.1\n10040,64.2,540,32.4@color:grey @opacity:0.1\n2352,69.7,654,32.8@color:grey @opacity:0.1\n45784,81.3,4235,39.86@color:grey @opacity:0.1\n34186,81.4,658,34.05@color:grey @opacity:0.1\n4712,78,973,25.4@color:grey @opacity:0.1\n943,61,446,30.8@color:grey @opacity:0.1\n5727,64.6,851,30.4@color:grey @opacity:0.1\n1390,72.1,579,26@color:grey @opacity:0.1\n64304,82,1278,37.92@color:grey @opacity:0.1\n48226,77.2,915,32.3@color:grey @opacity:0.1\n4743,65.9,1021,25.8@color:grey @opacity:0.1\n20485,78.2,847,32.9@color:grey @opacity:0.1\n2529,60.9,546,31.5@color:grey @opacity:0.1\n8219,74.4,835,35.5@color:grey @opacity:0.1\n11903,79.5,1204,35.7@color:grey @opacity:0.1\n6876,71,962,30.9@color:grey @opacity:0.1\n24787,77.6,1213,35.9@color:grey @opacity:0.1\n26437,80.8,1685,35.6@color:grey @opacity:0.1\n33604,78.5,1375,30.43@color:grey @opacity:0.1\n132877,79.7,1097,30.8@color:grey @opacity:0.1\n19203,75.2,815,35.7@color:grey @opacity:0.1\n23038,71,1430,29.57@color:grey @opacity:0.1\n1549,65.9,431,31.8@color:grey @opacity:0.1\n5558,73.2,1400,25.4@color:grey @opacity:0.1\n3003,68,850,31@color:grey @opacity:0.1\n52469,79.5,846,32.1@color:grey @opacity:0.1\n2251,65.3,497,25.2@color:grey @opacity:0.1\n12908,76.2,1358,35.5@color:grey @opacity:0.1\n25684,74.1,792,37@color:grey @opacity:0.1\n2085,57.1,734,25.1@color:grey @opacity:0.1\n80794,82,1021,29.1@color:grey @opacity:0.1\n27204,77.6,1427,36.4@color:grey @opacity:0.1\n28550,80.9,1409,36.6@color:grey @opacity:0.1\n2047,64,363,25.1@color:grey @opacity:0.1\n624,54.2,694,29.4@color:#CA670D @width:2\n12509,61.3,1480,33.5@color:grey @opacity:0.1\n34644,81,576,25.8@color:grey @opacity:0.1\n3047,56.1,507,26.67@color:grey @opacity:0.1\n32979,82.6,1518,29.5@color:grey @opacity:0.1\n10624,77.6,898,32.6@color:grey @opacity:0.1\n9997,74.8,874,28.01@color:grey @opacity:0.1\n10435,71.2,838,25.99@color:grey @opacity:0.1\n3975,67.5,518,31.4@color:grey @opacity:0.1\n17125,72,1636,32.9@color:grey @opacity:0.1\n6095,51.8,490,32.3@color:grey @opacity:0.1\n44892,82.1,1414,32.16@color:grey @opacity:0.1\n56118,83,2701,38@color:grey @opacity:0.1\n4637,68.2,1081,31.1@color:grey @opacity:0.1\n42948,79.5,996,28.3@color:grey @opacity:0.1\n2582,72.4,556,24.24@color:grey @opacity:0.1\n2571,64.1,562,32.2@color:grey @opacity:0.1\n14512,74.7,931,30.4@color:grey @opacity:0.1\n2086,72.4,521,28.95@color:grey @opacity:0.1\n1433,61.5,682,31.3@color:grey @opacity:0.1\n5069,71.5,663,28.2@color:grey @opacity:0.1\n30113,72.4,1230,32.9@color:grey @opacity:0.1\n11126,77.6,716,28.8@color:grey @opacity:0.1\n19360,79.2,1221,35@color:grey @opacity:0.1\n15865,70,943,24@color:grey @opacity:0.1\n1680,61.3,464,25.3@color:grey @opacity:0.1\n8449,71.5,763,36.6@color:grey @opacity:0.1\n60749,75.4,998,30.7@color:grey @opacity:0.1\n38225,81,3431,38.65@color:grey @opacity:0.1\n53354,79.1,2128,39.41@color:#9A7340 @width:2\n20438,76.8,1758,32.9@color:grey @opacity:0.1\n5598,71.8,502,26.93@color:grey @opacity:0.1\n2912,64.9,585,24.3@color:grey @opacity:0.1\n15753,74.8,682,32.2@color:grey @opacity:0.1\n5623,75.4,861,32@color:grey @opacity:0.1\n4319,74.6,1220,32.1@color:grey @opacity:0.1\n3887,66,877,23.39@color:grey @opacity:0.1\n4034,56.7,663,32.6@color:grey @opacity:0.1\n1801,59.3,869,33.7@color:grey @opacity:0.1",
+            "fill-between": false,
+            "fixed-symbol": "symbolCircle",
+            "label-colors": false,
+            "label-format": "YYYY",
+            "label-margin": 0,
+            "line-symbols": false,
+            "x-grid-lines": "on",
+            "y-grid-lines": "on",
+            "color-outline": "#fff",
+            "interpolation": "linear",
+            "negativeColor": {
+              "value": "#E31A1C",
+              "enabled": false
+            },
+            "x-tick-format": "YYYY",
+            "y-grid-format": "0,0.[00]",
+            "y-grid-labels": "auto",
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "all": "#afafaf",
+                "China": "#ae000b",
+                "India": "#15607a",
+                "Kuwait": "#afafaf",
+                "Somalia": "#c86300",
+                "Nicaragua": "#afafaf",
+                "Afghanistan": "#15607a",
+                "Netherlands": "#afafaf",
+                "South Korea": "#afafaf",
+                "South Africa": "#afafaf",
+                "United States": "#976f3a",
+                "United Kingdom": "#afafaf"
+              },
+              "palette": [],
+              "categoryOrder": [],
+              "categoryLabels": {
+                "all": "",
+                "China": "China",
+                "India": "India",
+                "Kuwait": "",
+                "Somalia": "Somalia",
+                "Nicaragua": "",
+                "Netherlands": "",
+                "South Korea": "",
+                "South Africa": "",
+                "United States": "United States",
+                "United Kingdom": ""
+              },
+              "excludeFromKey": []
+            },
+            "plotHeightMode": "fixed",
+            "show-color-key": false,
+            "color-by-column": true,
+            "hover-highlight": true,
+            "legend-offset-x": 0,
+            "legend-offset-y": 0,
+            "line-symbols-on": "both",
+            "plotHeightFixed": 581,
+            "plotHeightRatio": 0.5,
+            "show-size-legend": false,
+            "size-legend-type": "stacked",
+            "text-annotations": {
+              "jd8sqb75zu": {
+                "bg": false,
+                "dx": -14,
+                "dy": 13,
+                "id": "jd8sqb75zu",
+                "bold": true,
+                "size": 22,
+                "text": "1800",
+                "align": "tr",
+                "color": "#000000",
+                "italic": false,
+                "position": {
+                  "x": 156700,
+                  "y": 45
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 0
+              },
+              "9gtygf7530": {
+                "bg": false,
+                "dx": -14,
+                "dy": 13,
+                "id": "9gtygf7530",
+                "bold": true,
+                "size": 22,
+                "text": "2015",
+                "align": "tr",
+                "color": "#000000",
+                "italic": false,
+                "position": {
+                  "x": 156700,
+                  "y": 92
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 1
+              },
+              "53bvyrfht7": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "53bvyrfht7",
+                "bold": false,
+                "size": 13,
+                "text": "China",
+                "align": "mc",
+                "color": "#efefef",
+                "italic": false,
+                "position": {
+                  "x": "13398.7010",
+                  "y": "76.1317"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 2
+              },
+              "vhymosfoe": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "vhymosfoe",
+                "bold": false,
+                "size": 13,
+                "text": "India",
+                "align": "mc",
+                "color": "#efefef",
+                "italic": false,
+                "position": {
+                  "x": "5997.2352",
+                  "y": "67.2308"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 3
+              },
+              "zc65roorpw": {
+                "bg": false,
+                "dx": 10,
+                "dy": -1,
+                "id": "zc65roorpw",
+                "bold": false,
+                "size": 13,
+                "text": "Somalia",
+                "align": "tl",
+                "color": "#983c00",
+                "italic": false,
+                "position": {
+                  "x": 620,
+                  "y": 55.5
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 4
+              },
+              "7f3afekx8n": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "7f3afekx8n",
+                "bold": false,
+                "size": 13,
+                "text": "US",
+                "align": "mc",
+                "color": "#efefef",
+                "italic": false,
+                "position": {
+                  "x": "53787.2503",
+                  "y": "79.0931"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 5
+              }
+            },
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "highlight-labeled": true,
+            "line-symbols-size": 3.5,
+            "line-value-labels": false,
+            "range-annotations": {},
+            "regression-method": "linear",
+            "size-legend-title": "population",
+            "line-symbols-shape": "circle",
+            "shape-size-version": 1,
+            "stack-color-legend": false,
+            "y-grid-label-align": "left",
+            "line-symbols-opacity": 1,
+            "size-legend-position": "above",
+            "area-fill-color-below": "#cccccc",
+            "responsive-symbol-size": false,
+            "area-fill-color-between": "#cccccc",
+            "size-legend-title-width": 200,
+            "size-legend-label-format": "auto",
+            "size-legend-title-enabled": true,
+            "size-legend-label-position": "right",
+            "size-legend-title-position": "left",
+            "size-legend-values-setting": "auto"
+          },
+          "axes": {
+            "x": "gdp",
+            "y": "health",
+            "size": "population",
+            "color": "countries",
+            "labels": "country"
+          },
+          "publish": {
+            "embed-width": 600,
+            "embed-height": 732,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Every country has a higher life expectancy now than in 1800\" aria-label=\"Scatter Plot\" id=\"datawrapper-chart-lsM4n\" src=\"https://datawrapper.dwcdn.net/lsM4n/9/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"600\" height=\"731\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Every country has a higher life expectancy now than in 1800\" aria-label=\"Scatter Plot\" id=\"datawrapper-chart-lsM4n\" src=\"https://datawrapper.dwcdn.net/lsM4n/9/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"731\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:731px\" id=\"datawrapper-vis-lsM4n\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/lsM4n/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-lsM4n\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/lsM4n/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "chart-height": 602,
+            "embed-heights": {
+              "100": 1146.011364,
+              "200": 906.011364,
+              "300": 806.011364,
+              "400": 790.011364,
+              "500": 773.011364,
+              "700": 731.011364,
+              "800": 715.011364,
+              "900": 715.011364,
+              "1000": 715.011364
+            }
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T20:07:50.000Z",
+        "lastModifiedAt": "2025-10-11T20:07:50.000Z",
+        "forkedFrom": "lsM4n",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "visualize": {
+            "opacity": {
+              "__@t$__": "54089214017-1"
+            }
+          },
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089214017-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089214017-1"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089214017-3"
+            },
+            "chart-height": {
+              "__@t$__": "54089214017-4"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-4"
+  },
+  "data": "0-0"
+}

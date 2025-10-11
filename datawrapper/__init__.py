@@ -29,6 +29,8 @@ from datawrapper.charts import (
     LineValueLabel,
     MultipleColumnChart,
     RangeAnnotation,
+    ScatterPlot,
+    StackedBarChart,
     TextAnnotation,
     Transform,
 )
@@ -54,6 +56,8 @@ __all__ = [
     "AreaChart",
     "ArrowChart",
     "MultipleColumnChart",
+    "ScatterPlot",
+    "StackedBarChart",
     "TextAnnotation",
     "RangeAnnotation",
     "ConnectorLine",

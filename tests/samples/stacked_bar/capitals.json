@@ -1,0 +1,238 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "NjBls",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "be4e94f9d4ae5b3b0d5a68c3dc5b58e7",
+        "id": "NjBls",
+        "type": "d3-bars-stacked",
+        "title": "How many live in the capital?",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {},
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-format": {
+              "2016_perc": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "%",
+                "number-prepend": ""
+              },
+              "2016_perc1": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "%",
+                "number-prepend": ""
+              },
+              "2016_perc_city": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "%",
+                "number-prepend": ""
+              }
+            },
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "UN Population Division",
+            "source-url": "https://esa.un.org/unpd/wup/CD-ROM/",
+            "intro": "Share of population that lives in the capital, in urban areas and in rural areas, of selected countries, 2014.",
+            "byline": "Lisa Charlotte Muth",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": ""
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "auto": true
+            },
+            "rules": false,
+            "thick": false,
+            "x-grid": "off",
+            "y-grid": "on",
+            "scale-y": "linear",
+            "sort-by": "share of people in capital",
+            "labeling": "right",
+            "overlays": {},
+            "sort-bars": true,
+            "background": false,
+            "base-color": 0,
+            "force-grid": false,
+            "swap-labels": false,
+            "block-labels": false,
+            "custom-range": [
+              "",
+              ""
+            ],
+            "fill-between": false,
+            "label-colors": false,
+            "label-margin": 0,
+            "line-symbols": false,
+            "range-extent": "nice",
+            "thick-arrows": false,
+            "interpolation": "linear",
+            "replace-flags": {
+              "style": "4x3",
+              "enabled": true
+            },
+            "reverse-order": false,
+            "show-tooltips": true,
+            "tick-position": "top",
+            "totals-labels": false,
+            "x-tick-format": "YYYY",
+            "y-grid-format": "0,0.[00]",
+            "y-grid-labels": "auto",
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "rural areas": "#e8e8e8",
+                "urban and not capital": "#cdcdcd",
+                "share of people in capital": "#c71d1d"
+              },
+              "palette": [],
+              "categoryOrder": [],
+              "categoryLabels": {},
+              "excludeFromKey": []
+            },
+            "show-color-key": true,
+            "color-by-column": true,
+            "group-by-column": false,
+            "label-alignment": "left",
+            "line-symbols-on": "both",
+            "value-label-row": false,
+            "text-annotations": {},
+            "value-label-mode": "left",
+            "y-grid-subdivide": true,
+            "axis-label-format": "",
+            "custom-area-fills": {},
+            "custom-grid-lines": "",
+            "date-label-format": "YYYY",
+            "line-symbols-size": 3.5,
+            "range-annotations": {},
+            "show-group-labels": true,
+            "show-value-labels": true,
+            "stack-percentages": false,
+            "line-symbols-shape": "circle",
+            "stack-color-legend": false,
+            "value-label-format": "0%",
+            "compact-group-labels": false,
+            "line-symbols-opacity": 1,
+            "show-category-labels": true,
+            "area-fill-color-below": "#cccccc",
+            "value-label-alignment": "left",
+            "totals-labels-position": "before",
+            "value-label-visibility": "always",
+            "area-fill-color-between": "#cccccc",
+            "negativeColor": {
+              "enabled": false,
+              "value": "#E31A1C"
+            }
+          },
+          "axes": [],
+          "publish": {
+            "embed-width": 532,
+            "embed-height": 608,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"How many live in the capital?\" aria-label=\"Stacked Bars\" id=\"datawrapper-chart-ev8d7\" src=\"https://datawrapper.dwcdn.net/ev8d7/10/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"532\" height=\"603\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"How many live in the capital?\" aria-label=\"Stacked Bars\" id=\"datawrapper-chart-ev8d7\" src=\"https://datawrapper.dwcdn.net/ev8d7/10/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"603\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:603px\" id=\"datawrapper-vis-ev8d7\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/ev8d7/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-ev8d7\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/ev8d7/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "chart-height": 458,
+            "embed-heights": {
+              "100": 607,
+              "200": 607,
+              "300": 607,
+              "400": 607,
+              "500": 607,
+              "700": 607,
+              "800": 607,
+              "900": 607,
+              "1000": 607
+            }
+          },
+          "annotate": {
+            "notes": "<a href=\"https://unstats.un.org/unsd/demographic/sconcerns/densurb/Defintion_of%20Urban.pdf\">The UN defines \"Urban\" differently for each country.</a> To count as \"urban\", Japanese settlements need to have at least 50,000 inhabitants. In Iceland, 200 inhabitants are enough."
+          },
+          "custom": {
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T20:20:36.000Z",
+        "lastModifiedAt": "2025-10-11T20:20:37.000Z",
+        "forkedFrom": "ev8d7",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "visualize": {
+            "color-category": {
+              "categoryOrder": {
+                "__@t$__": "54089204552-1"
+              }
+            },
+            "negativeColor": {
+              "enabled": {
+                "__@t$__": "54089204552-1"
+              },
+              "value": {
+                "__@t$__": "54089204552-1"
+              }
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089204552-1"
+            }
+          },
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089204552-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089204552-1"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-1"
+  },
+  "data": "0-0"
+}

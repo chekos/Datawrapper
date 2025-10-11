@@ -6,6 +6,8 @@ from .base import Annotate, BaseChart, ColumnFormat, Describe, Transform
 from .column import ColumnChart
 from .line import AreaFill, Line, LineChart, LineSymbol, LineValueLabel
 from .multiple_column import MultipleColumnChart
+from .scatter import ScatterPlot
+from .stacked_bar import StackedBarChart
 
 __all__ = (
     "ConnectorLine",
@@ -27,4 +29,6 @@ __all__ = (
     "AreaChart",
     "ArrowChart",
     "MultipleColumnChart",
+    "ScatterPlot",
+    "StackedBarChart",
 )

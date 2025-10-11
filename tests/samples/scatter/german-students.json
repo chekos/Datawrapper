@@ -1,0 +1,414 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "OWIyD",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "392e84388e23afa558d1fdf0eeef55a4",
+        "id": "OWIyD",
+        "type": "d3-scatter-plot",
+        "title": "What are the student cities in Germany?",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {
+              "63cqmm4t36": {
+                "id": "63cqmm4t36",
+                "row": 0,
+                "value": "Share of students in %",
+                "column": 5,
+                "ignored": false,
+                "_index": 0
+              },
+              "iy99u404m4": {
+                "id": "iy99u404m4",
+                "row": 0,
+                "value": "Inhabitans",
+                "column": 3,
+                "ignored": false,
+                "_index": 1
+              },
+              "zyhrnu6er4": {
+                "id": "zyhrnu6er4",
+                "row": 0,
+                "value": "Inhabitants",
+                "column": 3,
+                "ignored": false,
+                "_index": 2
+              },
+              "6q2ux6z8fu": {
+                "id": "6q2ux6z8fu",
+                "row": 0,
+                "value": "Number of students",
+                "column": 1,
+                "ignored": false,
+                "_index": 3
+              }
+            },
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-format": {
+              "what": {
+                "type": "auto",
+                "ignore": true,
+                "number-append": "",
+                "number-format": "auto",
+                "number-prepend": ""
+              },
+              "percent": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": " %",
+                "number-format": "n1",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "percent-average": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "%",
+                "number-format": "n1",
+                "number-divisor": 0,
+                "number-prepend": ""
+              }
+            },
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "Eurostat 2016",
+            "source-url": "https://ec.europa.eu/eurostat/statistics-explained/index.php?title=Statistics_on_European_cities/de#Bildung_und_Besch.C3.A4ftigung",
+            "intro": "There were 2.807.000 students in Germany in 2016. Where were they based, and which cities had the highest share of students? <b>The size of the circle represents the number of students in these cities. The darker the circle, the higher the share of students.</b>",
+            "byline": "Lisa Charlotte Muth, Datawrapper",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": "",
+            "hide-title": false
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "auto": true
+            },
+            "size": "dynamic",
+            "shape": "fixed",
+            "x-pos": "bottom",
+            "y-pos": "left",
+            "symbol": [],
+            "x-axis": {
+              "log": false,
+              "range": [
+                0,
+                200000
+              ],
+              "ticks": []
+            },
+            "x-grid": "off",
+            "y-axis": {
+              "log": false,
+              "range": [
+                0,
+                52
+              ],
+              "ticks": []
+            },
+            "y-grid": "on",
+            "opacity": 1,
+            "scale-y": "linear",
+            "tooltip": {
+              "body": "<table>\n  <tr>\n    <td>Population: &emsp; </td>\n    <td>Students:</td>\n  </tr>\n  <tr>\n    <td><b>{{ pop }}</b></td>\n  </b>\n    <td><b>{{ students }}</b></td>\n</tr>\n</table>\n<hr>\n<big><b>{{ percent }}% of the population are students.</big></b>",
+              "title": "<big>{{ city }}</big>",
+              "legacy": {
+                "body": "<table>\n  <tr>\n    <td>Population: &emsp; </td>\n    <td>Students:</td>\n  </tr>\n  <tr>\n    <td><b>{{ pop }}</b></td>\n  </b>\n    <td><b>{{ students }}</b></td>\n</tr>\n</table>\n<hr>\n<big><b>{{ percent }}% of the population are students.</big></b>",
+                "title": "<big>{{ city }}</big>",
+                "fields": {
+                  "pop": "pop",
+                  "city": "city",
+                  "color": "color",
+                  "percent": "percent",
+                  "students": "students",
+                  "pop_average": "pop-average",
+                  "percent_average": "percent-average",
+                  "students_average": "students-average"
+                }
+              },
+              "sticky": false,
+              "enabled": true,
+              "migrated": true
+            },
+            "labeling": "right",
+            "loess-bw": 0.75,
+            "max-size": 33.85,
+            "outlines": false,
+            "overlays": {},
+            "x-format": "0a",
+            "y-format": "0",
+            "add-labels": [
+              "Berlin",
+              "Frankfurt am Main",
+              "München"
+            ],
+            "base-color": "#5b881d",
+            "fixed-size": 8.69,
+            "loess-iter": 0,
+            "regression": false,
+            "auto-labels": true,
+            "custom-lines": "",
+            "fill-between": false,
+            "fixed-symbol": "symbolCircle",
+            "label-colors": false,
+            "label-format": "YYYY",
+            "label-margin": 0,
+            "line-symbols": false,
+            "x-grid-lines": "on",
+            "y-grid-lines": "on",
+            "color-outline": "#fff",
+            "interpolation": "linear",
+            "negativeColor": {
+              "value": "#E31A1C",
+              "enabled": false
+            },
+            "x-tick-format": "YYYY",
+            "y-grid-format": "0,0.[00]",
+            "y-grid-labels": "auto",
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "5-10%": "#96C797",
+                "10%-20%": "#78AA91",
+                "less than 5%": "#A8DA9B",
+                "more than 20%": "#406274"
+              },
+              "palette": [],
+              "categoryOrder": [
+                "less than 5%",
+                "5-10%",
+                "10%-20%",
+                "more than 20%"
+              ],
+              "categoryLabels": {
+                "5-10%": "5-10%",
+                "10%-20%": "10%-20%",
+                "less than 5%": "less than 5%",
+                "more than 20%": "more than 20%"
+              },
+              "excludeFromKey": []
+            },
+            "plotHeightMode": "fixed",
+            "show-color-key": true,
+            "color-by-column": true,
+            "hover-highlight": true,
+            "legend-offset-x": 0,
+            "legend-offset-y": 0,
+            "line-symbols-on": "both",
+            "plotHeightFixed": 357,
+            "plotHeightRatio": 0.5,
+            "show-size-legend": false,
+            "size-legend-type": "stacked",
+            "text-annotations": {
+              "0up11a762f": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "0up11a762f",
+                "bold": true,
+                "size": 14,
+                "text": "↑\nhigher share \nof students",
+                "align": "br",
+                "color": "#000000",
+                "italic": false,
+                "position": {
+                  "x": "146367.9122",
+                  "y": "41.1759"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 0
+              },
+              "kwgku9ruhx": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "kwgku9ruhx",
+                "bold": true,
+                "size": 14,
+                "text": "more \nstudents\nlive in these \ncities\n→",
+                "align": "tl",
+                "color": "#000000",
+                "italic": false,
+                "position": {
+                  "x": "153803.5969",
+                  "y": "38.7234"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 1
+              }
+            },
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "highlight-labeled": true,
+            "line-symbols-size": 3.5,
+            "line-value-labels": false,
+            "range-annotations": {},
+            "regression-method": "logarithmic",
+            "line-symbols-shape": "circle",
+            "shape-size-version": 1,
+            "stack-color-legend": false,
+            "y-grid-label-align": "left",
+            "line-symbols-opacity": 1,
+            "size-legend-position": "above",
+            "area-fill-color-below": "#cccccc",
+            "responsive-symbol-size": false,
+            "area-fill-color-between": "#cccccc",
+            "size-legend-title-width": 200,
+            "size-legend-label-format": "auto",
+            "size-legend-title-enabled": true,
+            "size-legend-label-position": "right",
+            "size-legend-title-position": "left",
+            "size-legend-values-setting": "auto"
+          },
+          "axes": {
+            "x": "students",
+            "y": "percent",
+            "size": "students",
+            "color": "color",
+            "labels": "city"
+          },
+          "publish": {
+            "embed-width": 606,
+            "embed-height": 538,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {
+              "unit": "mm",
+              "scale": 1,
+              "width": "132",
+              "height": "141",
+              "include": "full",
+              "colorMode": "rgb",
+              "ligatures": true,
+              "fullVectorMode": true
+            },
+            "export-svg": {
+              "width": 500,
+              "height": 533,
+              "include": "full",
+              "fullVectorMode": true
+            },
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"What are the student cities in Germany?\" aria-label=\"Scatter Plot\" id=\"datawrapper-chart-GQDw3\" src=\"https://datawrapper.dwcdn.net/GQDw3/10/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"606\" height=\"534\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"What are the student cities in Germany?\" aria-label=\"Scatter Plot\" id=\"datawrapper-chart-GQDw3\" src=\"https://datawrapper.dwcdn.net/GQDw3/10/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"534\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:534px\" id=\"datawrapper-vis-GQDw3\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/GQDw3/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-GQDw3\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/GQDw3/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "chart-height": 408,
+            "embed-heights": {
+              "100": 951.020834,
+              "200": 683.020834,
+              "300": 607.020834,
+              "400": 565.020834,
+              "500": 549.020834,
+              "700": 532.020834,
+              "800": 515.020834,
+              "900": 515.020834,
+              "1000": 515.020834
+            }
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T20:06:05.000Z",
+        "lastModifiedAt": "2025-10-11T20:06:06.000Z",
+        "forkedFrom": "GQDw3",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089259627-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089259627-1"
+            }
+          },
+          "visualize": {
+            "opacity": {
+              "__@t$__": "54089259627-2"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089259627-3"
+            },
+            "chart-height": {
+              "__@t$__": "54089259627-4"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-4"
+  },
+  "data": "0-0"
+}

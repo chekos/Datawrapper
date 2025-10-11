@@ -1,0 +1,343 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "q1hq0",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "d603daecabc0dbe4e1b4145841f9f4cd",
+        "id": "q1hq0",
+        "type": "d3-bars-stacked",
+        "title": "Six kinds of sugar in thirty kinds of food",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {},
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-format": {
+              "Lactose": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "g",
+                "number-format": "-",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Sucrose": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "g",
+                "number-format": "-",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Column 1": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "g",
+                "number-format": "n1",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Fructose": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "g",
+                "number-format": "-",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "include? sugar": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "auto",
+                "number-prepend": ""
+              },
+              "Glucose (Dextrose)": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "g",
+                "number-format": "-",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Lactose(g)Per 100 g": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "g",
+                "number-format": "n1",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Maltose(g)Per 100 g": {
+                "type": "auto",
+                "ignore": true,
+                "number-append": "g",
+                "number-format": "n1",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Sucrose(g)Per 100 g": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "g",
+                "number-format": "n1",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Fructose(g)Per 100 g": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "g",
+                "number-format": "n1",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Maltose or Galactose": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "g",
+                "number-format": "-",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Galactose(g)Per 100 g": {
+                "type": "auto",
+                "ignore": true,
+                "number-append": "",
+                "number-format": "n100",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Sugars, total(g)Per 100 g": {
+                "type": "auto",
+                "ignore": true,
+                "number-append": "",
+                "number-format": "n1",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Glucose (dextrose)(g)Per 100 g": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "g",
+                "number-format": "n1",
+                "number-divisor": 0,
+                "number-prepend": ""
+              }
+            },
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "United States Department of Agriculture Food Composition Databases",
+            "source-url": "https://ndb.nal.usda.gov/ndb/search/list",
+            "intro": "Gram of sugar in selected types of food, <b>per 100g</b>. The <a href=\"https://www.nhs.uk/Livewell/Goodfood/Pages/reference-intakes-RI-guideline-daily-amounts-GDA.aspx\">National Health Service</a> in the UK recommends eating not more than 90g of sugar per day, including the sugar in fruits and milk.",
+            "byline": "Lisa Charlotte Muth, Datawrapper",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": "",
+            "hide-title": false,
+            "computed-columns": []
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false
+            },
+            "rules": false,
+            "thick": false,
+            "x-grid": "off",
+            "y-grid": "on",
+            "scale-y": "linear",
+            "sort-by": "Sucrose (Fructose+Glucose)",
+            "labeling": "right",
+            "overlays": {},
+            "sort-bars": false,
+            "background": true,
+            "base-color": 0,
+            "force-grid": true,
+            "mirror-bars": false,
+            "swap-labels": false,
+            "block-labels": false,
+            "custom-range": [
+              "",
+              100
+            ],
+            "fill-between": false,
+            "label-colors": false,
+            "label-margin": 0,
+            "line-symbols": false,
+            "range-extent": "nice",
+            "thick-arrows": false,
+            "interpolation": "linear",
+            "negativeColor": {
+              "value": "#E31A1C",
+              "enabled": false
+            },
+            "replace-flags": {
+              "style": "4x3",
+              "enabled": false
+            },
+            "reverse-order": false,
+            "show-tooltips": true,
+            "tick-position": "top",
+            "totals-labels": false,
+            "x-tick-format": "YYYY",
+            "y-grid-format": "0,0.[00]",
+            "y-grid-labels": "auto",
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "Lactose": "#B8E0E3",
+                "Sucrose": "#670000",
+                "Fructose": "#FFE59C",
+                "Glucose (Dextrose)": "#FF6954",
+                "Maltose or Galactose": "#DADADA",
+                "Galactose(g)Per 100 g": "#DADADA",
+                "Sucrose (Fructose+Glucose)": "#670000"
+              },
+              "palette": [],
+              "categoryOrder": [],
+              "categoryLabels": {},
+              "excludeFromKey": []
+            },
+            "show-color-key": true,
+            "color-by-column": true,
+            "group-by-column": false,
+            "highlight-range": false,
+            "label-alignment": "right",
+            "line-symbols-on": "both",
+            "value-label-row": false,
+            "text-annotations": {},
+            "value-label-mode": "left",
+            "y-grid-subdivide": true,
+            "axis-label-format": null,
+            "custom-area-fills": {},
+            "custom-grid-lines": "",
+            "date-label-format": "YYYY",
+            "line-symbols-size": 3.5,
+            "range-annotations": {},
+            "show-group-labels": true,
+            "show-value-labels": true,
+            "stack-percentages": false,
+            "independent-scales": true,
+            "line-symbols-shape": "circle",
+            "space-between-cols": "10",
+            "stack-color-legend": false,
+            "value-label-format": "0.[0]",
+            "compact-group-labels": false,
+            "line-symbols-opacity": 1,
+            "show-category-labels": true,
+            "area-fill-color-below": "#cccccc",
+            "value-label-alignment": "left",
+            "totals-labels-position": "before",
+            "value-label-visibility": "always",
+            "area-fill-color-between": "#cccccc"
+          },
+          "axes": {
+            "groups": "Description"
+          },
+          "publish": {
+            "embed-width": 477,
+            "embed-height": 958,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {
+              "unit": "mm",
+              "scale": 1,
+              "width": 132,
+              "height": 244,
+              "include": "full",
+              "colorMode": "rgb"
+            },
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Six kinds of sugar in thirty kinds of food\" aria-label=\"Stacked Bars\" id=\"datawrapper-chart-B1Lem\" src=\"https://datawrapper.dwcdn.net/B1Lem/11/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"477\" height=\"949\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Six kinds of sugar in thirty kinds of food\" aria-label=\"Stacked Bars\" id=\"datawrapper-chart-B1Lem\" src=\"https://datawrapper.dwcdn.net/B1Lem/11/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"949\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:949px\" id=\"datawrapper-vis-B1Lem\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/B1Lem/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-B1Lem\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/B1Lem/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "chart-height": 814,
+            "embed-heights": {
+              "100": 1221,
+              "200": 1052,
+              "300": 976,
+              "400": 934,
+              "500": 934,
+              "700": 917,
+              "800": 917,
+              "900": 917,
+              "1000": 917
+            }
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T20:20:39.000Z",
+        "lastModifiedAt": "2025-10-11T20:20:39.000Z",
+        "forkedFrom": "B1Lem",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "visualize": {
+            "axis-label-format": {
+              "__@t$__": "54089296089-1"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089296089-1"
+            },
+            "chart-height": {
+              "__@t$__": "54089296089-2"
+            }
+          },
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089296089-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089296089-1"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-2"
+  },
+  "data": "0-0"
+}
