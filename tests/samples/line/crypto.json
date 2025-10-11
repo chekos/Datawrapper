@@ -1,0 +1,788 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "8Fdwv",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "a899a95d8bba909b11caf2bb0442aa11",
+        "id": "8Fdwv",
+        "type": "d3-lines",
+        "title": "How some of the most popular cryptocurrencies have changed over the last 72 hours",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {
+              "1c1c1c1c1c": {
+                "row": 0,
+                "value": "Bitcoin",
+                "column": 9,
+                "id": "1c1c1c1c1c",
+                "_index": 0
+              },
+              "1d1d1d1d1d": {
+                "row": 0,
+                "value": "Bitcoin Cash",
+                "column": 8,
+                "id": "1d1d1d1d1d",
+                "_index": 1
+              },
+              "1e1e1e1e1e": {
+                "row": 0,
+                "value": "<a class=\"currency-name-container\" href=\"https://coinmarketcap.com/currencies/ethereum/\">Ethereum</a>",
+                "column": 1,
+                "id": "1e1e1e1e1e",
+                "_index": 2,
+                "ignored": false
+              },
+              "1f1f1f1f1f": {
+                "row": 0,
+                "value": "Ethereum</a>",
+                "column": 1,
+                "id": "1f1f1f1f1f",
+                "_index": 3,
+                "ignored": false
+              },
+              "1g1g1g1g1g": {
+                "row": 0,
+                "value": "",
+                "column": 2,
+                "id": "1g1g1g1g1g",
+                "_index": 4,
+                "ignored": false
+              },
+              "1h1h1h1h1h": {
+                "row": 0,
+                "value": "",
+                "column": 2,
+                "id": "1h1h1h1h1h",
+                "_index": 5,
+                "ignored": false
+              },
+              "1i1i1i1i1i": {
+                "row": 0,
+                "value": "",
+                "column": 2,
+                "id": "1i1i1i1i1i",
+                "_index": 6,
+                "ignored": false
+              },
+              "1j1j1j1j1j": {
+                "row": 0,
+                "value": "Ethereum",
+                "column": 1,
+                "id": "1j1j1j1j1j",
+                "_index": 7,
+                "ignored": false
+              },
+              "1k1k1k1k1k": {
+                "row": 0,
+                "value": "Litecoin",
+                "column": 3,
+                "id": "1k1k1k1k1k",
+                "_index": 8,
+                "ignored": false
+              },
+              "1l1l1l1l1l": {
+                "row": 0,
+                "value": "Ripple",
+                "column": 2,
+                "id": "1l1l1l1l1l",
+                "_index": 9,
+                "ignored": false
+              },
+              "17j17j17j1": {
+                "row": 0,
+                "value": "Cardano",
+                "column": 6,
+                "id": "17j17j17j1",
+                "_index": 10,
+                "ignored": false
+              },
+              "17k17k17k1": {
+                "row": 0,
+                "value": "NEM",
+                "column": 4,
+                "id": "17k17k17k1",
+                "_index": 11,
+                "ignored": false
+              },
+              "17l17l17l1": {
+                "row": 0,
+                "value": "Monero",
+                "column": 5,
+                "id": "17l17l17l1",
+                "_index": 12,
+                "ignored": false
+              }
+            },
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "CryptoCompare API",
+            "source-url": "https://www.cryptocompare.com/api/#-api-data-histominute-",
+            "intro": "All times in Coordinated Universal Time (UTC)",
+            "byline": "",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": ""
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false
+            },
+            "x-grid": "on",
+            "y-grid": "on",
+            "scale-y": "linear",
+            "labeling": null,
+            "base-color": "#cccccc",
+            "line-widths": null,
+            "fill-between": null,
+            "label-colors": true,
+            "label-margin": 0,
+            "line-symbols": null,
+            "custom-colors": null,
+            "interpolation": "monotone-x",
+            "show-tooltips": true,
+            "x-tick-format": null,
+            "y-grid-format": "+0%",
+            "y-grid-labels": "auto",
+            "line-symbols-on": null,
+            "y-grid-subdivide": true,
+            "range-annotations": {
+              "1c1c1c1c1c": {
+                "x0": null,
+                "x1": null,
+                "type": "y",
+                "color": "#000000",
+                "opacity": "64",
+                "id": "1c1c1c1c1c",
+                "_index": 0,
+                "display": "range",
+                "strokeWidth": 1,
+                "strokeType": "solid",
+                "position": {
+                  "x0": 100.1,
+                  "x1": 100,
+                  "y0": 100.1,
+                  "y1": 100
+                }
+              }
+            },
+            "line-symbols-shape": null,
+            "area-fill-color-below": null,
+            "area-fill-color-between": null,
+            "custom-area-fills": {},
+            "text-annotations": {},
+            "overlays": {},
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-ticks-x": "",
+            "x-grid-format": "MMM D|h a",
+            "custom-range-y": [
+              "",
+              ""
+            ],
+            "custom-ticks-y": "",
+            "y-grid-label-align": "left",
+            "lines": {
+              "ADA": {
+                "directLabel": true,
+                "colorKey": false,
+                "symbols": {
+                  "on": "last",
+                  "enabled": true,
+                  "shape": "square"
+                }
+              },
+              "BCH": {
+                "width": "style0",
+                "directLabel": true,
+                "colorKey": false,
+                "symbols": {
+                  "on": "last",
+                  "enabled": true,
+                  "shape": "square"
+                }
+              },
+              "BTC": {
+                "width": "style0",
+                "directLabel": true,
+                "colorKey": false,
+                "symbols": {
+                  "on": "last",
+                  "enabled": true,
+                  "shape": "square"
+                }
+              },
+              "ETH": {
+                "width": "style0",
+                "directLabel": true,
+                "colorKey": false,
+                "symbols": {
+                  "on": "last",
+                  "enabled": true,
+                  "shape": "square"
+                }
+              },
+              "LTC": {
+                "width": "style3",
+                "directLabel": true,
+                "colorKey": false,
+                "symbols": {
+                  "on": "last",
+                  "enabled": true,
+                  "shape": "square"
+                }
+              },
+              "XEM": {
+                "width": "style3"
+              },
+              "XMR": {
+                "width": "style3",
+                "directLabel": true,
+                "colorKey": false,
+                "symbols": {
+                  "on": "last",
+                  "enabled": true,
+                  "shape": "square"
+                }
+              },
+              "XRP": {
+                "width": "style0",
+                "directLabel": true,
+                "colorKey": false,
+                "symbols": {
+                  "on": "last",
+                  "enabled": true,
+                  "shape": "square"
+                }
+              },
+              "DASH": {
+                "width": "style3"
+              }
+            },
+            "connector-lines": true,
+            "value-label-colors": true,
+            "plotHeightFixed": 352,
+            "plotHeightRatio": 0.5,
+            "plotHeightMode": "fixed",
+            "color-category": {
+              "map": {
+                "ADA": "#d4a3d2",
+                "BCH": "#fa8c00",
+                "BTC": "#ae000b",
+                "ETH": "#3c95b7",
+                "LTC": "#5fd7ad",
+                "XEM": "#afafaf",
+                "XMR": "#a2dc46",
+                "XRP": "#dfc061",
+                "DASH": "#c4c4c4"
+              }
+            }
+          },
+          "axes": {},
+          "publish": {
+            "embed-width": 748,
+            "embed-height": 516,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "text": "#000000",
+            "background": "#ffffff",
+            "embed-codes": {
+              "embed-method-iframe": "<iframe src=\"//datawrapper.dwcdn.net/fiqQ4/2/\" scrolling=\"no\" frameborder=\"0\" allowtransparency=\"true\" width=\"748\" height=\"482\"></iframe>",
+              "embed-method-responsive": "<iframe id=\"datawrapper-chart-fiqQ4\" src=\"//datawrapper.dwcdn.net/fiqQ4/2/\" scrolling=\"no\" frameborder=\"0\" allowtransparency=\"true\" style=\"width: 0; min-width: 100% !important;\" height=\"482\"></iframe><script type=\"text/javascript\">if(\"undefined\"==typeof window.datawrapper)window.datawrapper={};window.datawrapper[\"fiqQ4\"]={},window.datawrapper[\"fiqQ4\"].embedDeltas={\"100\":765,\"200\":586,\"300\":540,\"400\":511,\"500\":482,\"700\":482,\"800\":482,\"900\":453,\"1000\":453},window.datawrapper[\"fiqQ4\"].iframe=document.getElementById(\"datawrapper-chart-fiqQ4\"),window.datawrapper[\"fiqQ4\"].iframe.style.height=window.datawrapper[\"fiqQ4\"].embedDeltas[Math.min(1e3,Math.max(100*Math.floor(window.datawrapper[\"fiqQ4\"].iframe.offsetWidth/100),100))]+\"px\",window.addEventListener(\"message\",function(a){if(\"undefined\"!=typeof a.data[\"datawrapper-height\"])for(var b in a.data[\"datawrapper-height\"])if(\"fiqQ4\"==b)window.datawrapper[\"fiqQ4\"].iframe.style.height=a.data[\"datawrapper-height\"][b]+\"px\"});</script>"
+            },
+            "chart-height": 394,
+            "embed-heights": {
+              "100": 765,
+              "200": 586,
+              "300": 540,
+              "400": 511,
+              "500": 482,
+              "700": 482,
+              "800": 482,
+              "900": 453,
+              "1000": 453
+            }
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "externalData": "",
+        "utf8": false,
+        "createdAt": "2025-10-11T15:57:39.000Z",
+        "lastModifiedAt": "2025-10-11T15:57:40.000Z",
+        "forkedFrom": "fiqQ4",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "data": {
+            "changes": {
+              "1e1e1e1e1e": {
+                "ignored": {
+                  "__@t$__": "54089293055-1"
+                }
+              },
+              "1f1f1f1f1f": {
+                "ignored": {
+                  "__@t$__": "54089293055-1"
+                }
+              },
+              "1g1g1g1g1g": {
+                "ignored": {
+                  "__@t$__": "54089293055-1"
+                }
+              },
+              "1h1h1h1h1h": {
+                "ignored": {
+                  "__@t$__": "54089293055-1"
+                }
+              },
+              "1i1i1i1i1i": {
+                "ignored": {
+                  "__@t$__": "54089293055-1"
+                }
+              },
+              "1j1j1j1j1j": {
+                "ignored": {
+                  "__@t$__": "54089293055-1"
+                }
+              },
+              "1k1k1k1k1k": {
+                "ignored": {
+                  "__@t$__": "54089293055-1"
+                }
+              },
+              "1l1l1l1l1l": {
+                "ignored": {
+                  "__@t$__": "54089293055-1"
+                }
+              },
+              "17j17j17j1": {
+                "ignored": {
+                  "__@t$__": "54089293055-1"
+                }
+              },
+              "17k17k17k1": {
+                "ignored": {
+                  "__@t$__": "54089293055-1"
+                }
+              },
+              "17l17l17l1": {
+                "ignored": {
+                  "__@t$__": "54089293055-1"
+                }
+              }
+            },
+            "upload-method": {
+              "__@t$__": "54089293055-1"
+            }
+          },
+          "visualize": {
+            "custom-range-x": {
+              "__@t$__": "54089293055-1"
+            },
+            "custom-ticks-x": {
+              "__@t$__": "54089293055-1"
+            },
+            "x-grid-format": {
+              "__@t$__": "54089293055-1"
+            },
+            "custom-range-y": {
+              "__@t$__": "54089293055-1"
+            },
+            "custom-ticks-y": {
+              "__@t$__": "54089293055-1"
+            },
+            "y-grid-label-align": {
+              "__@t$__": "54089293055-1"
+            },
+            "lines": {
+              "ADA": {
+                "directLabel": {
+                  "__@t$__": "54089293055-1"
+                },
+                "colorKey": {
+                  "__@t$__": "54089293055-1"
+                },
+                "symbols": {
+                  "on": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "enabled": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "shape": {
+                    "__@t$__": "54089293055-1"
+                  }
+                }
+              },
+              "BCH": {
+                "width": {
+                  "__@t$__": "54089293055-1"
+                },
+                "directLabel": {
+                  "__@t$__": "54089293055-1"
+                },
+                "colorKey": {
+                  "__@t$__": "54089293055-1"
+                },
+                "symbols": {
+                  "on": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "enabled": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "shape": {
+                    "__@t$__": "54089293055-1"
+                  }
+                }
+              },
+              "BTC": {
+                "width": {
+                  "__@t$__": "54089293055-1"
+                },
+                "directLabel": {
+                  "__@t$__": "54089293055-1"
+                },
+                "colorKey": {
+                  "__@t$__": "54089293055-1"
+                },
+                "symbols": {
+                  "on": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "enabled": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "shape": {
+                    "__@t$__": "54089293055-1"
+                  }
+                }
+              },
+              "ETH": {
+                "width": {
+                  "__@t$__": "54089293055-1"
+                },
+                "directLabel": {
+                  "__@t$__": "54089293055-1"
+                },
+                "colorKey": {
+                  "__@t$__": "54089293055-1"
+                },
+                "symbols": {
+                  "on": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "enabled": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "shape": {
+                    "__@t$__": "54089293055-1"
+                  }
+                }
+              },
+              "LTC": {
+                "width": {
+                  "__@t$__": "54089293055-1"
+                },
+                "directLabel": {
+                  "__@t$__": "54089293055-1"
+                },
+                "colorKey": {
+                  "__@t$__": "54089293055-1"
+                },
+                "symbols": {
+                  "on": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "enabled": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "shape": {
+                    "__@t$__": "54089293055-1"
+                  }
+                }
+              },
+              "XEM": {
+                "width": {
+                  "__@t$__": "54089293055-1"
+                }
+              },
+              "XMR": {
+                "width": {
+                  "__@t$__": "54089293055-1"
+                },
+                "directLabel": {
+                  "__@t$__": "54089293055-1"
+                },
+                "colorKey": {
+                  "__@t$__": "54089293055-1"
+                },
+                "symbols": {
+                  "on": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "enabled": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "shape": {
+                    "__@t$__": "54089293055-1"
+                  }
+                }
+              },
+              "XRP": {
+                "width": {
+                  "__@t$__": "54089293055-1"
+                },
+                "directLabel": {
+                  "__@t$__": "54089293055-1"
+                },
+                "colorKey": {
+                  "__@t$__": "54089293055-1"
+                },
+                "symbols": {
+                  "on": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "enabled": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "shape": {
+                    "__@t$__": "54089293055-1"
+                  }
+                }
+              },
+              "DASH": {
+                "width": {
+                  "__@t$__": "54089293055-1"
+                }
+              }
+            },
+            "connector-lines": {
+              "__@t$__": "54089293055-1"
+            },
+            "value-label-colors": {
+              "__@t$__": "54089293055-1"
+            },
+            "range-annotations": {
+              "1c1c1c1c1c": {
+                "display": {
+                  "__@t$__": "54089293055-1"
+                },
+                "strokeWidth": {
+                  "__@t$__": "54089293055-1"
+                },
+                "strokeType": {
+                  "__@t$__": "54089293055-1"
+                },
+                "position": {
+                  "x0": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "x1": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "y0": {
+                    "__@t$__": "54089293055-1"
+                  },
+                  "y1": {
+                    "__@t$__": "54089293055-1"
+                  }
+                },
+                "x0": {
+                  "__@t$__": "54089293055-1"
+                },
+                "x1": {
+                  "__@t$__": "54089293055-1"
+                }
+              }
+            },
+            "plotHeightFixed": {
+              "__@t$__": "54089293055-1"
+            },
+            "plotHeightRatio": {
+              "__@t$__": "54089293055-1"
+            },
+            "plotHeightMode": {
+              "__@t$__": "54089293055-1"
+            },
+            "color-category": {
+              "map": {
+                "ADA": {
+                  "__@t$__": "54089293055-1"
+                },
+                "BCH": {
+                  "__@t$__": "54089293055-1"
+                },
+                "BTC": {
+                  "__@t$__": "54089293055-1"
+                },
+                "ETH": {
+                  "__@t$__": "54089293055-1"
+                },
+                "LTC": {
+                  "__@t$__": "54089293055-1"
+                },
+                "XEM": {
+                  "__@t$__": "54089293055-1"
+                },
+                "XMR": {
+                  "__@t$__": "54089293055-1"
+                },
+                "XRP": {
+                  "__@t$__": "54089293055-1"
+                },
+                "DASH": {
+                  "__@t$__": "54089293055-1"
+                }
+              }
+            },
+            "labeling": {
+              "__@t$__": "54089293055-1"
+            },
+            "line-widths": {
+              "BCH": {
+                "__@t$__": "54089293055-1"
+              },
+              "BTC": {
+                "__@t$__": "54089293055-1"
+              },
+              "ETH": {
+                "__@t$__": "54089293055-1"
+              },
+              "LTC": {
+                "__@t$__": "54089293055-1"
+              },
+              "XEM": {
+                "__@t$__": "54089293055-1"
+              },
+              "XMR": {
+                "__@t$__": "54089293055-1"
+              },
+              "XRP": {
+                "__@t$__": "54089293055-1"
+              },
+              "DASH": {
+                "__@t$__": "54089293055-1"
+              },
+              "__@t$__": "54089293055-1"
+            },
+            "fill-between": {
+              "__@t$__": "54089293055-1"
+            },
+            "line-symbols": {
+              "__@t$__": "54089293055-1"
+            },
+            "custom-colors": {
+              "ADA": {
+                "__@t$__": "54089293055-1"
+              },
+              "BCH": {
+                "__@t$__": "54089293055-1"
+              },
+              "BTC": {
+                "__@t$__": "54089293055-1"
+              },
+              "ETH": {
+                "__@t$__": "54089293055-1"
+              },
+              "LTC": {
+                "__@t$__": "54089293055-1"
+              },
+              "XEM": {
+                "__@t$__": "54089293055-1"
+              },
+              "XMR": {
+                "__@t$__": "54089293055-1"
+              },
+              "XRP": {
+                "__@t$__": "54089293055-1"
+              },
+              "DASH": {
+                "__@t$__": "54089293055-1"
+              },
+              "__@t$__": "54089293055-1"
+            },
+            "x-tick-format": {
+              "__@t$__": "54089293055-1"
+            },
+            "line-symbols-on": {
+              "__@t$__": "54089293055-1"
+            },
+            "line-symbols-shape": {
+              "__@t$__": "54089293055-1"
+            },
+            "area-fill-color-below": {
+              "__@t$__": "54089293055-1"
+            },
+            "area-fill-color-between": {
+              "__@t$__": "54089293055-1"
+            }
+          },
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089293055-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089293055-1"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089293055-2"
+            },
+            "chart-height": {
+              "__@t$__": "54089293055-3"
+            }
+          }
+        },
+        "externalData": {
+          "__@t$__": "54089293055-1"
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-3"
+  },
+  "data": "0-0"
+}

@@ -1,0 +1,404 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "WsoYO",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "c529d5e68f6a3432170b3b6177b8b55a",
+        "id": "WsoYO",
+        "type": "d3-lines",
+        "title": "The rise and fall of cigarette consumption in developed countries",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {},
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "National statistics, via Our World in Data",
+            "source-url": "https://ourworldindata.org/smoking#the-rise-and-fall-of-smoking-in-rich-countries",
+            "intro": "Sales of cigarettes per adult per day, in selected countries. Figures include manufactured cigarettes, as well as an estimated number of hand-rolled cigarettes, per adult (ages 15+) per day.\n",
+            "byline": "",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": "",
+            "hide-title": false
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "auto": true
+            },
+            "lines": {
+              "Japan": {
+                "width": "style3",
+                "directLabel": false
+              },
+              "Spain": {
+                "width": "style3",
+                "directLabel": false
+              },
+              "Canada": {
+                "width": "style3",
+                "directLabel": false
+              },
+              "France": {
+                "directLabel": false
+              },
+              "Greece": null,
+              "Sweden": {
+                "width": "style3",
+                "directLabel": false
+              },
+              "Austria": {
+                "width": "style3",
+                "directLabel": false
+              },
+              "Belgium": null,
+              "Croatia": null,
+              "Germany": {
+                "directLabel": false
+              },
+              "Netherlands": {
+                "width": "style3",
+                "directLabel": false
+              },
+              "New Zealand": {
+                "width": "style3",
+                "directLabel": false
+              },
+              "Switzerland": {
+                "width": "style3",
+                "directLabel": false
+              },
+              "United States": {
+                "width": "style1",
+                "directLabel": false
+              },
+              "United Kingdom": {
+                "width": "style3",
+                "directLabel": false
+              },
+              "USSR and the former Soviet Union": null
+            },
+            "x-grid": "ticks",
+            "y-grid": "on",
+            "scale-y": "linear",
+            "overlays": {},
+            "base-color": "#ffab92",
+            "label-colors": false,
+            "label-margin": 0,
+            "range-extent": "nice",
+            "stack-to-100": false,
+            "interpolation": "linear",
+            "show-tooltips": true,
+            "x-grid-format": "YYYY",
+            "y-grid-format": "0,0.[00]",
+            "y-grid-labels": "outside",
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "Japan": "#cccccc",
+                "Spain": "#cccccc",
+                "Canada": "#cccccc",
+                "France": "#18a1cd",
+                "Greece": "#cccccc",
+                "Sweden": "#cccccc",
+                "Austria": "#cccccc",
+                "Belgium": "#cccccc",
+                "Croatia": "#cccccc",
+                "Germany": "#15607a",
+                "Netherlands": "#cccccc",
+                "New Zealand": "#cccccc",
+                "Switzerland": "#cccccc",
+                "United States": "#c71e1d",
+                "United Kingdom": "#cccccc",
+                "USSR and the former Soviet Union": "#cccccc"
+              }
+            },
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-range-y": [
+              0,
+              11.5
+            ],
+            "custom-ticks-x": "",
+            "custom-ticks-y": "",
+            "plotHeightMode": "fixed",
+            "show-color-key": true,
+            "variate-colors": false,
+            "connector-lines": true,
+            "highlight-range": false,
+            "label-alignment": "right",
+            "plotHeightFixed": 286,
+            "plotHeightRatio": 0.5,
+            "text-annotations": {
+              "NbU3LTYlmQ": {
+                "bg": true,
+                "dx": 0,
+                "dy": -8,
+                "id": "NbU3LTYlmQ",
+                "bold": false,
+                "size": 12,
+                "text": "sold cigarettes <br/>per day per adult",
+                "align": "tl",
+                "color": "#707070",
+                "italic": false,
+                "position": {
+                  "x": "1873/01/09 20:11",
+                  "y": "9.9062"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 0
+              },
+              "LJYVebdCz_": {
+                "bg": false,
+                "dx": -9,
+                "dy": -4,
+                "id": "LJYVebdCz_",
+                "bold": true,
+                "size": 14,
+                "text": "United<br/>States",
+                "align": "br",
+                "color": "#c02d24",
+                "italic": false,
+                "position": {
+                  "x": "1926/12/15 00:04",
+                  "y": "4.0966"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 1
+              },
+              "N3b7qoGYhk": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "N3b7qoGYhk",
+                "bold": true,
+                "size": 14,
+                "text": "France",
+                "align": "tl",
+                "color": "#008cb7",
+                "italic": false,
+                "position": {
+                  "x": "1946M11",
+                  "y": 1.3
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 2
+              },
+              "MuC9Kh5vx4": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "MuC9Kh5vx4",
+                "bold": true,
+                "size": 14,
+                "text": "Germany",
+                "align": "tl",
+                "color": "#15607a",
+                "italic": false,
+                "position": {
+                  "x": "1957/07/03 06:34",
+                  "y": "3.9940"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 3
+              }
+            },
+            "tooltip-x-format": "YYYY",
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "custom-grid-lines": "",
+            "range-annotations": {},
+            "value-label-colors": true,
+            "value-label-format": "0,0.[00]",
+            "y-grid-label-align": "left",
+            "compact-group-labels": false,
+            "tooltip-number-format": "0,0.[00]"
+          },
+          "axes": {
+            "x": "country"
+          },
+          "publish": {
+            "embed-width": 600,
+            "embed-height": 474,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "text": "#333333",
+            "background": "#ffffff",
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"The rise and fall of cigarette consumption in developed countries\" aria-label=\"Interactive line chart\" id=\"datawrapper-chart-XskMo\" src=\"https://datawrapper.dwcdn.net/XskMo/18/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"600\" height=\"478\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"The rise and fall of cigarette consumption in developed countries\" aria-label=\"Interactive line chart\" id=\"datawrapper-chart-XskMo\" src=\"https://datawrapper.dwcdn.net/XskMo/18/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"478\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:478px\" id=\"datawrapper-vis-XskMo\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/XskMo/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-XskMo\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/XskMo/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "chart-height": 292,
+            "embed-heights": {
+              "100": 807,
+              "200": 598,
+              "300": 508,
+              "400": 463,
+              "500": 446,
+              "700": 401,
+              "800": 401,
+              "900": 401,
+              "1000": 401
+            }
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T15:55:22.000Z",
+        "lastModifiedAt": "2025-10-11T15:55:23.000Z",
+        "forkedFrom": "XskMo",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089236790-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089236790-1"
+            }
+          },
+          "visualize": {
+            "lines": {
+              "Greece": {
+                "width": {
+                  "__@t$__": "54089236790-1"
+                },
+                "__@t$__": "54089236790-1"
+              },
+              "Belgium": {
+                "width": {
+                  "__@t$__": "54089236790-1"
+                },
+                "__@t$__": "54089236790-1"
+              },
+              "Croatia": {
+                "width": {
+                  "__@t$__": "54089236790-1"
+                },
+                "__@t$__": "54089236790-1"
+              },
+              "USSR and the former Soviet Union": {
+                "width": {
+                  "__@t$__": "54089236790-1"
+                },
+                "__@t$__": "54089236790-1"
+              }
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089236790-2"
+            },
+            "chart-height": {
+              "__@t$__": "54089236790-3"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-3"
+  },
+  "data": "0-0"
+}

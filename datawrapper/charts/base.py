@@ -869,10 +869,18 @@ class BaseChart(BaseModel):
         visualize_sharing = visualize.get("sharing", {})
         
         # Build base initialization dict
-        # Handle column-format: convert empty dict to empty list
+        # Handle column-format: convert dict to list
         data_metadata = metadata.get("data", {})
-        if "column-format" in data_metadata and isinstance(data_metadata["column-format"], dict) and not data_metadata["column-format"]:
-            data_metadata["column-format"] = []
+        if "column-format" in data_metadata and isinstance(data_metadata["column-format"], dict):
+            # Convert dict format (column_name -> config) to list format
+            column_format_dict = data_metadata["column-format"]
+            if column_format_dict:
+                data_metadata["column-format"] = [
+                    {"column": col_name, **col_config}
+                    for col_name, col_config in column_format_dict.items()
+                ]
+            else:
+                data_metadata["column-format"] = []
         
         init_data = {
             # Chart type and basic info

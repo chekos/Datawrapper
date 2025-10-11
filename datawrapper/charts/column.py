@@ -171,7 +171,7 @@ class ColumnChart(BaseChart):
     )
 
     #: The fixed height of the plot
-    plot_height_fixed: int = Field(
+    plot_height_fixed: int | float = Field(
         default=300,
         alias="plot-height-fixed",
         description="The fixed height of the plot",
