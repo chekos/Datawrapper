@@ -1,0 +1,411 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "oMSP1",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "f8100ec8d34401d4a676ad2d98203eca",
+        "id": "oMSP1",
+        "type": "d3-area",
+        "title": "Only 4% of all artworks acquired by Tate were created by women",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {
+              "4w2xoqlp40": {
+                "id": "4w2xoqlp40",
+                "row": 179,
+                "time": 1531398400346,
+                "value": "",
+                "column": 0,
+                "ignored": false,
+                "_index": 0
+              },
+              "9edpazqtq9": {
+                "id": "9edpazqtq9",
+                "row": 179,
+                "time": 1531398400346,
+                "value": "",
+                "column": 1,
+                "ignored": false,
+                "_index": 1
+              },
+              "ga7zpntw61": {
+                "id": "ga7zpntw61",
+                "row": 179,
+                "time": 1531398400346,
+                "value": "",
+                "column": 2,
+                "ignored": false,
+                "_index": 2
+              },
+              "rqsu60339v": {
+                "id": "rqsu60339v",
+                "row": 179,
+                "time": 1531398400346,
+                "value": "",
+                "column": 3,
+                "ignored": false,
+                "_index": 3
+              },
+              "87omx4qdo0": {
+                "id": "87omx4qdo0",
+                "row": 0,
+                "value": "Acquisiation from a male artist",
+                "column": 1,
+                "ignored": false,
+                "_index": 4
+              },
+              "n8gf544bq4": {
+                "id": "n8gf544bq4",
+                "row": 0,
+                "value": "Acquisition from an artwork created by a male artistt",
+                "column": 1,
+                "ignored": false,
+                "_index": 5
+              },
+              "g249myj6i1": {
+                "id": "g249myj6i1",
+                "row": 0,
+                "value": "Acquisition from an artwork created by a male artist",
+                "column": 1,
+                "ignored": false,
+                "_index": 6
+              },
+              "kdjcadtf0d": {
+                "id": "kdjcadtf0d",
+                "row": 0,
+                "value": "...by a artist with unknown gender",
+                "column": 2,
+                "ignored": false,
+                "_index": 7
+              },
+              "gtvjjk05h6": {
+                "id": "gtvjjk05h6",
+                "row": 0,
+                "value": "...by a female artist",
+                "column": 3,
+                "ignored": false,
+                "_index": 8
+              },
+              "wvnl6z722q": {
+                "id": "wvnl6z722q",
+                "row": 0,
+                "value": "Acquisition from an artwork created by a man",
+                "column": 1,
+                "ignored": false,
+                "_index": 9
+              },
+              "zok5yf2i1u": {
+                "id": "zok5yf2i1u",
+                "row": 0,
+                "value": "...by a woman",
+                "column": 3,
+                "ignored": false,
+                "_index": 10
+              },
+              "nhxiv0ytbh": {
+                "id": "nhxiv0ytbh",
+                "row": 0,
+                "value": "...by an artist with unknown gender",
+                "column": 2,
+                "ignored": false,
+                "_index": 11
+              }
+            },
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-order": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "column-format": {
+              "X.1": {
+                "type": "auto",
+                "ignore": true,
+                "number-append": "",
+                "number-format": "n0",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Male": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "%",
+                "number-format": "n0",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Var.2": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "n0",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Female": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "%",
+                "number-format": "n0",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "unknown": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "%",
+                "number-format": "n2",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "withoutgender": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "%",
+                "number-format": "n0",
+                "number-prepend": ""
+              },
+              "acquisitionYear": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "auto",
+                "number-prepend": ""
+              }
+            },
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "The Tate Collection",
+            "source-url": "https://github.com/tategallery/collection",
+            "intro": "Percentage of female and male artists of the around 70,000 artworks which were acquired by the Tate gallery, or by the Tate gallery together with the National Galleries of Scotland, between 1823 and 2013.",
+            "byline": "Lisa Charlotte Muth, Datawrapper",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": ""
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "auto": true
+            },
+            "lines": {
+              "Male": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Female": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "withoutgender": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              }
+            },
+            "x-grid": "ticks",
+            "y-grid": "ticks",
+            "scale-y": "linear",
+            "overlays": {},
+            "base-color": 0,
+            "sort-areas": "keep",
+            "stack-areas": true,
+            "area-opacity": 1,
+            "label-colors": false,
+            "label-margin": 0,
+            "stack-to-100": false,
+            "interpolation": "step",
+            "show-tooltips": true,
+            "x-grid-format": "YYYY",
+            "y-grid-format": "0,0.[00]",
+            "y-grid-labels": "auto",
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "Male": "#002a41",
+                "Female": "#cbf94b",
+                "unknown": "#858585",
+                "withoutgender": "#394952"
+              }
+            },
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-range-y": [
+              "",
+              ""
+            ],
+            "custom-ticks-x": "",
+            "custom-ticks-y": "",
+            "plotHeightMode": "fixed",
+            "show-color-key": true,
+            "plotHeightFixed": 444,
+            "plotHeightRatio": 0.5,
+            "text-annotations": {
+              "mobwnf7rs6": {
+                "bg": false,
+                "dx": 9,
+                "dy": -12,
+                "id": "mobwnf7rs6",
+                "bold": false,
+                "size": 12,
+                "text": "← <br/>In 1860, the Tate<br/>acquired only <br/>2 artworks. <br/>One of them was <br/>from the British<br/>School.",
+                "align": "tl",
+                "color": "#a4b1bb",
+                "italic": false,
+                "position": {
+                  "x": "1860M6",
+                  "y": 50
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 0
+              }
+            },
+            "tooltip-x-format": "YYYY",
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "range-annotations": {},
+            "stack-color-legend": false,
+            "y-grid-label-align": "left",
+            "area-separator-color": "background",
+            "area-separator-lines": false,
+            "reverse-color-legend": false,
+            "tooltip-number-format": "0,0.[00]"
+          },
+          "axes": {
+            "x": "year"
+          },
+          "publish": {
+            "embed-width": 703,
+            "embed-height": 640,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Only 4% of all artworks acquired by Tate were created by women\" aria-label=\"Interactive area chart\" id=\"datawrapper-chart-tTdLr\" src=\"https://datawrapper.dwcdn.net/tTdLr/8/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"703\" height=\"635\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Only 4% of all artworks acquired by Tate were created by women\" aria-label=\"Interactive area chart\" id=\"datawrapper-chart-tTdLr\" src=\"https://datawrapper.dwcdn.net/tTdLr/8/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"635\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data[\"datawrapper-height\"][t]+\"px\";r.style.height=d}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:635px\" id=\"datawrapper-vis-tTdLr\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/tTdLr/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-tTdLr\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/tTdLr/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "chart-height": 508,
+            "embed-heights": {
+              "100": 1080,
+              "200": 774,
+              "300": 701,
+              "400": 659,
+              "500": 642,
+              "700": 600,
+              "800": 600,
+              "900": 600,
+              "1000": 600
+            }
+          },
+          "annotate": {
+            "notes": "The data analysis can be found <a href=\"https://github.com/lisacharlotterost/dayprojects/blob/master/datawrapper-TATE-artworks/170606_Tate.md\">in this R markdown file."
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T17:53:45.000Z",
+        "lastModifiedAt": "2025-10-11T17:53:46.000Z",
+        "forkedFrom": "tTdLr",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089250518-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089250518-1"
+            }
+          },
+          "visualize": {
+            "area-opacity": {
+              "__@t$__": "54089250518-2"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089250518-2"
+            },
+            "chart-height": {
+              "__@t$__": "54089250518-3"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-3"
+  },
+  "data": "0-0"
+}

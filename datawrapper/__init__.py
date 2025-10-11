@@ -13,6 +13,7 @@ except PackageNotFoundError:  # pragma: no cover
 
 from datawrapper.charts import (
     Annotate,
+    AreaChart,
     AreaFill,
     BarChart,
     BarOverlay,
@@ -47,6 +48,7 @@ __all__ = [
     "LineSymbol",
     "LineValueLabel",
     "AreaFill",
+    "AreaChart",
     "TextAnnotation",
     "RangeAnnotation",
     "ConnectorLine",

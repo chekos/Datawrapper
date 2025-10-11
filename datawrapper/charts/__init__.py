@@ -1,4 +1,5 @@
 from .annos import ConnectorLine, RangeAnnotation, TextAnnotation
+from .area import AreaChart
 from .bar import BarChart, BarOverlay
 from .base import Annotate, BaseChart, ColumnFormat, Describe, Transform
 from .column import ColumnChart
@@ -21,4 +22,5 @@ __all__ = (
     "LineSymbol",
     "LineValueLabel",
     "AreaFill",
+    "AreaChart",
 )
