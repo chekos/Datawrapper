@@ -1,22 +1,26 @@
 """Unit test package for datawrapper."""
 
 import pandas as pd
+import pytest
 
 from datawrapper import Datawrapper
 
 
+@pytest.mark.api
 def test_get_charts():
     """Test the get_charts method."""
     dw = Datawrapper()
     dw.get_charts()
 
 
+@pytest.mark.api
 def test_get_folders():
     """Test the get_folders method."""
     dw = Datawrapper()
     dw.get_folders()
 
 
+@pytest.mark.api
 def test_fork():
     """Test the fork_chart method."""
     dw = Datawrapper()
@@ -29,6 +33,7 @@ def test_fork():
     assert source_id != fork_info["id"]
 
 
+@pytest.mark.api
 def test_copy():
     """Test the copy_chart method."""
     dw = Datawrapper()
@@ -41,6 +46,7 @@ def test_copy():
     assert chart_info["title"] in copy_info["title"]
 
 
+@pytest.mark.api
 def test_usage():
     """Test creating and updating charts with the same code as our example notebook."""
     # Connect

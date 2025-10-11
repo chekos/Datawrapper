@@ -1,8 +1,11 @@
 """Test the user methods."""
 
+import pytest
+
 from datawrapper import Datawrapper
 
 
+@pytest.mark.api
 def test_get_user():
     """Test the get user method."""
     # Connect
@@ -29,6 +32,7 @@ def test_get_user():
     assert isinstance(charts, dict)
 
 
+@pytest.mark.api
 def test_edit_user():
     """Test the user editing methods."""
     # Connect

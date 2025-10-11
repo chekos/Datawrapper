@@ -3,9 +3,12 @@
 import random
 import string
 
+import pytest
+
 from datawrapper import Datawrapper
 
 
+@pytest.mark.api
 def test_get_workspaces():
     """Test the get_workspaces method."""
     # Connect
@@ -25,6 +28,7 @@ def test_get_workspaces():
         assert workspace["slug"] == workspace_slug
 
 
+@pytest.mark.api
 def test_edit_workspaces():
     """Test creating, updating, and deleting workspaces."""
     # Connect
@@ -64,6 +68,7 @@ def test_edit_workspaces():
         raise
 
 
+@pytest.mark.api
 def test_workspace_members():
     """Test workspace membership operations."""
     # Connect
@@ -84,6 +89,7 @@ def test_workspace_members():
         # as they require actual members and could disrupt real workspaces
 
 
+@pytest.mark.api
 def test_workspace_teams():
     """Test workspace team operations."""
     # Connect
@@ -108,6 +114,7 @@ def test_workspace_teams():
             assert team["id"] == team_id
 
 
+@pytest.mark.api
 def test_workspace_team_members():
     """Test workspace team member operations."""
     # Connect

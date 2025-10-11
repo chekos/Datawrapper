@@ -1,8 +1,11 @@
 """Test themes related API enpoints."""
 
+import pytest
+
 from datawrapper import Datawrapper
 
 
+@pytest.mark.api
 def test_get_themes():
     """Test the get_themes method."""
     dw = Datawrapper()

@@ -1,8 +1,11 @@
 """Test River functions."""
 
+import pytest
+
 from datawrapper import Datawrapper
 
 
+@pytest.mark.api
 def test_get_river():
     """Test the get_river function."""
     # Create a client

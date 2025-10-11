@@ -1,8 +1,11 @@
 """Test oembed functions."""
 
+import pytest
+
 from datawrapper import Datawrapper
 
 
+@pytest.mark.api
 def test_get_oembed():
     """Test get_oembed function."""
     dw = Datawrapper()

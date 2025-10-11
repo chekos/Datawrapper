@@ -8,6 +8,7 @@ import pytest
 from datawrapper import BarChart, RangeAnnotation, TextAnnotation
 
 
+@pytest.mark.api
 class TestEndToEndWorkflows:
     """Test complete end-to-end workflows."""
 

@@ -4,6 +4,7 @@ from datawrapper import Datawrapper
 from datawrapper.exceptions import FailedRequestError
 
 
+@pytest.mark.api
 def test_get_failed_request():
     """Test that FailedRequestError is imported correctly."""
     dw = Datawrapper(access_token="test")

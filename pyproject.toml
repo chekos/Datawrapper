@@ -137,7 +137,6 @@ markers = [
     "functional: Functional tests (end-to-end)",
     "api: API tests (external dependencies)",
     "slow: Slow running tests",
-    "smoke: Smoke tests for CI/CD",
 ]
 filterwarnings = [
     "error",

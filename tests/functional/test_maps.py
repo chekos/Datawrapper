@@ -1,8 +1,11 @@
 import json
 
+import pytest
+
 from datawrapper import Datawrapper
 
 
+@pytest.mark.api
 def test_locator_map_points():
     """Test locator maps with points."""
     # Connect
@@ -85,6 +88,7 @@ def test_locator_map_points():
     dw.add_json(obj["id"], data)
 
 
+@pytest.mark.api
 def test_locator_map_areas():
     """Test locator maps with areas."""
     # Connect
@@ -104,6 +108,7 @@ def test_locator_map_areas():
     dw.add_json(obj["id"], data)
 
 
+@pytest.mark.api
 def test_locator_map_lines():
     """Test locator maps with lines."""
     # Connect

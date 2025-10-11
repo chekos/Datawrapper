@@ -1,8 +1,11 @@
 """Test the login token functions."""
 
+import pytest
+
 from datawrapper import Datawrapper
 
 
+@pytest.mark.api
 def test_login_tokens():
     """Test login token methods."""
     # Create a client

@@ -3,9 +3,12 @@
 import random
 import string
 
+import pytest
+
 from datawrapper import Datawrapper
 
 
+@pytest.mark.api
 def test_get_folders():
     """Test the get_folders method."""
     dw = Datawrapper()
@@ -13,6 +16,7 @@ def test_get_folders():
     assert len(folder_list) > 0
 
 
+@pytest.mark.api
 def test_folder_crud():
     """Run folder related tests for creation, updating and deleting."""
     # Connect

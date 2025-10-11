@@ -1,8 +1,11 @@
 """Test basemaps related API enpoints."""
 
+import pytest
+
 from datawrapper import Datawrapper
 
 
+@pytest.mark.api
 def test_get_basemaps():
     """Test the get_basemaps method."""
     dw = Datawrapper()
@@ -10,6 +13,7 @@ def test_get_basemaps():
     assert len(basemaps_list) > 0
 
 
+@pytest.mark.api
 def test_get_basemap():
     """Test the get_basemap method."""
     dw = Datawrapper()
@@ -28,6 +32,7 @@ def test_get_basemap():
     assert basemap_info["meta"]["projection"] == {"type": "geoAzimuthalEqualArea"}
 
 
+@pytest.mark.api
 def test_get_basemap_key():
     """Test the get_basemap_key method."""
     dw = Datawrapper()

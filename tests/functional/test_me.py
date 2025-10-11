@@ -1,14 +1,18 @@
 """Test methods that use the /me endpoint."""
 
+import pytest
+
 from datawrapper import Datawrapper
 
 
+@pytest.mark.api
 def test_get_my_account():
     """Test the get_my_account method."""
     dw = Datawrapper()
     assert isinstance(dw.get_my_account(), dict)
 
 
+@pytest.mark.api
 def test_update_my_account():
     """Test update_my_account."""
     dw = Datawrapper()
@@ -16,6 +20,7 @@ def test_update_my_account():
     dw.update_my_account(name="Test user")
 
 
+@pytest.mark.api
 def test_get_my_recently_edited_charts():
     """Test my_recently_edited_charts."""
     dw = Datawrapper()
@@ -34,6 +39,7 @@ def test_get_my_recently_edited_charts():
     assert isinstance(four["list"], list)
 
 
+@pytest.mark.api
 def test_get_my_recently_published_charts():
     """Test my_recently_published_charts."""
     dw = Datawrapper()
