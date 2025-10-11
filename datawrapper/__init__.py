@@ -34,6 +34,11 @@ from datawrapper.charts import (
     TextAnnotation,
     Transform,
 )
+from datawrapper.exceptions import (
+    FailedRequestError,
+    InvalidRequestError,
+    RateLimitError,
+)
 from datawrapper.flags import get_country_flag
 
 from .__main__ import Datawrapper
@@ -62,4 +67,7 @@ __all__ = [
     "RangeAnnotation",
     "ConnectorLine",
     "get_country_flag",
+    "FailedRequestError",
+    "InvalidRequestError",
+    "RateLimitError",
 ]

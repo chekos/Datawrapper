@@ -37,23 +37,31 @@ def test_edit_workspaces():
     workspace = dw.create_workspace(f"Test Workspace {suffix}")
     assert isinstance(workspace, dict)
 
-    # Get the workspace
-    workspace = dw.get_workspace(workspace["slug"])
+    try:
+        # Get the workspace
+        workspace = dw.get_workspace(workspace["slug"])
 
-    # Update the workspace
-    workspace = dw.update_workspace(
-        workspace["slug"], name=f"Test Workspace 2 {suffix}"
-    )
+        # Update the workspace
+        workspace = dw.update_workspace(
+            workspace["slug"], name=f"Test Workspace 2 {suffix}"
+        )
 
-    # Get the workspace again
-    workspace = dw.get_workspace(workspace["slug"])
+        # Get the workspace again
+        workspace = dw.get_workspace(workspace["slug"])
 
-    # Verify that the name changed
-    assert workspace["name"] == f"Test Workspace 2 {suffix}"
+        # Verify that the name changed
+        assert workspace["name"] == f"Test Workspace 2 {suffix}"
 
-    # Delete the workspace
-    delete = dw.delete_workspace(workspace["slug"])
-    assert delete is True
+        # Delete the workspace
+        delete = dw.delete_workspace(workspace["slug"])
+        assert delete is True
+    except Exception:
+        # Ensure cleanup even if test fails
+        try:
+            dw.delete_workspace(workspace["slug"])
+        except Exception:
+            pass  # Ignore cleanup errors
+        raise
 
 
 def test_workspace_members():

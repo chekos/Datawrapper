@@ -13,7 +13,7 @@ import pandas as pd
 import requests as r
 from IPython.display import IFrame, Image
 
-from .exceptions import FailedRequestError, InvalidRequestError
+from .exceptions import FailedRequestError, InvalidRequestError, RateLimitError
 
 logger = logging.getLogger(__name__)
 
@@ -127,6 +127,8 @@ class Datawrapper:
         if response.ok:
             return True
         logger.error(f"Delete request failed with status code {response.status_code}.")
+        if response.status_code == 429:
+            raise RateLimitError(response)
         raise FailedRequestError(response)
 
     def get(self, url: str, params: dict | None = None, timeout: int = 15) -> Any:
@@ -170,6 +172,8 @@ class Datawrapper:
             return response.content
         # If not, raise an exception
         logger.error(f"Get request failed with status code {response.status_code}.")
+        if response.status_code == 429:
+            raise RateLimitError(response)
         raise FailedRequestError(response)
 
     def patch(
@@ -222,6 +226,8 @@ class Datawrapper:
             return response.json()
         # If not, raise an exception
         logger.error(f"Patch request failed with status code {response.status_code}.")
+        if response.status_code == 429:
+            raise RateLimitError(response)
         raise FailedRequestError(response)
 
     def post(
@@ -276,6 +282,8 @@ class Datawrapper:
             return True
         # If not, raise an exception
         logger.error(f"Post request failed with status code {response.status_code}.")
+        if response.status_code == 429:
+            raise RateLimitError(response)
         raise FailedRequestError(response)
 
     def put(
@@ -331,6 +339,8 @@ class Datawrapper:
         if response.ok:
             return True
         logger.error(f"Put request failed with status code {response.status_code}.")
+        if response.status_code == 429:
+            raise RateLimitError(response)
         raise FailedRequestError(response)
 
     #

@@ -453,3 +453,43 @@ def pytest_collection_modifyitems(config, items):
         if "benchmark" in item.name or "perf" in item.name:
             item.add_marker(pytest.mark.benchmark)
             item.add_marker(pytest.mark.slow)
+
+
+@pytest.fixture(scope="session", autouse=True)
+def cleanup_test_workspaces_session():
+    """Clean up test workspaces before and after test session."""
+
+    def _cleanup():
+        """Helper to cleanup test workspaces."""
+        try:
+            from datawrapper import Datawrapper
+            from datawrapper.exceptions import RateLimitError
+
+            # Only run if we have an API token
+            if not os.getenv("DATAWRAPPER_ACCESS_TOKEN"):
+                return
+
+            dw = Datawrapper()
+            workspaces = dw.get_workspaces()
+
+            for workspace in workspaces["list"]:
+                if workspace["name"].startswith("Test Workspace"):
+                    try:
+                        dw.delete_workspace(workspace["slug"])
+                    except RateLimitError:
+                        # Stop on rate limit to avoid further issues
+                        break
+                    except Exception:
+                        # Ignore other errors during cleanup
+                        pass
+        except Exception:
+            # Silently ignore all cleanup errors
+            pass
+
+    # Cleanup before tests
+    _cleanup()
+
+    yield
+
+    # Cleanup after tests
+    _cleanup()
