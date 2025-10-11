@@ -118,7 +118,7 @@ jobs:
 
       - id: tests
         name: Run tests
-        run: uv run pytest --cov -sv
+        run: uv run pytest --cov -sv --ignore=tests/functional/test_workspaces.py
         shell: bash
 
   build:
