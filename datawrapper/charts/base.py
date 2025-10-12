@@ -528,12 +528,21 @@ class BaseChart(BaseModel):
         self._client = Datawrapper(access_token=token)
         return self._client
 
-    def _convert_data_to_csv(self) -> str:
+    def serialize_data(self) -> str | None:
         """Convert data to CSV string for API upload.
 
         Returns:
-            CSV string representation of the data.
+            CSV string representation of the data, or None if data is empty.
         """
+        # Check if data is empty
+        if isinstance(self.data, pd.DataFrame):
+            if self.data.empty:
+                return None
+        else:
+            if not bool(self.data):
+                return None
+
+        # Convert to CSV
         if isinstance(self.data, pd.DataFrame):
             return self.data.to_csv(index=False, encoding="utf-8")
         else:
@@ -555,35 +564,26 @@ class BaseChart(BaseModel):
             ValueError: If no access token is available or API returns invalid response.
             Exception: If the API request fails.
         """
+        # Get the client
         client = self._get_client(access_token)
 
-        # Get the serialized chart data
-        chart_data = self.serialize_model()
+        # Get the serialized chart metadata
+        metadata = self.serialize_model()
 
-        # Convert data to CSV string if present
-        data_to_pass = None
-        if not (
-            self.data.empty
-            if isinstance(self.data, pd.DataFrame)
-            else not bool(self.data)
-        ):
-            data_to_pass = self._convert_data_to_csv()
-
-        # Use the convenience method from the client
+        # Use the convenience method from the client to create the chart
         response = client.create_chart(
-            title=chart_data["title"],
-            chart_type=chart_data["type"],
-            theme=chart_data.get("theme") or None,
-            data=data_to_pass,
+            title=metadata["title"],
+            chart_type=metadata["type"],
+            theme=metadata.get("theme") or None,
+            data=self.serialize_data(),
             forkable=self.forkable,
-            language=chart_data.get("language"),
-            metadata=chart_data["metadata"],
+            language=metadata.get("language"),
+            metadata=metadata["metadata"],
         )
 
         # Extract and validate the chart ID
         if not isinstance(response, dict):
             raise ValueError(f"Unexpected response type from API: {type(response)}")
-
         chart_id = response.get("id")
         if not chart_id or not isinstance(chart_id, str):
             raise ValueError(f"Invalid chart ID received from API: {chart_id}")
@@ -611,31 +611,24 @@ class BaseChart(BaseModel):
                 "No chart_id set. Use create() first or set chart_id manually."
             )
 
+        # Get the client
         client = self._get_client(access_token)
 
-        # Get the serialized chart data
-        chart_data = self.serialize_model()
+        # Get the serialized chart metadata
+        metadata = self.serialize_model()
 
-        # Convert data to CSV string if present
-        data_to_pass = None
-        if not (
-            self.data.empty
-            if isinstance(self.data, pd.DataFrame)
-            else not bool(self.data)
-        ):
-            data_to_pass = self._convert_data_to_csv()
-
-        # Use the convenience method from the client
+        # Use the convenience method from the client to update the chart
         client.update_chart(
             chart_id=self.chart_id,
-            title=chart_data["title"],
-            chart_type=chart_data["type"],
-            theme=chart_data.get("theme") or None,
-            data=data_to_pass,
-            language=chart_data.get("language"),
-            metadata=chart_data["metadata"],
+            title=metadata["title"],
+            chart_type=metadata["type"],
+            theme=metadata.get("theme") or None,
+            data=self.serialize_data(),
+            language=metadata.get("language"),
+            metadata=metadata["metadata"],
         )
 
+        # Return the chart ID
         return self.chart_id
 
     @model_validator(mode="before")
