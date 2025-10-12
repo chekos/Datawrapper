@@ -1,4 +1,5 @@
 import os
+import uuid
 from io import StringIO
 from typing import Any, Literal
 
@@ -6,6 +7,7 @@ import pandas as pd
 from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 
 from datawrapper.__main__ import Datawrapper
+from datawrapper.charts.annos import RangeAnnotation, TextAnnotation
 from datawrapper.charts.models import (
     Annotate,
     Describe,
@@ -357,6 +359,42 @@ class BaseChart(BaseModel):
             # Convert list of dicts to DataFrame first, then to CSV
             df = pd.DataFrame(self.data)
             return df.to_csv(index=False, encoding="utf-8")
+
+    def _serialize_annotations(
+        self,
+        annotations: list[Any],
+        annotation_class: type[TextAnnotation | RangeAnnotation],
+    ) -> dict[str, Any]:
+        """Serialize annotations to dict with UUID keys.
+
+        Preserves existing UUIDs from deserialized charts to prevent duplicates.
+        Generates new UUIDs for new annotations.
+
+        Args:
+            annotations: List of annotation objects or dicts
+            annotation_class: The annotation class (TextAnnotation or RangeAnnotation)
+
+        Returns:
+            Dictionary mapping UUID keys to serialized annotation data
+        """
+        result = {}
+        for anno_obj in annotations:
+            # Convert to annotation object if needed
+            if isinstance(anno_obj, dict):
+                anno = annotation_class.model_validate(anno_obj)
+            else:
+                anno = anno_obj
+
+            # Use existing ID or generate new one
+            if anno.id:
+                anno_id = anno.id
+            else:
+                anno_id = str(uuid.uuid4()).replace("-", "")[:10]
+
+            # Serialize the annotation using the custom serialize_model method
+            result[anno_id] = anno.serialize_model()
+
+        return result
 
     #
     # Deserialization methods for parsing API responses and input data

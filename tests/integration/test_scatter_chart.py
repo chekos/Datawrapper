@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from unittest.mock import Mock, patch
 
 import pandas as pd
 
@@ -470,84 +471,145 @@ class TestScatterPlotParsing:
 
     def test_parse_automation_sample(self):
         """Test parsing the automation sample JSON."""
-        chart_data = load_sample_json("automation.json")
+        chart_metadata = load_sample_json("automation.json")
+        sample_csv = load_sample_csv("automation.csv")
 
-        chart = ScatterPlot.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
-        assert chart.chart_type == "d3-scatter-plot"
-        assert chart.title == "Higher Risk of Job Automation in Lower Paying Jobs"
-        assert chart.x_column == "prob"
-        assert chart.y_column == "medWage"
-        assert chart.size_column == "numbEmployed"
-        assert chart.x_log is False
-        assert chart.y_log is True
-        assert chart.regression is True
-        assert chart.regression_method == "exponential"
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = ScatterPlot.get("test-id", access_token="test-token")
+
+            assert chart.chart_type == "d3-scatter-plot"
+            assert chart.title == "Higher Risk of Job Automation in Lower Paying Jobs"
+            assert chart.x_column == "prob"
+            assert chart.y_column == "medWage"
+            assert chart.size_column == "numbEmployed"
+            assert chart.x_log is False
+            assert chart.y_log is True
+            assert chart.regression is True
+            assert chart.regression_method == "exponential"
 
     def test_parse_elements_sample(self):
         """Test parsing the elements sample JSON."""
-        chart_data = load_sample_json("elements.json")
+        chart_metadata = load_sample_json("elements.json")
+        sample_csv = load_sample_csv("elements.csv")
 
-        chart = ScatterPlot.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
-        assert chart.chart_type == "d3-scatter-plot"
-        assert chart.title == "When were chemical elements discovered?"
-        assert chart.x_column == "Group"
-        assert chart.y_column == "Period"
-        assert chart.shape_column == "time range"
-        assert chart.labels_column == "Symbol"
-        assert chart.fixed_size == 20
-        assert chart.show_color_key is True
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = ScatterPlot.get("test-id", access_token="test-token")
+
+            assert chart.chart_type == "d3-scatter-plot"
+            assert chart.title == "When were chemical elements discovered?"
+            assert chart.x_column == "Group"
+            assert chart.y_column == "Period"
+            assert chart.shape_column == "time range"
+            assert chart.labels_column == "Symbol"
+            assert chart.fixed_size == 20
+            assert chart.show_color_key is True
 
     def test_parse_german_students_sample(self):
         """Test parsing the german-students sample JSON."""
-        chart_data = load_sample_json("german-students.json")
+        chart_metadata = load_sample_json("german-students.json")
+        sample_csv = load_sample_csv("german-students.csv")
 
-        chart = ScatterPlot.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
-        assert chart.chart_type == "d3-scatter-plot"
-        assert chart.title == "What are the student cities in Germany?"
-        assert chart.x_column == "students"
-        assert chart.y_column == "percent"
-        assert chart.size == "dynamic"
-        assert chart.size_column == "students"
-        assert chart.labels_column == "city"
-        assert chart.add_labels == ["Berlin", "Frankfurt am Main", "München"]
-        assert chart.highlight_labeled is True
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = ScatterPlot.get("test-id", access_token="test-token")
+
+            assert chart.chart_type == "d3-scatter-plot"
+            assert chart.title == "What are the student cities in Germany?"
+            assert chart.x_column == "students"
+            assert chart.y_column == "percent"
+            assert chart.size == "dynamic"
+            assert chart.size_column == "students"
+            assert chart.labels_column == "city"
+            assert chart.add_labels == ["Berlin", "Frankfurt am Main", "München"]
+            assert chart.highlight_labeled is True
 
     def test_parse_life_expectancy_sample(self):
         """Test parsing the life-expectancy sample JSON."""
-        chart_data = load_sample_json("life-expectancy.json")
+        chart_metadata = load_sample_json("life-expectancy.json")
+        sample_csv = load_sample_csv("life-expectancy.csv")
 
-        chart = ScatterPlot.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
-        assert chart.chart_type == "d3-scatter-plot"
-        assert (
-            chart.title == "Every country has a higher life expectancy now than in 1800"
-        )
-        assert chart.x_column == "gdp"
-        assert chart.y_column == "health"
-        assert chart.size_column == "population"
-        assert chart.labels_column == "country"
-        assert chart.x_log is True
-        assert chart.y_log is False
-        assert chart.auto_labels is False
-        assert chart.show_color_key is False
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = ScatterPlot.get("test-id", access_token="test-token")
+
+            assert chart.chart_type == "d3-scatter-plot"
+            assert (
+                chart.title
+                == "Every country has a higher life expectancy now than in 1800"
+            )
+            assert chart.x_column == "gdp"
+            assert chart.y_column == "health"
+            assert chart.size_column == "population"
+            assert chart.labels_column == "country"
+            assert chart.x_log is True
+            assert chart.y_log is False
+            assert chart.auto_labels is False
+            assert chart.show_color_key is False
 
     def test_parse_preserves_all_fields(self):
         """Test that parsing preserves all scatter-specific fields."""
-        chart_data = load_sample_json("automation.json")
+        chart_metadata = load_sample_json("automation.json")
+        sample_csv = load_sample_csv("automation.csv")
 
-        chart = ScatterPlot.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
-        # Verify key fields are preserved
-        assert chart.opacity == 0.86
-        assert chart.outlines is True
-        assert chart.color_outline == "#fff"
-        assert chart.show_color_key is True
-        assert chart.max_size > 0
-        assert chart.plot_height_mode == "fixed"
-        assert chart.plot_height_fixed > 0
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = ScatterPlot.get("test-id", access_token="test-token")
+
+            # Verify key fields are preserved
+            assert chart.opacity == 0.86
+            assert chart.outlines is True
+            assert chart.color_outline == "#fff"
+            assert chart.show_color_key is True
+            assert chart.max_size > 0
+            assert chart.plot_height_mode == "fixed"
+            assert chart.plot_height_fixed > 0
 
 
 class TestScatterPlotRoundTrip:
@@ -569,15 +631,35 @@ class TestScatterPlotRoundTrip:
         # Serialize
         serialized = original.model_dump(by_alias=True)
 
-        # Parse back
-        parsed = ScatterPlot.from_api(serialized)
+        # Parse back (simulating API response)
+        chart_metadata = {
+            "type": serialized["type"],
+            "title": serialized["title"],
+            "axes": serialized["axes"],
+            "metadata": serialized["metadata"],
+        }
 
-        # Verify key fields match
-        assert parsed.title == original.title
-        assert parsed.x_column == original.x_column
-        assert parsed.y_column == original.y_column
-        assert parsed.x_log == original.x_log
-        assert parsed.y_range == original.y_range
+        mock_csv = "X,Y\n1,4\n2,5\n3,6"
+
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
+
+        def mock_get(url):
+            if url.endswith("/data"):
+                return mock_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            parsed = ScatterPlot.get("test-id", access_token="test-token")
+
+            # Verify key fields match
+            assert parsed.title == original.title
+            assert parsed.x_column == original.x_column
+            assert parsed.y_column == original.y_column
+            assert parsed.x_log == original.x_log
+            assert parsed.y_range == original.y_range
 
     def test_round_trip_with_all_options(self):
         """Test round-trip with many options set."""
@@ -616,21 +698,41 @@ class TestScatterPlotRoundTrip:
         serialized = original.model_dump(by_alias=True)
 
         # Parse back
-        parsed = ScatterPlot.from_api(serialized)
+        chart_metadata = {
+            "type": serialized["type"],
+            "title": serialized["title"],
+            "axes": serialized["axes"],
+            "metadata": serialized["metadata"],
+        }
 
-        # Verify fields match
-        assert parsed.title == original.title
-        assert parsed.x_column == original.x_column
-        assert parsed.y_column == original.y_column
-        assert parsed.size == original.size
-        assert parsed.size_column == original.size_column
-        assert parsed.labels_column == original.labels_column
-        assert parsed.x_log == original.x_log
-        assert parsed.y_log == original.y_log
-        assert parsed.regression == original.regression
-        assert parsed.regression_method == original.regression_method
-        assert parsed.opacity == original.opacity
-        assert parsed.outlines == original.outlines
+        mock_csv = "X,Y,Size,Label\n1,4,10,A\n2,5,20,B\n3,6,30,C"
+
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
+
+        def mock_get(url):
+            if url.endswith("/data"):
+                return mock_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            parsed = ScatterPlot.get("test-id", access_token="test-token")
+
+            # Verify fields match
+            assert parsed.title == original.title
+            assert parsed.x_column == original.x_column
+            assert parsed.y_column == original.y_column
+            assert parsed.size == original.size
+            assert parsed.size_column == original.size_column
+            assert parsed.labels_column == original.labels_column
+            assert parsed.x_log == original.x_log
+            assert parsed.y_log == original.y_log
+            assert parsed.regression == original.regression
+            assert parsed.regression_method == original.regression_method
+            assert parsed.opacity == original.opacity
+            assert parsed.outlines == original.outlines
 
 
 class TestScatterPlotCompatibility:

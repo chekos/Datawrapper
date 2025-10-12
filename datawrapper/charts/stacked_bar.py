@@ -277,16 +277,3 @@ class StackedBarChart(BaseChart):
             init_data["groups_column"] = None
 
         return init_data
-
-    @classmethod
-    def from_api(cls, api_response: dict[str, Any]) -> "StackedBarChart":
-        """Create a StackedBarChart instance from API response data.
-
-        Args:
-            api_response: The JSON response from the chart metadata endpoint
-
-        Returns:
-            A StackedBarChart instance populated with the API data
-        """
-        init_data = cls.deserialize_model(api_response)
-        return cls(**init_data)

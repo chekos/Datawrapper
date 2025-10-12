@@ -563,14 +563,12 @@ class ScatterPlot(BaseChart):
                 "plotHeightFixed": self.plot_height_fixed,
                 "plotHeightRatio": self.plot_height_ratio,
                 # Annotations
-                "text-annotations": [
-                    TextAnnotation(**anno).model_dump(by_alias=True)
-                    for anno in self.text_annotations
-                ],
-                "range-annotations": [
-                    RangeAnnotation(**anno).model_dump(by_alias=True)
-                    for anno in self.range_annotations
-                ],
+                "text-annotations": self._serialize_annotations(
+                    self.text_annotations, TextAnnotation
+                ),
+                "range-annotations": self._serialize_annotations(
+                    self.range_annotations, RangeAnnotation
+                ),
                 "custom-lines": self.custom_lines,
                 # Labeling
                 "auto-labels": self.auto_labels,
@@ -701,22 +699,32 @@ class ScatterPlot(BaseChart):
         init_data["plot_height_fixed"] = visualize.get("plotHeightFixed", 300)
         init_data["plot_height_ratio"] = visualize.get("plotHeightRatio", 0.5)
 
-        # Annotations
+        # Annotations - preserve UUIDs by including them in annotation data
         text_annos = visualize.get("text-annotations", {})
         if isinstance(text_annos, dict):
-            init_data["text_annotations"] = list(text_annos.values())
-        elif isinstance(text_annos, list):
-            init_data["text_annotations"] = text_annos
+            init_data["text_annotations"] = (
+                []
+                if not text_annos
+                else [
+                    {**anno_data, "id": anno_id}
+                    for anno_id, anno_data in text_annos.items()
+                ]
+            )
         else:
-            init_data["text_annotations"] = []
+            init_data["text_annotations"] = text_annos if text_annos else []
 
         range_annos = visualize.get("range-annotations", {})
         if isinstance(range_annos, dict):
-            init_data["range_annotations"] = list(range_annos.values())
-        elif isinstance(range_annos, list):
-            init_data["range_annotations"] = range_annos
+            init_data["range_annotations"] = (
+                []
+                if not range_annos
+                else [
+                    {**anno_data, "id": anno_id}
+                    for anno_id, anno_data in range_annos.items()
+                ]
+            )
         else:
-            init_data["range_annotations"] = []
+            init_data["range_annotations"] = range_annos if range_annos else []
 
         init_data["custom_lines"] = visualize.get("custom-lines", "")
 
@@ -739,17 +747,3 @@ class ScatterPlot(BaseChart):
             init_data["tooltip_sticky"] = False
 
         return init_data
-
-    @classmethod
-    def from_api(cls, api_response: dict[str, Any]) -> "ScatterPlot":
-        """Create a ScatterPlot instance from API response data.
-
-        Args:
-            api_response: The JSON response from the chart metadata endpoint
-            chart_data: The CSV data from the chart data endpoint
-
-        Returns:
-            A ScatterPlot instance populated with the API data
-        """
-        init_data = cls.deserialize_model(api_response)
-        return cls(**init_data)

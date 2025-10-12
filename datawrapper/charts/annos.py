@@ -86,6 +86,12 @@ class TextAnnotation(BaseModel):
         },
     )
 
+    #: The unique ID for this annotation (preserved during deserialization, auto-generated during serialization)
+    id: str | None = Field(
+        default=None,
+        description="The unique ID for this annotation (used as dict key, not included in serialized output)",
+    )
+
     #: Whether or not to show a text outline
     bg: bool = Field(default=True, description="Whether or not to show a text outline")
 
@@ -170,7 +176,10 @@ class TextAnnotation(BaseModel):
     )
 
     def serialize_model(self) -> dict:
-        """Serialize the model to a dictionary for the Datawrapper API."""
+        """Serialize the model to a dictionary for the Datawrapper API.
+
+        Note: The 'id' field is not included in the output as it's used as the dict key.
+        """
         model = {
             "bg": self.bg,
             "dx": self.dx,
@@ -220,6 +229,12 @@ class RangeAnnotation(BaseModel):
         },
     )
 
+    #: The unique ID for this annotation (preserved during deserialization, auto-generated during serialization)
+    id: str | None = Field(
+        default=None,
+        description="The unique ID for this annotation (used as dict key, not included in serialized output)",
+    )
+
     #: The axis of the annotation
     type: Literal["x", "y"] = Field(
         default="x", description="The axis of the annotation"
@@ -263,7 +278,10 @@ class RangeAnnotation(BaseModel):
     )
 
     def serialize_model(self) -> dict:
-        """Serialize the model to a dictionary for the Datawrapper API."""
+        """Serialize the model to a dictionary for the Datawrapper API.
+
+        Note: The 'id' field is not included in the output as it's used as the dict key.
+        """
         return {
             "type": self.type,
             "color": self.color,

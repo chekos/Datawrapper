@@ -296,34 +296,14 @@ class ColumnChart(BaseChart):
                     "placement": self.value_labels_placement,
                 },
                 # Annotations
-                "text-annotations": [],
-                "range-annotations": [],
+                "text-annotations": self._serialize_annotations(
+                    self.text_annotations, TextAnnotation
+                ),
+                "range-annotations": self._serialize_annotations(
+                    self.range_annotations, RangeAnnotation
+                ),
             }
         )
-
-        # Add text annotations, if any
-        for ta_obj in self.text_annotations:
-            if isinstance(ta_obj, dict):
-                ta_dict = TextAnnotation.model_validate(ta_obj).serialize_model()
-            elif isinstance(ta_obj, TextAnnotation):
-                ta_dict = ta_obj.serialize_model()
-            else:
-                raise ValueError(
-                    "Text annotations must be TextAnnotation objects or dicts"
-                )
-            model["metadata"]["visualize"]["text-annotations"].append(ta_dict)
-
-        # Add range annotations, if any
-        for ra_obj in self.range_annotations:
-            if isinstance(ra_obj, dict):
-                ra_dict = RangeAnnotation.model_validate(ra_obj).serialize_model()
-            elif isinstance(ra_obj, RangeAnnotation):
-                ra_dict = ra_obj.serialize_model()
-            else:
-                raise ValueError(
-                    "Range annotations must be RangeAnnotation objects or dicts"
-                )
-            model["metadata"]["visualize"]["range-annotations"].append(ra_dict)
 
         # Return the serialized data
         return model
@@ -443,15 +423,31 @@ class ColumnChart(BaseChart):
             init_data["value_labels_format"] = ""
             init_data["value_labels_placement"] = "outside"
 
-        # Annotations - handle empty dicts → empty lists
-        text_annos = visualize.get("text-annotations", [])
-        init_data["text_annotations"] = (
-            [] if isinstance(text_annos, dict) and not text_annos else text_annos
-        )
+        # Annotations - preserve UUIDs by including them in annotation data
+        text_annos = visualize.get("text-annotations", {})
+        if isinstance(text_annos, dict):
+            init_data["text_annotations"] = (
+                []
+                if not text_annos
+                else [
+                    {**anno_data, "id": anno_id}
+                    for anno_id, anno_data in text_annos.items()
+                ]
+            )
+        else:
+            init_data["text_annotations"] = text_annos if text_annos else []
 
-        range_annos = visualize.get("range-annotations", [])
-        init_data["range_annotations"] = (
-            [] if isinstance(range_annos, dict) and not range_annos else range_annos
-        )
+        range_annos = visualize.get("range-annotations", {})
+        if isinstance(range_annos, dict):
+            init_data["range_annotations"] = (
+                []
+                if not range_annos
+                else [
+                    {**anno_data, "id": anno_id}
+                    for anno_id, anno_data in range_annos.items()
+                ]
+            )
+        else:
+            init_data["range_annotations"] = range_annos if range_annos else []
 
         return init_data

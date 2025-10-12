@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from unittest.mock import Mock, patch
 
 import pandas as pd
 
@@ -357,70 +358,132 @@ class TestMultipleColumnChartParsing:
 
     def test_parse_jobs_sample(self):
         """Test parsing the jobs.json sample."""
-        chart_data = load_sample_json("jobs.json")
+        chart_metadata = load_sample_json("jobs.json")
+        sample_csv = load_sample_csv("jobs.csv")
 
-        chart = MultipleColumnChart.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
-        assert chart.chart_type == "multiple-columns"
-        assert chart.title == "Manufacturing construction has seen the highest growth"
-        assert chart.grid_layout == "fixedCount"
-        assert chart.grid_column == 3
-        assert chart.grid_column_mobile == 3
-        assert chart.grid_row_height == 122
-        assert chart.base_color == "#809cae"
-        assert chart.bar_padding == 26
-        assert chart.y_grid_format == "0.[0]a"
-        assert chart.y_grid_labels == "off"
-        assert chart.show_color_key is True
-        assert "Manufacturing" in chart.color_category
-        assert chart.color_category["Manufacturing"] == "#2d1780"
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = MultipleColumnChart.get("test-id", access_token="test-token")
+
+            assert chart.chart_type == "multiple-columns"
+            assert (
+                chart.title == "Manufacturing construction has seen the highest growth"
+            )
+            assert chart.grid_layout == "fixedCount"
+            assert chart.grid_column == 3
+            assert chart.grid_column_mobile == 3
+            assert chart.grid_row_height == 122
+            assert chart.base_color == "#809cae"
+            assert chart.bar_padding == 26
+            assert chart.y_grid_format == "0.[0]a"
+            assert chart.y_grid_labels == "off"
+            assert chart.show_color_key is True
+            assert "Manufacturing" in chart.color_category
+            assert chart.color_category["Manufacturing"] == "#2d1780"
 
     def test_parse_population_sample(self):
         """Test parsing the population.json sample."""
-        chart_data = load_sample_json("population.json")
+        chart_metadata = load_sample_json("population.json")
+        sample_csv = load_sample_csv("population.csv")
 
-        chart = MultipleColumnChart.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
-        assert chart.chart_type == "multiple-columns"
-        assert "population" in chart.title.lower()
-        assert chart.grid_layout == "fixedCount"
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = MultipleColumnChart.get("test-id", access_token="test-token")
+
+            assert chart.chart_type == "multiple-columns"
+            assert "population" in chart.title.lower()
+            assert chart.grid_layout == "fixedCount"
 
     def test_parse_social_media_sample(self):
         """Test parsing the social-media.json sample."""
-        chart_data = load_sample_json("social-media.json")
+        chart_metadata = load_sample_json("social-media.json")
+        sample_csv = load_sample_csv("social-media.csv")
 
-        chart = MultipleColumnChart.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
-        assert chart.chart_type == "multiple-columns"
-        assert chart.grid_layout == "fixedCount"
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = MultipleColumnChart.get("test-id", access_token="test-token")
+
+            assert chart.chart_type == "multiple-columns"
+            assert chart.grid_layout == "fixedCount"
 
     def test_parse_uk_spending_sample(self):
         """Test parsing the uk-spending.json sample."""
-        chart_data = load_sample_json("uk-spending.json")
+        chart_metadata = load_sample_json("uk-spending.json")
+        sample_csv = load_sample_csv("uk-spending.csv")
 
-        chart = MultipleColumnChart.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
-        assert chart.chart_type == "multiple-columns"
-        assert chart.grid_layout == "fixedCount"
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = MultipleColumnChart.get("test-id", access_token="test-token")
+
+            assert chart.chart_type == "multiple-columns"
+            assert chart.grid_layout == "fixedCount"
 
     def test_parse_preserves_all_fields(self):
         """Test that parsing preserves all important fields."""
-        chart_data = load_sample_json("jobs.json")
+        chart_metadata = load_sample_json("jobs.json")
+        sample_csv = load_sample_csv("jobs.csv")
 
-        chart = MultipleColumnChart.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
-        # Verify layout fields
-        assert isinstance(chart.grid_column, int)
-        assert isinstance(chart.grid_column_mobile, int)
-        assert isinstance(chart.grid_row_height, int)
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
 
-        # Verify appearance fields
-        assert isinstance(chart.base_color, str)
-        assert isinstance(chart.bar_padding, int)
+        mock_client.get.side_effect = mock_get
 
-        # Verify label fields
-        assert isinstance(chart.show_color_key, bool)
-        assert isinstance(chart.label_colors, bool)
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = MultipleColumnChart.get("test-id", access_token="test-token")
+
+            # Verify layout fields
+            assert isinstance(chart.grid_column, int)
+            assert isinstance(chart.grid_column_mobile, int)
+            assert isinstance(chart.grid_row_height, int)
+
+            # Verify appearance fields
+            assert isinstance(chart.base_color, str)
+            assert isinstance(chart.bar_padding, int)
+
+            # Verify label fields
+            assert isinstance(chart.show_color_key, bool)
+            assert isinstance(chart.label_colors, bool)
 
 
 class TestMultipleColumnChartRoundTrip:
@@ -448,14 +511,27 @@ class TestMultipleColumnChartRoundTrip:
             "metadata": serialized["metadata"],
         }
 
-        parsed = MultipleColumnChart.from_api(chart_metadata)
+        mock_csv = "Year,Value\n2020,100\n2021,110"
 
-        # Verify key fields match
-        assert parsed.title == original.title
-        assert parsed.chart_type == original.chart_type
-        assert parsed.grid_column == original.grid_column
-        assert parsed.grid_row_height == original.grid_row_height
-        assert parsed.base_color == original.base_color
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
+
+        def mock_get(url):
+            if url.endswith("/data"):
+                return mock_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            parsed = MultipleColumnChart.get("test-id", access_token="test-token")
+
+            # Verify key fields match
+            assert parsed.title == original.title
+            assert parsed.chart_type == original.chart_type
+            assert parsed.grid_column == original.grid_column
+            assert parsed.grid_row_height == original.grid_row_height
+            assert parsed.base_color == original.base_color
 
     def test_round_trip_with_all_options(self):
         """Test round-trip with many options set."""
@@ -490,23 +566,36 @@ class TestMultipleColumnChartRoundTrip:
             "metadata": serialized["metadata"],
         }
 
-        parsed = MultipleColumnChart.from_api(chart_metadata)
+        mock_csv = "Year,Value\n2020,100\n2021,110"
 
-        # Verify all fields match
-        assert parsed.grid_layout == original.grid_layout
-        assert parsed.grid_column == original.grid_column
-        assert parsed.grid_column_mobile == original.grid_column_mobile
-        assert parsed.sort == original.sort
-        assert parsed.sort_by == original.sort_by
-        assert parsed.custom_range_x == original.custom_range_x
-        assert parsed.custom_ticks_x == original.custom_ticks_x
-        assert parsed.x_grid == original.x_grid
-        assert parsed.y_grid_labels == original.y_grid_labels
-        assert parsed.base_color == original.base_color
-        assert parsed.negative_color == original.negative_color
-        assert parsed.color_category == original.color_category
-        assert parsed.value_labels == original.value_labels
-        assert parsed.show_color_key == original.show_color_key
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
+
+        def mock_get(url):
+            if url.endswith("/data"):
+                return mock_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            parsed = MultipleColumnChart.get("test-id", access_token="test-token")
+
+            # Verify all fields match
+            assert parsed.grid_layout == original.grid_layout
+            assert parsed.grid_column == original.grid_column
+            assert parsed.grid_column_mobile == original.grid_column_mobile
+            assert parsed.sort == original.sort
+            assert parsed.sort_by == original.sort_by
+            assert parsed.custom_range_x == original.custom_range_x
+            assert parsed.custom_ticks_x == original.custom_ticks_x
+            assert parsed.x_grid == original.x_grid
+            assert parsed.y_grid_labels == original.y_grid_labels
+            assert parsed.base_color == original.base_color
+            assert parsed.negative_color == original.negative_color
+            assert parsed.color_category == original.color_category
+            assert parsed.value_labels == original.value_labels
+            assert parsed.show_color_key == original.show_color_key
 
 
 class TestMultipleColumnChartCompatibility:

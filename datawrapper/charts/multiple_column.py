@@ -395,14 +395,12 @@ class MultipleColumnChart(BaseChart):
                 },
                 "xGridLabelAllColumns": self.x_grid_label_all,
                 # Annotations
-                "text-annotations": [
-                    TextAnnotation(**anno).model_dump(by_alias=True)
-                    for anno in self.text_annotations
-                ],
-                "range-annotations": [
-                    RangeAnnotation(**anno).model_dump(by_alias=True)
-                    for anno in self.range_annotations
-                ],
+                "text-annotations": self._serialize_annotations(
+                    self.text_annotations, TextAnnotation
+                ),
+                "range-annotations": self._serialize_annotations(
+                    self.range_annotations, RangeAnnotation
+                ),
             }
         )
 
@@ -594,34 +592,31 @@ class MultipleColumnChart(BaseChart):
             init_data["value_labels_always"] = False
             init_data["value_labels_placement"] = "outside"
 
-        # Annotations
+        # Annotations - preserve UUIDs by including them in annotation data
         text_annos = visualize.get("text-annotations", {})
         if isinstance(text_annos, dict):
-            init_data["text_annotations"] = list(text_annos.values())
-        elif isinstance(text_annos, list):
-            init_data["text_annotations"] = text_annos
+            init_data["text_annotations"] = (
+                []
+                if not text_annos
+                else [
+                    {**anno_data, "id": anno_id}
+                    for anno_id, anno_data in text_annos.items()
+                ]
+            )
         else:
-            init_data["text_annotations"] = []
+            init_data["text_annotations"] = text_annos if text_annos else []
 
         range_annos = visualize.get("range-annotations", {})
         if isinstance(range_annos, dict):
-            init_data["range_annotations"] = list(range_annos.values())
-        elif isinstance(range_annos, list):
-            init_data["range_annotations"] = range_annos
+            init_data["range_annotations"] = (
+                []
+                if not range_annos
+                else [
+                    {**anno_data, "id": anno_id}
+                    for anno_id, anno_data in range_annos.items()
+                ]
+            )
         else:
-            init_data["range_annotations"] = []
+            init_data["range_annotations"] = range_annos if range_annos else []
 
         return init_data
-
-    @classmethod
-    def from_api(cls, api_response: dict[str, Any]) -> "MultipleColumnChart":
-        """Create a MultipleColumnChart instance from API response data.
-
-        Args:
-            api_response: The JSON response from the chart metadata endpoint
-
-        Returns:
-            A MultipleColumnChart instance populated with the API data
-        """
-        init_data = cls.deserialize_model(api_response)
-        return cls(**init_data)

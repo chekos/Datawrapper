@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from unittest.mock import Mock, patch
 
 import pandas as pd
 
@@ -247,94 +248,142 @@ class TestStackedBarChartParsing:
 
     def test_parse_candy_sample(self):
         """Test parsing the candy.json sample."""
-        chart_data = load_sample_json("candy.json")
+        chart_metadata = load_sample_json("candy.json")
+        sample_csv = load_sample_csv("candy.csv")
 
-        chart = StackedBarChart.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
-        assert (
-            chart.title
-            == "Bounty &amp; Snickers are the two most controversial candy bars in Celebrations"
-        )
-        assert chart.chart_type == "d3-bars-stacked"
-        assert chart.intro.startswith("Replies to the question")
-        assert chart.byline == "Lisa Charlotte Muth, Datawrapper"
-        assert chart.source_name == "YouGov, November 2017"
-        assert chart.thick_bars is True
-        assert chart.stack_percentages is True
-        assert chart.sort_bars is True
-        assert chart.sort_by == "I like them a lot"
-        assert chart.base_color == 2
-        assert chart.show_color_key is True
-        assert chart.color_by_column is True
-        assert chart.value_label_format == "0%"
-        assert len(chart.color_category) > 0
-        assert "I like them a lot" in chart.color_category
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = StackedBarChart.get("test-id", access_token="test-token")
+
+            assert (
+                chart.title
+                == "Bounty &amp; Snickers are the two most controversial candy bars in Celebrations"
+            )
+            assert chart.chart_type == "d3-bars-stacked"
+            assert chart.intro.startswith("Replies to the question")
+            assert chart.byline == "Lisa Charlotte Muth, Datawrapper"
+            assert chart.source_name == "YouGov, November 2017"
+            assert chart.thick_bars is True
+            assert chart.stack_percentages is True
+            assert chart.sort_bars is True
+            assert chart.sort_by == "I like them a lot"
+            assert chart.base_color == 2
+            assert chart.show_color_key is True
+            assert chart.color_by_column is True
+            assert chart.value_label_format == "0%"
+            assert len(chart.color_category) > 0
+            assert "I like them a lot" in chart.color_category
 
     def test_parse_capitals_sample(self):
         """Test parsing the capitals.json sample."""
-        chart_data = load_sample_json("capitals.json")
+        chart_metadata = load_sample_json("capitals.json")
+        sample_csv = load_sample_csv("capitals.csv")
 
-        chart = StackedBarChart.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
-        assert chart.title == "How many live in the capital?"
-        assert chart.intro.startswith("Share of population")
-        assert chart.byline == "Lisa Charlotte Muth"
-        assert chart.source_name == "UN Population Division"
-        assert chart.replace_flags == "4x3"  # enabled with style 4x3
-        assert chart.thick_bars is False
-        assert chart.stack_percentages is False
-        assert chart.sort_bars is True
-        assert chart.sort_by == "share of people in capital"
-        assert chart.base_color == 0
-        assert chart.show_color_key is True
-        assert chart.color_by_column is True
-        assert chart.negative_color_enabled is False
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = StackedBarChart.get("test-id", access_token="test-token")
+
+            assert chart.title == "How many live in the capital?"
+            assert chart.intro.startswith("Share of population")
+            assert chart.byline == "Lisa Charlotte Muth"
+            assert chart.source_name == "UN Population Division"
+            assert chart.replace_flags == "4x3"  # enabled with style 4x3
+            assert chart.thick_bars is False
+            assert chart.stack_percentages is False
+            assert chart.sort_bars is True
+            assert chart.sort_by == "share of people in capital"
+            assert chart.base_color == 0
+            assert chart.show_color_key is True
+            assert chart.color_by_column is True
+            assert chart.negative_color_enabled is False
 
     def test_parse_media_trust_sample(self):
         """Test parsing the media-trust.json sample."""
-        chart_data = load_sample_json("media-trust.json")
+        chart_metadata = load_sample_json("media-trust.json")
+        sample_csv = load_sample_csv("media-trust.csv")
 
-        chart = StackedBarChart.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
-        assert chart.title == "Trust in Media Reporting"
-        assert (
-            chart.intro
-            == "Trust in Media Reporting regarding widely reported topics of 2015"
-        )
-        assert chart.source_name == "Infratest dimap"
-        assert chart.thick_bars is True
-        assert chart.stack_percentages is True
-        assert chart.sort_bars is True
-        assert chart.sort_by == "Low trust"
-        assert chart.base_color == 2
-        assert chart.reverse_order is True
-        assert chart.value_label_mode == "diverging"
-        assert chart.block_labels is True
-        assert chart.show_color_key is True
-        assert chart.color_by_column is True
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = StackedBarChart.get("test-id", access_token="test-token")
+
+            assert chart.title == "Trust in Media Reporting"
+            assert (
+                chart.intro
+                == "Trust in Media Reporting regarding widely reported topics of 2015"
+            )
+            assert chart.source_name == "Infratest dimap"
+            assert chart.thick_bars is True
+            assert chart.stack_percentages is True
+            assert chart.sort_bars is True
+            assert chart.sort_by == "Low trust"
+            assert chart.base_color == 2
+            assert chart.reverse_order is True
+            assert chart.value_label_mode == "diverging"
+            assert chart.block_labels is True
+            assert chart.show_color_key is True
+            assert chart.color_by_column is True
 
     def test_parse_sugar_sample(self):
         """Test parsing the sugar.json sample."""
-        chart_data = load_sample_json("sugar.json")
+        chart_metadata = load_sample_json("sugar.json")
+        sample_csv = load_sample_csv("sugar.csv")
 
-        chart = StackedBarChart.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
-        assert chart.title == "Six kinds of sugar in thirty kinds of food"
-        assert chart.intro.startswith("Gram of sugar")
-        assert chart.byline == "Lisa Charlotte Muth, Datawrapper"
-        assert (
-            chart.source_name
-            == "United States Department of Agriculture Food Composition Databases"
-        )
-        assert chart.thick_bars is False
-        assert chart.stack_percentages is False
-        assert chart.sort_bars is False
-        assert chart.sort_by == "Sucrose (Fructose+Glucose)"
-        assert chart.base_color == 0
-        assert chart.show_color_key is True
-        assert chart.color_by_column is True
-        assert chart.groups_column == "Description"  # From axes.groups
-        assert chart.value_label_format == "0.[0]"
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = StackedBarChart.get("test-id", access_token="test-token")
+
+            assert chart.title == "Six kinds of sugar in thirty kinds of food"
+            assert chart.intro.startswith("Gram of sugar")
+            assert chart.byline == "Lisa Charlotte Muth, Datawrapper"
+            assert (
+                chart.source_name
+                == "United States Department of Agriculture Food Composition Databases"
+            )
+            assert chart.thick_bars is False
+            assert chart.stack_percentages is False
+            assert chart.sort_bars is False
+            assert chart.sort_by == "Sucrose (Fructose+Glucose)"
+            assert chart.base_color == 0
+            assert chart.show_color_key is True
+            assert chart.color_by_column is True
+            assert chart.groups_column == "Description"  # From axes.groups
+            assert chart.value_label_format == "0.[0]"
 
 
 class TestStackedBarChartRoundTrip:
@@ -342,16 +391,44 @@ class TestStackedBarChartRoundTrip:
 
     def test_roundtrip_candy(self):
         """Test roundtrip with candy sample."""
-        chart_data = load_sample_json("candy.json")
+        chart_metadata = load_sample_json("candy.json")
+        sample_csv = load_sample_csv("candy.csv")
+
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
+
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
 
         # Parse from API
-        chart = StackedBarChart.from_api(chart_data)
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = StackedBarChart.get("test-id", access_token="test-token")
 
         # Serialize back
         serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
 
         # Parse again
-        chart2 = StackedBarChart.from_api(serialized)
+        chart_metadata2 = {
+            "type": serialized["type"],
+            "title": serialized["title"],
+            "metadata": serialized["metadata"],
+        }
+        if "axes" in serialized:
+            chart_metadata2["axes"] = serialized["axes"]
+
+        def mock_get2(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata2
+
+        mock_client.get.side_effect = mock_get2
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart2 = StackedBarChart.get("test-id", access_token="test-token")
 
         # Compare key fields
         assert chart.title == chart2.title
@@ -363,11 +440,41 @@ class TestStackedBarChartRoundTrip:
 
     def test_roundtrip_capitals(self):
         """Test roundtrip with capitals sample."""
-        chart_data = load_sample_json("capitals.json")
+        chart_metadata = load_sample_json("capitals.json")
+        sample_csv = load_sample_csv("capitals.csv")
 
-        chart = StackedBarChart.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
+
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = StackedBarChart.get("test-id", access_token="test-token")
+
         serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
-        chart2 = StackedBarChart.from_api(serialized)
+
+        chart_metadata2 = {
+            "type": serialized["type"],
+            "title": serialized["title"],
+            "metadata": serialized["metadata"],
+        }
+        if "axes" in serialized:
+            chart_metadata2["axes"] = serialized["axes"]
+
+        def mock_get2(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata2
+
+        mock_client.get.side_effect = mock_get2
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart2 = StackedBarChart.get("test-id", access_token="test-token")
 
         assert chart.replace_flags == chart2.replace_flags
         assert chart.stack_percentages == chart2.stack_percentages
@@ -375,11 +482,41 @@ class TestStackedBarChartRoundTrip:
 
     def test_roundtrip_media_trust(self):
         """Test roundtrip with media-trust sample."""
-        chart_data = load_sample_json("media-trust.json")
+        chart_metadata = load_sample_json("media-trust.json")
+        sample_csv = load_sample_csv("media-trust.csv")
 
-        chart = StackedBarChart.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
+
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = StackedBarChart.get("test-id", access_token="test-token")
+
         serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
-        chart2 = StackedBarChart.from_api(serialized)
+
+        chart_metadata2 = {
+            "type": serialized["type"],
+            "title": serialized["title"],
+            "metadata": serialized["metadata"],
+        }
+        if "axes" in serialized:
+            chart_metadata2["axes"] = serialized["axes"]
+
+        def mock_get2(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata2
+
+        mock_client.get.side_effect = mock_get2
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart2 = StackedBarChart.get("test-id", access_token="test-token")
 
         assert chart.reverse_order == chart2.reverse_order
         assert chart.value_label_mode == chart2.value_label_mode
@@ -387,11 +524,41 @@ class TestStackedBarChartRoundTrip:
 
     def test_roundtrip_sugar(self):
         """Test roundtrip with sugar sample."""
-        chart_data = load_sample_json("sugar.json")
+        chart_metadata = load_sample_json("sugar.json")
+        sample_csv = load_sample_csv("sugar.csv")
 
-        chart = StackedBarChart.from_api(chart_data)
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
+
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = StackedBarChart.get("test-id", access_token="test-token")
+
         serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
-        chart2 = StackedBarChart.from_api(serialized)
+
+        chart_metadata2 = {
+            "type": serialized["type"],
+            "title": serialized["title"],
+            "metadata": serialized["metadata"],
+        }
+        if "axes" in serialized:
+            chart_metadata2["axes"] = serialized["axes"]
+
+        def mock_get2(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata2
+
+        mock_client.get.side_effect = mock_get2
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart2 = StackedBarChart.get("test-id", access_token="test-token")
 
         assert chart.groups_column == chart2.groups_column
         assert chart.value_label_format == chart2.value_label_format

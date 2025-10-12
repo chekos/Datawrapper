@@ -190,8 +190,8 @@ class TestChartCreationWorkflow:
         visualize = metadata["visualize"]
         assert "text-annotations" in visualize
         assert "range-annotations" in visualize
-        assert isinstance(visualize["text-annotations"], list)
-        assert isinstance(visualize["range-annotations"], list)
+        assert isinstance(visualize["text-annotations"], dict)
+        assert isinstance(visualize["range-annotations"], dict)
 
 
 class TestChartValidationWorkflow:

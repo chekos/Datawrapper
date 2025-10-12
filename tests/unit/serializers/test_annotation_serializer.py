@@ -192,16 +192,28 @@ class TestAnnotationIntegration:
         assert "text-annotations" in visualize
         assert "range-annotations" in visualize
 
-        # Check that annotations are properly serialized
+        # Check that annotations are properly serialized as dicts with UUID keys
         text_annos = visualize["text-annotations"]
         range_annos = visualize["range-annotations"]
 
+        assert isinstance(text_annos, dict)
+        assert isinstance(range_annos, dict)
         assert len(text_annos) == 1
         assert len(range_annos) == 1
 
-        # Verify annotation content
-        assert text_annos[0]["text"] == "Chart annotation"
-        assert range_annos[0]["position"]["x0"] == 10
+        # Verify annotation content (get first value from dict)
+        text_anno_data = list(text_annos.values())[0]
+        range_anno_data = list(range_annos.values())[0]
+
+        assert text_anno_data["text"] == "Chart annotation"
+        assert text_anno_data["position"]["x"] == 50
+        assert text_anno_data["position"]["y"] == 100
+
+        assert range_anno_data["type"] in ["x", "y"]
+        assert range_anno_data["position"]["x0"] == 10
+        assert range_anno_data["position"]["x1"] == 90
+        assert range_anno_data["position"]["y0"] == 20
+        assert range_anno_data["position"]["y1"] == 80
 
     def test_empty_annotations_in_chart(self):
         """Test that empty annotation lists serialize correctly."""
@@ -221,11 +233,11 @@ class TestAnnotationIntegration:
         metadata = serialized["metadata"]
         visualize = metadata["visualize"]
 
-        # Empty lists should still be present
+        # Empty lists should serialize as empty dicts
         assert "text-annotations" in visualize
         assert "range-annotations" in visualize
-        assert visualize["text-annotations"] == []
-        assert visualize["range-annotations"] == []
+        assert visualize["text-annotations"] == {}
+        assert visualize["range-annotations"] == {}
 
     def test_mixed_annotation_types(self):
         """Test serialization with multiple annotation types."""
@@ -246,9 +258,14 @@ class TestAnnotationIntegration:
         visualize = serialized["metadata"]["visualize"]
         text_annos = visualize["text-annotations"]
 
+        # Annotations are now serialized as dict with UUID keys
+        assert isinstance(text_annos, dict)
         assert len(text_annos) == 3
-        assert text_annos[0]["text"] == "First"
-        assert text_annos[1]["text"] == "Second"
-        assert text_annos[1]["color"] == "#ff0000"
-        assert text_annos[2]["text"] == "Third"
-        assert text_annos[2]["bold"] is True
+
+        # Get annotation values in order (dict maintains insertion order in Python 3.7+)
+        anno_values = list(text_annos.values())
+        assert anno_values[0]["text"] == "First"
+        assert anno_values[1]["text"] == "Second"
+        assert anno_values[1]["color"] == "#ff0000"
+        assert anno_values[2]["text"] == "Third"
+        assert anno_values[2]["bold"] is True
