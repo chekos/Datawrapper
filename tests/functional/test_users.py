@@ -1,5 +1,7 @@
 """Test the user methods."""
 
+from unittest.mock import Mock, patch
+
 import pytest
 
 from datawrapper import Datawrapper
@@ -32,26 +34,69 @@ def test_get_user():
     assert isinstance(charts, dict)
 
 
-@pytest.mark.api
 def test_edit_user():
-    """Test the user editing methods."""
-    # Connect
-    dw = Datawrapper()
+    """Test the user editing methods using mocked API calls."""
+    # Mock account data
+    mock_account = {
+        "id": "test-user-123",
+        "name": "Original Name",
+        "email": "test@example.com",
+    }
 
-    # Get my account
-    my_account = dw.get_my_account()
-    my_id = my_account["id"]
+    with patch("tests.functional.test_users.Datawrapper") as mock_dw_class:
+        # Create mock client instance
+        mock_client = Mock()
+        mock_dw_class.return_value = mock_client
 
-    # Edit my account
-    dw.update_user(my_id, name="Test User")
+        # Mock get_my_account to return our test account
+        mock_client.get_my_account.return_value = mock_account.copy()
 
-    # Get my account again
-    user = dw.get_user(my_id)
-    assert user["name"] == "Test User"
+        # Track update calls to return appropriate user state
+        update_call_count = 0
 
-    # Reset my account
-    dw.update_user(my_id, name=my_account["name"])
+        def mock_get_user(user_id):
+            nonlocal update_call_count
+            # Return state based on how many updates have been called
+            if update_call_count == 1:
+                # After first update
+                return {**mock_account, "name": "Test User"}
+            elif update_call_count >= 2:
+                # After reset
+                return mock_account.copy()
+            else:
+                # Initial state
+                return mock_account.copy()
 
-    # Get my account again
-    user = dw.get_user(my_id)
-    assert user["name"] == my_account["name"]
+        def mock_update_user(user_id, **kwargs):
+            nonlocal update_call_count
+            update_call_count += 1
+            return None
+
+        mock_client.get_user.side_effect = mock_get_user
+        mock_client.update_user.side_effect = mock_update_user
+
+        # Now run the actual test logic
+        dw = Datawrapper()
+
+        # Get my account
+        my_account = dw.get_my_account()
+        my_id = my_account["id"]
+
+        # Edit my account
+        dw.update_user(my_id, name="Test User")
+
+        # Get my account again
+        user = dw.get_user(my_id)
+        assert user["name"] == "Test User"
+
+        # Reset my account
+        dw.update_user(my_id, name=my_account["name"])
+
+        # Get my account again
+        user = dw.get_user(my_id)
+        assert user["name"] == my_account["name"]
+
+        # Verify the API calls were made correctly
+        assert mock_client.get_my_account.call_count == 1
+        assert mock_client.update_user.call_count == 2
+        assert mock_client.get_user.call_count == 2
