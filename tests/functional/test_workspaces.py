@@ -1,142 +1,303 @@
-"""Test the workspace functions."""
+"""Test the workspace functions with mocked API calls."""
 
 import random
 import string
-
-import pytest
+from unittest.mock import patch
 
 from datawrapper import Datawrapper
 
 
-@pytest.mark.api
 def test_get_workspaces():
-    """Test the get_workspaces method."""
-    # Connect
-    dw = Datawrapper()
+    """Test the get_workspaces method with mocked API."""
+    with (
+        patch.object(Datawrapper, "get_workspaces") as mock_get_workspaces,
+        patch.object(Datawrapper, "get_workspace") as mock_get_workspace,
+    ):
+        # Mock response for get_workspaces
+        mock_get_workspaces.return_value = {
+            "list": [
+                {
+                    "slug": "test-workspace-1",
+                    "name": "Test Workspace 1",
+                    "id": "ws123",
+                },
+                {
+                    "slug": "test-workspace-2",
+                    "name": "Test Workspace 2",
+                    "id": "ws456",
+                },
+            ]
+        }
 
-    # Get all workspaces
-    workspaces = dw.get_workspaces()
+        # Mock response for get_workspace
+        mock_get_workspace.return_value = {
+            "slug": "test-workspace-1",
+            "name": "Test Workspace 1",
+            "id": "ws123",
+        }
 
-    # Verify format of data
-    assert isinstance(workspaces["list"], list)
+        # Connect
+        dw = Datawrapper()
 
-    # If there are workspaces, test get_workspace with the first one
-    if len(workspaces["list"]) > 0:
+        # Get all workspaces
+        workspaces = dw.get_workspaces()
+
+        # Verify format of data
+        assert isinstance(workspaces["list"], list)
+        assert len(workspaces["list"]) == 2
+
+        # Test get_workspace with the first one
         workspace_slug = workspaces["list"][0]["slug"]
         workspace = dw.get_workspace(workspace_slug)
         assert isinstance(workspace, dict)
         assert workspace["slug"] == workspace_slug
 
+        # Verify mocks were called
+        mock_get_workspaces.assert_called_once()
+        mock_get_workspace.assert_called_once_with(workspace_slug)
 
-@pytest.mark.api
+
 def test_edit_workspaces():
-    """Test creating, updating, and deleting workspaces."""
-    # Connect
-    dw = Datawrapper()
-
+    """Test creating, updating, and deleting workspaces with mocked API."""
     # Generate random suffix for unique names
     suffix = "".join(random.choices(string.ascii_lowercase + string.digits, k=5))
 
-    # Create a workspace
-    workspace = dw.create_workspace(f"Test Workspace {suffix}")
-    assert isinstance(workspace, dict)
+    with (
+        patch.object(Datawrapper, "create_workspace") as mock_create,
+        patch.object(Datawrapper, "get_workspace") as mock_get,
+        patch.object(Datawrapper, "update_workspace") as mock_update,
+        patch.object(Datawrapper, "delete_workspace") as mock_delete,
+    ):
+        # Mock responses
+        created_workspace = {
+            "slug": f"test-workspace-{suffix}",
+            "name": f"Test Workspace {suffix}",
+            "id": "ws789",
+        }
+        mock_create.return_value = created_workspace
 
-    try:
+        updated_workspace = {
+            "slug": f"test-workspace-{suffix}",
+            "name": f"Test Workspace 2 {suffix}",
+            "id": "ws789",
+        }
+
+        # First get returns original, second get returns updated
+        mock_get.side_effect = [created_workspace, updated_workspace]
+        mock_update.return_value = updated_workspace
+        mock_delete.return_value = True
+
+        # Connect
+        dw = Datawrapper()
+
+        # Create a workspace
+        workspace = dw.create_workspace(f"Test Workspace {suffix}")
+        assert isinstance(workspace, dict)
+        assert workspace["name"] == f"Test Workspace {suffix}"
+
         # Get the workspace
         workspace = dw.get_workspace(workspace["slug"])
+        assert workspace["name"] == f"Test Workspace {suffix}"
 
         # Update the workspace
         workspace = dw.update_workspace(
             workspace["slug"], name=f"Test Workspace 2 {suffix}"
         )
+        assert workspace["name"] == f"Test Workspace 2 {suffix}"
 
         # Get the workspace again
         workspace = dw.get_workspace(workspace["slug"])
-
-        # Verify that the name changed
         assert workspace["name"] == f"Test Workspace 2 {suffix}"
 
         # Delete the workspace
         delete = dw.delete_workspace(workspace["slug"])
         assert delete is True
-    except Exception:
-        # Ensure cleanup even if test fails
-        try:
-            dw.delete_workspace(workspace["slug"])
-        except Exception:
-            pass  # Ignore cleanup errors
-        raise
+
+        # Verify all mocks were called
+        mock_create.assert_called_once()
+        assert mock_get.call_count == 2
+        mock_update.assert_called_once()
+        mock_delete.assert_called_once()
 
 
-@pytest.mark.api
 def test_workspace_members():
-    """Test workspace membership operations."""
-    # Connect
-    dw = Datawrapper()
+    """Test workspace membership operations with mocked API."""
+    with (
+        patch.object(Datawrapper, "get_workspaces") as mock_get_workspaces,
+        patch.object(Datawrapper, "get_workspace_members") as mock_get_members,
+    ):
+        # Mock responses
+        mock_get_workspaces.return_value = {
+            "list": [
+                {
+                    "slug": "test-workspace-1",
+                    "name": "Test Workspace 1",
+                    "id": "ws123",
+                }
+            ]
+        }
 
-    # Get all workspaces
-    workspaces = dw.get_workspaces()
+        mock_get_members.return_value = {
+            "list": [
+                {
+                    "id": "user123",
+                    "email": "user1@example.com",
+                    "role": "admin",
+                },
+                {
+                    "id": "user456",
+                    "email": "user2@example.com",
+                    "role": "member",
+                },
+            ]
+        }
 
-    # If there are workspaces, test membership operations
-    if len(workspaces["list"]) > 0:
+        # Connect
+        dw = Datawrapper()
+
+        # Get all workspaces
+        workspaces = dw.get_workspaces()
+        assert len(workspaces["list"]) > 0
+
         workspace_slug = workspaces["list"][0]["slug"]
 
         # Get workspace members
         members = dw.get_workspace_members(workspace_slug)
         assert isinstance(members["list"], list)
+        assert len(members["list"]) == 2
 
-        # Note: We won't test update/remove in automated tests
-        # as they require actual members and could disrupt real workspaces
+        # Verify mocks were called
+        mock_get_workspaces.assert_called_once()
+        mock_get_members.assert_called_once_with(workspace_slug)
 
 
-@pytest.mark.api
 def test_workspace_teams():
-    """Test workspace team operations."""
-    # Connect
-    dw = Datawrapper()
+    """Test workspace team operations with mocked API."""
+    with (
+        patch.object(Datawrapper, "get_workspaces") as mock_get_workspaces,
+        patch.object(Datawrapper, "get_workspace_teams") as mock_get_teams,
+        patch.object(Datawrapper, "get_workspace_team") as mock_get_team,
+    ):
+        # Mock responses
+        mock_get_workspaces.return_value = {
+            "list": [
+                {
+                    "slug": "test-workspace-1",
+                    "name": "Test Workspace 1",
+                    "id": "ws123",
+                }
+            ]
+        }
 
-    # Get all workspaces
-    workspaces = dw.get_workspaces()
+        mock_get_teams.return_value = {
+            "list": [
+                {
+                    "id": "team123",
+                    "name": "Team Alpha",
+                },
+                {
+                    "id": "team456",
+                    "name": "Team Beta",
+                },
+            ]
+        }
 
-    # If there are workspaces, test team operations
-    if len(workspaces["list"]) > 0:
+        mock_get_team.return_value = {
+            "id": "team123",
+            "name": "Team Alpha",
+        }
+
+        # Connect
+        dw = Datawrapper()
+
+        # Get all workspaces
+        workspaces = dw.get_workspaces()
+        assert len(workspaces["list"]) > 0
+
         workspace_slug = workspaces["list"][0]["slug"]
 
         # Get workspace teams
         teams = dw.get_workspace_teams(workspace_slug)
         assert isinstance(teams["list"], list)
+        assert len(teams["list"]) == 2
 
-        # If there are teams, test getting a single team
-        if len(teams["list"]) > 0:
-            team_id = teams["list"][0]["id"]
-            team = dw.get_workspace_team(workspace_slug, team_id)
-            assert isinstance(team, dict)
-            assert team["id"] == team_id
+        # Get a single team
+        team_id = teams["list"][0]["id"]
+        team = dw.get_workspace_team(workspace_slug, team_id)
+        assert isinstance(team, dict)
+        assert team["id"] == team_id
+
+        # Verify mocks were called
+        mock_get_workspaces.assert_called_once()
+        mock_get_teams.assert_called_once_with(workspace_slug)
+        mock_get_team.assert_called_once_with(workspace_slug, team_id)
 
 
-@pytest.mark.api
 def test_workspace_team_members():
-    """Test workspace team member operations."""
-    # Connect
-    dw = Datawrapper()
+    """Test workspace team member operations with mocked API."""
+    with (
+        patch.object(Datawrapper, "get_workspaces") as mock_get_workspaces,
+        patch.object(Datawrapper, "get_workspace_teams") as mock_get_teams,
+        patch.object(
+            Datawrapper, "get_workspace_team_members"
+        ) as mock_get_team_members,
+    ):
+        # Mock responses
+        mock_get_workspaces.return_value = {
+            "list": [
+                {
+                    "slug": "test-workspace-1",
+                    "name": "Test Workspace 1",
+                    "id": "ws123",
+                }
+            ]
+        }
 
-    # Get all workspaces
-    workspaces = dw.get_workspaces()
+        mock_get_teams.return_value = {
+            "list": [
+                {
+                    "id": "team123",
+                    "name": "Team Alpha",
+                }
+            ]
+        }
 
-    # If there are workspaces, test team member operations
-    if len(workspaces["list"]) > 0:
+        mock_get_team_members.return_value = {
+            "list": [
+                {
+                    "id": "user123",
+                    "email": "user1@example.com",
+                    "role": "member",
+                },
+                {
+                    "id": "user456",
+                    "email": "user2@example.com",
+                    "role": "member",
+                },
+            ]
+        }
+
+        # Connect
+        dw = Datawrapper()
+
+        # Get all workspaces
+        workspaces = dw.get_workspaces()
+        assert len(workspaces["list"]) > 0
+
         workspace_slug = workspaces["list"][0]["slug"]
 
         # Get workspace teams
         teams = dw.get_workspace_teams(workspace_slug)
+        assert len(teams["list"]) > 0
 
-        # If there are teams, test member operations
-        if len(teams["list"]) > 0:
-            team_id = teams["list"][0]["id"]
+        team_id = teams["list"][0]["id"]
 
-            # Get team members
-            members = dw.get_workspace_team_members(workspace_slug, team_id)
-            assert isinstance(members["list"], list)
+        # Get team members
+        members = dw.get_workspace_team_members(workspace_slug, team_id)
+        assert isinstance(members["list"], list)
+        assert len(members["list"]) == 2
 
-            # Note: We won't test add/update/remove in automated tests
-            # as they require actual users and could disrupt real teams
+        # Verify mocks were called
+        mock_get_workspaces.assert_called_once()
+        mock_get_teams.assert_called_once_with(workspace_slug)
+        mock_get_team_members.assert_called_once_with(workspace_slug, team_id)

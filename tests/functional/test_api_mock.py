@@ -81,12 +81,9 @@ def test_create_sample_bar_chart_mock():
         mock_client = Mock()
         mock_datawrapper_class.return_value = mock_client
 
-        # Mock the POST response for chart creation
+        # Mock the create_chart response for chart creation
         mock_create_response = {"id": "test-chart-123", "title": chart.title}
-        mock_client.post.return_value = mock_create_response
-
-        # Mock the PUT response for data upload (returns None/empty)
-        mock_client.put.return_value = None
+        mock_client.create_chart.return_value = mock_create_response
 
         # Mock the _CHARTS_URL attribute
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
@@ -99,34 +96,20 @@ def test_create_sample_bar_chart_mock():
         print(f"✅ Chart created successfully with ID: {chart_id}")
 
         # Verify the chart creation API call
-        mock_client.post.assert_called_once()
-        post_call_args = mock_client.post.call_args
+        mock_client.create_chart.assert_called_once()
+        create_call_args = mock_client.create_chart.call_args
 
-        # Check the URL
-        assert post_call_args[0][0] == "https://api.datawrapper.de/v3/charts"
+        # Check the call arguments
+        call_kwargs = create_call_args[1]
+        assert call_kwargs["title"] == chart.title
+        assert call_kwargs["chart_type"] == chart.chart_type
+        assert "metadata" in call_kwargs
 
-        # Check the data payload
-        post_data = post_call_args[1]["data"]
-        assert post_data["title"] == chart.title
-        assert post_data["type"] == chart.chart_type
-        assert "metadata" in post_data
-
-        # Verify the data upload API call
-        mock_client.put.assert_called_once()
-        put_call_args = mock_client.put.call_args
-
-        # Check the data upload URL
-        expected_data_url = f"https://api.datawrapper.de/v3/charts/{chart_id}/data"
-        assert put_call_args[0][0] == expected_data_url
-
-        # Check that CSV data was uploaded
-        uploaded_data = put_call_args[1]["data"]
-        assert isinstance(uploaded_data, bytes)
-
-        # Decode and verify CSV content
-        csv_content = uploaded_data.decode("utf-8")
-        assert "Country,Turnout" in csv_content  # CSV header
-        assert "Romania (2020),33.2" in csv_content  # Sample data row
+        # Check that CSV data was provided
+        csv_data = call_kwargs["data"]
+        assert csv_data is not None
+        assert "Country,Turnout" in csv_data  # CSV header
+        assert "Romania (2020),33.2" in csv_data  # Sample data row
 
         # Verify chart_id was set correctly
         assert chart.chart_id == chart_id
@@ -161,12 +144,9 @@ def test_create_simple_bar_chart_mock():
         mock_client = Mock()
         mock_datawrapper_class.return_value = mock_client
 
-        # Mock the POST response for chart creation
+        # Mock the create_chart response for chart creation
         mock_create_response = {"id": "simple-chart-456", "title": chart.title}
-        mock_client.post.return_value = mock_create_response
-
-        # Mock the PUT response for data upload
-        mock_client.put.return_value = None
+        mock_client.create_chart.return_value = mock_create_response
 
         # Mock the _CHARTS_URL attribute
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
@@ -179,8 +159,7 @@ def test_create_simple_bar_chart_mock():
         print(f"✅ Chart created with ID: {chart_id}")
 
         # Verify the API calls were made correctly
-        assert mock_client.post.called
-        assert mock_client.put.called
+        assert mock_client.create_chart.called
 
         # Verify chart_id was set
         assert chart.chart_id == "simple-chart-456"
@@ -222,11 +201,8 @@ def test_update_chart_mock():
         mock_client = Mock()
         mock_datawrapper_class.return_value = mock_client
 
-        # Mock the PATCH response for chart update
-        mock_client.patch.return_value = None
-
-        # Mock the PUT response for data upload
-        mock_client.put.return_value = None
+        # Mock the update_chart response for chart update (returns None)
+        mock_client.update_chart.return_value = None
 
         # Mock the _CHARTS_URL attribute
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
@@ -239,22 +215,15 @@ def test_update_chart_mock():
         print(f"✅ Chart updated successfully with ID: {updated_chart_id}")
 
         # Verify the update API call
-        mock_client.patch.assert_called_once()
-        patch_call_args = mock_client.patch.call_args
+        mock_client.update_chart.assert_called_once()
+        update_call_args = mock_client.update_chart.call_args
 
-        # Check the URL
-        expected_update_url = "https://api.datawrapper.de/v3/charts/existing-chart-789"
-        assert patch_call_args[0][0] == expected_update_url
-
-        # Verify the data upload API call
-        mock_client.put.assert_called_once()
-        put_call_args = mock_client.put.call_args
-
-        # Check the data upload URL
-        expected_data_url = (
-            "https://api.datawrapper.de/v3/charts/existing-chart-789/data"
-        )
-        assert put_call_args[0][0] == expected_data_url
+        # Check the call arguments
+        call_kwargs = update_call_args[1]
+        assert call_kwargs["chart_id"] == "existing-chart-789"
+        assert call_kwargs["title"] == chart.title
+        assert call_kwargs["chart_type"] == chart.chart_type
+        assert "metadata" in call_kwargs
 
         # Verify the returned chart_id matches
         assert updated_chart_id == "existing-chart-789"

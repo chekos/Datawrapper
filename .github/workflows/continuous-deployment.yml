@@ -59,37 +59,8 @@ jobs:
         name: Run mypy
         run: uv run mypy ./ --ignore-missing-imports
 
-  test-cleanup:
-    name: Cleanup test workspaces
-    runs-on: ubuntu-latest
-    steps:
-      - id: checkout
-        name: Checkout
-        uses: actions/checkout@v5
-
-      - id: install-uv
-        name: Install uv
-        uses: astral-sh/setup-uv@v6
-        with:
-          version: "latest"
-          enable-cache: true
-          cache-dependency-glob: '**/pyproject.toml'
-
-      - id: install-python
-        name: Install Python
-        run: uv python install 3.13
-
-      - id: install-python-dependencies
-        name: Install Python dependencies
-        run: uv sync --extra test
-
-      - id: cleanup
-        name: Run cleanup script
-        run: uv run python ./scripts/cleanup_test_workspaces.py
-
   test-python:
     name: Test Python code
-    needs: [test-cleanup]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -118,7 +89,7 @@ jobs:
 
       - id: tests
         name: Run tests
-        run: uv run pytest --cov -sv --ignore=tests/functional/test_workspaces.py
+        run: uv run pytest --cov -sv
         shell: bash
 
   build:
