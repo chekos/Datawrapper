@@ -90,7 +90,7 @@ def test_metadata_content_structure():
 
     # Check annotate section structure
     assert "notes" in metadata["annotate"]
-    assert "byline" in metadata["annotate"]
+    # Note: byline is in describe section, not annotate (per Datawrapper API)
 
     # Check custom section (should be a dict)
     assert isinstance(metadata["custom"], dict)

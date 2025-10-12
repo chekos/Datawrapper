@@ -90,6 +90,7 @@ class TestBaseChartAPIIntegration:
                     "type": "d3-bars",
                     "language": "en-US",
                     "metadata": chart.serialize_model()["metadata"],
+                    "forkable": True,
                 },
                 extra_headers={"content-type": "application/json"},
             )

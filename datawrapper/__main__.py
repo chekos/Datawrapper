@@ -289,7 +289,7 @@ class Datawrapper:
     def put(
         self,
         url: str,
-        data: dict | None = None,
+        data: dict | bytes | None = None,
         timeout: int = 15,
         extra_headers: dict | None = None,
         dump_data: bool = True,
@@ -300,8 +300,8 @@ class Datawrapper:
         ----------
         url : str
             The URL to request.
-        data : dict
-            A dictionary of data to pass to the request, by default None
+        data : dict | bytes
+            A dictionary of data to pass to the request, or raw bytes when dump_data is False, by default None
         timeout : int, optional
             The timeout for the request in seconds, by default 15
         extra_headers : dict, optional

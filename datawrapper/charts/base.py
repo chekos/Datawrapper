@@ -14,21 +14,13 @@ class Annotate(BaseModel):
     model_config = ConfigDict(
         populate_by_name=True,
         strict=True,
-        json_schema_extra={
-            "examples": [{"notes": "Example note", "byline": "By John Doe"}]
-        },
+        json_schema_extra={"examples": [{"notes": "Example note"}]},
     )
 
     #: The footnotes that appear below the chart
     notes: str = Field(
         default="",
         description="The footnotes that appear below the chart",
-    )
-
-    #: The byline that appears below the chart
-    byline: str = Field(
-        default="",
-        description="The byline that appears below the chart",
     )
 
 
@@ -487,6 +479,16 @@ class BaseChart(BaseModel):
     )
 
     #
+    # Chart Settings
+    #
+
+    #: Whether to allow other users to fork this visualization
+    forkable: bool = Field(
+        default=True,
+        description="Whether to allow other users to fork this visualization",
+    )
+
+    #
     # API Integration
     #
 
@@ -503,7 +505,15 @@ class BaseChart(BaseModel):
         self._client = None
 
     def _get_client(self, access_token: str | None = None) -> Datawrapper:
-        """Get or create a Datawrapper client instance."""
+        """Get or create a Datawrapper client instance.
+
+        Args:
+            access_token: Optional Datawrapper API access token.
+                           If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+
+        Returns:
+            An instance of the Datawrapper client.
+        """
         if self._client is not None:
             return self._client
 
@@ -517,6 +527,19 @@ class BaseChart(BaseModel):
 
         self._client = Datawrapper(access_token=token)
         return self._client
+
+    def _convert_data_to_csv(self) -> str:
+        """Convert data to CSV string for API upload.
+
+        Returns:
+            CSV string representation of the data.
+        """
+        if isinstance(self.data, pd.DataFrame):
+            return self.data.to_csv(index=False, encoding="utf-8")
+        else:
+            # Convert list of dicts to DataFrame first, then to CSV
+            df = pd.DataFrame(self.data)
+            return df.to_csv(index=False, encoding="utf-8")
 
     def create(self, access_token: str | None = None) -> str:
         """Create a new chart via the Datawrapper API.
@@ -537,20 +560,22 @@ class BaseChart(BaseModel):
         # Get the serialized chart data
         chart_data = self.serialize_model()
 
+        # Craft the payload for the API
+        payload = {
+            "title": chart_data["title"],
+            "type": chart_data["type"],
+            "language": chart_data.get("language"),
+            "metadata": chart_data["metadata"],
+            "forkable": self.forkable,
+        }
+
+        # Only include theme if it's not empty
+        theme = chart_data.get("theme", "")
+        if theme:
+            payload["theme"] = theme
+
         try:
             # Create chart using direct POST to charts endpoint
-            payload = {
-                "title": chart_data["title"],
-                "type": chart_data["type"],
-                "language": chart_data.get("language"),
-                "metadata": chart_data["metadata"],
-            }
-
-            # Only include theme if it's not empty
-            theme = chart_data.get("theme", "")
-            if theme:
-                payload["theme"] = theme
-
             response = client.post(
                 client._CHARTS_URL,
                 data=payload,
@@ -580,13 +605,7 @@ class BaseChart(BaseModel):
             else not bool(self.data)
         ):
             try:
-                # Convert data to CSV string
-                if isinstance(self.data, pd.DataFrame):
-                    csv_data = self.data.to_csv(index=False, encoding="utf-8")
-                else:
-                    # Convert list of dicts to DataFrame first, then to CSV
-                    df = pd.DataFrame(self.data)
-                    csv_data = df.to_csv(index=False, encoding="utf-8")
+                csv_data = self._convert_data_to_csv()
 
                 # Upload data using PUT
                 client.put(
@@ -627,20 +646,21 @@ class BaseChart(BaseModel):
         # Get the serialized chart data
         chart_data = self.serialize_model()
 
+        # Craft the payload for the API
+        payload = {
+            "title": chart_data["title"],
+            "type": chart_data["type"],
+            "language": chart_data.get("language"),
+            "metadata": chart_data["metadata"],
+        }
+
+        # Only include theme if it's not empty
+        theme = chart_data.get("theme", "")
+        if theme:
+            payload["theme"] = theme
+
         try:
             # Update chart using direct PATCH to charts endpoint
-            payload = {
-                "title": chart_data["title"],
-                "type": chart_data["type"],
-                "language": chart_data.get("language"),
-                "metadata": chart_data["metadata"],
-            }
-
-            # Only include theme if it's not empty
-            theme = chart_data.get("theme", "")
-            if theme:
-                payload["theme"] = theme
-
             client.patch(
                 f"{client._CHARTS_URL}/{self.chart_id}",
                 data=payload,
@@ -658,13 +678,7 @@ class BaseChart(BaseModel):
             else not bool(self.data)
         ):
             try:
-                # Convert data to CSV string
-                if isinstance(self.data, pd.DataFrame):
-                    csv_data = self.data.to_csv(index=False, encoding="utf-8")
-                else:
-                    # Convert list of dicts to DataFrame first, then to CSV
-                    df = pd.DataFrame(self.data)
-                    csv_data = df.to_csv(index=False, encoding="utf-8")
+                csv_data = self._convert_data_to_csv()
 
                 # Upload data using PUT
                 client.put(
@@ -708,18 +722,12 @@ class BaseChart(BaseModel):
         if self.theme:
             dw_obj["theme"] = self.theme
 
-        # Prepare the data
-        data = self.data.copy()
-        if isinstance(data, pd.DataFrame):
-            data = data.to_dict(orient="records")
-
         # Set the transformations
-        if isinstance(self.transformations, Transform):
-            data_section = self.transformations.model_dump(by_alias=True)
-        else:
-            data_section = Transform.model_validate(self.transformations).model_dump(
-                by_alias=True
-            )
+        data_section = (
+            self.transformations
+            if isinstance(self.transformations, Transform)
+            else Transform.model_validate(self.transformations)
+        ).model_dump(by_alias=True)
 
         # Validate the Describe data
         describe = Describe.model_validate(
@@ -737,7 +745,6 @@ class BaseChart(BaseModel):
         annotate = Annotate.model_validate(
             {
                 "notes": self.notes,
-                "byline": self.byline,
             }
         )
 
@@ -893,6 +900,7 @@ class BaseChart(BaseModel):
             "title": chart_metadata.get("title", ""),
             "theme": chart_metadata.get("theme", ""),
             "language": chart_metadata.get("language", "en-US"),
+            "forkable": chart_metadata.get("forkable", True),
             # Data
             "data": data_df,
             "transformations": data_metadata,
