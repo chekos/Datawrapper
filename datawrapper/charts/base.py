@@ -560,67 +560,37 @@ class BaseChart(BaseModel):
         # Get the serialized chart data
         chart_data = self.serialize_model()
 
-        # Craft the payload for the API
-        payload = {
-            "title": chart_data["title"],
-            "type": chart_data["type"],
-            "language": chart_data.get("language"),
-            "metadata": chart_data["metadata"],
-            "forkable": self.forkable,
-        }
-
-        # Only include theme if it's not empty
-        theme = chart_data.get("theme", "")
-        if theme:
-            payload["theme"] = theme
-
-        try:
-            # Create chart using direct POST to charts endpoint
-            response = client.post(
-                client._CHARTS_URL,
-                data=payload,
-                extra_headers={"content-type": "application/json"},
-            )
-        except Exception as e:
-            raise Exception(
-                f"Failed to create chart via Datawrapper API. Error: {str(e)}"
-            ) from e
-
-        # Extract and validate the chart ID
-        if isinstance(response, dict):
-            chart_id = response.get("id")
-        else:
-            raise ValueError(f"Unexpected response type from API: {type(response)}")
-
-        if not chart_id or not isinstance(chart_id, str):
-            raise ValueError(f"Invalid chart ID received from API: {chart_id}")
-
-        # Store the chart ID
-        self.chart_id = chart_id
-
-        # Upload data if present
+        # Convert data to CSV string if present
+        data_to_pass = None
         if not (
             self.data.empty
             if isinstance(self.data, pd.DataFrame)
             else not bool(self.data)
         ):
-            try:
-                csv_data = self._convert_data_to_csv()
+            data_to_pass = self._convert_data_to_csv()
 
-                # Upload data using PUT
-                client.put(
-                    f"{client._CHARTS_URL}/{chart_id}/data",
-                    data=csv_data.encode("utf-8"),
-                    extra_headers={"content-type": "text/csv"},
-                    dump_data=False,  # Don't JSON encode the CSV data
-                )
-            except Exception as e:
-                raise Exception(
-                    f"Chart created successfully (ID: {chart_id}) but failed to upload data. "
-                    f"Error: {str(e)}"
-                ) from e
+        # Use the convenience method from the client
+        response = client.create_chart(
+            title=chart_data["title"],
+            chart_type=chart_data["type"],
+            theme=chart_data.get("theme") or None,
+            data=data_to_pass,
+            forkable=self.forkable,
+            language=chart_data.get("language"),
+            metadata=chart_data["metadata"],
+        )
 
-        return chart_id
+        # Extract and validate the chart ID
+        if not isinstance(response, dict):
+            raise ValueError(f"Unexpected response type from API: {type(response)}")
+
+        chart_id = response.get("id")
+        if not chart_id or not isinstance(chart_id, str):
+            raise ValueError(f"Invalid chart ID received from API: {chart_id}")
+
+        # Store and return the chart ID
+        self.chart_id = chart_id
+        return self.chart_id
 
     def update(self, access_token: str | None = None) -> str:
         """Update an existing chart via the Datawrapper API.
@@ -646,52 +616,25 @@ class BaseChart(BaseModel):
         # Get the serialized chart data
         chart_data = self.serialize_model()
 
-        # Craft the payload for the API
-        payload = {
-            "title": chart_data["title"],
-            "type": chart_data["type"],
-            "language": chart_data.get("language"),
-            "metadata": chart_data["metadata"],
-        }
-
-        # Only include theme if it's not empty
-        theme = chart_data.get("theme", "")
-        if theme:
-            payload["theme"] = theme
-
-        try:
-            # Update chart using direct PATCH to charts endpoint
-            client.patch(
-                f"{client._CHARTS_URL}/{self.chart_id}",
-                data=payload,
-                extra_headers={"content-type": "application/json"},
-            )
-        except Exception as e:
-            raise Exception(
-                f"Failed to update chart via Datawrapper API. Error: {str(e)}"
-            ) from e
-
-        # Upload data if present
+        # Convert data to CSV string if present
+        data_to_pass = None
         if not (
             self.data.empty
             if isinstance(self.data, pd.DataFrame)
             else not bool(self.data)
         ):
-            try:
-                csv_data = self._convert_data_to_csv()
+            data_to_pass = self._convert_data_to_csv()
 
-                # Upload data using PUT
-                client.put(
-                    f"{client._CHARTS_URL}/{self.chart_id}/data",
-                    data=csv_data.encode("utf-8"),
-                    extra_headers={"content-type": "text/csv"},
-                    dump_data=False,  # Don't JSON encode the CSV data
-                )
-            except Exception as e:
-                raise Exception(
-                    f"Chart updated successfully (ID: {self.chart_id}) but failed to upload data. "
-                    f"Error: {str(e)}"
-                ) from e
+        # Use the convenience method from the client
+        client.update_chart(
+            chart_id=self.chart_id,
+            title=chart_data["title"],
+            chart_type=chart_data["type"],
+            theme=chart_data.get("theme") or None,
+            data=data_to_pass,
+            language=chart_data.get("language"),
+            metadata=chart_data["metadata"],
+        )
 
         return self.chart_id
 

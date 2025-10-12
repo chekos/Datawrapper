@@ -416,8 +416,8 @@ class TestArrowChartIntegration:
 
         mock_client = Mock()
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
-        mock_client.post.return_value = {"id": "created-chart-id"}
-        mock_client.put.return_value = None
+        mock_client.create_chart.return_value = {"id": "created-chart-id"}
+        mock_client.update_chart.return_value = {"id": "created-chart-id"}
 
         # Create the chart
         with patch.object(original_chart, "_get_client", return_value=mock_client):

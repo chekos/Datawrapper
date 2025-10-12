@@ -582,8 +582,8 @@ class TestChartGetIntegration:
 
         mock_client = Mock()
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
-        mock_client.post.return_value = {"id": "created-chart-id"}
-        mock_client.put.return_value = None
+        mock_client.create_chart.return_value = {"id": "created-chart-id"}
+        mock_client.update_chart.return_value = {"id": "created-chart-id"}
 
         # Create the chart
         with patch.object(original_chart, "_get_client", return_value=mock_client):
@@ -647,8 +647,7 @@ class TestChartGetIntegration:
             return mock_metadata
 
         mock_client.get.side_effect = mock_get
-        mock_client.patch.return_value = None
-        mock_client.put.return_value = None
+        mock_client.update_chart.return_value = {"id": "existing-chart-id"}
 
         with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
             # Fetch the chart
@@ -667,13 +666,10 @@ class TestChartGetIntegration:
             chart.update(access_token="test-token")
 
             # Verify update was called
-            mock_client.patch.assert_called_once()
-            call_args = mock_client.patch.call_args
-            assert (
-                call_args[0][0]
-                == "https://api.datawrapper.de/v3/charts/existing-chart-id"
-            )
-            assert call_args[1]["data"]["title"] == "Updated Title"
+            mock_client.update_chart.assert_called_once()
+            call_args = mock_client.update_chart.call_args
+            assert call_args[1]["chart_id"] == "existing-chart-id"
+            assert call_args[1]["title"] == "Updated Title"
 
     def test_chart_type_mismatch_error(self):
         """Test that using wrong chart class raises error."""

@@ -72,8 +72,8 @@ class TestBaseChartAPIIntegration:
         )
 
         mock_client = Mock()
-        mock_client.post.return_value = {"id": "test-chart-id"}
-        mock_client.put.return_value = None
+        mock_client.create_chart.return_value = {"id": "test-chart-id"}
+        mock_client.update_chart.return_value = {"id": "test-chart-id"}
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
         with patch.object(chart, "_get_client", return_value=mock_client):
@@ -82,35 +82,20 @@ class TestBaseChartAPIIntegration:
             assert chart_id == "test-chart-id"
             assert chart.chart_id == "test-chart-id"
 
-            # Verify post was called with correct parameters
-            mock_client.post.assert_called_once_with(
-                "https://api.datawrapper.de/v3/charts",
-                data={
-                    "title": "Test Chart",
-                    "type": "d3-bars",
-                    "language": "en-US",
-                    "metadata": chart.serialize_model()["metadata"],
-                    "forkable": True,
-                },
-                extra_headers={"content-type": "application/json"},
-            )
-
-            # Verify put was called for data upload
-            mock_client.put.assert_called_once()
-            put_call_args = mock_client.put.call_args
-            assert (
-                put_call_args[0][0]
-                == "https://api.datawrapper.de/v3/charts/test-chart-id/data"
-            )
-            assert "data" in put_call_args[1]
-            assert put_call_args[1]["extra_headers"]["content-type"] == "text/csv"
+            # Verify create_chart was called with correct parameters
+            mock_client.create_chart.assert_called_once()
+            call_args = mock_client.create_chart.call_args
+            assert call_args[1]["title"] == "Test Chart"
+            assert call_args[1]["chart_type"] == "d3-bars"
+            assert call_args[1]["data"] is not None
+            assert call_args[1]["metadata"] is not None
 
     def test_create_chart_invalid_response(self):
         """Test chart creation with invalid API response."""
         chart = BaseChart(**{"chart-type": "d3-bars", "title": "Test Chart"})
 
         mock_client = Mock()
-        mock_client.post.return_value = {"id": None}  # Invalid ID
+        mock_client.create_chart.return_value = {"id": None}  # Invalid ID
 
         with patch.object(chart, "_get_client", return_value=mock_client):
             with pytest.raises(ValueError, match="Invalid chart ID received from API"):
@@ -121,7 +106,7 @@ class TestBaseChartAPIIntegration:
         chart = BaseChart(**{"chart-type": "d3-bars", "title": "Test Chart"})
 
         mock_client = Mock()
-        mock_client.post.return_value = {}  # No ID field
+        mock_client.create_chart.return_value = {}  # No ID field
 
         with patch.object(chart, "_get_client", return_value=mock_client):
             with pytest.raises(ValueError, match="Invalid chart ID received from API"):
@@ -139,8 +124,7 @@ class TestBaseChartAPIIntegration:
         chart.chart_id = "existing-chart-id"
 
         mock_client = Mock()
-        mock_client.patch.return_value = None
-        mock_client.put.return_value = None
+        mock_client.update_chart.return_value = {"id": "existing-chart-id"}
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
         with patch.object(chart, "_get_client", return_value=mock_client):
@@ -148,27 +132,14 @@ class TestBaseChartAPIIntegration:
 
             assert chart_id == "existing-chart-id"
 
-            # Verify patch was called with correct parameters
-            mock_client.patch.assert_called_once_with(
-                "https://api.datawrapper.de/v3/charts/existing-chart-id",
-                data={
-                    "title": "Updated Chart",
-                    "type": "d3-bars",
-                    "language": "en-US",
-                    "metadata": chart.serialize_model()["metadata"],
-                },
-                extra_headers={"content-type": "application/json"},
-            )
-
-            # Verify put was called for data upload
-            mock_client.put.assert_called_once()
-            put_call_args = mock_client.put.call_args
-            assert (
-                put_call_args[0][0]
-                == "https://api.datawrapper.de/v3/charts/existing-chart-id/data"
-            )
-            assert "data" in put_call_args[1]
-            assert put_call_args[1]["extra_headers"]["content-type"] == "text/csv"
+            # Verify update_chart was called with correct parameters
+            mock_client.update_chart.assert_called_once()
+            call_args = mock_client.update_chart.call_args
+            assert call_args[1]["chart_id"] == "existing-chart-id"
+            assert call_args[1]["title"] == "Updated Chart"
+            assert call_args[1]["chart_type"] == "d3-bars"
+            assert call_args[1]["data"] is not None
+            assert call_args[1]["metadata"] is not None
 
     def test_update_chart_no_chart_id(self):
         """Test update raises error when no chart_id is set."""
@@ -178,22 +149,23 @@ class TestBaseChartAPIIntegration:
             chart.update(access_token="test-token")
 
     def test_update_chart_empty_data(self):
-        """Test update with empty data doesn't call put for data."""
+        """Test update with empty data passes None for data parameter."""
         chart = BaseChart(**{"chart-type": "d3-bars", "title": "Test Chart"})
         chart.chart_id = "existing-chart-id"
         # Leave data empty (default)
 
         mock_client = Mock()
-        mock_client.patch.return_value = None
+        mock_client.update_chart.return_value = {"id": "existing-chart-id"}
 
         with patch.object(chart, "_get_client", return_value=mock_client):
             chart.update(access_token="test-token")
 
-            # Verify patch was called for metadata update
-            mock_client.patch.assert_called_once()
+            # Verify update_chart was called
+            mock_client.update_chart.assert_called_once()
+            call_args = mock_client.update_chart.call_args
 
-            # Verify put was NOT called for empty data
-            mock_client.put.assert_not_called()
+            # Verify data parameter is None for empty data
+            assert call_args[1]["data"] is None
 
     def test_create_with_list_data(self):
         """Test chart creation with list data instead of DataFrame."""
@@ -206,8 +178,7 @@ class TestBaseChartAPIIntegration:
         )
 
         mock_client = Mock()
-        mock_client.post.return_value = {"id": "test-chart-id"}
-        mock_client.put.return_value = None
+        mock_client.create_chart.return_value = {"id": "test-chart-id"}
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
         with patch.object(chart, "_get_client", return_value=mock_client):
@@ -215,17 +186,8 @@ class TestBaseChartAPIIntegration:
 
             assert chart_id == "test-chart-id"
 
-            # Verify post was called for chart creation
-            mock_client.post.assert_called_once()
-
-            # Verify put was called for data upload (list data converted to CSV)
-            mock_client.put.assert_called_once()
-            put_call_args = mock_client.put.call_args
-            assert (
-                put_call_args[0][0]
-                == "https://api.datawrapper.de/v3/charts/test-chart-id/data"
-            )
-            assert "data" in put_call_args[1]
+            # Verify create_chart was called for chart creation
+            mock_client.create_chart.assert_called_once()
 
     def test_api_integration_excludes_private_fields(self):
         """Test that chart_id and _client are excluded from serialization."""
@@ -249,7 +211,8 @@ class TestBaseChartAPIIntegration:
         )
 
         mock_client = Mock()
-        mock_client.post.return_value = {"id": "workflow-chart-id"}
+        mock_client.create_chart.return_value = {"id": "workflow-chart-id"}
+        mock_client.update_chart.return_value = {"id": "workflow-chart-id"}
         mock_client.patch.return_value = None
         mock_client.put.return_value = None
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
@@ -268,6 +231,7 @@ class TestBaseChartAPIIntegration:
             assert updated_id == "workflow-chart-id"
 
             # Verify both create and update were called
-            assert mock_client.post.call_count == 1  # Chart creation
-            assert mock_client.patch.call_count == 1  # Chart update
-            assert mock_client.put.call_count == 2  # Data upload for create and update
+            assert mock_client.create_chart.call_count == 1  # Chart creation
+            assert mock_client.update_chart.call_count == 1  # Chart update via update()
+            assert mock_client.patch.call_count == 0  # No longer used
+            assert mock_client.put.call_count == 0  # No longer used
