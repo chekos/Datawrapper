@@ -325,17 +325,11 @@ class BaseChart(BaseModel):
 
         # Create the metadata section in the proper Datawrapper order
         dw_obj["metadata"] = {
-            # Data section first
             "data": data_section,
-            # Describe section
             "describe": describe.model_dump(by_alias=True),
-            # Visualize section
             "visualize": visualize.model_dump(by_alias=True),
-            # Publish section
             "publish": publish.model_dump(by_alias=True),
-            # Annotate section
             "annotate": annotate.model_dump(by_alias=True),
-            # Custom section
             "custom": self.custom,
         }
 
@@ -496,6 +490,27 @@ class BaseChart(BaseModel):
         return self._client
 
     @classmethod
+    def _validate_chart_type(cls, chart_type: str) -> None:
+        """Validate that the chart type matches the class's allowed types.
+
+        Args:
+            chart_type: The chart type from the API response
+
+        Raises:
+            ValueError: If chart type doesn't match the class's constraints
+        """
+        if hasattr(cls, "model_fields") and "chart_type" in cls.model_fields:
+            field_info = cls.model_fields["chart_type"]
+            if hasattr(field_info.annotation, "__args__"):
+                assert field_info.annotation
+                allowed_types = field_info.annotation.__args__
+                if chart_type not in allowed_types:
+                    raise ValueError(
+                        f"Chart type mismatch: expected one of {allowed_types}, "
+                        f"got '{chart_type}'. Use BaseChart.get() or the correct chart class."
+                    )
+
+    @classmethod
     def get(cls, chart_id: str, access_token: str | None = None) -> "BaseChart":
         """Fetch an existing chart from the Datawrapper API.
 
@@ -511,49 +526,44 @@ class BaseChart(BaseModel):
             ValueError: If no access token is available or chart type doesn't match.
             Exception: If the API request fails.
         """
-        # Create a temporary instance to use _get_client
-        temp_instance = cls.__new__(cls)
-        temp_instance._client = None
-        client = temp_instance._get_client(access_token)
+        # Create a Datawrapper client instance
+        client = Datawrapper(access_token=access_token)
 
         try:
             # Fetch chart metadata
-            response = client.get(f"{client._CHARTS_URL}/{chart_id}")
-
-            if not isinstance(response, dict):
-                raise ValueError(f"Unexpected response type from API: {type(response)}")
-
-            # Verify chart type matches if this is a subclass
-            chart_type = response.get("type")
-            if hasattr(cls, "model_fields") and "chart_type" in cls.model_fields:
-                # Check if this subclass has a specific chart_type constraint
-                field_info = cls.model_fields["chart_type"]
-                if hasattr(field_info.annotation, "__args__"):
-                    # This is a Literal type with specific allowed values
-                    assert field_info.annotation
-                    allowed_types = field_info.annotation.__args__
-                    if chart_type not in allowed_types:
-                        raise ValueError(
-                            f"Chart type mismatch: expected one of {allowed_types}, got '{chart_type}'. "
-                            f"Use BaseChart.get() or the correct chart class."
-                        )
-
-            # Fetch chart data
-            data_response = client.get(f"{client._CHARTS_URL}/{chart_id}/data")
-
+            metadata_response = client.get(f"{client._CHARTS_URL}/{chart_id}")
         except Exception as e:
             raise Exception(
                 f"Failed to fetch chart from Datawrapper API. Error: {str(e)}"
             ) from e
 
+        if not isinstance(metadata_response, dict):
+            raise ValueError(
+                f"Unexpected response type from API: {type(metadata_response)}"
+            )
+
+        # Verify chart type matches if this is a subclass
+        chart_type = metadata_response.get("type")
+        assert chart_type is not None, "API response missing 'type' field"
+        cls._validate_chart_type(chart_type)
+
+        try:
+            # Fetch chart data
+            data_response = client.get(f"{client._CHARTS_URL}/{chart_id}/data")
+        except Exception as e:
+            raise Exception(
+                f"Failed to fetch chart data from Datawrapper API. Error: {str(e)}"
+            ) from e
+
         # Parse the response into our model
-        parsed_data = cls._from_api(response, data_response)
+        parsed_data = cls._from_api(metadata_response, data_response)
 
         # Create instance and set chart_id and client
         instance = cls(**parsed_data)
         instance.chart_id = chart_id
         instance._client = client
 
+        # Return the instance
         return instance
 
     def create(self, access_token: str | None = None) -> str:
