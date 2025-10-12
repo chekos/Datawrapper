@@ -358,9 +358,8 @@ class TestMultipleColumnChartParsing:
     def test_parse_jobs_sample(self):
         """Test parsing the jobs.json sample."""
         chart_data = load_sample_json("jobs.json")
-        csv_data = load_sample_csv("jobs.csv")
 
-        chart = MultipleColumnChart.from_api(chart_data, csv_data)
+        chart = MultipleColumnChart.from_api(chart_data)
 
         assert chart.chart_type == "multiple-columns"
         assert chart.title == "Manufacturing construction has seen the highest growth"
@@ -379,9 +378,8 @@ class TestMultipleColumnChartParsing:
     def test_parse_population_sample(self):
         """Test parsing the population.json sample."""
         chart_data = load_sample_json("population.json")
-        csv_data = load_sample_csv("population.csv")
 
-        chart = MultipleColumnChart.from_api(chart_data, csv_data)
+        chart = MultipleColumnChart.from_api(chart_data)
 
         assert chart.chart_type == "multiple-columns"
         assert "population" in chart.title.lower()
@@ -390,9 +388,8 @@ class TestMultipleColumnChartParsing:
     def test_parse_social_media_sample(self):
         """Test parsing the social-media.json sample."""
         chart_data = load_sample_json("social-media.json")
-        csv_data = load_sample_csv("social-media.csv")
 
-        chart = MultipleColumnChart.from_api(chart_data, csv_data)
+        chart = MultipleColumnChart.from_api(chart_data)
 
         assert chart.chart_type == "multiple-columns"
         assert chart.grid_layout == "fixedCount"
@@ -400,9 +397,8 @@ class TestMultipleColumnChartParsing:
     def test_parse_uk_spending_sample(self):
         """Test parsing the uk-spending.json sample."""
         chart_data = load_sample_json("uk-spending.json")
-        csv_data = load_sample_csv("uk-spending.csv")
 
-        chart = MultipleColumnChart.from_api(chart_data, csv_data)
+        chart = MultipleColumnChart.from_api(chart_data)
 
         assert chart.chart_type == "multiple-columns"
         assert chart.grid_layout == "fixedCount"
@@ -410,9 +406,8 @@ class TestMultipleColumnChartParsing:
     def test_parse_preserves_all_fields(self):
         """Test that parsing preserves all important fields."""
         chart_data = load_sample_json("jobs.json")
-        csv_data = load_sample_csv("jobs.csv")
 
-        chart = MultipleColumnChart.from_api(chart_data, csv_data)
+        chart = MultipleColumnChart.from_api(chart_data)
 
         # Verify layout fields
         assert isinstance(chart.grid_column, int)
@@ -452,9 +447,8 @@ class TestMultipleColumnChartRoundTrip:
             "title": serialized["title"],
             "metadata": serialized["metadata"],
         }
-        csv_data = data.to_csv(index=False)
 
-        parsed = MultipleColumnChart.from_api(chart_metadata, csv_data)
+        parsed = MultipleColumnChart.from_api(chart_metadata)
 
         # Verify key fields match
         assert parsed.title == original.title
@@ -495,9 +489,8 @@ class TestMultipleColumnChartRoundTrip:
             "title": serialized["title"],
             "metadata": serialized["metadata"],
         }
-        csv_data = data.to_csv(index=False)
 
-        parsed = MultipleColumnChart.from_api(chart_metadata, csv_data)
+        parsed = MultipleColumnChart.from_api(chart_metadata)
 
         # Verify all fields match
         assert parsed.grid_layout == original.grid_layout

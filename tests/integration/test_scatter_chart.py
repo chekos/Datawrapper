@@ -471,9 +471,8 @@ class TestScatterPlotParsing:
     def test_parse_automation_sample(self):
         """Test parsing the automation sample JSON."""
         chart_data = load_sample_json("automation.json")
-        csv_data = load_sample_csv("automation.csv")
 
-        chart = ScatterPlot.from_api(chart_data, csv_data)
+        chart = ScatterPlot.from_api(chart_data)
 
         assert chart.chart_type == "d3-scatter-plot"
         assert chart.title == "Higher Risk of Job Automation in Lower Paying Jobs"
@@ -488,9 +487,8 @@ class TestScatterPlotParsing:
     def test_parse_elements_sample(self):
         """Test parsing the elements sample JSON."""
         chart_data = load_sample_json("elements.json")
-        csv_data = load_sample_csv("elements.csv")
 
-        chart = ScatterPlot.from_api(chart_data, csv_data)
+        chart = ScatterPlot.from_api(chart_data)
 
         assert chart.chart_type == "d3-scatter-plot"
         assert chart.title == "When were chemical elements discovered?"
@@ -504,9 +502,8 @@ class TestScatterPlotParsing:
     def test_parse_german_students_sample(self):
         """Test parsing the german-students sample JSON."""
         chart_data = load_sample_json("german-students.json")
-        csv_data = load_sample_csv("german-students.csv")
 
-        chart = ScatterPlot.from_api(chart_data, csv_data)
+        chart = ScatterPlot.from_api(chart_data)
 
         assert chart.chart_type == "d3-scatter-plot"
         assert chart.title == "What are the student cities in Germany?"
@@ -521,9 +518,8 @@ class TestScatterPlotParsing:
     def test_parse_life_expectancy_sample(self):
         """Test parsing the life-expectancy sample JSON."""
         chart_data = load_sample_json("life-expectancy.json")
-        csv_data = load_sample_csv("life-expectancy.csv")
 
-        chart = ScatterPlot.from_api(chart_data, csv_data)
+        chart = ScatterPlot.from_api(chart_data)
 
         assert chart.chart_type == "d3-scatter-plot"
         assert (
@@ -541,9 +537,8 @@ class TestScatterPlotParsing:
     def test_parse_preserves_all_fields(self):
         """Test that parsing preserves all scatter-specific fields."""
         chart_data = load_sample_json("automation.json")
-        csv_data = load_sample_csv("automation.csv")
 
-        chart = ScatterPlot.from_api(chart_data, csv_data)
+        chart = ScatterPlot.from_api(chart_data)
 
         # Verify key fields are preserved
         assert chart.opacity == 0.86
@@ -575,7 +570,7 @@ class TestScatterPlotRoundTrip:
         serialized = original.model_dump(by_alias=True)
 
         # Parse back
-        parsed = ScatterPlot.from_api(serialized, df.to_csv(index=False))
+        parsed = ScatterPlot.from_api(serialized)
 
         # Verify key fields match
         assert parsed.title == original.title
@@ -621,7 +616,7 @@ class TestScatterPlotRoundTrip:
         serialized = original.model_dump(by_alias=True)
 
         # Parse back
-        parsed = ScatterPlot.from_api(serialized, df.to_csv(index=False))
+        parsed = ScatterPlot.from_api(serialized)
 
         # Verify fields match
         assert parsed.title == original.title

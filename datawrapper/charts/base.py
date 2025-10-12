@@ -375,20 +375,32 @@ class BaseChart(BaseModel):
         return data
 
     @classmethod
-    def _from_api(cls, chart_metadata: dict[str, Any], csv_data: str) -> dict[str, Any]:
-        """Parse Datawrapper API response into model initialization data.
-
-        This base implementation handles common fields. Subclasses should override
-        _parse_visualize_metadata to handle chart-specific visualize settings.
+    def deserialize_data(cls, csv_data: str) -> pd.DataFrame:
+        """Parse CSV string from Datawrapper API into DataFrame.
 
         Args:
-            chart_metadata: The JSON response from the chart metadata endpoint
             csv_data: The CSV data from the chart data endpoint
 
         Returns:
-            Dictionary that can be used to initialize the model
+            DataFrame containing the parsed CSV data
         """
-        metadata = chart_metadata.get("metadata", {})
+        # Use sep=None with engine='python' to auto-detect delimiter (comma or tab)
+        return pd.read_csv(StringIO(csv_data), sep=None, engine="python")
+
+    @classmethod
+    def deserialize_model(cls, api_response: dict[str, Any]) -> dict[str, Any]:
+        """Parse Datawrapper API response into model initialization data.
+
+        This base implementation handles common fields. Subclasses should override
+        to handle chart-specific visualize settings.
+
+        Args:
+            api_response: The JSON response from the chart metadata endpoint
+
+        Returns:
+            Dictionary that can be used to initialize the model (without data)
+        """
+        metadata = api_response.get("metadata", {})
 
         # Extract common fields
         describe = metadata.get("describe", {})
@@ -399,21 +411,16 @@ class BaseChart(BaseModel):
         visualize = metadata.get("visualize", {})
         visualize_sharing = visualize.get("sharing", {})
 
-        # Parse CSV data into DataFrame
-        # Use sep=None with engine='python' to auto-detect delimiter (comma or tab)
-        data_df = pd.read_csv(StringIO(csv_data), sep=None, engine="python")
-
         # Build base initialization dict without hardcoded defaults
         # Pydantic will apply model field defaults for any missing values
         result = {
             # Chart type and basic info
-            "chart_type": chart_metadata.get("type"),
-            "title": chart_metadata.get("title"),
-            "theme": chart_metadata.get("theme"),
-            "language": chart_metadata.get("language"),
-            "forkable": chart_metadata.get("forkable"),
-            # Data
-            "data": data_df,
+            "chart_type": api_response.get("type"),
+            "title": api_response.get("title"),
+            "theme": api_response.get("theme"),
+            "language": api_response.get("language"),
+            "forkable": api_response.get("forkable"),
+            # Data transformations (but not the data itself)
             "transformations": Transform.from_api_data_section(
                 metadata.get("data", {})
             ),
@@ -552,8 +559,12 @@ class BaseChart(BaseModel):
                 f"Failed to fetch chart data from Datawrapper API. Error: {str(e)}"
             ) from e
 
-        # Parse the response into our model
-        parsed_data = cls._from_api(metadata_response, data_response)
+        # Parse metadata and data separately
+        metadata_dict = cls.deserialize_model(metadata_response)
+        data_df = cls.deserialize_data(data_response)
+
+        # Merge them
+        parsed_data = {**metadata_dict, "data": data_df}
 
         # Create instance and set chart_id and client
         instance = cls(**parsed_data)

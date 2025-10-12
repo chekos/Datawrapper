@@ -329,23 +329,21 @@ class ColumnChart(BaseChart):
         return model
 
     @classmethod
-    def _from_api(
-        cls, chart_metadata: dict[str, Any], chart_data: str
-    ) -> dict[str, Any]:
+    def deserialize_model(cls, api_response: dict[str, Any]) -> dict[str, Any]:
         """Parse Datawrapper API response including column chart specific fields.
 
         Args:
-            chart_metadata: The JSON response from the chart metadata endpoint
+            api_response: The JSON response from the chart metadata endpoint
             chart_data: The CSV data from the chart data endpoint
 
         Returns:
             Dictionary that can be used to initialize the ColumnChart model
         """
         # Call parent to get base fields
-        init_data = super()._from_api(chart_metadata, chart_data)
+        init_data = super().deserialize_model(api_response)
 
         # Extract column-specific sections
-        metadata = chart_metadata.get("metadata", {})
+        metadata = api_response.get("metadata", {})
         visualize = metadata.get("visualize", {})
 
         # Horizontal axis (X-axis)

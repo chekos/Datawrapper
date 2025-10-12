@@ -410,23 +410,21 @@ class MultipleColumnChart(BaseChart):
         return model
 
     @classmethod
-    def _from_api(
-        cls, chart_metadata: dict[str, Any], chart_data: str
-    ) -> dict[str, Any]:
+    def deserialize_model(cls, api_response: dict[str, Any]) -> dict[str, Any]:
         """Parse Datawrapper API response including multiple column chart specific fields.
 
         Args:
-            chart_metadata: The JSON response from the chart metadata endpoint
+            api_response: The JSON response from the chart metadata endpoint
             chart_data: The CSV data from the chart data endpoint
 
         Returns:
             Dictionary that can be used to initialize the MultipleColumnChart model
         """
         # Call parent to get base fields
-        init_data = super()._from_api(chart_metadata, chart_data)
+        init_data = super().deserialize_model(api_response)
 
         # Extract multiple-column-specific sections
-        metadata = chart_metadata.get("metadata", {})
+        metadata = api_response.get("metadata", {})
         visualize = metadata.get("visualize", {})
 
         # Layout
@@ -616,17 +614,14 @@ class MultipleColumnChart(BaseChart):
         return init_data
 
     @classmethod
-    def from_api(
-        cls, chart_metadata: dict[str, Any], chart_data: str
-    ) -> "MultipleColumnChart":
+    def from_api(cls, api_response: dict[str, Any]) -> "MultipleColumnChart":
         """Create a MultipleColumnChart instance from API response data.
 
         Args:
-            chart_metadata: The JSON response from the chart metadata endpoint
-            chart_data: The CSV data from the chart data endpoint
+            api_response: The JSON response from the chart metadata endpoint
 
         Returns:
             A MultipleColumnChart instance populated with the API data
         """
-        init_data = cls._from_api(chart_metadata, chart_data)
+        init_data = cls.deserialize_model(api_response)
         return cls(**init_data)

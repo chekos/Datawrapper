@@ -248,9 +248,8 @@ class TestStackedBarChartParsing:
     def test_parse_candy_sample(self):
         """Test parsing the candy.json sample."""
         chart_data = load_sample_json("candy.json")
-        csv_data = load_sample_csv("candy.csv")
 
-        chart = StackedBarChart.from_api(chart_data, csv_data)
+        chart = StackedBarChart.from_api(chart_data)
 
         assert (
             chart.title
@@ -274,9 +273,8 @@ class TestStackedBarChartParsing:
     def test_parse_capitals_sample(self):
         """Test parsing the capitals.json sample."""
         chart_data = load_sample_json("capitals.json")
-        csv_data = load_sample_csv("capitals.csv")
 
-        chart = StackedBarChart.from_api(chart_data, csv_data)
+        chart = StackedBarChart.from_api(chart_data)
 
         assert chart.title == "How many live in the capital?"
         assert chart.intro.startswith("Share of population")
@@ -295,9 +293,8 @@ class TestStackedBarChartParsing:
     def test_parse_media_trust_sample(self):
         """Test parsing the media-trust.json sample."""
         chart_data = load_sample_json("media-trust.json")
-        csv_data = load_sample_csv("media-trust.csv")
 
-        chart = StackedBarChart.from_api(chart_data, csv_data)
+        chart = StackedBarChart.from_api(chart_data)
 
         assert chart.title == "Trust in Media Reporting"
         assert (
@@ -319,9 +316,8 @@ class TestStackedBarChartParsing:
     def test_parse_sugar_sample(self):
         """Test parsing the sugar.json sample."""
         chart_data = load_sample_json("sugar.json")
-        csv_data = load_sample_csv("sugar.csv")
 
-        chart = StackedBarChart.from_api(chart_data, csv_data)
+        chart = StackedBarChart.from_api(chart_data)
 
         assert chart.title == "Six kinds of sugar in thirty kinds of food"
         assert chart.intro.startswith("Gram of sugar")
@@ -347,16 +343,15 @@ class TestStackedBarChartRoundTrip:
     def test_roundtrip_candy(self):
         """Test roundtrip with candy sample."""
         chart_data = load_sample_json("candy.json")
-        csv_data = load_sample_csv("candy.csv")
 
         # Parse from API
-        chart = StackedBarChart.from_api(chart_data, csv_data)
+        chart = StackedBarChart.from_api(chart_data)
 
         # Serialize back
         serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
 
         # Parse again
-        chart2 = StackedBarChart.from_api(serialized, csv_data)
+        chart2 = StackedBarChart.from_api(serialized)
 
         # Compare key fields
         assert chart.title == chart2.title
@@ -369,11 +364,10 @@ class TestStackedBarChartRoundTrip:
     def test_roundtrip_capitals(self):
         """Test roundtrip with capitals sample."""
         chart_data = load_sample_json("capitals.json")
-        csv_data = load_sample_csv("capitals.csv")
 
-        chart = StackedBarChart.from_api(chart_data, csv_data)
+        chart = StackedBarChart.from_api(chart_data)
         serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
-        chart2 = StackedBarChart.from_api(serialized, csv_data)
+        chart2 = StackedBarChart.from_api(serialized)
 
         assert chart.replace_flags == chart2.replace_flags
         assert chart.stack_percentages == chart2.stack_percentages
@@ -382,11 +376,10 @@ class TestStackedBarChartRoundTrip:
     def test_roundtrip_media_trust(self):
         """Test roundtrip with media-trust sample."""
         chart_data = load_sample_json("media-trust.json")
-        csv_data = load_sample_csv("media-trust.csv")
 
-        chart = StackedBarChart.from_api(chart_data, csv_data)
+        chart = StackedBarChart.from_api(chart_data)
         serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
-        chart2 = StackedBarChart.from_api(serialized, csv_data)
+        chart2 = StackedBarChart.from_api(serialized)
 
         assert chart.reverse_order == chart2.reverse_order
         assert chart.value_label_mode == chart2.value_label_mode
@@ -395,11 +388,10 @@ class TestStackedBarChartRoundTrip:
     def test_roundtrip_sugar(self):
         """Test roundtrip with sugar sample."""
         chart_data = load_sample_json("sugar.json")
-        csv_data = load_sample_csv("sugar.csv")
 
-        chart = StackedBarChart.from_api(chart_data, csv_data)
+        chart = StackedBarChart.from_api(chart_data)
         serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
-        chart2 = StackedBarChart.from_api(serialized, csv_data)
+        chart2 = StackedBarChart.from_api(serialized)
 
         assert chart.groups_column == chart2.groups_column
         assert chart.value_label_format == chart2.value_label_format
