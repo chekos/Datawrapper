@@ -134,13 +134,14 @@ class TestEndToEndWorkflows:
         assert len(visualize["range-annotations"]) == 2
 
         # Step 6: Verify annotation properties are preserved
-        text_annos = visualize["text-annotations"]
+        # Annotations are stored as dicts with UUID keys, so convert to list
+        text_annos = list(visualize["text-annotations"].values())
         assert text_annos[0]["text"] == "Peak"
         assert text_annos[0]["bold"] is True
         assert text_annos[1]["text"] == "Valley"
         assert text_annos[1]["italic"] is True
 
-        range_annos = visualize["range-annotations"]
+        range_annos = list(visualize["range-annotations"].values())
         assert range_annos[0]["type"] == "y"
         assert range_annos[0]["color"] == "#FFFF00"
         assert range_annos[1]["type"] == "x"
@@ -294,7 +295,9 @@ class TestEndToEndWorkflows:
         # Step 5: Verify annotations are in JSON
         visualize = parsed_json["metadata"]["visualize"]
         assert len(visualize["text-annotations"]) == 1
-        assert visualize["text-annotations"][0]["text"] == "Export test"
+        # Annotations are stored as dicts with UUID keys, so get the first value
+        text_anno = list(visualize["text-annotations"].values())[0]
+        assert text_anno["text"] == "Export test"
 
     @pytest.mark.functional
     def test_chart_comparison_workflow(self, sample_dataframe):
