@@ -488,10 +488,6 @@ class BaseChart(BaseModel):
         description="Whether to allow other users to fork this visualization",
     )
 
-    #
-    # API Integration
-    #
-
     #: The chart ID after creation (populated by create() method)
     chart_id: str | None = Field(
         default=None,
@@ -499,149 +495,9 @@ class BaseChart(BaseModel):
         exclude=True,  # Don't include in serialization
     )
 
-    def __init__(self, **data):
-        """Initialize the BaseChart with private attributes."""
-        super().__init__(**data)
-        self._client = None
-
-    def _get_client(self, access_token: str | None = None) -> Datawrapper:
-        """Get or create a Datawrapper client instance.
-
-        Args:
-            access_token: Optional Datawrapper API access token.
-                           If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
-
-        Returns:
-            An instance of the Datawrapper client.
-        """
-        if self._client is not None:
-            return self._client
-
-        # Try to get access token from parameter, environment, or raise error
-        token = access_token or os.getenv("DATAWRAPPER_ACCESS_TOKEN")
-        if not token:
-            raise ValueError(
-                "No Datawrapper access token provided. "
-                "Set DATAWRAPPER_ACCESS_TOKEN environment variable or pass access_token parameter."
-            )
-
-        self._client = Datawrapper(access_token=token)
-        return self._client
-
-    def serialize_data(self) -> str | None:
-        """Convert data to CSV string for API upload.
-
-        Returns:
-            CSV string representation of the data, or None if data is empty.
-        """
-        # Check if data is empty
-        if isinstance(self.data, pd.DataFrame):
-            if self.data.empty:
-                return None
-        else:
-            if not bool(self.data):
-                return None
-
-        # Convert to CSV
-        if isinstance(self.data, pd.DataFrame):
-            return self.data.to_csv(index=False, encoding="utf-8")
-        else:
-            # Convert list of dicts to DataFrame first, then to CSV
-            df = pd.DataFrame(self.data)
-            return df.to_csv(index=False, encoding="utf-8")
-
-    def create(self, access_token: str | None = None) -> str:
-        """Create a new chart via the Datawrapper API.
-
-        Args:
-            access_token: Optional Datawrapper API access token.
-                         If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
-
-        Returns:
-            The chart ID of the created chart.
-
-        Raises:
-            ValueError: If no access token is available or API returns invalid response.
-            Exception: If the API request fails.
-        """
-        # Get the client
-        client = self._get_client(access_token)
-
-        # Get the serialized chart metadata
-        metadata = self.serialize_model()
-
-        # Use the convenience method from the client to create the chart
-        response = client.create_chart(
-            title=metadata["title"],
-            chart_type=metadata["type"],
-            theme=metadata.get("theme") or None,
-            data=self.serialize_data(),
-            forkable=self.forkable,
-            language=metadata.get("language"),
-            metadata=metadata["metadata"],
-        )
-
-        # Extract and validate the chart ID
-        if not isinstance(response, dict):
-            raise ValueError(f"Unexpected response type from API: {type(response)}")
-        chart_id = response.get("id")
-        if not chart_id or not isinstance(chart_id, str):
-            raise ValueError(f"Invalid chart ID received from API: {chart_id}")
-
-        # Store and return the chart ID
-        self.chart_id = chart_id
-        return self.chart_id
-
-    def update(self, access_token: str | None = None) -> str:
-        """Update an existing chart via the Datawrapper API.
-
-        Args:
-            access_token: Optional Datawrapper API access token.
-                         If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
-
-        Returns:
-            The chart ID of the updated chart.
-
-        Raises:
-            ValueError: If no chart_id is set or no access token is available.
-            Exception: If the API request fails.
-        """
-        if not self.chart_id:
-            raise ValueError(
-                "No chart_id set. Use create() first or set chart_id manually."
-            )
-
-        # Get the client
-        client = self._get_client(access_token)
-
-        # Get the serialized chart metadata
-        metadata = self.serialize_model()
-
-        # Use the convenience method from the client to update the chart
-        client.update_chart(
-            chart_id=self.chart_id,
-            title=metadata["title"],
-            chart_type=metadata["type"],
-            theme=metadata.get("theme") or None,
-            data=self.serialize_data(),
-            language=metadata.get("language"),
-            metadata=metadata["metadata"],
-        )
-
-        # Return the chart ID
-        return self.chart_id
-
-    @model_validator(mode="before")
-    @classmethod
-    def convert_column_format_dicts(cls, data: dict[str, Any]) -> dict[str, Any]:
-        """Convert dictionary items in transformation to Transform objects."""
-        if not isinstance(data, dict):
-            return data
-
-        if "transformations" in data and isinstance(data["transformations"], dict):
-            data["transformations"] = Transform.model_validate(data["transformations"])
-
-        return data
+    #
+    # Serialization methods for preparing data for API upload
+    #
 
     @model_serializer
     def serialize_model(self) -> dict[str, Any]:
@@ -724,66 +580,43 @@ class BaseChart(BaseModel):
         # Return the obj
         return dw_obj
 
-    @classmethod
-    def get(cls, chart_id: str, access_token: str | None = None) -> "BaseChart":
-        """Fetch an existing chart from the Datawrapper API.
-
-        Args:
-            chart_id: The ID of the chart to fetch
-            access_token: Optional Datawrapper API access token.
-                        If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+    def serialize_data(self) -> str | None:
+        """Convert data to CSV string for API upload.
 
         Returns:
-            An instance of the chart class with data populated from the API.
-
-        Raises:
-            ValueError: If no access token is available or chart type doesn't match.
-            Exception: If the API request fails.
+            CSV string representation of the data, or None if data is empty.
         """
-        # Create a temporary instance to use _get_client
-        temp_instance = cls.__new__(cls)
-        temp_instance._client = None
-        client = temp_instance._get_client(access_token)
+        # Check if data is empty
+        if isinstance(self.data, pd.DataFrame):
+            if self.data.empty:
+                return None
+        else:
+            if not bool(self.data):
+                return None
 
-        try:
-            # Fetch chart metadata
-            response = client.get(f"{client._CHARTS_URL}/{chart_id}")
+        # Convert to CSV
+        if isinstance(self.data, pd.DataFrame):
+            return self.data.to_csv(index=False, encoding="utf-8")
+        else:
+            # Convert list of dicts to DataFrame first, then to CSV
+            df = pd.DataFrame(self.data)
+            return df.to_csv(index=False, encoding="utf-8")
 
-            if not isinstance(response, dict):
-                raise ValueError(f"Unexpected response type from API: {type(response)}")
+    #
+    # Deserialization methods for parsing API responses and input data
+    #
 
-            # Verify chart type matches if this is a subclass
-            chart_type = response.get("type")
-            if hasattr(cls, "model_fields") and "chart_type" in cls.model_fields:
-                # Check if this subclass has a specific chart_type constraint
-                field_info = cls.model_fields["chart_type"]
-                if hasattr(field_info.annotation, "__args__"):
-                    # This is a Literal type with specific allowed values
-                    assert field_info.annotation
-                    allowed_types = field_info.annotation.__args__
-                    if chart_type not in allowed_types:
-                        raise ValueError(
-                            f"Chart type mismatch: expected one of {allowed_types}, got '{chart_type}'. "
-                            f"Use BaseChart.get() or the correct chart class."
-                        )
+    @model_validator(mode="before")
+    @classmethod
+    def convert_column_format_dicts(cls, data: dict[str, Any]) -> dict[str, Any]:
+        """Convert dictionary items in transformation to Transform objects."""
+        if not isinstance(data, dict):
+            return data
 
-            # Fetch chart data
-            data_response = client.get(f"{client._CHARTS_URL}/{chart_id}/data")
+        if "transformations" in data and isinstance(data["transformations"], dict):
+            data["transformations"] = Transform.model_validate(data["transformations"])
 
-        except Exception as e:
-            raise Exception(
-                f"Failed to fetch chart from Datawrapper API. Error: {str(e)}"
-            ) from e
-
-        # Parse the response into our model
-        parsed_data = cls._from_api(response, data_response)
-
-        # Create instance and set chart_id and client
-        instance = cls(**parsed_data)
-        instance.chart_id = chart_id
-        instance._client = client
-
-        return instance
+        return data
 
     @classmethod
     def _from_api(cls, chart_metadata: dict[str, Any], csv_data: str) -> dict[str, Any]:
@@ -866,3 +699,178 @@ class BaseChart(BaseModel):
         }
 
         return init_data
+
+    #
+    # CRUD methods for Datawrapper API
+    #
+
+    def __init__(self, **data):
+        """Initialize the BaseChart with private attributes."""
+        super().__init__(**data)
+        self._client = None
+
+    def _get_client(self, access_token: str | None = None) -> Datawrapper:
+        """Get or create a Datawrapper client instance.
+
+        Args:
+            access_token: Optional Datawrapper API access token.
+                           If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+
+        Returns:
+            An instance of the Datawrapper client.
+        """
+        if self._client is not None:
+            return self._client
+
+        # Try to get access token from parameter, environment, or raise error
+        token = access_token or os.getenv("DATAWRAPPER_ACCESS_TOKEN")
+        if not token:
+            raise ValueError(
+                "No Datawrapper access token provided. "
+                "Set DATAWRAPPER_ACCESS_TOKEN environment variable or pass access_token parameter."
+            )
+
+        self._client = Datawrapper(access_token=token)
+        return self._client
+
+    @classmethod
+    def get(cls, chart_id: str, access_token: str | None = None) -> "BaseChart":
+        """Fetch an existing chart from the Datawrapper API.
+
+        Args:
+            chart_id: The ID of the chart to fetch
+            access_token: Optional Datawrapper API access token.
+                        If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+
+        Returns:
+            An instance of the chart class with data populated from the API.
+
+        Raises:
+            ValueError: If no access token is available or chart type doesn't match.
+            Exception: If the API request fails.
+        """
+        # Create a temporary instance to use _get_client
+        temp_instance = cls.__new__(cls)
+        temp_instance._client = None
+        client = temp_instance._get_client(access_token)
+
+        try:
+            # Fetch chart metadata
+            response = client.get(f"{client._CHARTS_URL}/{chart_id}")
+
+            if not isinstance(response, dict):
+                raise ValueError(f"Unexpected response type from API: {type(response)}")
+
+            # Verify chart type matches if this is a subclass
+            chart_type = response.get("type")
+            if hasattr(cls, "model_fields") and "chart_type" in cls.model_fields:
+                # Check if this subclass has a specific chart_type constraint
+                field_info = cls.model_fields["chart_type"]
+                if hasattr(field_info.annotation, "__args__"):
+                    # This is a Literal type with specific allowed values
+                    assert field_info.annotation
+                    allowed_types = field_info.annotation.__args__
+                    if chart_type not in allowed_types:
+                        raise ValueError(
+                            f"Chart type mismatch: expected one of {allowed_types}, got '{chart_type}'. "
+                            f"Use BaseChart.get() or the correct chart class."
+                        )
+
+            # Fetch chart data
+            data_response = client.get(f"{client._CHARTS_URL}/{chart_id}/data")
+
+        except Exception as e:
+            raise Exception(
+                f"Failed to fetch chart from Datawrapper API. Error: {str(e)}"
+            ) from e
+
+        # Parse the response into our model
+        parsed_data = cls._from_api(response, data_response)
+
+        # Create instance and set chart_id and client
+        instance = cls(**parsed_data)
+        instance.chart_id = chart_id
+        instance._client = client
+
+        return instance
+
+    def create(self, access_token: str | None = None) -> str:
+        """Create a new chart via the Datawrapper API.
+
+        Args:
+            access_token: Optional Datawrapper API access token.
+                         If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+
+        Returns:
+            The chart ID of the created chart.
+
+        Raises:
+            ValueError: If no access token is available or API returns invalid response.
+            Exception: If the API request fails.
+        """
+        # Get the client
+        client = self._get_client(access_token)
+
+        # Get the serialized chart metadata
+        metadata = self.serialize_model()
+
+        # Use the convenience method from the client to create the chart
+        response = client.create_chart(
+            title=metadata["title"],
+            chart_type=metadata["type"],
+            theme=metadata.get("theme") or None,
+            data=self.serialize_data(),
+            forkable=self.forkable,
+            language=metadata.get("language"),
+            metadata=metadata["metadata"],
+        )
+
+        # Extract and validate the chart ID
+        if not isinstance(response, dict):
+            raise ValueError(f"Unexpected response type from API: {type(response)}")
+        chart_id = response.get("id")
+        if not chart_id or not isinstance(chart_id, str):
+            raise ValueError(f"Invalid chart ID received from API: {chart_id}")
+
+        # Store and return the chart ID
+        self.chart_id = chart_id
+        return self.chart_id
+
+    def update(self, access_token: str | None = None) -> str:
+        """Update an existing chart via the Datawrapper API.
+
+        Args:
+            access_token: Optional Datawrapper API access token.
+                         If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+
+        Returns:
+            The chart ID of the updated chart.
+
+        Raises:
+            ValueError: If no chart_id is set or no access token is available.
+            Exception: If the API request fails.
+        """
+        if not self.chart_id:
+            raise ValueError(
+                "No chart_id set. Use create() first or set chart_id manually."
+            )
+
+        # Get the client
+        client = self._get_client(access_token)
+
+        # Get the serialized chart metadata
+        metadata = self.serialize_model()
+
+        # Use the convenience method from the client to update the chart
+        client.update_chart(
+            chart_id=self.chart_id,
+            title=metadata["title"],
+            chart_type=metadata["type"],
+            theme=metadata.get("theme") or None,
+            data=self.serialize_data(),
+            language=metadata.get("language"),
+            metadata=metadata["metadata"],
+        )
+
+        # Return the chart ID
+        return self.chart_id
