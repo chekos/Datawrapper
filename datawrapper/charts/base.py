@@ -390,10 +390,6 @@ class BaseChart(BaseModel):
         """
         metadata = chart_metadata.get("metadata", {})
 
-        # Parse CSV data into DataFrame
-        # Use sep=None with engine='python' to auto-detect delimiter (comma or tab)
-        data_df = pd.read_csv(StringIO(csv_data), sep=None, engine="python")
-
         # Extract common fields
         describe = metadata.get("describe", {})
         annotate = metadata.get("annotate", {})
@@ -403,58 +399,51 @@ class BaseChart(BaseModel):
         visualize = metadata.get("visualize", {})
         visualize_sharing = visualize.get("sharing", {})
 
-        # Build base initialization dict
-        # Handle column-format: convert dict to list
-        data_metadata = metadata.get("data", {})
-        if "column-format" in data_metadata and isinstance(
-            data_metadata["column-format"], dict
-        ):
-            # Convert dict format (column_name -> config) to list format
-            column_format_dict = data_metadata["column-format"]
-            if column_format_dict:
-                data_metadata["column-format"] = [
-                    {"column": col_name, **col_config}
-                    for col_name, col_config in column_format_dict.items()
-                ]
-            else:
-                data_metadata["column-format"] = []
+        # Parse CSV data into DataFrame
+        # Use sep=None with engine='python' to auto-detect delimiter (comma or tab)
+        data_df = pd.read_csv(StringIO(csv_data), sep=None, engine="python")
 
-        init_data = {
+        # Build base initialization dict without hardcoded defaults
+        # Pydantic will apply model field defaults for any missing values
+        result = {
             # Chart type and basic info
             "chart_type": chart_metadata.get("type"),
-            "title": chart_metadata.get("title", ""),
-            "theme": chart_metadata.get("theme", ""),
-            "language": chart_metadata.get("language", "en-US"),
-            "forkable": chart_metadata.get("forkable", True),
+            "title": chart_metadata.get("title"),
+            "theme": chart_metadata.get("theme"),
+            "language": chart_metadata.get("language"),
+            "forkable": chart_metadata.get("forkable"),
             # Data
             "data": data_df,
-            "transformations": data_metadata,
+            "transformations": Transform.from_api_data_section(
+                metadata.get("data", {})
+            ),
             # Description
-            "intro": describe.get("intro", ""),
-            "notes": annotate.get("notes", ""),
-            "source_name": describe.get("source-name", ""),
-            "source_url": describe.get("source-url", ""),
-            "byline": describe.get("byline", ""),
-            "aria_description": describe.get("aria-description", ""),
-            "hide_title": describe.get("hide-title", False),
+            "intro": describe.get("intro"),
+            "notes": annotate.get("notes"),
+            "source_name": describe.get("source-name"),
+            "source_url": describe.get("source-url"),
+            "byline": describe.get("byline"),
+            "aria_description": describe.get("aria-description"),
+            "hide_title": describe.get("hide-title"),
             # Layout/Publish
-            "auto_dark_mode": publish.get("autoDarkMode", False),
-            "dark_mode_invert": visualize.get("dark-mode-invert", True),
-            "get_the_data": publish_blocks.get("get-the-data", False),
-            "download_image": publish_blocks.get("download-image", False),
-            "download_pdf": publish_blocks.get("download-pdf", False),
-            "download_svg": publish_blocks.get("download-svg", False),
-            "embed": publish_blocks.get("embed", False),
-            "force_attribution": publish.get("force-attribution", False),
-            "share_buttons": visualize_sharing.get("enabled", False),
-            "share_url": visualize_sharing.get("url", ""),
-            "logo": publish_logo.get("enabled", False),
-            "logo_id": publish_logo.get("id", ""),
+            "auto_dark_mode": publish.get("autoDarkMode"),
+            "dark_mode_invert": visualize.get("dark-mode-invert"),
+            "get_the_data": publish_blocks.get("get-the-data"),
+            "download_image": publish_blocks.get("download-image"),
+            "download_pdf": publish_blocks.get("download-pdf"),
+            "download_svg": publish_blocks.get("download-svg"),
+            "embed": publish_blocks.get("embed"),
+            "force_attribution": publish.get("force-attribution"),
+            "share_buttons": visualize_sharing.get("enabled"),
+            "share_url": visualize_sharing.get("url"),
+            "logo": publish_logo.get("enabled"),
+            "logo_id": publish_logo.get("id"),
             # Custom
-            "custom": metadata.get("custom", {}),
+            "custom": metadata.get("custom"),
         }
 
-        return init_data
+        # Remove None values to let Pydantic apply model defaults
+        return {k: v for k, v in result.items() if v is not None}
 
     #
     # CRUD methods for Datawrapper API
@@ -526,21 +515,29 @@ class BaseChart(BaseModel):
             ValueError: If no access token is available or chart type doesn't match.
             Exception: If the API request fails.
         """
+        # Get token from parameter or environment
+        token = access_token or os.getenv("DATAWRAPPER_ACCESS_TOKEN")
+        if not token:
+            raise ValueError(
+                "No Datawrapper access token provided. "
+                "Set DATAWRAPPER_ACCESS_TOKEN environment variable or pass access_token parameter."
+            )
+
         # Create a Datawrapper client instance
-        client = Datawrapper(access_token=access_token)
+        client = Datawrapper(access_token=token)
 
         try:
             # Fetch chart metadata
             metadata_response = client.get(f"{client._CHARTS_URL}/{chart_id}")
+
+            if not isinstance(metadata_response, dict):
+                raise ValueError(
+                    f"Unexpected response type from API: {type(metadata_response)}"
+                )
         except Exception as e:
             raise Exception(
                 f"Failed to fetch chart from Datawrapper API. Error: {str(e)}"
             ) from e
-
-        if not isinstance(metadata_response, dict):
-            raise ValueError(
-                f"Unexpected response type from API: {type(metadata_response)}"
-            )
 
         # Verify chart type matches if this is a subclass
         chart_type = metadata_response.get("type")

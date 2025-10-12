@@ -319,6 +319,42 @@ class Transform(BaseModel):
 
         return data
 
+    @classmethod
+    def from_api_data_section(cls, api_data: dict[str, Any]) -> "Transform":
+        """Create Transform from Datawrapper API's metadata.data section.
+
+        Handles the API's dict-based column-format structure by converting it
+        to the list-based structure expected by this model.
+
+        Args:
+            api_data: The 'data' section from API metadata response
+
+        Returns:
+            A validated Transform instance
+
+        Example:
+            >>> api_response = {
+            ...     "data": {"column-format": {"sales": {"type": "number"}}}
+            ... }
+            >>> transform = Transform.from_api_data_section(api_response["data"])
+        """
+        # Make a copy to avoid mutating the input
+        data = api_data.copy()
+
+        # Convert column-format from dict to list if needed
+        if "column-format" in data and isinstance(data["column-format"], dict):
+            column_format_dict = data["column-format"]
+            data["column-format"] = (
+                [
+                    {"column": col_name, **col_config}
+                    for col_name, col_config in column_format_dict.items()
+                ]
+                if column_format_dict
+                else []
+            )
+
+        return cls.model_validate(data)
+
 
 class Describe(BaseModel):
     """A model for the Datawrapper API's 'describe' attribute."""
