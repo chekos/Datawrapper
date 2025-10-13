@@ -5,6 +5,7 @@ from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
+from .models import CustomTicks
 
 
 class ColumnChart(BaseChart):
@@ -245,7 +246,7 @@ class ColumnChart(BaseChart):
             {
                 # Horizontal axis
                 "custom-range-x": self.custom_range_x,
-                "custom-ticks-x": ",".join(str(tick) for tick in self.custom_ticks_x),
+                "custom-ticks-x": CustomTicks.serialize(self.custom_ticks_x),
                 "x-grid-format": self.x_grid_format,
                 "grid-lines-x": {
                     "type": "" if self.x_grid == "off" else self.x_grid,
@@ -253,7 +254,7 @@ class ColumnChart(BaseChart):
                 },
                 # Vertical axis
                 "custom-range": self.custom_range_y,
-                "custom-ticks": ",".join(str(tick) for tick in self.custom_ticks_y),
+                "custom-ticks": CustomTicks.serialize(self.custom_ticks_y),
                 "y-grid-format": self.y_grid_format,
                 "grid-lines": self.y_grid,
                 "yAxisLabels": {
@@ -328,17 +329,9 @@ class ColumnChart(BaseChart):
 
         # Horizontal axis (X-axis)
         init_data["custom_range_x"] = visualize.get("custom-range-x", ["", ""])
-
-        # Parse custom ticks X (comes as comma-separated string)
-        ticks_x_str = visualize.get("custom-ticks-x", "")
-        if ticks_x_str:
-            init_data["custom_ticks_x"] = [
-                float(x.strip()) if x.strip() else x.strip()
-                for x in ticks_x_str.split(",")
-            ]
-        else:
-            init_data["custom_ticks_x"] = []
-
+        init_data["custom_ticks_x"] = CustomTicks.deserialize(
+            visualize.get("custom-ticks-x", "")
+        )
         init_data["x_grid_format"] = visualize.get("x-grid-format", "auto")
 
         # Parse grid-lines-x
@@ -352,17 +345,9 @@ class ColumnChart(BaseChart):
 
         # Vertical axis (Y-axis)
         init_data["custom_range_y"] = visualize.get("custom-range", ["", ""])
-
-        # Parse custom ticks Y (comes as comma-separated string)
-        ticks_y_str = visualize.get("custom-ticks", "")
-        if ticks_y_str:
-            init_data["custom_ticks_y"] = [
-                float(x.strip()) if x.strip() else x.strip()
-                for x in ticks_y_str.split(",")
-            ]
-        else:
-            init_data["custom_ticks_y"] = []
-
+        init_data["custom_ticks_y"] = CustomTicks.deserialize(
+            visualize.get("custom-ticks", "")
+        )
         init_data["y_grid_format"] = visualize.get("y-grid-format", "")
         init_data["y_grid"] = visualize.get("grid-lines", True)
 

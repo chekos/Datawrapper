@@ -1,0 +1,70 @@
+# Datawrapper Python Library
+
+This is a Python library for interacting with the Datawrapper API to create and manage charts.
+
+## Project Structure
+
+- `datawrapper/` - Main package directory
+  - `__main__.py` - Main Datawrapper API client
+  - `charts/` - Chart-specific implementations
+    - `base.py` - BaseChart class with common functionality
+    - `models.py` - Pydantic models for API metadata structures
+    - `annos.py` - Annotation models (TextAnnotation, RangeAnnotation)
+    - Individual chart type files: `area.py`, `bar.py`, `column.py`, `line.py`, `multiple_column.py`, `scatter.py`, `stacked_bar.py`, `arrow.py`
+- `tests/` - Test suite
+  - `unit/` - Unit tests
+  - `integration/` - Integration tests
+  - `functional/` - Functional tests (require API token)
+  - `samples/` - Sample chart JSON files for testing
+
+## Key Patterns
+
+### Serialization/Deserialization
+
+The library uses a consistent pattern for converting between Python objects and Datawrapper API JSON:
+
+1. **Serialization** (Python → API): Chart classes have a `serialize()` method that converts Python objects to the API's expected JSON format
+2. **Deserialization** (API → Python): Chart classes have a `deserialize_model()` classmethod that converts API JSON responses back to Python objects
+
+### Custom Ticks Utility
+
+The `CustomTicks` class in `models.py` provides utilities for handling custom tick marks on chart axes:
+
+- `CustomTicks.serialize(ticks: list[Any]) -> str`: Converts a list of tick values to a comma-separated string for the API
+- `CustomTicks.deserialize(ticks_str: str) -> list[Any]`: Parses a comma-separated string from the API back to a list of tick values
+  - Automatically converts numeric strings to numbers (int or float)
+  - Preserves non-numeric strings as-is (e.g., date strings like "2020-01-01")
+
+This utility is used by AreaChart, ColumnChart, LineChart, and MultipleColumnChart to handle the `custom-ticks-x` and `custom-ticks-y` fields.
+
+### Annotations
+
+Charts support two types of annotations:
+- `TextAnnotation`: Text labels at specific coordinates
+- `RangeAnnotation`: Highlighted ranges with optional labels
+
+Both have `serialize()` methods to convert to API format. The BaseChart class provides `serialize_annotations()` to handle lists of annotations.
+
+## Testing
+
+- Run all tests: `uv run python -m pytest tests/`
+- Run unit tests only: `uv run python -m pytest tests/unit/`
+- Run integration tests: `uv run python -m pytest tests/integration/`
+- Functional tests require `DATAWRAPPER_ACCESS_TOKEN` environment variable
+
+## Recent Changes
+
+### Custom Ticks Refactoring (2025-01-13)
+
+Refactored the custom tick marks handling to eliminate code duplication:
+
+- Created `CustomTicks` utility class in `models.py` with `serialize()` and `deserialize()` static methods
+- Updated AreaChart, ColumnChart, LineChart, and MultipleColumnChart to use the new utility
+- Removed duplicate tick parsing logic from individual chart classes
+- Added comprehensive unit tests in `tests/unit/models/test_custom_ticks.py`
+- All existing integration tests continue to pass
+
+The `CustomTicks.deserialize()` method intelligently handles mixed data types:
+- Converts numeric strings to int or float
+- Preserves non-numeric strings (like dates) as-is
+- Handles empty strings and whitespace

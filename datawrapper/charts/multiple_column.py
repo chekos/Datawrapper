@@ -5,6 +5,7 @@ from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
+from .models import CustomTicks
 
 
 class MultipleColumnChart(BaseChart):
@@ -350,7 +351,7 @@ class MultipleColumnChart(BaseChart):
                 },
                 # Horizontal axis
                 "custom-range-x": self.custom_range_x,
-                "custom-ticks-x": ",".join(str(tick) for tick in self.custom_ticks_x),
+                "custom-ticks-x": CustomTicks.serialize(self.custom_ticks_x),
                 "x-grid-format": self.x_grid_format,
                 "x-grid-labels": self.x_grid_labels,
                 "x-grid": self.x_grid_all,
@@ -360,7 +361,7 @@ class MultipleColumnChart(BaseChart):
                 },
                 # Vertical axis
                 "custom-range-y": self.custom_range_y,
-                "custom-ticks-y": ",".join(str(tick) for tick in self.custom_ticks_y),
+                "custom-ticks-y": CustomTicks.serialize(self.custom_ticks_y),
                 "y-grid-format": self.y_grid_format,
                 "grid-lines": self.y_grid,
                 "yAxisLabels": {
@@ -445,28 +446,9 @@ class MultipleColumnChart(BaseChart):
 
         # Horizontal axis
         init_data["custom_range_x"] = visualize.get("custom-range-x", ["", ""])
-
-        # Parse custom-ticks-x (comma-separated string to list)
-        custom_ticks_x_str = visualize.get("custom-ticks-x", "")
-        if custom_ticks_x_str:
-            ticks = []
-            for tick in custom_ticks_x_str.split(","):
-                tick = tick.strip()
-                if tick:
-                    # Try to convert to number, keep as string if it fails
-                    try:
-                        ticks.append(
-                            int(tick)
-                            if tick.isdigit()
-                            or (tick.startswith("-") and tick[1:].isdigit())
-                            else float(tick)
-                        )
-                    except ValueError:
-                        ticks.append(tick)
-            init_data["custom_ticks_x"] = ticks
-        else:
-            init_data["custom_ticks_x"] = []
-
+        init_data["custom_ticks_x"] = CustomTicks.deserialize(
+            visualize.get("custom-ticks-x", "")
+        )
         init_data["x_grid_format"] = visualize.get("x-grid-format", "auto")
         init_data["x_grid_labels"] = visualize.get("x-grid-labels", "on")
         init_data["x_grid_all"] = visualize.get("x-grid", "off")
@@ -483,28 +465,9 @@ class MultipleColumnChart(BaseChart):
 
         # Vertical axis
         init_data["custom_range_y"] = visualize.get("custom-range-y", ["", ""])
-
-        # Parse custom-ticks-y (comma-separated string to list)
-        custom_ticks_y_str = visualize.get("custom-ticks-y", "")
-        if custom_ticks_y_str:
-            ticks = []
-            for tick in custom_ticks_y_str.split(","):
-                tick = tick.strip()
-                if tick:
-                    # Try to convert to number, keep as string if it fails
-                    try:
-                        ticks.append(
-                            int(tick)
-                            if tick.isdigit()
-                            or (tick.startswith("-") and tick[1:].isdigit())
-                            else float(tick)
-                        )
-                    except ValueError:
-                        ticks.append(tick)
-            init_data["custom_ticks_y"] = ticks
-        else:
-            init_data["custom_ticks_y"] = []
-
+        init_data["custom_ticks_y"] = CustomTicks.deserialize(
+            visualize.get("custom-ticks-y", "")
+        )
         init_data["y_grid_format"] = visualize.get("y-grid-format", "")
 
         # Parse grid-lines (can be bool or string "show")
