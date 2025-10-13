@@ -132,7 +132,7 @@ jobs:
     steps:
       - id: fetch
         name: Fetch artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v5
         with:
           name: release-candidate
           path: ./dist
