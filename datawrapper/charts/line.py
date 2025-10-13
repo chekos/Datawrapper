@@ -507,12 +507,14 @@ class LineChart(BaseChart):
                 "plotHeightRatio": self.plot_height_ratio,
                 # Initialize empty structures
                 "lines": {},
-                "custom-area-fills": {},
                 "text-annotations": self._serialize_annotations(
                     self.text_annotations, TextAnnotation
                 ),
                 "range-annotations": self._serialize_annotations(
                     self.range_annotations, RangeAnnotation
+                ),
+                "custom-area-fills": self._serialize_annotations(
+                    self.area_fills, AreaFill
                 ),
             }
         )
@@ -564,23 +566,6 @@ class LineChart(BaseChart):
             }
 
             model["metadata"]["visualize"]["lines"][line_name] = line_dict
-
-        # Add area fills - these serialize to a dict, not a list
-        area_fills_dict = {}
-        for i, fill_obj in enumerate(self.area_fills):
-            # Convert to AreaFill object if needed
-            if isinstance(fill_obj, dict):
-                fill = AreaFill.model_validate(fill_obj)
-            else:
-                fill = fill_obj
-
-            # Generate a unique ID for this fill
-            fill_id = f"fill_{i}"
-
-            # Serialize the fill using the custom serialize_model method
-            area_fills_dict[fill_id] = fill.serialize_model()
-
-        model["metadata"]["visualize"]["custom-area-fills"] = area_fills_dict
 
         # Return the serialized data
         return model

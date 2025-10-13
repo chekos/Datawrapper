@@ -84,6 +84,17 @@ This pattern is used by AreaChart, BarChart, ColumnChart, LineChart, MultipleCol
 
 ## Recent Changes
 
+### Area Fill Serialization Fix (2025-01-13)
+
+Fixed the area fill serialization in LineChart to match the Datawrapper API's expected format:
+
+- Updated `AreaFill.serialize_model()` in `annos.py` to return a list of area fill dictionaries instead of a dictionary with UUID keys
+- The API expects area fills in the format: `[{fill1}, {fill2}, ...]` (same as text/range annotations)
+- Updated `tests/integration/test_line_chart.py` to verify the correct list format
+- All 220 integration tests pass
+
+**Important**: Area fills follow the same serialization pattern as text and range annotations - they serialize to a list for POST/PUT requests, even though the API returns them as a dict with UUID keys in GET responses.
+
 ### Annotation Serialization Fix (2025-01-13)
 
 Fixed the annotation serialization to match the Datawrapper API's expected format:

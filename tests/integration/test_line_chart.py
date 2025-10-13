@@ -115,8 +115,9 @@ class TestLineChartCreation:
         serialized = chart.serialize_model()
         area_fills = serialized["metadata"]["visualize"]["custom-area-fills"]
 
+        assert isinstance(area_fills, list)
         assert len(area_fills) == 1
-        fill = list(area_fills.values())[0]
+        fill = area_fills[0]
         assert fill["from"] == "baseline"
         assert fill["to"] == "value"
         assert fill["color"] == "#c3e8d5"
