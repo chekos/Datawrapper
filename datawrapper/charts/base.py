@@ -398,23 +398,6 @@ class BaseChart(BaseModel):
 
         return result
 
-    @classmethod
-    def _deserialize_annotations(
-        cls,
-        api_data: dict[str, dict] | list | None,
-        annotation_class: type[TextAnnotation | RangeAnnotation],
-    ) -> list[dict[str, Any]]:
-        """Deserialize annotations from API response.
-
-        Args:
-            api_data: The annotation data from API (dict with UUID keys or list)
-            annotation_class: The annotation class (TextAnnotation or RangeAnnotation)
-
-        Returns:
-            List of annotation dicts ready for model initialization
-        """
-        return annotation_class.deserialize_model(api_data)
-
     #
     # Deserialization methods for parsing API responses and input data
     #

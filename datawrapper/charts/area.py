@@ -397,11 +397,11 @@ class AreaChart(BaseChart):
         init_data["plot_height_ratio"] = visualize.get("plotHeightRatio", 0.5)
 
         # Annotations
-        init_data["text_annotations"] = cls._deserialize_annotations(
-            visualize.get("text-annotations"), TextAnnotation
+        init_data["text_annotations"] = TextAnnotation.deserialize_model(
+            visualize.get("text-annotations")
         )
-        init_data["range_annotations"] = cls._deserialize_annotations(
-            visualize.get("range-annotations"), RangeAnnotation
+        init_data["range_annotations"] = RangeAnnotation.deserialize_model(
+            visualize.get("range-annotations")
         )
 
         return init_data

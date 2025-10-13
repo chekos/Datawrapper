@@ -566,12 +566,12 @@ class BarChart(BaseChart):
         # Annotations
         init_data["highlighted_series"] = visualize.get("highlighted-series", [])
 
-        # Annotations - use helper method for deserialization
-        init_data["text_annotations"] = cls._deserialize_annotations(
-            visualize.get("text-annotations"), TextAnnotation
+        # Annotations
+        init_data["text_annotations"] = TextAnnotation.deserialize_model(
+            visualize.get("text-annotations")
         )
-        init_data["range_annotations"] = cls._deserialize_annotations(
-            visualize.get("range-annotations"), RangeAnnotation
+        init_data["range_annotations"] = RangeAnnotation.deserialize_model(
+            visualize.get("range-annotations")
         )
 
         return init_data

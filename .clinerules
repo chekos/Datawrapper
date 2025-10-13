@@ -56,7 +56,17 @@ Charts support two types of annotations:
 - `TextAnnotation`: Text labels at specific coordinates
 - `RangeAnnotation`: Highlighted ranges with optional labels
 
-Both have `serialize()` methods to convert to API format. The BaseChart class provides `serialize_annotations()` to handle lists of annotations.
+Both annotation classes have:
+- `serialize()` method: Converts a single annotation instance to API format
+- `deserialize_model()` classmethod: Converts API JSON (list of annotation dicts) back to Python list of dicts
+
+The BaseChart class provides `_serialize_annotations()` helper method to handle lists of annotations during serialization.
+
+Chart classes use the annotation class methods directly:
+- For serialization: `self._serialize_annotations(self.text_annotations, TextAnnotation)`
+- For deserialization: `TextAnnotation.deserialize_model(visualize.get("text-annotations"))`
+
+This pattern is used by AreaChart, BarChart, ColumnChart, LineChart, MultipleColumnChart, and ScatterPlot.
 
 ## Testing
 
@@ -66,6 +76,22 @@ Both have `serialize()` methods to convert to API format. The BaseChart class pr
 - Functional tests require `DATAWRAPPER_ACCESS_TOKEN` environment variable
 
 ## Recent Changes
+
+### Annotation Deserialization Refactoring (2025-01-13)
+
+Simplified annotation deserialization by adding `deserialize_model()` classmethods to annotation classes:
+
+- Added `TextAnnotation.deserialize_model()` and `RangeAnnotation.deserialize_model()` classmethods in `annos.py`
+- These methods handle converting API JSON (list of annotation dicts or None) to Python list of dicts
+- Removed the `_deserialize_annotations()` helper method from BaseChart
+- Updated AreaChart, BarChart, ColumnChart, LineChart, MultipleColumnChart, and ScatterPlot to call annotation class methods directly
+- All 220 existing integration tests continue to pass
+
+This change creates symmetry between serialization and deserialization:
+- Serialization: Chart calls `self._serialize_annotations(annotations, AnnotationClass)`
+- Deserialization: Chart calls `AnnotationClass.deserialize_model(api_data)`
+
+The annotation classes now fully own their own serialization/deserialization logic.
 
 ### Color Category Refactoring (2025-01-13)
 

@@ -699,12 +699,12 @@ class ScatterPlot(BaseChart):
         init_data["plot_height_fixed"] = visualize.get("plotHeightFixed", 300)
         init_data["plot_height_ratio"] = visualize.get("plotHeightRatio", 0.5)
 
-        # Annotations - use helper method for deserialization
-        init_data["text_annotations"] = cls._deserialize_annotations(
-            visualize.get("text-annotations"), TextAnnotation
+        # Annotations
+        init_data["text_annotations"] = TextAnnotation.deserialize_model(
+            visualize.get("text-annotations")
         )
-        init_data["range_annotations"] = cls._deserialize_annotations(
-            visualize.get("range-annotations"), RangeAnnotation
+        init_data["range_annotations"] = RangeAnnotation.deserialize_model(
+            visualize.get("range-annotations")
         )
 
         init_data["custom_lines"] = visualize.get("custom-lines", "")
