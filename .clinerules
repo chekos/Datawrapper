@@ -77,6 +77,23 @@ This pattern is used by AreaChart, BarChart, ColumnChart, LineChart, MultipleCol
 
 ## Recent Changes
 
+### BaseChart Publish Method (2025-01-13)
+
+Added a `publish()` method to the BaseChart class that delegates to the main Datawrapper client's `publish_chart()` method:
+
+- The `publish()` method is available on all chart instances (AreaChart, BarChart, ColumnChart, LineChart, MultipleColumnChart, ScatterPlot, StackedBarChart, ArrowChart)
+- Requires that the chart has been created (has a `chart_id`)
+- Automatically gets or creates a Datawrapper client using the chart's access token
+- Returns the API response from publishing the chart
+- All 232 unit tests and 220 integration tests pass
+
+Usage example:
+```python
+chart = BarChart(title="My Chart", data=data)
+chart.create()  # Creates the chart and sets chart_id
+response = chart.publish()  # Publishes the chart
+```
+
 ### Annotation Deserialization Refactoring (2025-01-13)
 
 Simplified annotation deserialization by adding `deserialize_model()` classmethods to annotation classes:

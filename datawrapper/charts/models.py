@@ -98,13 +98,17 @@ class ColorCategory:
             ...     {"A": "#ff0000"},
             ...     category_labels={"A": "Category A"},
             ...     category_order=["A", "B"],
+            ...     exclude_from_key=[],
             ... )
-            {'map': {'A': '#ff0000'}, 'categoryLabels': {'A': 'Category A'}, 'categoryOrder': ['A', 'B']}
+            {'map': {'A': '#ff0000'}, 'excludeFromKey': [], 'categoryLabels': {'A': 'Category A'}, 'categoryOrder': ['A', 'B']}
         """
         result: dict[str, Any] = {"map": color_map}
 
-        if exclude_from_key:
+        # Only include excludeFromKey if explicitly provided (not None)
+        if exclude_from_key is not None:
             result["excludeFromKey"] = exclude_from_key
+
+        # Only include category_labels and category_order if they're non-empty
         if category_labels:
             result["categoryLabels"] = category_labels
         if category_order:

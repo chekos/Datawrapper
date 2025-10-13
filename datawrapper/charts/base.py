@@ -614,12 +614,15 @@ class BaseChart(BaseModel):
         # Return the instance
         return instance
 
-    def create(self, access_token: str | None = None) -> str:
+    def create(
+        self, access_token: str | None = None, folder_id: int | None = None
+    ) -> str:
         """Create a new chart via the Datawrapper API.
 
         Args:
             access_token: Optional Datawrapper API access token.
                          If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+            folder_id: Optional folder ID to create the chart in.
 
         Returns:
             The chart ID of the created chart.
@@ -643,6 +646,7 @@ class BaseChart(BaseModel):
             forkable=self.forkable,
             language=metadata.get("language"),
             metadata=metadata["metadata"],
+            folder_id=folder_id,
         )
 
         # Extract and validate the chart ID
@@ -694,6 +698,37 @@ class BaseChart(BaseModel):
 
         # Return the chart ID
         return self.chart_id
+
+    def publish(
+        self,
+        display: bool = False,
+        access_token: str | None = None,
+    ) -> dict | Any:
+        """Publish the chart via the Datawrapper API.
+
+        Args:
+            display: Whether to display the published chart as output in notebook cell, by default False
+            access_token: Optional Datawrapper API access token.
+                         If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+
+        Returns:
+            Either a dictionary containing the published chart's information or an IFrame
+            object displaying the chart.
+
+        Raises:
+            ValueError: If no chart_id is set or no access token is available.
+            Exception: If the API request fails.
+        """
+        if not self.chart_id:
+            raise ValueError(
+                "No chart_id set. Use create() first or set chart_id manually."
+            )
+
+        # Get the client
+        client = self._get_client(access_token)
+
+        # Call the publish_chart method from the client
+        return client.publish_chart(chart_id=self.chart_id, display=display)
 
     def export(
         self,
