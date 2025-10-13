@@ -1053,11 +1053,19 @@ class Datawrapper:
         unit: str = "px",
         mode: str = "rgb",
         width: int = 400,
+        height: int | str | None = None,
         plain: bool = False,
         zoom: int = 2,
         scale: int = 1,
         border_width: int = 20,
+        border_color: str | None = None,
         transparent: bool = False,
+        download: bool = False,
+        full_vector: bool = False,
+        ligatures: bool = True,
+        logo: str = "auto",
+        logo_id: str | None = None,
+        dark: bool = False,
         output: str = "png",
         filepath: str = "./image.png",
         display: bool = False,
@@ -1076,7 +1084,9 @@ class Datawrapper:
             by default "rgb"
         width : int, optional
             Width of visualization. If not specified, it takes the chart width,
-            by default None
+            by default 400
+        height : int | str, optional
+            Height of visualization. Can be a number or "auto", by default None
         plain : bool, optional
             Defines if only the visualization should be exported (True), or if it should
              include header and footer as well (False), by default False
@@ -1085,9 +1095,24 @@ class Datawrapper:
         scale : int, optional
             Defines the multiplier for the pdf size, by default 1
         border_width : int, optional
-            Margin arouund the visualization, by default 20
+            Margin around the visualization, by default 20
+        border_color : str, optional
+            Color of the border around the visualization, by default None
         transparent : bool, optional
-            Set to `True` to export your visualization with a transparent background.
+            Set to `True` to export your visualization with a transparent background,
+            by default False
+        download : bool, optional
+            Whether to trigger a download, by default False
+        full_vector : bool, optional
+            Export as full vector graphic (for supported formats), by default False
+        ligatures : bool, optional
+            Enable typographic ligatures, by default True
+        logo : str, optional
+            Logo display setting. One of "auto", "on", or "off", by default "auto"
+        logo_id : str, optional
+            Custom logo ID to use, by default None
+        dark : bool, optional
+            Export in dark mode, by default False
         output : str, optional
             One of png, pdf, or svg, by default "png"
         filepath : str, optional
@@ -1109,8 +1134,21 @@ class Datawrapper:
             "zoom": zoom,
             "scale": scale,
             "borderWidth": border_width,
-            "transparent": transparent,
+            "transparent": json.dumps(transparent),
+            "download": json.dumps(download),
+            "fullVector": json.dumps(full_vector),
+            "ligatures": json.dumps(ligatures),
+            "logo": logo,
+            "dark": json.dumps(dark),
         }
+
+        # Add optional parameters only if provided
+        if height is not None:
+            _query["height"] = height
+        if border_color is not None:
+            _query["borderColor"] = border_color
+        if logo_id is not None:
+            _query["logoId"] = logo_id
 
         content = self.get(
             f"{self._CHARTS_URL}/{chart_id}/export/{output}", params=_query
