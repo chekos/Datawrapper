@@ -5,7 +5,7 @@ from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .models import CustomTicks
+from .models import ColorCategory, CustomTicks
 
 
 class ColumnChart(BaseChart):
@@ -271,19 +271,11 @@ class ColumnChart(BaseChart):
                     "enabled": self.negative_color is not None,
                 },
                 "bar-padding": self.bar_padding,
-                "color-category": {
-                    "map": self.color_category,
-                    **(
-                        {}
-                        if not self.category_labels
-                        else {"categoryLabels": self.category_labels}
-                    ),
-                    **(
-                        {}
-                        if not self.category_order
-                        else {"categoryOrder": self.category_order}
-                    ),
-                },
+                "color-category": ColorCategory.serialize(
+                    self.color_category,
+                    self.category_labels,
+                    self.category_order,
+                ),
                 "color-by-column": bool(self.color_category),
                 "plotHeightMode": self.plot_height_mode,
                 "plotHeightFixed": self.plot_height_fixed,
@@ -374,16 +366,8 @@ class ColumnChart(BaseChart):
         else:
             init_data["negative_color"] = None
 
-        # Parse color-category (complex nested structure)
-        color_category_obj = visualize.get("color-category", {})
-        if isinstance(color_category_obj, dict):
-            init_data["color_category"] = color_category_obj.get("map", {})
-            init_data["category_labels"] = color_category_obj.get("categoryLabels", {})
-            init_data["category_order"] = color_category_obj.get("categoryOrder", [])
-        else:
-            init_data["color_category"] = {}
-            init_data["category_labels"] = {}
-            init_data["category_order"] = []
+        # Parse color-category using utility
+        init_data.update(ColorCategory.deserialize(visualize.get("color-category")))
 
         init_data["bar_padding"] = visualize.get("bar-padding", 30)
         init_data["plot_height_mode"] = visualize.get("plotHeightMode", "fixed")

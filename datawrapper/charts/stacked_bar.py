@@ -5,6 +5,7 @@ from typing import Any, Literal
 from pydantic import ConfigDict, Field, model_serializer
 
 from .base import BaseChart
+from .models import ColorCategory
 
 
 class StackedBarChart(BaseChart):
@@ -174,7 +175,7 @@ class StackedBarChart(BaseChart):
         model["metadata"]["visualize"].update(
             {
                 "reverse-order": self.reverse_order,
-                "color-category": {"map": self.color_category},
+                "color-category": ColorCategory.serialize(self.color_category),
                 "range-value-labels": self.range_value_labels,
                 "show-color-key": self.show_color_key,
                 "value-label-format": self.value_label_format,
@@ -229,12 +230,9 @@ class StackedBarChart(BaseChart):
         # Parse stacked bar specific fields
         init_data["reverse_order"] = visualize.get("reverse-order", False)
 
-        # Parse color-category
-        color_category = visualize.get("color-category", {})
-        if isinstance(color_category, dict):
-            init_data["color_category"] = color_category.get("map", {})
-        else:
-            init_data["color_category"] = {}
+        # Parse color-category using utility
+        color_data = ColorCategory.deserialize(visualize.get("color-category"))
+        init_data["color_category"] = color_data["color_category"]
 
         init_data["range_value_labels"] = visualize.get("range-value-labels", "")
         init_data["show_color_key"] = visualize.get("show-color-key", False)

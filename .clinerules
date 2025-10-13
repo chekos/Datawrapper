@@ -37,6 +37,19 @@ The `CustomTicks` class in `models.py` provides utilities for handling custom ti
 
 This utility is used by AreaChart, ColumnChart, LineChart, and MultipleColumnChart to handle the `custom-ticks-x` and `custom-ticks-y` fields.
 
+### Color Category Utility
+
+The `ColorCategory` class in `models.py` provides utilities for handling color category mappings:
+
+- `ColorCategory.serialize(color_map, category_labels=None, category_order=None, exclude_from_key=None) -> dict`: Converts Python color mappings to the API's expected format with a `map` key and optional additional fields
+- `ColorCategory.deserialize(color_category_obj) -> dict`: Parses the API's color category structure back to Python, returning a dictionary with keys:
+  - `color_category`: The color mapping dictionary
+  - `category_labels`: Optional labels for categories
+  - `category_order`: Optional ordering for categories
+  - `exclude_from_color_key`: Optional list of categories to exclude from the legend
+
+This utility is used by AreaChart, BarChart, ColumnChart, LineChart, MultipleColumnChart, StackedBarChart, and ArrowChart to handle the `color-category` field in the visualize metadata.
+
 ### Annotations
 
 Charts support two types of annotations:
@@ -53,6 +66,18 @@ Both have `serialize()` methods to convert to API format. The BaseChart class pr
 - Functional tests require `DATAWRAPPER_ACCESS_TOKEN` environment variable
 
 ## Recent Changes
+
+### Color Category Refactoring (2025-01-13)
+
+Refactored the color category handling to eliminate code duplication:
+
+- Created `ColorCategory` utility class in `models.py` with `serialize()` and `deserialize()` static methods
+- Updated AreaChart, BarChart, ColumnChart, LineChart, MultipleColumnChart, StackedBarChart, and ArrowChart to use the new utility
+- Removed duplicate color category serialization/deserialization logic from individual chart classes
+- Added comprehensive unit tests in `tests/unit/models/test_color_category.py`
+- All 220 existing integration tests continue to pass
+
+The `ColorCategory` utility handles both simple color mappings and complex structures with category labels, ordering, and exclusions from the legend.
 
 ### Custom Ticks Refactoring (2025-01-13)
 

@@ -4,6 +4,7 @@ import pandas as pd
 from pydantic import ConfigDict, Field, model_serializer
 
 from .base import BaseChart
+from .models import ColorCategory
 
 
 class ArrowChart(BaseChart):
@@ -184,7 +185,7 @@ class ArrowChart(BaseChart):
                 "y-grid": self.y_grid,
                 "reverse-order": self.reverse_order,
                 "thick-arrows": self.thick_arrows,
-                "color-category": {"map": self.color_category},
+                "color-category": ColorCategory.serialize(self.color_category),
                 "range-value-labels": self.range_value_labels,
                 "sort-range": {
                     "by": self.sort_by,
@@ -236,12 +237,9 @@ class ArrowChart(BaseChart):
         init_data["reverse_order"] = visualize.get("reverse-order", False)
         init_data["thick_arrows"] = visualize.get("thick-arrows", True)
 
-        # Parse color-category
-        color_category_obj = visualize.get("color-category", {})
-        if isinstance(color_category_obj, dict):
-            init_data["color_category"] = color_category_obj.get("map", {})
-        else:
-            init_data["color_category"] = {}
+        # Parse color-category using utility
+        color_data = ColorCategory.deserialize(visualize.get("color-category"))
+        init_data["color_category"] = color_data["color_category"]
 
         # Labels & formatting
         init_data["range_value_labels"] = visualize.get("range-value-labels", "")

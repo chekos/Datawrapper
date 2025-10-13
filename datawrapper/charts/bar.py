@@ -5,6 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
+from .models import ColorCategory
 
 
 class BarOverlay(BaseModel):
@@ -399,20 +400,6 @@ class BarChart(BaseChart):
         # Call the parent class's serialize_model method
         model = super().serialize_model()
 
-        # Build the color-category dict with all its components
-        color_category_dict = {
-            "map": self.color_category,
-            "excludeFromKey": self.exclude_from_color_key,
-        }
-
-        # Add categoryLabels if provided
-        if self.category_labels:
-            color_category_dict["categoryLabels"] = self.category_labels
-
-        # Add categoryOrder if provided
-        if self.category_order:
-            color_category_dict["categoryOrder"] = self.category_order
-
         # Add chart specific properties
         model["metadata"]["visualize"].update(
             {
@@ -437,7 +424,12 @@ class BarChart(BaseChart):
                 "axis-label-format": self.axis_label_format,
                 # Appearance
                 "base-color": self.base_color,
-                "color-category": color_category_dict,
+                "color-category": ColorCategory.serialize(
+                    self.color_category,
+                    self.category_labels,
+                    self.category_order,
+                    self.exclude_from_color_key,
+                ),
                 "color-by-column": bool(self.color_category),
                 "rules": self.rules,
                 "thick": self.thick,
@@ -551,20 +543,8 @@ class BarChart(BaseChart):
         init_data["base_color"] = visualize.get("base-color", "#4682b4")
         init_data["color_column"] = axes.get("colors", "")
 
-        # Parse color-category (complex nested structure)
-        color_category_obj = visualize.get("color-category", {})
-        if isinstance(color_category_obj, dict):
-            init_data["color_category"] = color_category_obj.get("map", {})
-            init_data["exclude_from_color_key"] = color_category_obj.get(
-                "excludeFromKey", []
-            )
-            init_data["category_labels"] = color_category_obj.get("categoryLabels", {})
-            init_data["category_order"] = color_category_obj.get("categoryOrder", [])
-        else:
-            init_data["color_category"] = {}
-            init_data["exclude_from_color_key"] = []
-            init_data["category_labels"] = {}
-            init_data["category_order"] = []
+        # Parse color-category using utility
+        init_data.update(ColorCategory.deserialize(visualize.get("color-category")))
 
         init_data["rules"] = visualize.get("rules", False)
         init_data["thick"] = visualize.get("thick", False)

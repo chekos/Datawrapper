@@ -5,7 +5,7 @@ from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .models import CustomTicks
+from .models import ColorCategory, CustomTicks
 
 
 class AreaChart(BaseChart):
@@ -303,7 +303,7 @@ class AreaChart(BaseChart):
                 "area-separator-lines": self.area_separator_lines,
                 "area-separator-color": self.area_separator_color,
                 # Customize specific layers
-                "color-category": {"map": self.color_category},
+                "color-category": ColorCategory.serialize(self.color_category),
                 # Labels
                 "show-color-key": self.show_color_key,
                 # Tooltips
@@ -379,12 +379,9 @@ class AreaChart(BaseChart):
             "area-separator-color", "#4682b4"
         )
 
-        # Parse color-category
-        color_category_obj = visualize.get("color-category", {})
-        if isinstance(color_category_obj, dict):
-            init_data["color_category"] = color_category_obj.get("map", {})
-        else:
-            init_data["color_category"] = {}
+        # Parse color-category using utility
+        color_data = ColorCategory.deserialize(visualize.get("color-category"))
+        init_data["color_category"] = color_data["color_category"]
 
         # Labels
         init_data["show_color_key"] = visualize.get("show-color-key", False)
@@ -399,7 +396,7 @@ class AreaChart(BaseChart):
         init_data["plot_height_fixed"] = visualize.get("plotHeightFixed", 300)
         init_data["plot_height_ratio"] = visualize.get("plotHeightRatio", 0.5)
 
-        # Annotations - use helper method for deserialization
+        # Annotations
         init_data["text_annotations"] = cls._deserialize_annotations(
             visualize.get("text-annotations"), TextAnnotation
         )

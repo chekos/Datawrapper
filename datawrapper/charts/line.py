@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .models import CustomTicks
+from .models import ColorCategory, CustomTicks
 
 
 class LineSymbol(BaseModel):
@@ -547,7 +547,7 @@ class LineChart(BaseChart):
                 "base-color": self.base_color,
                 "interpolation": self.interpolation,
                 "connector-lines": self.connector_lines,
-                "color-category": {"map": self.color_category},
+                "color-category": ColorCategory.serialize(self.color_category),
                 # Labels
                 "stack-color-legend": self.stack_color_legend,
                 "label-colors": self.label_colors,
@@ -693,12 +693,9 @@ class LineChart(BaseChart):
         init_data["interpolation"] = visualize.get("interpolation", "linear")
         init_data["connector_lines"] = visualize.get("connector-lines", False)
 
-        # Parse color-category
-        color_category_obj = visualize.get("color-category", {})
-        if isinstance(color_category_obj, dict):
-            init_data["color_category"] = color_category_obj.get("map", {})
-        else:
-            init_data["color_category"] = {}
+        # Parse color-category using utility
+        color_data = ColorCategory.deserialize(visualize.get("color-category"))
+        init_data["color_category"] = color_data["color_category"]
 
         # Parse lines configuration
         lines_obj = visualize.get("lines", {})
