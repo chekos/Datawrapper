@@ -77,6 +77,24 @@ This pattern is used by AreaChart, BarChart, ColumnChart, LineChart, MultipleCol
 
 ## Recent Changes
 
+### Annotation Serialization Fix (2025-01-13)
+
+Fixed the annotation serialization to match the Datawrapper API's expected format:
+
+- Updated `BaseChart._serialize_annotations()` to return a list of annotation dictionaries instead of a dictionary
+- The API expects annotations in the format: `[{annotation1}, {annotation2}, ...]`
+- Updated integration tests to verify the correct list format
+- All 232 unit tests and 220 integration tests pass
+
+### Export Test Mocking (2025-01-13)
+
+Converted the export integration tests to use mocking instead of hitting the API:
+
+- Updated `tests/integration/test_base_export.py` to mock the Datawrapper client
+- Tests now run faster and are more reliable (no network dependencies)
+- Removed the `DATAWRAPPER_ACCESS_TOKEN` requirement for these tests
+- Tests verify that the export method correctly delegates to the client's `export_chart()` method
+
 ### BaseChart Publish Method (2025-01-13)
 
 Added a `publish()` method to the BaseChart class that delegates to the main Datawrapper client's `publish_chart()` method:

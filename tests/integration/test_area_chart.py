@@ -151,10 +151,10 @@ class TestAreaChartCreation:
 
         serialized = chart.serialize_model()
 
-        # Annotations should be dicts with generated IDs
-        assert isinstance(serialized["metadata"]["visualize"]["text-annotations"], dict)
+        # Annotations should be lists of dicts
+        assert isinstance(serialized["metadata"]["visualize"]["text-annotations"], list)
         assert isinstance(
-            serialized["metadata"]["visualize"]["range-annotations"], dict
+            serialized["metadata"]["visualize"]["range-annotations"], list
         )
         assert len(serialized["metadata"]["visualize"]["text-annotations"]) == 1
         assert len(serialized["metadata"]["visualize"]["range-annotations"]) == 1

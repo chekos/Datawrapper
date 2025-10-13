@@ -6,7 +6,7 @@ from datawrapper import BarChart, RangeAnnotation, TextAnnotation
 
 
 def test_multiple_text_annotations():
-    """Test that multiple text annotations are properly serialized as a dict with UUID keys."""
+    """Test that multiple text annotations are properly serialized as a list."""
     # Create a bar chart with multiple text annotations
     chart = BarChart(
         title="Test Chart",
@@ -23,22 +23,21 @@ def test_multiple_text_annotations():
     # Serialize the chart
     serialized = chart.serialize_model()
 
-    # Check that text-annotations is a dict with all 3 annotations
+    # Check that text-annotations is a list with all 3 annotations
     text_annotations = serialized["metadata"]["visualize"]["text-annotations"]
-    assert isinstance(text_annotations, dict), "text-annotations should be a dict"
+    assert isinstance(text_annotations, list), "text-annotations should be a list"
     assert len(text_annotations) == 3, (
         f"Expected 3 text annotations, got {len(text_annotations)}"
     )
 
-    # Verify the content of each annotation (dict maintains insertion order in Python 3.7+)
-    anno_values = list(text_annotations.values())
-    assert anno_values[0]["text"] == "First annotation"
-    assert anno_values[1]["text"] == "Second annotation"
-    assert anno_values[2]["text"] == "Third annotation"
+    # Verify the content of each annotation
+    assert text_annotations[0]["text"] == "First annotation"
+    assert text_annotations[1]["text"] == "Second annotation"
+    assert text_annotations[2]["text"] == "Third annotation"
 
 
 def test_multiple_range_annotations():
-    """Test that multiple range annotations are properly serialized as a dict with UUID keys."""
+    """Test that multiple range annotations are properly serialized as a list."""
     # Create a bar chart with multiple range annotations
     chart = BarChart(
         title="Test Chart",
@@ -54,19 +53,18 @@ def test_multiple_range_annotations():
     # Serialize the chart
     serialized = chart.serialize_model()
 
-    # Check that range-annotations is a dict with all 2 annotations
+    # Check that range-annotations is a list with all 2 annotations
     range_annotations = serialized["metadata"]["visualize"]["range-annotations"]
-    assert isinstance(range_annotations, dict), "range-annotations should be a dict"
+    assert isinstance(range_annotations, list), "range-annotations should be a list"
     assert len(range_annotations) == 2, (
         f"Expected 2 range annotations, got {len(range_annotations)}"
     )
 
-    # Verify the content of each annotation (dict maintains insertion order in Python 3.7+)
-    anno_values = list(range_annotations.values())
-    assert anno_values[0]["position"]["x0"] == 0
-    assert anno_values[0]["position"]["x1"] == 10
-    assert anno_values[1]["position"]["x0"] == 20
-    assert anno_values[1]["position"]["x1"] == 30
+    # Verify the content of each annotation
+    assert range_annotations[0]["position"]["x0"] == 0
+    assert range_annotations[0]["position"]["x1"] == 10
+    assert range_annotations[1]["position"]["x0"] == 20
+    assert range_annotations[1]["position"]["x1"] == 30
 
 
 def test_mixed_annotations():
@@ -94,9 +92,9 @@ def test_mixed_annotations():
     assert len(text_annotations) == 1
     assert len(range_annotations) == 1
 
-    # Get first values from dicts
-    text_anno = list(text_annotations.values())[0]
-    range_anno = list(range_annotations.values())[0]
+    # Get first items from lists
+    text_anno = text_annotations[0]
+    range_anno = range_annotations[0]
 
     assert text_anno["text"] == "Text annotation"
     assert range_anno["position"]["x0"] == 0
@@ -116,11 +114,11 @@ def test_empty_annotations():
     # Serialize the chart
     serialized = chart.serialize_model()
 
-    # Check that annotation dicts are empty
+    # Check that annotation lists are empty
     text_annotations = serialized["metadata"]["visualize"]["text-annotations"]
     range_annotations = serialized["metadata"]["visualize"]["range-annotations"]
 
-    assert isinstance(text_annotations, dict)
-    assert isinstance(range_annotations, dict)
+    assert isinstance(text_annotations, list)
+    assert isinstance(range_annotations, list)
     assert len(text_annotations) == 0
     assert len(range_annotations) == 0

@@ -59,8 +59,8 @@ def test_base_chart_serialization_with_default_values():
     assert serialized["type"] == "d3-area"
     assert serialized["title"] == ""  # Default empty title
     assert serialized["language"] == "en-US"  # Default language
-    # Default empty theme is omitted from serialization
-    assert "theme" not in serialized
+    # Default theme is "datawrapper"
+    assert serialized["theme"] == "datawrapper"
 
 
 def test_base_chart_serialization_structure():
@@ -79,14 +79,15 @@ def test_base_chart_serialization_structure():
         "type",
         "title",
         "language",
+        "theme",
         "metadata",
     ]
 
     for section in expected_root_sections:
         assert section in serialized, f"Missing root section: {section}"
 
-    # Theme is omitted when empty (our fix for Datawrapper API compatibility)
-    assert "theme" not in serialized
+    # Default theme is "datawrapper"
+    assert serialized["theme"] == "datawrapper"
 
     # Verify metadata subsections are present
     metadata = serialized["metadata"]

@@ -1,17 +1,12 @@
 """Test the export method on BaseChart."""
 
-import os
-from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 import pytest
 
 from datawrapper.charts.base import BaseChart
 
 
-@pytest.mark.skipif(
-    not os.getenv("DATAWRAPPER_ACCESS_TOKEN"),
-    reason="DATAWRAPPER_ACCESS_TOKEN not set",
-)
 def test_base_chart_export_method_exists():
     """Test that the export method exists on BaseChart."""
     chart = BaseChart(chart_type="d3-lines", title="Test Chart")
@@ -19,50 +14,46 @@ def test_base_chart_export_method_exists():
     assert callable(chart.export)
 
 
-@pytest.mark.skipif(
-    not os.getenv("DATAWRAPPER_ACCESS_TOKEN"),
-    reason="DATAWRAPPER_ACCESS_TOKEN not set",
-)
 def test_base_chart_export_requires_chart_id():
     """Test that export raises ValueError when chart_id is not set."""
     chart = BaseChart(chart_type="d3-lines", title="Test Chart")
-    
+
     with pytest.raises(ValueError, match="No chart_id set"):
         chart.export()
 
 
-@pytest.mark.skipif(
-    not os.getenv("DATAWRAPPER_ACCESS_TOKEN"),
-    reason="DATAWRAPPER_ACCESS_TOKEN not set",
-)
 def test_base_chart_export_with_chart_id(tmp_path):
     """Test that export works when chart_id is set."""
-    # Create a simple chart
+    # Create a chart with a chart_id
     chart = BaseChart(
         chart_type="d3-lines",
         title="Test Export Chart",
         data=[{"x": 1, "y": 2}, {"x": 2, "y": 4}],
     )
-    
-    # Create the chart
-    chart_id = chart.create()
-    
-    try:
+    chart.chart_id = "test123"
+
+    # Mock the client and its export_chart method
+    mock_client = MagicMock()
+    output_file = tmp_path / "test_export.png"
+    mock_client.export_chart.return_value = output_file
+
+    with patch.object(chart, "_get_client", return_value=mock_client):
         # Export to a temporary file
-        output_file = tmp_path / "test_export.png"
         result = chart.export(
             output="png",
             filepath=str(output_file),
             display=False,
         )
-        
-        # Verify the file was created
-        assert isinstance(result, Path)
-        assert result.exists()
-        assert result.suffix == ".png"
-        
-    finally:
-        # Clean up: delete the chart
-        if chart.chart_id:
-            client = chart._get_client()
-            client.delete_chart(chart.chart_id)
+
+        # Verify the client method was called
+        mock_client.export_chart.assert_called_once()
+
+        # Verify the chart_id was passed
+        call_kwargs = mock_client.export_chart.call_args.kwargs
+        assert call_kwargs["chart_id"] == "test123"
+        assert call_kwargs["output"] == "png"
+        assert call_kwargs["filepath"] == str(output_file)
+        assert call_kwargs["display"] is False
+
+        # Verify the result
+        assert result == output_file

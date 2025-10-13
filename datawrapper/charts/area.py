@@ -180,7 +180,7 @@ class AreaChart(BaseChart):
     )
 
     #: The color of the separator lines between areas
-    area_separator_color: str = Field(
+    area_separator_color: str | int = Field(
         default="#4682b4",
         alias="area-separator-color",
         description="The color of the separator lines between areas",

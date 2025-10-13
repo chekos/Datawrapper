@@ -1,5 +1,4 @@
 import os
-import uuid
 from io import StringIO
 from pathlib import Path
 from typing import Any, Literal
@@ -164,7 +163,7 @@ class BaseChart(BaseModel):
     )
 
     #: The theme of the chart
-    theme: str = Field(default="", description="The theme of the chart")
+    theme: str = Field(default="datawrapper", description="The theme of the chart")
 
     #: Whether the chart should automatically flip to dark mode when the user's system is in dark mode
     auto_dark_mode: bool = Field(
@@ -366,20 +365,20 @@ class BaseChart(BaseModel):
         self,
         annotations: list[Any],
         annotation_class: type[TextAnnotation | RangeAnnotation],
-    ) -> dict[str, Any]:
-        """Serialize annotations to dict with UUID keys.
+    ) -> list[dict[str, Any]]:
+        """Serialize annotations to a list of dictionaries.
 
-        Preserves existing UUIDs from deserialized charts to prevent duplicates.
-        Generates new UUIDs for new annotations.
+        This matches the format expected by the Datawrapper API when creating/updating charts.
+        When there are no annotations, returns an empty list.
 
         Args:
             annotations: List of annotation objects or dicts
             annotation_class: The annotation class (TextAnnotation or RangeAnnotation)
 
         Returns:
-            Dictionary mapping UUID keys to serialized annotation data
+            List of serialized annotation dictionaries, or empty list if no annotations
         """
-        result = {}
+        result = []
         for anno_obj in annotations:
             # Convert to annotation object if needed
             if isinstance(anno_obj, dict):
@@ -387,14 +386,8 @@ class BaseChart(BaseModel):
             else:
                 anno = anno_obj
 
-            # Use existing ID or generate new one
-            if anno.id:
-                anno_id = anno.id
-            else:
-                anno_id = str(uuid.uuid4()).replace("-", "")[:10]
-
             # Serialize the annotation using the custom serialize_model method
-            result[anno_id] = anno.serialize_model()
+            result.append(anno.serialize_model())
 
         return result
 
@@ -415,7 +408,7 @@ class BaseChart(BaseModel):
         return data
 
     @classmethod
-    def deserialize_data(cls, csv_data: str) -> pd.DataFrame:
+    def deserialize_data(cls, csv_data: str | pd.DataFrame) -> pd.DataFrame:
         """Parse CSV string from Datawrapper API into DataFrame.
 
         Args:
@@ -425,6 +418,8 @@ class BaseChart(BaseModel):
             DataFrame containing the parsed CSV data
         """
         # Use sep=None with engine='python' to auto-detect delimiter (comma or tab)
+        if isinstance(csv_data, pd.DataFrame):
+            return csv_data
         return pd.read_csv(StringIO(csv_data), sep=None, engine="python")
 
     @classmethod
