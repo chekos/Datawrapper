@@ -1,9 +1,11 @@
 import os
 import uuid
 from io import StringIO
+from pathlib import Path
 from typing import Any, Literal
 
 import pandas as pd
+from IPython.display import Image
 from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 
 from datawrapper.__main__ import Datawrapper
@@ -692,3 +694,96 @@ class BaseChart(BaseModel):
 
         # Return the chart ID
         return self.chart_id
+
+    def export(
+        self,
+        unit: str = "px",
+        mode: str = "rgb",
+        width: int = 400,
+        height: int | str | None = None,
+        plain: bool = False,
+        zoom: int = 2,
+        scale: int = 1,
+        border_width: int = 20,
+        border_color: str | None = None,
+        transparent: bool = False,
+        download: bool = False,
+        full_vector: bool = False,
+        ligatures: bool = True,
+        logo: str = "auto",
+        logo_id: str | None = None,
+        dark: bool = False,
+        output: str = "png",
+        filepath: str = "./image.png",
+        display: bool = False,
+        access_token: str | None = None,
+    ) -> Path | Image:
+        """Export the chart to an image file.
+
+        Args:
+            unit: One of px, mm, inch. Defines the unit in which the borderwidth, height,
+                and width will be measured in, by default "px"
+            mode: One of rgb or cmyk. Which color mode the output should be in,
+                by default "rgb"
+            width: Width of visualization. If not specified, it takes the chart width,
+                by default 400
+            height: Height of visualization. Can be a number or "auto", by default None
+            plain: Defines if only the visualization should be exported (True), or if it should
+                include header and footer as well (False), by default False
+            zoom: Defines the multiplier for the png size, by default 2
+            scale: Defines the multiplier for the pdf size, by default 1
+            border_width: Margin around the visualization, by default 20
+            border_color: Color of the border around the visualization, by default None
+            transparent: Set to True to export your visualization with a transparent background,
+                by default False
+            download: Whether to trigger a download, by default False
+            full_vector: Export as full vector graphic (for supported formats), by default False
+            ligatures: Enable typographic ligatures, by default True
+            logo: Logo display setting. One of "auto", "on", or "off", by default "auto"
+            logo_id: Custom logo ID to use, by default None
+            dark: Export in dark mode, by default False
+            output: One of png, pdf, or svg, by default "png"
+            filepath: Name/filepath to save output in, by default "./image.png"
+            display: Whether to display the exported image as output in the notebook cell,
+                by default False
+            access_token: Optional Datawrapper API access token.
+                If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+
+        Returns:
+            The file path to the exported image or an Image object displaying the image.
+
+        Raises:
+            ValueError: If no chart_id is set or no access token is available.
+            Exception: If the API request fails.
+        """
+        if not self.chart_id:
+            raise ValueError(
+                "No chart_id set. Use create() first or set chart_id manually."
+            )
+
+        # Get the client
+        client = self._get_client(access_token)
+
+        # Call the export_chart method from the client
+        return client.export_chart(
+            chart_id=self.chart_id,
+            unit=unit,
+            mode=mode,
+            width=width,
+            height=height,
+            plain=plain,
+            zoom=zoom,
+            scale=scale,
+            border_width=border_width,
+            border_color=border_color,
+            transparent=transparent,
+            download=download,
+            full_vector=full_vector,
+            ligatures=ligatures,
+            logo=logo,
+            logo_id=logo_id,
+            dark=dark,
+            output=output,
+            filepath=filepath,
+            display=display,
+        )
