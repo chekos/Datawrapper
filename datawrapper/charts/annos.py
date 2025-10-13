@@ -209,6 +209,29 @@ class TextAnnotation(BaseModel):
 
         return model
 
+    @classmethod
+    def deserialize_model(cls, api_data: dict[str, dict] | list | None) -> list[dict]:
+        """Deserialize annotations from API response format.
+
+        Args:
+            api_data: Dictionary mapping UUID keys to annotation data,
+                      or a list, or None
+
+        Returns:
+            List of annotation dicts with 'id' field preserved
+        """
+        if not api_data:
+            return []
+
+        # Handle dict format (UUID keys -> annotation data)
+        if isinstance(api_data, dict):
+            return [
+                {**anno_data, "id": anno_id} for anno_id, anno_data in api_data.items()
+            ]
+
+        # Handle list format (already deserialized or legacy)
+        return list(api_data)
+
 
 class RangeAnnotation(BaseModel):
     """A base class for the Datawrapper API's 'range-annotations' attribute."""
@@ -296,3 +319,26 @@ class RangeAnnotation(BaseModel):
             "strokeType": self.stroke_type,
             "strokeWidth": self.stroke_width,
         }
+
+    @classmethod
+    def deserialize_model(cls, api_data: dict[str, dict] | list | None) -> list[dict]:
+        """Deserialize annotations from API response format.
+
+        Args:
+            api_data: Dictionary mapping UUID keys to annotation data,
+                      or a list, or None
+
+        Returns:
+            List of annotation dicts with 'id' field preserved
+        """
+        if not api_data:
+            return []
+
+        # Handle dict format (UUID keys -> annotation data)
+        if isinstance(api_data, dict):
+            return [
+                {**anno_data, "id": anno_id} for anno_id, anno_data in api_data.items()
+            ]
+
+        # Handle list format (already deserialized or legacy)
+        return list(api_data)

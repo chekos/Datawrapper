@@ -699,32 +699,13 @@ class ScatterPlot(BaseChart):
         init_data["plot_height_fixed"] = visualize.get("plotHeightFixed", 300)
         init_data["plot_height_ratio"] = visualize.get("plotHeightRatio", 0.5)
 
-        # Annotations - preserve UUIDs by including them in annotation data
-        text_annos = visualize.get("text-annotations", {})
-        if isinstance(text_annos, dict):
-            init_data["text_annotations"] = (
-                []
-                if not text_annos
-                else [
-                    {**anno_data, "id": anno_id}
-                    for anno_id, anno_data in text_annos.items()
-                ]
-            )
-        else:
-            init_data["text_annotations"] = text_annos if text_annos else []
-
-        range_annos = visualize.get("range-annotations", {})
-        if isinstance(range_annos, dict):
-            init_data["range_annotations"] = (
-                []
-                if not range_annos
-                else [
-                    {**anno_data, "id": anno_id}
-                    for anno_id, anno_data in range_annos.items()
-                ]
-            )
-        else:
-            init_data["range_annotations"] = range_annos if range_annos else []
+        # Annotations - use helper method for deserialization
+        init_data["text_annotations"] = cls._deserialize_annotations(
+            visualize.get("text-annotations"), TextAnnotation
+        )
+        init_data["range_annotations"] = cls._deserialize_annotations(
+            visualize.get("range-annotations"), RangeAnnotation
+        )
 
         init_data["custom_lines"] = visualize.get("custom-lines", "")
 
