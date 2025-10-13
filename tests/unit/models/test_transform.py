@@ -23,7 +23,7 @@ class TestTransform:
         assert transform.vertical_header is True
         assert transform.horizontal_header is True
         assert transform.column_order == []
-        assert transform.column_format == []
+        assert len(transform.column_format) == 0
         assert transform.external_data == ""
         assert transform.use_datawrapper_cdn is True
         assert transform.upload_method == "copy"
@@ -194,8 +194,8 @@ class TestTransform:
         with pytest.raises(ValidationError):
             datawrapper.Transform(**{"external-data": 123})
 
-    def test_transform_from_api_data_section_with_dict_column_format(self):
-        """Test Transform.from_api_data_section converts dict column-format to list."""
+    def test_transform_with_dict_column_format(self):
+        """Test Transform handles dict column-format from API (auto-converts to list)."""
         # Simulate API response with dict-based column-format
         api_data = {
             "transpose": False,
@@ -210,7 +210,7 @@ class TestTransform:
             "upload-method": "copy",
         }
 
-        transform = datawrapper.Transform.from_api_data_section(api_data)
+        transform = datawrapper.Transform(**api_data)
 
         # Verify the transform was created successfully
         assert isinstance(transform, datawrapper.Transform)
@@ -236,19 +236,19 @@ class TestTransform:
         date_col = next(cf for cf in transform.column_format if cf.column == "date")
         assert date_col.type == "date"
 
-    def test_transform_from_api_data_section_with_empty_dict_column_format(self):
-        """Test Transform.from_api_data_section handles empty dict column-format."""
+    def test_transform_with_empty_dict_column_format(self):
+        """Test Transform handles empty dict column-format."""
         api_data = {
             "column-format": {},
         }
 
-        transform = datawrapper.Transform.from_api_data_section(api_data)
+        transform = datawrapper.Transform(**api_data)
 
         # Verify empty dict was converted to empty list
-        assert transform.column_format == []
+        assert len(transform.column_format) == 0
 
-    def test_transform_from_api_data_section_with_list_column_format(self):
-        """Test Transform.from_api_data_section handles list column-format (no conversion needed)."""
+    def test_transform_with_list_column_format(self):
+        """Test Transform handles list column-format (no conversion needed)."""
         api_data = {
             "column-format": [
                 {"column": "sales", "type": "number"},
@@ -256,30 +256,9 @@ class TestTransform:
             ],
         }
 
-        transform = datawrapper.Transform.from_api_data_section(api_data)
+        transform = datawrapper.Transform(**api_data)
 
         # Verify list format was preserved
         assert len(transform.column_format) == 2
         assert transform.column_format[0].column == "sales"
         assert transform.column_format[1].column == "date"
-
-    def test_transform_from_api_data_section_immutability(self):
-        """Test Transform.from_api_data_section doesn't mutate input."""
-        api_data = {
-            "column-format": {
-                "sales": {"type": "number"},
-            },
-        }
-
-        # Store original structure
-        original_column_format = api_data["column-format"].copy()
-
-        # Create transform
-        transform = datawrapper.Transform.from_api_data_section(api_data)
-
-        # Verify input wasn't mutated
-        assert api_data["column-format"] == original_column_format
-        assert isinstance(api_data["column-format"], dict)
-
-        # Verify transform has the converted format
-        assert isinstance(transform.column_format, list)

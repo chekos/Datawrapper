@@ -2,7 +2,7 @@
 
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 
 
 class CustomTicks:
@@ -358,6 +358,121 @@ class ColumnFormat(BaseModel):
     )
 
 
+class ColumnFormatList(BaseModel):
+    """A wrapper for a list of ColumnFormat objects that handles API serialization.
+
+    The Datawrapper API expects column-format as a dictionary where column names
+    are keys and format configs are values. This model handles the conversion
+    between the user-friendly list format and the API's dict format.
+    """
+
+    model_config = ConfigDict(
+        populate_by_name=True,
+        json_schema_extra={
+            "examples": [
+                {
+                    "formats": [
+                        {"column": "sales", "type": "number", "number-prepend": "$"},
+                        {"column": "date", "type": "date"},
+                    ]
+                }
+            ]
+        },
+    )
+
+    #: The list of column format configurations
+    formats: list[ColumnFormat] = Field(
+        default_factory=list,
+        description="The list of column format configurations",
+    )
+
+    @model_validator(mode="before")
+    @classmethod
+    def convert_from_dict_or_list(cls, data: Any) -> dict[str, Any]:
+        """Convert dict format (from API) or list format to internal structure.
+
+        Handles three input formats:
+        1. Dict with 'formats' key (already in correct format)
+        2. Dict without 'formats' key (API format - column names as keys)
+        3. List of ColumnFormat objects or dicts (direct list format)
+        """
+        # If it's already a dict with 'formats', use it as-is
+        if isinstance(data, dict) and "formats" in data:
+            formats = data["formats"]
+            # Ensure all items are ColumnFormat objects
+            if isinstance(formats, list):
+                data["formats"] = [
+                    item
+                    if isinstance(item, ColumnFormat)
+                    else ColumnFormat.model_validate(item)
+                    for item in formats
+                ]
+            return data
+
+        # If it's a dict without 'formats', assume it's API format (column names as keys)
+        if isinstance(data, dict):
+            formats_list = []
+            for col_name, col_config in data.items():
+                if not isinstance(col_config, dict):
+                    raise ValueError(
+                        f"column_format values must be dictionaries, got {type(col_config).__name__} for column '{col_name}'"
+                    )
+                formats_list.append({"column": col_name, **col_config})
+            return {"formats": formats_list}
+
+        # If it's a list, wrap it in the formats key
+        if isinstance(data, list):
+            return {"formats": data}
+
+        # For any other type, return as-is and let Pydantic validation handle it
+        return data
+
+    @model_serializer
+    def serialize_to_dict(self) -> dict[str, dict[str, Any]]:
+        """Serialize to API format (dict with column names as keys).
+
+        Converts the internal list format to the dictionary format expected
+        by the Datawrapper API, filtering out default values.
+        """
+        if not self.formats:
+            return {}
+
+        result: dict[str, dict[str, Any]] = {}
+        for col_format in self.formats:
+            # Extract column name as key
+            col_name = col_format.column
+
+            # Serialize the format config (excluding the column field)
+            col_config = col_format.model_dump(by_alias=True, exclude={"column"})
+
+            # Only include non-default values to match API expectations
+            filtered_config = {}
+            for key, value in col_config.items():
+                # Include if not a default value
+                if key == "type" and value != "auto":
+                    filtered_config[key] = value
+                elif key == "ignore" and value is not False:
+                    filtered_config[key] = value
+                elif key in ("number-prepend", "number-append") and value != "":
+                    filtered_config[key] = value
+
+            result[col_name] = filtered_config
+
+        return result
+
+    def __iter__(self):
+        """Allow iteration over the formats list."""
+        return iter(self.formats)
+
+    def __len__(self):
+        """Return the number of formats."""
+        return len(self.formats)
+
+    def __getitem__(self, index):
+        """Allow indexing into the formats list."""
+        return self.formats[index]
+
+
 class Transform(BaseModel):
     """A model for the Datawrapper API's 'data' metadata attribute."""
 
@@ -365,7 +480,6 @@ class Transform(BaseModel):
         populate_by_name=True,
         json_schema_extra={
             "examples": [
-                # Example 1: Using dictionary style for column_format
                 {
                     "transpose": False,
                     "vertical-header": True,
@@ -377,18 +491,7 @@ class Transform(BaseModel):
                     "external-data": "",
                     "use-datawrapper-cdn": True,
                     "upload-method": "copy",
-                },
-                # Example 2: Using python attribute style to initialize column_format
-                {
-                    "transpose": True,
-                    "vertical-header": False,
-                    "horizontal-header": True,
-                    "column-order": [2, 0, 1],
-                    "column-format": [{"column": "date", "type": "date"}],
-                    "external-data": "https://example.com/data.csv",
-                    "use-datawrapper-cdn": False,
-                    "upload-method": "external-data",
-                },
+                }
             ]
         },
     )
@@ -415,9 +518,9 @@ class Transform(BaseModel):
         description="The order of the columns",
     )
 
-    # Accept either ColumnFormat objects or dicts
-    column_format: list[ColumnFormat | dict] = Field(
-        default_factory=list,
+    # Use ColumnFormatList wrapper for column-format
+    column_format: ColumnFormatList = Field(
+        default_factory=ColumnFormatList,
         alias="column-format",
         description="The formatting options for the data columns",
     )
@@ -442,61 +545,6 @@ class Transform(BaseModel):
             description="The uploading method for the data",
         )
     )
-
-    @model_validator(mode="before")
-    @classmethod
-    def convert_column_format_dicts(cls, data: dict[str, Any]) -> dict[str, Any]:
-        """Convert dictionary items in column_format to ColumnFormat objects."""
-        if not isinstance(data, dict):
-            return data
-
-        # Check both Python style and JSON style field names
-        for field_name in ["column_format", "column-format"]:
-            if field_name in data and isinstance(data[field_name], list):
-                data[field_name] = [
-                    item
-                    if isinstance(item, ColumnFormat)
-                    else ColumnFormat.model_validate(item)
-                    for item in data[field_name]
-                ]
-
-        return data
-
-    @classmethod
-    def from_api_data_section(cls, api_data: dict[str, Any]) -> "Transform":
-        """Create Transform from Datawrapper API's metadata.data section.
-
-        Handles the API's dict-based column-format structure by converting it
-        to the list-based structure expected by this model.
-
-        Args:
-            api_data: The 'data' section from API metadata response
-
-        Returns:
-            A validated Transform instance
-
-        Example:
-            >>> api_response = {
-            ...     "data": {"column-format": {"sales": {"type": "number"}}}
-            ... }
-            >>> transform = Transform.from_api_data_section(api_response["data"])
-        """
-        # Make a copy to avoid mutating the input
-        data = api_data.copy()
-
-        # Convert column-format from dict to list if needed
-        if "column-format" in data and isinstance(data["column-format"], dict):
-            column_format_dict = data["column-format"]
-            data["column-format"] = (
-                [
-                    {"column": col_name, **col_config}
-                    for col_name, col_config in column_format_dict.items()
-                ]
-                if column_format_dict
-                else []
-            )
-
-        return cls.model_validate(data)
 
 
 class Describe(BaseModel):

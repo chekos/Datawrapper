@@ -456,9 +456,7 @@ class BaseChart(BaseModel):
             "language": api_response.get("language"),
             "forkable": api_response.get("forkable"),
             # Data transformations (but not the data itself)
-            "transformations": Transform.from_api_data_section(
-                metadata.get("data", {})
-            ),
+            "transformations": Transform.model_validate(metadata.get("data", {})),
             # Description
             "intro": describe.get("intro"),
             "notes": annotate.get("notes"),
