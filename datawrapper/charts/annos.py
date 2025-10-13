@@ -233,6 +233,107 @@ class TextAnnotation(BaseModel):
         return list(api_data)
 
 
+class AreaFill(BaseModel):
+    """A base class for the Datawrapper API's 'custom-area-fills' attribute."""
+
+    model_config = ConfigDict(
+        populate_by_name=True,
+        strict=True,
+        json_schema_extra={
+            "examples": [
+                {
+                    "from_column": "baseline",
+                    "to_column": "new",
+                    "color": "#15607a",
+                    "opacity": 0.3,
+                }
+            ]
+        },
+    )
+
+    #: The unique ID for this area fill (preserved during deserialization, auto-generated during serialization)
+    id: str | None = Field(
+        default=None,
+        description="The unique ID for this area fill (used as dict key, not included in serialized output)",
+    )
+
+    #: The line to fill upwards from
+    from_column: str = Field(alias="from", description="The line to fill upwards from")
+
+    #: The line to fill upwards to
+    to_column: str = Field(alias="to", description="The line to fill upwards to")
+
+    #: The color of the fill
+    color: str = Field(default="#15607a", description="The color of the fill")
+
+    #: The opacity of the fill
+    opacity: float = Field(default=0.3, description="The opacity of the fill")
+
+    #: Whether to use different colors when there are negative values
+    use_mixed_colors: bool = Field(
+        default=False,
+        alias="useMixedColors",
+        description="Whether to use different colors when there are negative values",
+    )
+
+    #: The color of the fill when it is negative
+    color_negative: str = Field(
+        default="#cc0000",
+        alias="colorNegative",
+        description="The color of the fill when it is negative",
+    )
+
+    #: The interpolation method to use when drawing lines
+    interpolation: Literal[
+        "linear",
+        "step",
+        "step-after",
+        "stepAfter",
+        "step-before",
+        "stepBefore",
+        "cardinal",
+        "monotone",
+    ] = Field(default="linear", description="The interpolation method to use")
+
+    def serialize_model(self) -> dict:
+        """Serialize the model to a dictionary for the Datawrapper API.
+
+        Note: The 'id' field is not included in the output as it's used as the dict key.
+        """
+        return {
+            "from": self.from_column,
+            "to": self.to_column,
+            "color": self.color,
+            "opacity": self.opacity,
+            "useMixedColors": self.use_mixed_colors,
+            "colorNegative": self.color_negative,
+            "interpolation": self.interpolation,
+        }
+
+    @classmethod
+    def deserialize_model(cls, api_data: dict[str, dict] | list | None) -> list[dict]:
+        """Deserialize area fills from API response format.
+
+        Args:
+            api_data: Dictionary mapping UUID keys to area fill data,
+                      or a list, or None
+
+        Returns:
+            List of area fill dicts with 'id' field preserved
+        """
+        if not api_data:
+            return []
+
+        # Handle dict format (UUID keys -> area fill data)
+        if isinstance(api_data, dict):
+            return [
+                {**fill_data, "id": fill_id} for fill_id, fill_data in api_data.items()
+            ]
+
+        # Handle list format (already deserialized or legacy)
+        return list(api_data)
+
+
 class RangeAnnotation(BaseModel):
     """A base class for the Datawrapper API's 'range-annotations' attribute."""
 

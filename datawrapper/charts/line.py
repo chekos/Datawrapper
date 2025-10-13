@@ -3,7 +3,7 @@ from typing import Any, Literal
 import pandas as pd
 from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
-from .annos import RangeAnnotation, TextAnnotation
+from .annos import AreaFill, RangeAnnotation, TextAnnotation
 from .base import BaseChart
 from .models import ColorCategory, CustomTicks
 
@@ -95,63 +95,6 @@ class LineValueLabel(BaseModel):
         default=0,
         alias="maxInnerLabels",
         description="The maximum number of inner value labels to show",
-    )
-
-
-class AreaFill(BaseModel):
-    """Configure a fill between two lines on a Datawrapper line chart."""
-
-    model_config = ConfigDict(populate_by_name=True, strict=True)
-
-    #: The line to fill upwards from
-    from_column: str = Field(
-        alias="from",
-        description="The line to fill upwards from",
-    )
-
-    #: The line to fill upwards to
-    to_column: str = Field(
-        alias="to",
-        description="The line to fill upwards to",
-    )
-
-    #: The color of the fill
-    color: str = Field(
-        default="#4682b4",
-        description="The color of the fill",
-    )
-
-    #: The opacity of the fill
-    opacity: float = Field(
-        default=0.15,
-        description="The opacity of the fill",
-    )
-
-    #: Whether to use different colors when there are negative values
-    use_mixed_colors: bool = Field(
-        default=False,
-        alias="useMixedColors",
-        description="Whether to use different colors when there are negative values",
-    )
-
-    #: The color of the fill when it is negative
-    color_negative: str = Field(
-        default="#E31A1C",
-        alias="colorNegative",
-        description="The color of the fill when it is negative",
-    )
-
-    #: The interpolation method to use when drawing lines
-    interpolation: Literal[
-        "linear",
-        "step",
-        "step-after",
-        "step-before",
-        "monotone-x",
-        "cardinal",
-    ] = Field(
-        default="linear",
-        description="The interpolation method to use when drawing lines",
     )
 
 
@@ -622,29 +565,22 @@ class LineChart(BaseChart):
 
             model["metadata"]["visualize"]["lines"][line_name] = line_dict
 
-        # Add area fills
-        for fill_obj in self.area_fills:
+        # Add area fills - these serialize to a dict, not a list
+        area_fills_dict = {}
+        for i, fill_obj in enumerate(self.area_fills):
+            # Convert to AreaFill object if needed
             if isinstance(fill_obj, dict):
-                fill_config = AreaFill.model_validate(fill_obj)
-            elif isinstance(fill_obj, AreaFill):
-                fill_config = fill_obj
+                fill = AreaFill.model_validate(fill_obj)
             else:
-                raise ValueError("Area fills must be AreaFill objects or dicts")
+                fill = fill_obj
 
-            # Generate a unique ID for the fill
-            import uuid
+            # Generate a unique ID for this fill
+            fill_id = f"fill_{i}"
 
-            fill_id = str(uuid.uuid4()).replace("-", "")[:10]
+            # Serialize the fill using the custom serialize_model method
+            area_fills_dict[fill_id] = fill.serialize_model()
 
-            model["metadata"]["visualize"]["custom-area-fills"][fill_id] = {
-                "from": fill_config.from_column,
-                "to": fill_config.to_column,
-                "color": fill_config.color,
-                "opacity": fill_config.opacity,
-                "useMixedColors": fill_config.use_mixed_colors,
-                "colorNegative": fill_config.color_negative,
-                "interpolation": fill_config.interpolation,
-            }
+        model["metadata"]["visualize"]["custom-area-fills"] = area_fills_dict
 
         # Return the serialized data
         return model
@@ -742,27 +678,12 @@ class LineChart(BaseChart):
                         }
                     )
 
-        # Parse area fills
-        area_fills_obj = visualize.get("custom-area-fills", {})
-        init_data["area_fills"] = []
-        if isinstance(area_fills_obj, dict):
-            for _fill_id, fill_config in area_fills_obj.items():
-                if isinstance(fill_config, dict):
-                    init_data["area_fills"].append(
-                        {
-                            "from_column": fill_config.get("from", ""),
-                            "to_column": fill_config.get("to", ""),
-                            "color": fill_config.get("color", "#4682b4"),
-                            "opacity": fill_config.get("opacity", 0.15),
-                            "use_mixed_colors": fill_config.get(
-                                "useMixedColors", False
-                            ),
-                            "color_negative": fill_config.get(
-                                "colorNegative", "#E31A1C"
-                            ),
-                            "interpolation": fill_config.get("interpolation", "linear"),
-                        }
-                    )
+        # Parse area fills using AreaFill.deserialize_model
+        area_fills_data = AreaFill.deserialize_model(visualize.get("custom-area-fills"))
+        # Convert dicts to AreaFill objects
+        init_data["area_fills"] = [
+            AreaFill.model_validate(fill_dict) for fill_dict in area_fills_data
+        ]
 
         # Labels
         init_data["stack_color_legend"] = visualize.get("stack-color-legend", False)

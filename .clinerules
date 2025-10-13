@@ -52,13 +52,14 @@ This utility is used by AreaChart, BarChart, ColumnChart, LineChart, MultipleCol
 
 ### Annotations
 
-Charts support two types of annotations:
+Charts support three types of annotations:
 - `TextAnnotation`: Text labels at specific coordinates
 - `RangeAnnotation`: Highlighted ranges with optional labels
+- `AreaFill`: Filled areas between two lines (LineChart only)
 
-Both annotation classes have:
-- `serialize()` method: Converts a single annotation instance to API format
-- `deserialize_model()` classmethod: Converts API JSON (list of annotation dicts) back to Python list of dicts
+All annotation classes have:
+- `serialize_model()` method: Converts a single annotation instance to API format
+- `deserialize_model()` classmethod: Converts API JSON (dict with UUID keys or list) back to Python list of dicts
 
 The BaseChart class provides `_serialize_annotations()` helper method to handle lists of annotations during serialization.
 
@@ -67,6 +68,12 @@ Chart classes use the annotation class methods directly:
 - For deserialization: `TextAnnotation.deserialize_model(visualize.get("text-annotations"))`
 
 This pattern is used by AreaChart, BarChart, ColumnChart, LineChart, MultipleColumnChart, and ScatterPlot.
+
+**Important API Format Notes:**
+- The API returns annotations as dictionaries with UUID keys mapping to annotation data
+- The API expects annotations to be sent as dictionaries with UUID keys (not lists)
+- The `deserialize_model()` methods handle both dict and list formats for flexibility
+- The `id` field is preserved during deserialization but not included in serialization output (used as dict key)
 
 ## Testing
 

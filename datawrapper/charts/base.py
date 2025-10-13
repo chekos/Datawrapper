@@ -8,7 +8,7 @@ from IPython.display import Image
 from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 
 from datawrapper.__main__ import Datawrapper
-from datawrapper.charts.annos import RangeAnnotation, TextAnnotation
+from datawrapper.charts.annos import AreaFill, RangeAnnotation, TextAnnotation
 from datawrapper.charts.models import (
     Annotate,
     Describe,
@@ -364,8 +364,8 @@ class BaseChart(BaseModel):
     def _serialize_annotations(
         self,
         annotations: list[Any],
-        annotation_class: type[TextAnnotation | RangeAnnotation],
-    ) -> list[dict[str, Any]]:
+        annotation_class: type[TextAnnotation | RangeAnnotation | AreaFill],
+    ) -> list[dict[str, Any]] | dict[str, dict[str, Any]]:
         """Serialize annotations to a list of dictionaries.
 
         This matches the format expected by the Datawrapper API when creating/updating charts.
