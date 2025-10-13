@@ -2,5 +2,5 @@ myst-nb==0.17.1
 sphinx-tabs==3.4.1
 sphinxcontrib-bibtex==2.5.0
 sphinx-book-theme==1.0.1
-importlib-metadata==6.1.0
+importlib-metadata==8.7.0
 datawrapper
