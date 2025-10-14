@@ -52,6 +52,54 @@ The `CustomRange` class in `models.py` provides utilities for handling custom ax
 
 This utility is used by AreaChart, BarChart, ColumnChart, LineChart, MultipleColumnChart, and ArrowChart to handle the `custom-range-x` and `custom-range-y` fields in the visualize metadata.
 
+### Number Divisor
+
+The `NumberDivisor` enum in `models.py` provides a developer-friendly way to specify number formatting divisors:
+
+**Enum Values:**
+- `NumberDivisor.NO_CHANGE` = "0" - No change to the number
+- `NumberDivisor.AUTO_DETECT` = "auto" - Automatically detect appropriate divisor
+- `NumberDivisor.DIVIDE_BY_THOUSAND` = "3" - Divide by 1,000
+- `NumberDivisor.DIVIDE_BY_MILLION` = "6" - Divide by 1,000,000
+- `NumberDivisor.DIVIDE_BY_BILLION` = "9" - Divide by 1,000,000,000
+- `NumberDivisor.MULTIPLY_BY_HUNDRED` = "-2" - Multiply by 100 (for percentages)
+- `NumberDivisor.MULTIPLY_BY_THOUSAND` = "-3" - Multiply by 1,000
+- `NumberDivisor.MULTIPLY_BY_MILLION` = "-6" - Multiply by 1,000,000
+- `NumberDivisor.MULTIPLY_BY_BILLION` = "-9" - Multiply by 1,000,000,000
+- `NumberDivisor.MULTIPLY_BY_TRILLION` = "-12" - Multiply by 1,000,000,000,000
+
+**Usage in ColumnFormat:**
+The `ColumnFormat` model has a `number_divisor` field that accepts:
+- Enum values: `NumberDivisor.DIVIDE_BY_MILLION`
+- Raw integers: `6`, `-2`, `0`
+- Raw strings: `"6"`, `"auto"`, `"0"`
+
+The field has validation to ensure only valid values are accepted. Invalid values raise a `ValidationError`.
+
+**Serialization:**
+- When serializing to API format via `ColumnFormatList.serialize_to_dict()`, the default value (0 or "0") is excluded from the output
+- Enum values are serialized as their string values (e.g., `NumberDivisor.DIVIDE_BY_MILLION` becomes `"6"`)
+- The API field name is `"number-divisor"` (with hyphen)
+
+**Example:**
+```python
+from datawrapper.charts.models import ColumnFormat, NumberDivisor
+
+# Using enum (recommended for clarity)
+col_format = ColumnFormat(
+    column="revenue",
+    number_divisor=NumberDivisor.DIVIDE_BY_MILLION,
+    number_prepend="$",
+    number_append="M"
+)
+
+# Using raw int (also valid)
+col_format = ColumnFormat(column="revenue", number_divisor=6)
+
+# Using raw string (also valid)
+col_format = ColumnFormat(column="revenue", number_divisor="auto")
+```
+
 ### Color Category Utility
 
 The `ColorCategory` class in `models.py` provides utilities for handling color category mappings:

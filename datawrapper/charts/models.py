@@ -1,8 +1,46 @@
 """Pydantic models for Datawrapper API metadata structures."""
 
+from enum import Enum
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_validator,
+    model_serializer,
+    model_validator,
+)
+
+
+class NumberDivisor(str, Enum):
+    """Number divisor options for formatting numbers in charts.
+
+    These values control how numbers are scaled in chart displays:
+    - Positive values divide the number (e.g., 3 = divide by 1000)
+    - Negative values multiply the number (e.g., -2 = multiply by 100)
+    - "0" or 0 means no change
+    - "auto" lets Datawrapper auto-detect the best divisor
+
+    Examples:
+        >>> # Using enum (recommended - more readable)
+        >>> ColumnFormat(column="sales", number_divisor=NumberDivisor.DIVIDE_BY_MILLION)
+
+        >>> # Using raw API values (also supported)
+        >>> ColumnFormat(column="sales", number_divisor=6)
+        >>> ColumnFormat(column="sales", number_divisor="auto")
+    """
+
+    NO_CHANGE = "0"
+    AUTO_DETECT = "auto"
+    DIVIDE_BY_THOUSAND = "3"
+    DIVIDE_BY_MILLION = "6"
+    DIVIDE_BY_BILLION = "9"
+    MULTIPLY_BY_HUNDRED = "-2"
+    MULTIPLY_BY_THOUSAND = "-3"
+    MULTIPLY_BY_MILLION = "-6"
+    MULTIPLY_BY_BILLION = "-9"
+    MULTIPLY_BY_TRILLION = "-12"
 
 
 class CustomTicks:
@@ -490,6 +528,56 @@ class ColumnFormat(BaseModel):
         default="", alias="number-append", description="What to append after the number"
     )
 
+    #: Number divisor for scaling values (use NumberDivisor enum or raw API values)
+    number_divisor: NumberDivisor | int | str = Field(
+        default=0,
+        alias="number-divisor",
+        description="Number divisor for scaling values. Use NumberDivisor enum for readability or raw API values (0, 'auto', 3, 6, 9, -2, -3, -6, -9, -12).",
+    )
+
+    @field_validator("number_divisor")
+    @classmethod
+    def validate_number_divisor(
+        cls, v: NumberDivisor | int | str
+    ) -> NumberDivisor | int | str:
+        """Validate number_divisor is a valid value.
+
+        Accepts NumberDivisor enum values or raw API values (int or str).
+        """
+        # If it's already a NumberDivisor enum, it's valid
+        if isinstance(v, NumberDivisor):
+            return v
+
+        # Define valid raw values (both int and string representations)
+        valid_values = {
+            0,
+            "0",
+            "auto",
+            3,
+            "3",
+            6,
+            "6",
+            9,
+            "9",
+            -2,
+            "-2",
+            -3,
+            "-3",
+            -6,
+            "-6",
+            -9,
+            "-9",
+            -12,
+            "-12",
+        }
+
+        if v not in valid_values:
+            raise ValueError(
+                f"Invalid number_divisor: {v}. Use NumberDivisor enum or valid API values: "
+                f"0, 'auto', 3, 6, 9, -2, -3, -6, -9, -12"
+            )
+        return v
+
 
 class ColumnFormatList(BaseModel):
     """A wrapper for a list of ColumnFormat objects that handles API serialization.
@@ -588,6 +676,12 @@ class ColumnFormatList(BaseModel):
                     filtered_config[key] = value
                 elif key in ("number-prepend", "number-append") and value != "":
                     filtered_config[key] = value
+                elif key == "number-divisor" and value not in (0, "0"):
+                    # Convert NumberDivisor enum to its value for API
+                    if isinstance(value, NumberDivisor):
+                        filtered_config[key] = value.value
+                    else:
+                        filtered_config[key] = value
 
             result[col_name] = filtered_config
 
