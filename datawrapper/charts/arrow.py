@@ -121,7 +121,7 @@ class ArrowChart(BaseChart):
     #
 
     #: The custom range for the x axis
-    custom_range: list[Any] = Field(
+    custom_range: list[Any] | tuple[Any, Any] = Field(
         default_factory=lambda: ["", ""],
         alias="custom-range",
         description="The custom range for the x axis",

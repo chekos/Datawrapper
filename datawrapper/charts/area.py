@@ -46,7 +46,7 @@ class AreaChart(BaseChart):
     #
 
     #: The custom range for the x axis
-    custom_range_x: list[Any] = Field(
+    custom_range_x: list[Any] | tuple[Any, Any] = Field(
         default_factory=lambda: ["", ""],
         alias="custom-range-x",
         description="The custom range for the x axis",
@@ -78,7 +78,7 @@ class AreaChart(BaseChart):
     #
 
     #: The custom range for the y axis
-    custom_range_y: list[Any] = Field(
+    custom_range_y: list[Any] | tuple[Any, Any] = Field(
         default_factory=lambda: ["", ""],
         alias="custom-range-y",
         description="The custom range for the y axis",
