@@ -229,3 +229,27 @@ This change creates consistency with other model patterns in the library:
 - Line configurations now own their own serialization/deserialization logic
 - Eliminates inline serialization/deserialization code in LineChart
 - Makes the code more maintainable and easier to test
+
+### RangeAnnotation Permissive Position Fields (2025-01-14)
+
+Made the RangeAnnotation position fields (x0, x1, y0, y1) optional to support different annotation types:
+
+- Changed all position fields from required to optional (default None) in the RangeAnnotation model
+- Updated `serialize_model()` to only include non-None position values in the output
+- Updated `deserialize_model()` to handle missing position values from API responses
+- Added comprehensive tests in `tests/unit/models/test_range_annotation_permissive.py` covering:
+  - Vertical lines (only x0 needed)
+  - Vertical ranges (x0 and x1 needed)
+  - Horizontal lines (only y0 needed)
+  - Horizontal ranges (y0 and y1 needed)
+  - Mixed numeric and string positions
+  - API format with duplicate positions
+- All 487 unit and integration tests pass
+
+This change allows RangeAnnotation to support:
+- **Vertical lines**: Set only `x0` with `type="x"` and `display="line"`
+- **Vertical ranges**: Set `x0` and `x1` with `type="x"` and `display="range"`
+- **Horizontal lines**: Set only `y0` with `type="y"` and `display="line"`
+- **Horizontal ranges**: Set `y0` and `y1` with `type="y"` and `display="range"`
+
+The serialization now only includes the position fields that are actually set, making the API payloads cleaner and more flexible.

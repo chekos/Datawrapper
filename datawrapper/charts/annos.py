@@ -375,17 +375,29 @@ class RangeAnnotation(BaseModel):
     #: The opacity of the annotation
     opacity: int = Field(default=50, description="The opacity of the annotation")
 
-    #: The first x position
-    x0: Any = Field(description="The first x position")
+    #: The first x position (required for type="x" annotations)
+    x0: Any | None = Field(
+        default=None,
+        description="The first x position (required for type='x' annotations)",
+    )
 
-    #: The second x position
-    x1: Any = Field(description="The second x position")
+    #: The second x position (required for type="x" range annotations)
+    x1: Any | None = Field(
+        default=None,
+        description="The second x position (required for type='x' range annotations)",
+    )
 
-    #: The first y position
-    y0: Any = Field(description="The first y position")
+    #: The first y position (required for type="y" annotations)
+    y0: Any | None = Field(
+        default=None,
+        description="The first y position (required for type='y' annotations)",
+    )
 
-    #: The second y position
-    y1: Any = Field(description="The second y position")
+    #: The second y position (required for type="y" range annotations)
+    y1: Any | None = Field(
+        default=None,
+        description="The second y position (required for type='y' range annotations)",
+    )
 
     #: The stroke type of the annotation, if the display style is a line
     stroke_type: Literal["solid", "dashed", "dotted"] = Field(
@@ -405,18 +417,25 @@ class RangeAnnotation(BaseModel):
         """Serialize the model to a dictionary for the Datawrapper API.
 
         Note: The 'id' field is not included in the output as it's used as the dict key.
+        Only includes position values that are not None.
         """
+        # Build position dict with only non-None values
+        position = {}
+        if self.x0 is not None:
+            position["x0"] = self.x0
+        if self.x1 is not None:
+            position["x1"] = self.x1
+        if self.y0 is not None:
+            position["y0"] = self.y0
+        if self.y1 is not None:
+            position["y1"] = self.y1
+
         return {
             "type": self.type,
             "color": self.color,
             "display": self.display,
             "opacity": self.opacity,
-            "position": {
-                "x0": self.x0,
-                "x1": self.x1,
-                "y0": self.y0,
-                "y1": self.y1,
-            },
+            "position": position,
             "strokeType": self.stroke_type,
             "strokeWidth": self.stroke_width,
         }
