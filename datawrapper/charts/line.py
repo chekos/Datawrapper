@@ -48,13 +48,13 @@ class LineSymbol(BaseModel):
     )
 
     #: The size of the symbols
-    size: int = Field(
+    size: int | float = Field(
         default=6,
         description="The size of the symbols",
     )
 
     #: The opacity of the symbols between 0 and 1
-    opacity: float = Field(
+    opacity: int | float = Field(
         default=1.0,
         description="The opacity of the symbols between 0 and 1",
     )
