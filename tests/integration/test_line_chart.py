@@ -189,7 +189,7 @@ class TestLineChartGet:
             assert chart.x_grid_format == "MMM|DD"
             assert chart.y_grid_format == "0,0.[00]"
             assert chart.custom_range_x == ["2020-03-01", "2020-07-07"]
-            assert chart.custom_range_y == ["0", ""]
+            assert chart.custom_range_y == [0, ""]
 
             # Verify line customization
             assert chart.interpolation == "monotone-x"

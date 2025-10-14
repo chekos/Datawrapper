@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 from .annos import AreaFill, RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .models import ColorCategory, CustomTicks
+from .models import ColorCategory, CustomRange, CustomTicks, ModelListSerializer
 
 
 class LineSymbol(BaseModel):
@@ -179,6 +179,93 @@ class Line(BaseModel):
         alias="connectMissingPoints",
         description="Whether or not to connect missing points",
     )
+
+    @staticmethod
+    def serialize_model(line: "Line") -> dict[str, Any]:
+        """Serialize a Line instance to API format.
+
+        Args:
+            line: The Line instance to serialize
+
+        Returns:
+            Dictionary in the API's expected format
+        """
+        line_dict = {
+            "title": line.title,
+            "interpolation": line.interpolation,
+            "width": line.width,
+            "colorKey": line.color_key,
+            "directLabel": line.direct_label,
+            "bgStroke": line.outline,
+            "connectMissingPoints": line.connect_missing_points,
+            "symbols": {
+                "enabled": line.symbols.enabled,
+                "shape": line.symbols.shape,
+                "style": line.symbols.style,
+                "on": line.symbols.on,
+                "size": line.symbols.size,
+                "opacity": line.symbols.opacity,
+            },
+            "valueLabels": {
+                "enabled": line.value_labels.enabled,
+                "last": line.value_labels.last,
+                "first": line.value_labels.first,
+                "showCircles": line.value_labels.show_circles,
+                "maxInnerLabels": line.value_labels.max_inner_labels,
+            },
+        }
+
+        # Add dash if set
+        if line.dash is not None:
+            line_dict["dash"] = line.dash
+
+        return line_dict
+
+    @classmethod
+    def deserialize_model(cls, line_name: str, line_config: dict) -> dict[str, Any]:
+        """Deserialize API line config to Line initialization dict.
+
+        Args:
+            line_name: The column name for this line
+            line_config: The line configuration from the API
+
+        Returns:
+            Dictionary that can be used to initialize a Line instance
+        """
+        # Parse symbols
+        symbols_obj = line_config.get("symbols", {})
+        symbols = {
+            "enabled": symbols_obj.get("enabled", False),
+            "shape": symbols_obj.get("shape", "circle"),
+            "style": symbols_obj.get("style", "fill"),
+            "on": symbols_obj.get("on", "last"),
+            "size": symbols_obj.get("size", 6),
+            "opacity": symbols_obj.get("opacity", 1.0),
+        }
+
+        # Parse value labels
+        value_labels_obj = line_config.get("valueLabels", {})
+        value_labels = {
+            "enabled": value_labels_obj.get("enabled", False),
+            "last": value_labels_obj.get("last", False),
+            "first": value_labels_obj.get("first", False),
+            "show_circles": value_labels_obj.get("showCircles", False),
+            "max_inner_labels": value_labels_obj.get("maxInnerLabels", 0),
+        }
+
+        return {
+            "column": line_name,
+            "title": line_config.get("title", ""),
+            "interpolation": line_config.get("interpolation", "linear"),
+            "width": line_config.get("width", "style1"),
+            "dash": line_config.get("dash"),
+            "color_key": line_config.get("colorKey", False),
+            "direct_label": line_config.get("directLabel", False),
+            "outline": line_config.get("bgStroke", False),
+            "symbols": symbols,
+            "value_labels": value_labels,
+            "connect_missing_points": line_config.get("connectMissingPoints", False),
+        }
 
 
 class LineChart(BaseChart):
@@ -473,12 +560,12 @@ class LineChart(BaseChart):
         model["metadata"]["visualize"].update(
             {
                 # Horizontal axis
-                "custom-range-x": self.custom_range_x,
+                "custom-range-x": CustomRange.serialize(self.custom_range_x),
                 "custom-ticks-x": CustomTicks.serialize(self.custom_ticks_x),
                 "x-grid-format": self.x_grid_format,
                 "x-grid": self.x_grid,
                 # Vertical axis
-                "custom-range-y": self.custom_range_y,
+                "custom-range-y": CustomRange.serialize(self.custom_range_y),
                 "custom-ticks-y": CustomTicks.serialize(self.custom_ticks_y),
                 "y-grid-format": self.y_grid_format,
                 "y-grid": self.y_grid,
@@ -507,13 +594,13 @@ class LineChart(BaseChart):
                 "plotHeightRatio": self.plot_height_ratio,
                 # Initialize empty structures
                 "lines": {},
-                "text-annotations": self._serialize_annotations(
+                "text-annotations": ModelListSerializer.serialize(
                     self.text_annotations, TextAnnotation
                 ),
-                "range-annotations": self._serialize_annotations(
+                "range-annotations": ModelListSerializer.serialize(
                     self.range_annotations, RangeAnnotation
                 ),
-                "custom-area-fills": self._serialize_annotations(
+                "custom-area-fills": ModelListSerializer.serialize(
                     self.area_fills, AreaFill
                 ),
             }
@@ -523,49 +610,13 @@ class LineChart(BaseChart):
         for line_obj in self.lines:
             if isinstance(line_obj, dict):
                 line_config = Line.model_validate(line_obj)
-            elif isinstance(line_obj, Line):
-                line_config = line_obj
             else:
-                raise ValueError("Lines must be Line objects or dicts")
+                line_config = line_obj
 
-            # Get the column name from the line config
             line_name = line_config.column
-
-            # Serialize the line configuration
-            line_dict = {
-                "title": line_config.title,
-                "interpolation": line_config.interpolation,
-                "width": line_config.width,
-                "colorKey": line_config.color_key,
-                "directLabel": line_config.direct_label,
-                "bgStroke": line_config.outline,
-                "connectMissingPoints": line_config.connect_missing_points,
-            }
-
-            # Add dash if set
-            if line_config.dash is not None:
-                line_dict["dash"] = line_config.dash
-
-            # Add symbols configuration
-            line_dict["symbols"] = {
-                "enabled": line_config.symbols.enabled,
-                "shape": line_config.symbols.shape,
-                "style": line_config.symbols.style,
-                "on": line_config.symbols.on,
-                "size": line_config.symbols.size,
-                "opacity": line_config.symbols.opacity,
-            }
-
-            # Add value labels configuration
-            line_dict["valueLabels"] = {
-                "enabled": line_config.value_labels.enabled,
-                "last": line_config.value_labels.last,
-                "first": line_config.value_labels.first,
-                "showCircles": line_config.value_labels.show_circles,
-                "maxInnerLabels": line_config.value_labels.max_inner_labels,
-            }
-
-            model["metadata"]["visualize"]["lines"][line_name] = line_dict
+            model["metadata"]["visualize"]["lines"][line_name] = Line.serialize_model(
+                line_config
+            )
 
         # Return the serialized data
         return model
@@ -589,7 +640,9 @@ class LineChart(BaseChart):
         visualize = metadata.get("visualize", {})
 
         # Horizontal axis (X-axis)
-        init_data["custom_range_x"] = visualize.get("custom-range-x", ["", ""])
+        init_data["custom_range_x"] = CustomRange.deserialize(
+            visualize.get("custom-range-x")
+        )
         init_data["custom_ticks_x"] = CustomTicks.deserialize(
             visualize.get("custom-ticks-x", "")
         )
@@ -597,7 +650,9 @@ class LineChart(BaseChart):
         init_data["x_grid"] = visualize.get("x-grid", "off")
 
         # Vertical axis (Y-axis)
-        init_data["custom_range_y"] = visualize.get("custom-range-y", ["", ""])
+        init_data["custom_range_y"] = CustomRange.deserialize(
+            visualize.get("custom-range-y")
+        )
         init_data["custom_ticks_y"] = CustomTicks.deserialize(
             visualize.get("custom-ticks-y", "")
         )
@@ -624,47 +679,13 @@ class LineChart(BaseChart):
         if isinstance(lines_obj, dict):
             for line_name, line_config in lines_obj.items():
                 if isinstance(line_config, dict):
-                    # Parse symbols
-                    symbols_obj = line_config.get("symbols", {})
-                    symbols = {
-                        "enabled": symbols_obj.get("enabled", False),
-                        "shape": symbols_obj.get("shape", "circle"),
-                        "style": symbols_obj.get("style", "fill"),
-                        "on": symbols_obj.get("on", "last"),
-                        "size": symbols_obj.get("size", 6),
-                        "opacity": symbols_obj.get("opacity", 1.0),
-                    }
-
-                    # Parse value labels
-                    value_labels_obj = line_config.get("valueLabels", {})
-                    value_labels = {
-                        "enabled": value_labels_obj.get("enabled", False),
-                        "last": value_labels_obj.get("last", False),
-                        "first": value_labels_obj.get("first", False),
-                        "show_circles": value_labels_obj.get("showCircles", False),
-                        "max_inner_labels": value_labels_obj.get("maxInnerLabels", 0),
-                    }
-
                     init_data["lines"].append(
-                        {
-                            "column": line_name,  # Add the column name from the dict key
-                            "title": line_config.get("title", ""),
-                            "interpolation": line_config.get("interpolation", "linear"),
-                            "width": line_config.get("width", "style1"),
-                            "dash": line_config.get("dash"),
-                            "color_key": line_config.get("colorKey", False),
-                            "direct_label": line_config.get("directLabel", False),
-                            "outline": line_config.get("bgStroke", False),
-                            "symbols": symbols,
-                            "value_labels": value_labels,
-                            "connect_missing_points": line_config.get(
-                                "connectMissingPoints", False
-                            ),
-                        }
+                        Line.deserialize_model(line_name, line_config)
                     )
 
         # Parse area fills using AreaFill.deserialize_model
         area_fills_data = AreaFill.deserialize_model(visualize.get("custom-area-fills"))
+
         # Convert dicts to AreaFill objects
         init_data["area_fills"] = [
             AreaFill.model_validate(fill_dict) for fill_dict in area_fills_data

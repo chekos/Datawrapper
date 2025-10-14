@@ -8,7 +8,6 @@ from IPython.display import Image
 from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 
 from datawrapper.__main__ import Datawrapper
-from datawrapper.charts.annos import AreaFill, RangeAnnotation, TextAnnotation
 from datawrapper.charts.models import (
     Annotate,
     Describe,
@@ -360,36 +359,6 @@ class BaseChart(BaseModel):
             # Convert list of dicts to DataFrame first, then to CSV
             df = pd.DataFrame(self.data)
             return df.to_csv(index=False, encoding="utf-8")
-
-    def _serialize_annotations(
-        self,
-        annotations: list[Any],
-        annotation_class: type[TextAnnotation | RangeAnnotation | AreaFill],
-    ) -> list[dict[str, Any]] | dict[str, dict[str, Any]]:
-        """Serialize annotations to a list of dictionaries.
-
-        This matches the format expected by the Datawrapper API when creating/updating charts.
-        When there are no annotations, returns an empty list.
-
-        Args:
-            annotations: List of annotation objects or dicts
-            annotation_class: The annotation class (TextAnnotation or RangeAnnotation)
-
-        Returns:
-            List of serialized annotation dictionaries, or empty list if no annotations
-        """
-        result = []
-        for anno_obj in annotations:
-            # Convert to annotation object if needed
-            if isinstance(anno_obj, dict):
-                anno = annotation_class.model_validate(anno_obj)
-            else:
-                anno = anno_obj
-
-            # Serialize the annotation using the custom serialize_model method
-            result.append(anno.serialize_model())
-
-        return result
 
     #
     # Deserialization methods for parsing API responses and input data

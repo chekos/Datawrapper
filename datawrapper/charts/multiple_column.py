@@ -5,7 +5,7 @@ from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .models import ColorCategory, CustomTicks
+from .models import ColorCategory, CustomRange, CustomTicks, ModelListSerializer
 
 
 class MultipleColumnChart(BaseChart):
@@ -350,7 +350,7 @@ class MultipleColumnChart(BaseChart):
                     "by": self.sort_by,
                 },
                 # Horizontal axis
-                "custom-range-x": self.custom_range_x,
+                "custom-range-x": CustomRange.serialize(self.custom_range_x),
                 "custom-ticks-x": CustomTicks.serialize(self.custom_ticks_x),
                 "x-grid-format": self.x_grid_format,
                 "x-grid-labels": self.x_grid_labels,
@@ -360,7 +360,7 @@ class MultipleColumnChart(BaseChart):
                     "enabled": self.x_grid != "off",
                 },
                 # Vertical axis
-                "custom-range-y": self.custom_range_y,
+                "custom-range-y": CustomRange.serialize(self.custom_range_y),
                 "custom-ticks-y": CustomTicks.serialize(self.custom_ticks_y),
                 "y-grid-format": self.y_grid_format,
                 "grid-lines": self.y_grid,
@@ -396,10 +396,10 @@ class MultipleColumnChart(BaseChart):
                 },
                 "xGridLabelAllColumns": self.x_grid_label_all,
                 # Annotations
-                "text-annotations": self._serialize_annotations(
+                "text-annotations": ModelListSerializer.serialize(
                     self.text_annotations, TextAnnotation
                 ),
-                "range-annotations": self._serialize_annotations(
+                "range-annotations": ModelListSerializer.serialize(
                     self.range_annotations, RangeAnnotation
                 ),
             }
@@ -445,7 +445,9 @@ class MultipleColumnChart(BaseChart):
             init_data["sort_by"] = "end"
 
         # Horizontal axis
-        init_data["custom_range_x"] = visualize.get("custom-range-x", ["", ""])
+        init_data["custom_range_x"] = CustomRange.deserialize(
+            visualize.get("custom-range-x")
+        )
         init_data["custom_ticks_x"] = CustomTicks.deserialize(
             visualize.get("custom-ticks-x", "")
         )
@@ -464,7 +466,9 @@ class MultipleColumnChart(BaseChart):
             init_data["x_grid"] = "off"
 
         # Vertical axis
-        init_data["custom_range_y"] = visualize.get("custom-range-y", ["", ""])
+        init_data["custom_range_y"] = CustomRange.deserialize(
+            visualize.get("custom-range-y")
+        )
         init_data["custom_ticks_y"] = CustomTicks.deserialize(
             visualize.get("custom-ticks-y", "")
         )

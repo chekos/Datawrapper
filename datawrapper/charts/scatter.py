@@ -5,6 +5,7 @@ from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
+from .models import ModelListSerializer
 
 
 class ScatterPlot(BaseChart):
@@ -563,10 +564,10 @@ class ScatterPlot(BaseChart):
                 "plotHeightFixed": self.plot_height_fixed,
                 "plotHeightRatio": self.plot_height_ratio,
                 # Annotations
-                "text-annotations": self._serialize_annotations(
+                "text-annotations": ModelListSerializer.serialize(
                     self.text_annotations, TextAnnotation
                 ),
-                "range-annotations": self._serialize_annotations(
+                "range-annotations": ModelListSerializer.serialize(
                     self.range_annotations, RangeAnnotation
                 ),
                 "custom-lines": self.custom_lines,

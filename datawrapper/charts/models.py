@@ -70,6 +70,96 @@ class CustomTicks:
         return result
 
 
+class CustomRange:
+    """Utility class for serializing and deserializing custom axis ranges."""
+
+    @staticmethod
+    def serialize(range_values: list[Any] | tuple[Any, Any]) -> list[Any]:
+        """Convert range values to API format.
+
+        Args:
+            range_values: List or tuple of [min, max] values
+
+        Returns:
+            List of two values for the API
+
+        Example:
+            >>> CustomRange.serialize([0, 100])
+            [0, 100]
+            >>> CustomRange.serialize(["", ""])
+            ['', '']
+            >>> CustomRange.serialize([0, ""])
+            [0, '']
+        """
+        if not range_values or len(range_values) != 2:
+            return ["", ""]
+
+        result = []
+        for value in range_values:
+            # Keep empty strings as-is
+            if value == "":
+                result.append("")
+            else:
+                result.append(value)
+
+        return result
+
+    @staticmethod
+    def deserialize(range_values: list[Any] | None) -> list[Any]:
+        """Parse range values from API format.
+
+        Attempts to convert numeric strings to numbers, while preserving
+        empty strings and non-numeric values.
+
+        Args:
+            range_values: List from API response
+
+        Returns:
+            List of (min, max) values with proper types
+
+        Example:
+            >>> CustomRange.deserialize([0, 100])
+            [0, 100]
+            >>> CustomRange.deserialize(["0", "100"])
+            [0, 100]
+            >>> CustomRange.deserialize(["", ""])
+            ['', '']
+            >>> CustomRange.deserialize([0, ""])
+            [0, '']
+            >>> CustomRange.deserialize(None)
+            ['', '']
+        """
+        if not range_values or len(range_values) == 0:
+            return ["", ""]
+
+        result: list[Any] = []
+        for value in range_values:
+            # Keep empty strings as-is
+            if value == "":
+                result.append("")
+            # Try to convert strings to numbers
+            elif isinstance(value, str):
+                try:
+                    num = float(value)
+                    # If it's a whole number, convert to int
+                    if num.is_integer():
+                        result.append(int(num))
+                    else:
+                        result.append(num)
+                except ValueError:
+                    # Keep as string if conversion fails
+                    result.append(value)
+            else:
+                # Keep numbers and other types as-is
+                result.append(value)
+
+        # Pad with empty strings if we have fewer than 2 values
+        while len(result) < 2:
+            result.append("")
+
+        return result[:2]  # Return only first 2 values
+
+
 class ColorCategory:
     """Utility class for serializing and deserializing color category structures."""
 
@@ -146,6 +236,49 @@ class ColorCategory:
             "category_order": color_category_obj.get("categoryOrder", []),
             "exclude_from_color_key": color_category_obj.get("excludeFromKey", []),
         }
+
+
+class ModelListSerializer:
+    """Utility class for serializing lists of model objects to API format."""
+
+    @staticmethod
+    def serialize(
+        items: list[Any],
+        model_class: type[Any],
+    ) -> list[dict[str, Any]]:
+        """Serialize a list of model objects to API format.
+
+        This utility handles converting a list of model objects (or dicts) into
+        the list of dictionaries format expected by the Datawrapper API.
+
+        Args:
+            items: List of model objects or dicts
+            model_class: The model class (e.g., TextAnnotation, RangeAnnotation, AreaFill)
+
+        Returns:
+            List of serialized dictionaries
+
+        Example:
+            >>> from datawrapper.charts.annos import TextAnnotation
+            >>> annotations = [
+            ...     TextAnnotation(x=0, y=0, text="Label 1"),
+            ...     {"x": 1, "y": 1, "text": "Label 2"},
+            ... ]
+            >>> ModelListSerializer.serialize(annotations, TextAnnotation)
+            [{'x': 0, 'y': 0, 'text': 'Label 1', ...}, {'x': 1, 'y': 1, 'text': 'Label 2', ...}]
+        """
+        result: list[Any] = []
+        for item in items:
+            # Convert to model object if needed
+            if isinstance(item, dict):
+                obj = model_class.model_validate(item)
+            else:
+                obj = item
+
+            # Serialize the object using its serialize_model method
+            result.append(obj.serialize_model())
+
+        return result
 
 
 class Annotate(BaseModel):

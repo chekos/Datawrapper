@@ -4,7 +4,7 @@ import pandas as pd
 from pydantic import ConfigDict, Field, model_serializer
 
 from .base import BaseChart
-from .models import ColorCategory
+from .models import ColorCategory, CustomRange
 
 
 class ArrowChart(BaseChart):
@@ -191,7 +191,7 @@ class ArrowChart(BaseChart):
                     "by": self.sort_by,
                     "enabled": self.sort_ranges,
                 },
-                "custom-range": self.custom_range,
+                "custom-range": CustomRange.serialize(self.custom_range),
                 "range-extent": self.range_extent,
                 "value-label-format": self.value_label_format,
                 "color-by-column": self.color_by_column,
@@ -269,7 +269,9 @@ class ArrowChart(BaseChart):
             init_data["replace_flags"] = "off"
 
         # Axes
-        init_data["custom_range"] = visualize.get("custom-range", ["", ""])
+        init_data["custom_range"] = CustomRange.deserialize(
+            visualize.get("custom-range")
+        )
         init_data["range_extent"] = visualize.get("range-extent", "nice")
 
         # Parse axes section

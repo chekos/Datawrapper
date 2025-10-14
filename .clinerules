@@ -37,6 +37,21 @@ The `CustomTicks` class in `models.py` provides utilities for handling custom ti
 
 This utility is used by AreaChart, ColumnChart, LineChart, and MultipleColumnChart to handle the `custom-ticks-x` and `custom-ticks-y` fields.
 
+### Custom Range Utility
+
+The `CustomRange` class in `models.py` provides utilities for handling custom axis ranges:
+
+- `CustomRange.serialize(range_values: list[Any] | tuple[Any, Any]) -> list[Any]`: Converts a list or tuple of range values to a list for the API
+  - Accepts both lists and tuples (e.g., `[0, 100]` or `(0, 100)`)
+  - Preserves the original data types of the values
+- `CustomRange.deserialize(range_list: list[Any] | None) -> list[Any] | None`: Parses a list from the API back to a list of range values
+  - Automatically converts numeric strings to numbers (int or float)
+  - Preserves non-numeric strings as-is (e.g., date strings like "2020-01-01")
+  - Returns None if input is None or empty list
+  - Handles lists with 1, 2, or more values (though typically ranges have 2 values: min and max)
+
+This utility is used by AreaChart, BarChart, ColumnChart, LineChart, MultipleColumnChart, and ArrowChart to handle the `custom-range-x` and `custom-range-y` fields in the visualize metadata.
+
 ### Color Category Utility
 
 The `ColorCategory` class in `models.py` provides utilities for handling color category mappings:
@@ -130,18 +145,34 @@ chart.create()  # Creates the chart and sets chart_id
 response = chart.publish()  # Publishes the chart
 ```
 
+### Annotation Serialization Refactoring (2025-01-14)
+
+Refactored annotation serialization to use a new `ModelListSerializer` utility class:
+
+- Created `ModelListSerializer` class in `models.py` with a `serialize()` static method
+- This utility handles serializing lists of Pydantic model instances (like annotations) to API format
+- Removed the `_serialize_annotations()` helper method from BaseChart
+- Updated AreaChart, BarChart, ColumnChart, LineChart, MultipleColumnChart, and ScatterPlot to use `ModelListSerializer.serialize()`
+- Added comprehensive unit tests in `tests/unit/models/test_model_list_serializer.py`
+- All 457 unit and integration tests pass
+
+The `ModelListSerializer` provides a centralized, reusable way to serialize lists of model instances:
+- Handles both model instances and dict inputs
+- Validates and converts items using the model class's `serialize_model()` method
+- Returns a list of serialized dictionaries ready for the API
+
+This pattern can be reused for any future model list serialization needs beyond just annotations.
+
 ### Annotation Deserialization Refactoring (2025-01-13)
 
 Simplified annotation deserialization by adding `deserialize_model()` classmethods to annotation classes:
 
 - Added `TextAnnotation.deserialize_model()` and `RangeAnnotation.deserialize_model()` classmethods in `annos.py`
 - These methods handle converting API JSON (list of annotation dicts or None) to Python list of dicts
-- Removed the `_deserialize_annotations()` helper method from BaseChart
 - Updated AreaChart, BarChart, ColumnChart, LineChart, MultipleColumnChart, and ScatterPlot to call annotation class methods directly
-- All 220 existing integration tests continue to pass
 
 This change creates symmetry between serialization and deserialization:
-- Serialization: Chart calls `self._serialize_annotations(annotations, AnnotationClass)`
+- Serialization: Chart calls `ModelListSerializer.serialize(annotations, AnnotationClass)`
 - Deserialization: Chart calls `AnnotationClass.deserialize_model(api_data)`
 
 The annotation classes now fully own their own serialization/deserialization logic.
@@ -183,3 +214,18 @@ Refactored the Transform model to use direct dictionary access instead of deprec
 - All 231 unit tests and 220 integration tests continue to pass
 
 This change aligns with the library's pattern of using direct dictionary access for API response parsing rather than custom helper methods.
+
+### Line Configuration Refactoring (2025-01-14)
+
+Refactored the Line configuration handling in LineChart to use dedicated serialization/deserialization methods:
+
+- Added `Line.serialize_model()` static method to convert Line instances to API format
+- Added `Line.deserialize_model()` classmethod to parse API line configurations back to Python
+- Updated `LineChart.serialize_model()` to use `Line.serialize_model()` for each line configuration
+- Updated `LineChart.deserialize_model()` to use `Line.deserialize_model()` for parsing line configurations
+- All 457 unit and integration tests pass
+
+This change creates consistency with other model patterns in the library:
+- Line configurations now own their own serialization/deserialization logic
+- Eliminates inline serialization/deserialization code in LineChart
+- Makes the code more maintainable and easier to test

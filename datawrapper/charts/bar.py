@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .models import ColorCategory
+from .models import ColorCategory, CustomRange, ModelListSerializer
 
 
 class BarOverlay(BaseModel):
@@ -417,7 +417,7 @@ class BarChart(BaseChart):
                 "show-color-key": self.show_color_key,
                 "stack-color-legend": self.stack_color_legend,
                 # Horizontal axis
-                "custom-range": self.custom_range,
+                "custom-range": CustomRange.serialize(self.custom_range),
                 "force-grid": self.force_grid,
                 "custom-grid-lines": ",".join(str(t) for t in self.custom_grid_lines),
                 "tick-position": self.tick_position,
@@ -444,10 +444,10 @@ class BarChart(BaseChart):
                 "overlays": [],
                 # Annotations
                 "highlighted-series": self.highlighted_series,
-                "text-annotations": self._serialize_annotations(
+                "text-annotations": ModelListSerializer.serialize(
                     self.text_annotations, TextAnnotation
                 ),
-                "range-annotations": self._serialize_annotations(
+                "range-annotations": ModelListSerializer.serialize(
                     self.range_annotations, RangeAnnotation
                 ),
             }
@@ -523,7 +523,9 @@ class BarChart(BaseChart):
 
         # Horizontal axis
         init_data["bar_column"] = axes.get("bars", "")
-        init_data["custom_range"] = visualize.get("custom-range", ["", ""])
+        init_data["custom_range"] = CustomRange.deserialize(
+            visualize.get("custom-range")
+        )
         init_data["force_grid"] = visualize.get("force-grid", False)
 
         # Parse custom grid lines (comes as comma-separated string)
