@@ -130,14 +130,14 @@ class TestMultipleColumnChartCreation:
         chart = MultipleColumnChart(
             title="Labeled Chart",
             data=data,
-            value_labels="always",
+            show_value_labels="always",
             value_labels_placement="inside",
             value_labels_format="0,0",
             label_colors=True,
             show_color_key=True,
         )
 
-        assert chart.value_labels == "always"
+        assert chart.show_value_labels == "always"
         assert chart.value_labels_placement == "inside"
         assert chart.value_labels_format == "0,0"
         assert chart.label_colors is True
@@ -328,29 +328,57 @@ class TestMultipleColumnChartSerialization:
         """Test that valueLabels is serialized correctly."""
         data = pd.DataFrame({"Year": [2020, 2021], "Value": [100, 110]})
 
-        # Test with value labels on
-        chart_on = MultipleColumnChart(
+        # Test with value labels always on
+        chart_always = MultipleColumnChart(
             title="Test",
             data=data,
-            value_labels="always",
+            show_value_labels="always",
             value_labels_format="0,0",
-            value_labels_always=True,
             value_labels_placement="inside",
         )
-        serialized_on = chart_on.model_dump(by_alias=True)
-        val_labels_on = serialized_on["metadata"]["visualize"]["valueLabels"]
+        serialized_always = chart_always.model_dump(by_alias=True)
+        val_labels_always = serialized_always["metadata"]["visualize"]["valueLabels"]
 
-        assert val_labels_on["show"] == "always"
-        assert val_labels_on["format"] == "0,0"
-        assert val_labels_on["enabled"] is True
-        assert val_labels_on["placement"] == "inside"
+        assert val_labels_always["show"] == "always"
+        assert val_labels_always["format"] == "0,0"
+        assert val_labels_always["enabled"] is True
+        assert val_labels_always["placement"] == "inside"
+        # When always is True, value-labels-always should be present and True
+        assert (
+            serialized_always["metadata"]["visualize"].get("value-labels-always")
+            is True
+        )
+
+        # Test with value labels on hover (default)
+        chart_hover = MultipleColumnChart(
+            title="Test",
+            data=data,
+            show_value_labels="hover",
+            value_labels_format="0.0a",
+        )
+        serialized_hover = chart_hover.model_dump(by_alias=True)
+        val_labels_hover = serialized_hover["metadata"]["visualize"]["valueLabels"]
+
+        assert val_labels_hover["show"] == "hover"
+        assert val_labels_hover["format"] == "0.0a"
+        assert val_labels_hover["enabled"] is True
+        assert val_labels_hover["placement"] == "outside"
+        # When hover, value-labels-always should not be present (or False)
+        assert (
+            serialized_hover["metadata"]["visualize"].get("value-labels-always", False)
+            is False
+        )
 
         # Test with value labels off
-        chart_off = MultipleColumnChart(title="Test", data=data, value_labels="off")
+        chart_off = MultipleColumnChart(
+            title="Test", data=data, show_value_labels="off"
+        )
         serialized_off = chart_off.model_dump(by_alias=True)
         val_labels_off = serialized_off["metadata"]["visualize"]["valueLabels"]
 
         assert val_labels_off["show"] == ""
+        assert val_labels_off["enabled"] is False
+        assert val_labels_off["placement"] == "outside"
 
 
 class TestMultipleColumnChartParsing:
@@ -552,7 +580,7 @@ class TestMultipleColumnChartRoundTrip:
             base_color="#123456",
             negative_color="#654321",
             color_category={"A": "#FF0000", "B": "#00FF00"},
-            value_labels="always",
+            show_value_labels="always",
             show_color_key=True,
         )
 
@@ -594,7 +622,7 @@ class TestMultipleColumnChartRoundTrip:
             assert parsed.base_color == original.base_color
             assert parsed.negative_color == original.negative_color
             assert parsed.color_category == original.color_category
-            assert parsed.value_labels == original.value_labels
+            assert parsed.show_value_labels == original.show_value_labels
             assert parsed.show_color_key == original.show_color_key
 
 

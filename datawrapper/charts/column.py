@@ -12,6 +12,7 @@ from .serializers import (
     ModelListSerializer,
     NegativeColor,
     PlotHeight,
+    ValueLabels,
 )
 
 
@@ -203,18 +204,18 @@ class ColumnChart(BaseChart):
         description="Whether or not to show the color key above the chart",
     )
 
+    #: Whether or not to show value labels
+    show_value_labels: Literal["hover", "always", "off"] = Field(
+        default="hover",
+        alias="show-value-labels",
+        description="Whether or not to show value labels",
+    )
+
     #: How to format the value labels
     value_labels_format: str = Field(
         default="",
         alias="value-labels-format",
         description="How to format the value labels. Customization options can be found at https://academy.datawrapper.de/article/207-custom-number-formats-that-you-can-display-in-datawrapper",
-    )
-
-    #: Whether or not to show value labels
-    value_labels: Literal["hover", "always", "off"] = Field(
-        default="hover",
-        alias="value-labels",
-        description="Whether or not to show value labels",
     )
 
     #: Where to place the value labels
@@ -288,12 +289,12 @@ class ColumnChart(BaseChart):
                 ),
                 # Labels
                 "show-color-key": self.show_color_key,
-                "valueLabels": {
-                    "show": "" if self.value_labels == "off" else self.value_labels,
-                    "format": self.value_labels_format,
-                    "enabled": self.value_labels != "off",
-                    "placement": self.value_labels_placement,
-                },
+                **ValueLabels.serialize(
+                    show=self.show_value_labels,
+                    format_str=self.value_labels_format,
+                    placement=self.value_labels_placement,
+                    chart_type="column",
+                ),
                 # Annotations
                 "text-annotations": ModelListSerializer.serialize(
                     self.text_annotations, TextAnnotation
@@ -388,17 +389,8 @@ class ColumnChart(BaseChart):
         if "show-color-key" in visualize:
             init_data["show_color_key"] = visualize["show-color-key"]
 
-        # Parse valueLabels
-        if "valueLabels" in visualize:
-            value_labels_obj = visualize["valueLabels"]
-            if isinstance(value_labels_obj, dict):
-                enabled = value_labels_obj.get("enabled", False)
-                show = value_labels_obj.get("show", "hover")
-                init_data["value_labels"] = show if enabled else "off"
-                if "format" in value_labels_obj:
-                    init_data["value_labels_format"] = value_labels_obj["format"]
-                if "placement" in value_labels_obj:
-                    init_data["value_labels_placement"] = value_labels_obj["placement"]
+        # Parse valueLabels using utility
+        init_data.update(ValueLabels.deserialize(visualize, chart_type="column"))
 
         # Annotations
         init_data["text_annotations"] = TextAnnotation.deserialize_model(

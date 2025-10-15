@@ -44,7 +44,7 @@ class TestColumnChartCreation:
             title="Test Chart",
             data=pd.DataFrame({"date": ["2020/01"], "Value": [4.0]}),
             y_grid=True,
-            value_labels="always",
+            show_value_labels="always",
             bar_padding=60,
         )
 
@@ -53,7 +53,8 @@ class TestColumnChartCreation:
         assert serialized["type"] == "column-chart"
         assert serialized["title"] == "Test Chart"
         assert serialized["metadata"]["visualize"]["grid-lines"] is True
-        assert serialized["metadata"]["visualize"]["valueLabels"]["show"] == "always"
+        assert serialized["metadata"]["visualize"]["valueLabels"]["enabled"] is True
+        assert serialized["metadata"]["visualize"]["value-labels-always"] is True
         assert serialized["metadata"]["visualize"]["bar-padding"] == 60
 
     def test_serialize_with_custom_ranges(self):
@@ -183,8 +184,8 @@ class TestColumnChartGet:
             assert chart.chart_type == "column-chart"
             assert chart.title == "US unemployment claims"
 
-            # Verify value labels are disabled (hover mode but not enabled)
-            assert chart.value_labels == "off"  # Because enabled=false in API
+            # Verify value labels are off (enabled=false with show="hover" means off)
+            assert chart.show_value_labels == "off"
             assert chart.value_labels_format == "0.[0]a"
             assert chart.value_labels_placement == "outside"
 
@@ -217,7 +218,7 @@ class TestColumnChartGet:
             assert chart.title == "Monthly change in US private payrolls"
 
             # Verify value labels are always on
-            assert chart.value_labels == "always"
+            assert chart.show_value_labels == "always"
             assert chart.value_labels_format == "+1,000"
             assert chart.value_labels_placement == "outside"
 
@@ -272,7 +273,7 @@ class TestColumnChartGet:
             assert chart.negative_color is None  # disabled in sample
 
             # Verify value labels
-            assert chart.value_labels == "always"
+            assert chart.show_value_labels == "always"
             assert chart.value_labels_placement == "outside"
 
     def test_get_parses_grid_lines_x(self):
@@ -459,7 +460,7 @@ class TestColumnChartGet:
         with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
             chart = ColumnChart.get("test-id", access_token="test-token")
 
-            assert chart.value_labels == "always"
+            assert chart.show_value_labels == "always"
             assert chart.value_labels_format == "0.0%"
             assert chart.value_labels_placement == "inside"
 
@@ -473,7 +474,7 @@ class TestColumnChartIntegration:
             title="Test Column Chart",
             data=pd.DataFrame({"date": ["2020/01", "2020/02"], "Value": [10.0, 20.0]}),
             y_grid=True,
-            value_labels="always",
+            show_value_labels="always",
             bar_padding=50,
         )
 
@@ -513,7 +514,7 @@ class TestColumnChartIntegration:
             assert fetched_chart.title == original_chart.title
             assert fetched_chart.chart_type == original_chart.chart_type
             assert fetched_chart.y_grid == original_chart.y_grid
-            assert fetched_chart.value_labels == original_chart.value_labels
+            assert fetched_chart.show_value_labels == original_chart.show_value_labels
             assert fetched_chart.bar_padding == original_chart.bar_padding
 
 

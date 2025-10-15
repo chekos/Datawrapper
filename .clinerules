@@ -9,7 +9,7 @@ This is a Python library for interacting with the Datawrapper API to create and 
   - `charts/` - Chart-specific implementations
     - `base.py` - BaseChart class with common functionality
     - `models.py` - Pydantic models for API metadata structures
-    - `serializers.py` - Utility classes for serialization/deserialization (ColorCategory, CustomRange, CustomTicks, ModelListSerializer)
+    - `serializers.py` - Utility classes for serialization/deserialization (ColorCategory, CustomRange, CustomTicks, ModelListSerializer, ValueLabels)
     - `annos.py` - Annotation models (TextAnnotation, RangeAnnotation)
     - Individual chart type files: `area.py`, `bar.py`, `column.py`, `line.py`, `multiple_column.py`, `scatter.py`, `stacked_bar.py`, `arrow.py`
 - `tests/` - Test suite
@@ -296,236 +296,78 @@ python_format = PlotHeight.deserialize({"mode": "ratio", "fixed": 0.5})
 # Returns: 0.5
 ```
 
-### Annotations
+### Value Labels Utility
 
-Charts support three types of annotations:
-- `TextAnnotation`: Text labels at specific coordinates
-- `RangeAnnotation`: Highlighted ranges with optional labels
-- `AreaFill`: Filled areas between two lines (LineChart only)
+The `ValueLabels` class in `serializers.py` provides utilities for handling value label configuration across different chart types:
 
-All annotation classes have:
-- `serialize_model()` method: Converts a single annotation instance to API format
-- `deserialize_model()` classmethod: Converts API JSON (dict with UUID keys or list) back to Python list of dicts
+**Chart Type Variations:**
+Different chart types use different API formats for value labels:
+- **BarChart**: Flat structure with `show-value-labels` (bool), `value-label-format`, `value-label-alignment`
+- **ColumnChart/MultipleColumnChart**: Nested `valueLabels` object with `show`, `format`, `enabled`, `placement`, plus optional top-level `value-label-format` and `value-labels-always` fields
+- **LineChart/ArrowChart/StackedBarChart**: Simple `value-label-format` or `value-labels-format` field
 
-The BaseChart class provides `_serialize_annotations()` helper method to handle lists of annotations during serialization.
+**Methods:**
+- `ValueLabels.serialize(show, format_str, placement=None, alignment=None, always=None, chart_type="column") -> dict`: Converts Python parameters to API format
+  - For column charts: Creates nested `valueLabels` object with optional top-level fields
+  - For bar charts: Creates flat structure with alignment
+  - For other charts: Creates simple format field
+  - The `always` parameter is derived from `show` if not explicitly provided for column charts
+  - Only includes `value-labels-always` in output when it's `True`
+  - Filters out `None` and empty string values from top-level fields while preserving nested objects
 
-Chart classes use the annotation class methods directly:
-- For serialization: `self._serialize_annotations(self.text_annotations, TextAnnotation)`
-- For deserialization: `TextAnnotation.deserialize_model(visualize.get("text-annotations"))`
+- `ValueLabels.deserialize(api_obj, chart_type="column") -> dict`: Converts API format to Python parameters
+  - Parses the appropriate API structure based on chart type
+  - For column charts: Extracts from nested `valueLabels` object and derives `value_labels_always` from show mode
+  - Returns a dictionary with standardized Python field names
 
-This pattern is used by AreaChart, BarChart, ColumnChart, LineChart, MultipleColumnChart, and ScatterPlot.
+**Usage:**
+This utility is used by BarChart, ColumnChart, and MultipleColumnChart to handle value label configuration in the visualize metadata. It consolidates what were previously multiple separate fields into a cleaner, more consistent interface.
 
-**Important API Format Notes:**
-- The API returns annotations as dictionaries with UUID keys mapping to annotation data
-- The API expects annotations to be sent as dictionaries with UUID keys (not lists)
-- The `deserialize_model()` methods handle both dict and list formats for flexibility
-- The `id` field is preserved during deserialization but not included in serialization output (used as dict key)
-
-## Testing
-
-- Run all tests: `uv run python -m pytest tests/`
-- Run unit tests only: `uv run python -m pytest tests/unit/`
-- Run integration tests: `uv run python -m pytest tests/integration/`
-- Most functional tests require `DATAWRAPPER_ACCESS_TOKEN` environment variable
-- Some functional tests (e.g., `test_folders.py`) use mocked API responses and don't require an API token
-
-## Recent Changes
-
-### Pydantic Defaults Refactoring - All Chart Types (2025-01-15)
-
-Completed comprehensive refactoring of all chart deserialization methods to leverage Pydantic Field defaults:
-
-**Charts Refactored:**
-- LineChart, AreaChart, ColumnChart, BarChart (Session 1-2)
-- MultipleColumnChart, ScatterPlot, StackedBarChart, ArrowChart (Session 3)
-
-**Pattern Applied:**
-Changed from `visualize.get("field-name", default_value)` to conditional assignment:
+**Example (Column Chart):**
 ```python
-if "field-name" in visualize:
-    init_data["field_name"] = visualize["field-name"]
+from datawrapper.charts.serializers import ValueLabels
+
+# Serialization (Python → API)
+api_format = ValueLabels.serialize(
+    show="always",
+    format_str="0,0",
+    placement="outside",
+    chart_type="column"
+)
+# Returns: {
+#   "valueLabels": {"show": "always", "format": "0,0", "enabled": True, "placement": "outside"},
+#   "value-label-format": "0,0",
+#   "value-labels-always": True
+# }
+
+# When show is "hover", value-labels-always is excluded
+api_format = ValueLabels.serialize(
+    show="hover",
+    format_str="0,0",
+    placement="outside",
+    chart_type="column"
+)
+# Returns: {
+#   "valueLabels": {"show": "hover", "format": "0,0", "enabled": True, "placement": "outside"},
+#   "value-label-format": "0,0"
+# }
+
+# Deserialization (API → Python)
+python_format = ValueLabels.deserialize(
+    {"valueLabels": {"show": "always", "format": "0,0", "enabled": True, "placement": "outside"}},
+    chart_type="column"
+)
+# Returns: {
+#   "show_value_labels": "always",
+#   "value_labels_format": "0,0",
+#   "value_labels_placement": "outside",
+#   "value_labels_always": True
+# }
 ```
 
-**Benefits:**
-- Eliminated 100+ duplicate default value specifications across all chart types
-- Defaults now defined once in Field definitions
-- Easier maintenance - changing a default only requires updating the Field definition
-- More Pydantic-idiomatic - leverages Pydantic's built-in default handling
-- Clearer code - deserialization logic focuses on parsing, not default management
-- Consistent pattern across all chart types
-
-**Test Results:**
-- All 542 unit and integration tests pass
-- No breaking changes introduced
-- Code is more maintainable and follows Pydantic best practices
-
-### Replace Flags Refactoring (2025-01-15)
-
-Created a new `ReplaceFlags` utility class in `serializers.py` to handle the complex nested structure of the `replace-flags` field:
-
-**Changes:**
-- Extracted replace-flags serialization/deserialization logic into dedicated utility class
-- Corrected field name from "type" to "style" based on actual API responses
-- Applied to BarChart and StackedBarChart
-- Created comprehensive unit tests in `tests/unit/serializers/test_replace_flags.py`
-
-**Pattern:**
-```python
-# In chart models
-replace_flags: str = Field(default="off", serialization_alias="replace-flags")
-
-@field_serializer("replace_flags")
-def serialize_replace_flags(self, value: str) -> dict:
-    return ReplaceFlags.serialize(value)
-
-# In deserialization
-if "replace-flags" in visualize:
-    init_data["replace_flags"] = ReplaceFlags.deserialize(visualize["replace-flags"])
-```
-
-**Benefits:**
-- Consistent handling across chart types
-- Cleaner chart model code
-- Easier to test and maintain
-- Follows same pattern as PlotHeight utility
-
-**Test Results:**
-- All 573 unit and integration tests pass
-- New utility properly handles all flag styles (off, 4x3, 1x1, circle)
-
-### Mocked Folder Tests (2025-01-15)
-
-Refactored `tests/functional/test_folders.py` to use fully mocked API responses instead of hitting the live API:
-
-**Changes:**
-- Replaced `@pytest.mark.api` decorator with `monkeypatch` fixtures
-- Created mock response data for all folder operations (get, create, update, delete)
-- Implemented stateful mock functions that track call counts to return appropriate responses
-- Tests now run without requiring `DATAWRAPPER_ACCESS_TOKEN` environment variable
-
-**Benefits:**
-- Tests run faster without network calls
-- Tests are more reliable (no dependency on API availability)
-- Tests can run in CI/CD environments without API credentials
-- Easier to test edge cases and error conditions
-
-**Pattern:**
-```python
-def test_folder_crud(monkeypatch):
-    # Define mock response data
-    mock_folder = {"id": 12345, "name": "Test Folder", ...}
-
-    # Create mock functions with self parameter
-    def mock_post(self, url, **kwargs):
-        return mock_folder
-
-    # Patch the methods
-    monkeypatch.setattr("datawrapper.Datawrapper.post", mock_post)
-
-    # Run tests
-    dw = Datawrapper()
-    result = dw.create_folder(name="Test Folder")
-    assert result["id"] == 12345
-```
-
-### Mocked Account and Chart History Tests (2025-01-15)
-
-Refactored four tests in `tests/functional/test_me.py` to use fully mocked API responses:
-
-**Tests Mocked:**
-1. `test_get_my_account` - Mocks GET request to retrieve account information
-2. `test_update_my_account` - Mocks PATCH requests to update account information
-3. `test_get_my_recently_edited_charts` - Mocks GET requests with various parameters (limit, offset, min_last_edit_step)
-4. `test_get_my_recently_published_charts` - Mocks GET requests with various parameters (limit, offset)
-
-### MultipleColumnChart Negative Color Default Fix (2025-01-15)
-
-Fixed inconsistency in `negative_color` default value for MultipleColumnChart:
-
-**Issue:**
-- MultipleColumnChart had `negative_color` default set to `"#de2d26"` (red color)
-- ColumnChart and StackedBarChart both use `None` as the default
-- This inconsistency meant MultipleColumnChart would always show negative values in red by default, while other chart types required explicit configuration
-
-**Fix:**
-- Changed MultipleColumnChart `negative_color` default from `"#de2d26"` to `None`
-- Now consistent with ColumnChart and StackedBarChart behavior
-- Users must explicitly set a color if they want negative values highlighted
-
-**Test Results:**
-- All 634 tests pass
-- No tests were affected by this change (no tests relied on the specific default value)
-
-### Mocked User Tests (2025-01-15)
-
-Refactored `test_get_user` in `tests/functional/test_users.py` to use fully mocked API responses:
-
-**Test Mocked:**
-- `test_get_user` - Mocks multiple sequential GET requests:
-  1. `get_users()` - Returns list of users
-  2. `get_my_account()` - Returns current user account
-  3. `get_user(user_id)` - Returns specific user details
-  4. `get_recently_edited_charts(user_id)` - Returns user's edited charts
-  5. `get_recently_published_charts(user_id)` - Returns user's published charts
-
-**Changes:**
-- Removed `@pytest.mark.api` decorators from all four tests
-- Added `monkeypatch` parameter to function signatures
-- Created mock response data for all test scenarios
-- Implemented stateful mock functions that track call counts and return appropriate responses
-- Tests now run without requiring `DATAWRAPPER_ACCESS_TOKEN` environment variable
-
-**Changes for test_get_user:**
-- Removed `@pytest.mark.api` decorator
-- Added `monkeypatch` parameter to function signature
-- Created comprehensive mock response data for all five API calls
-- Implemented stateful mock GET function that tracks call count and returns appropriate responses based on sequence
-- Test now runs without requiring `DATAWRAPPER_ACCESS_TOKEN` environment variable
-
-**Benefits:**
-- Tests run faster without network calls
-- Tests are more reliable (no dependency on API availability)
-- Tests can run in CI/CD environments without API credentials
-- Follows same pattern as mocked folder tests
-
-**Pattern for GET requests:**
-```python
-def test_get_my_account(monkeypatch):
-    # Define mock response data
-    mock_account = {"id": 12345, "email": "test@example.com", ...}
-
-    def mock_get(self, url, **kwargs):
-        return mock_account
-
-    monkeypatch.setattr("datawrapper.Datawrapper.get", mock_get)
-
-    # Run tests
-    dw = Datawrapper()
-    result = dw.get_my_account()
-    assert result["id"] == 12345
-```
-
-**Pattern for PATCH requests:**
-```python
-def test_update_my_account(monkeypatch):
-    # Define mock response data for different calls
-    mock_account_foobar = {"id": 12345, "name": "Foobar", ...}
-    mock_account_test_user = {"id": 12345, "name": "Test user", ...}
-
-    # Track which call we're on
-    call_count = [0]
-
-    def mock_patch(self, url, **kwargs):
-        call_count[0] += 1
-        if call_count[0] == 1:
-            return mock_account_foobar
-        else:
-            return mock_account_test_user
-
-    monkeypatch.setattr("datawrapper.Datawrapper.patch", mock_patch)
-
-    # Run tests
-    dw = Datawrapper()
-    result1 = dw.update_my_account(name="Foobar")
-    assert result1["name"] == "Foobar"
-```
+**Important Notes:**
+- The `always` parameter is automatically derived from `show` if not explicitly provided during serialization for column charts
+- The `value-labels-always` field is only included in the API output when it's `True`
+- The `enabled` field in the nested `valueLabels` object controls on/off (True for hover or always, False for off)
+- The separate `value-labels-always` field controls hover vs always behavior
+- This utility standardizes value label handling across different chart types while respecting their unique API requirements

@@ -12,6 +12,7 @@ from .serializers import (
     ModelListSerializer,
     NegativeColor,
     PlotHeight,
+    ValueLabels,
 )
 
 
@@ -276,6 +277,13 @@ class MultipleColumnChart(BaseChart):
         description="Whether or not to show the color key above the chart",
     )
 
+    #: Whether or not to show value labels
+    show_value_labels: Literal["hover", "always", "off"] = Field(
+        default="hover",
+        alias="show-value-labels",
+        description="Whether or not to show value labels",
+    )
+
     #: How to format the value labels
     value_labels_format: str = Field(
         default="",
@@ -283,25 +291,11 @@ class MultipleColumnChart(BaseChart):
         description="How to format the value labels. Customization options can be found at https://academy.datawrapper.de/article/207-custom-number-formats-that-you-can-display-in-datawrapper",
     )
 
-    #: Whether or not to show value labels
-    value_labels: Literal["hover", "always", "off"] = Field(
-        default="hover",
-        alias="value-labels",
-        description="Whether or not to show value labels",
-    )
-
     #: Where to place the value labels
     value_labels_placement: Literal["inside", "outside", "below"] = Field(
         default="outside",
         alias="value-labels-placement",
         description="Where to place the value labels",
-    )
-
-    #: Whether or not to permanently show the value labels
-    value_labels_always: bool = Field(
-        default=False,
-        alias="value-labels-always",
-        description="Whether or not to permanently show the value labels",
     )
 
     #: The amount of margin to leave for the right hand side for labels
@@ -394,12 +388,12 @@ class MultipleColumnChart(BaseChart):
                 "show-color-key": self.show_color_key,
                 "label-colors": self.label_colors,
                 "label-margin": self.label_margin,
-                "valueLabels": {
-                    "show": "" if self.value_labels == "off" else self.value_labels,
-                    "format": self.value_labels_format,
-                    "enabled": self.value_labels_always,
-                    "placement": self.value_labels_placement,
-                },
+                **ValueLabels.serialize(
+                    self.show_value_labels,
+                    self.value_labels_format,
+                    placement=self.value_labels_placement,
+                    chart_type="multiple-column",
+                ),
                 "xGridLabelAllColumns": self.x_grid_label_all,
                 # Annotations
                 "text-annotations": ModelListSerializer.serialize(
@@ -552,21 +546,10 @@ class MultipleColumnChart(BaseChart):
         if "xGridLabelAllColumns" in visualize:
             init_data["x_grid_label_all"] = visualize["xGridLabelAllColumns"]
 
-        # Parse valueLabels
-        value_labels_obj = visualize.get("valueLabels", {})
-        if isinstance(value_labels_obj, dict):
-            show_value = value_labels_obj.get("show", "hover")
-            init_data["value_labels"] = "off" if show_value == "" else show_value
-            init_data["value_labels_format"] = value_labels_obj.get("format", "")
-            init_data["value_labels_always"] = value_labels_obj.get("enabled", False)
-            init_data["value_labels_placement"] = value_labels_obj.get(
-                "placement", "outside"
-            )
-        else:
-            init_data["value_labels"] = "hover"
-            init_data["value_labels_format"] = ""
-            init_data["value_labels_always"] = False
-            init_data["value_labels_placement"] = "outside"
+        # Parse valueLabels using utility
+        init_data.update(
+            ValueLabels.deserialize(visualize, chart_type="multiple-column")
+        )
 
         # Annotations
         init_data["text_annotations"] = TextAnnotation.deserialize_model(
