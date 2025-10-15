@@ -218,7 +218,7 @@ class MultipleColumnChart(BaseChart):
 
     #: The negative color to use, if you want one
     negative_color: str | None = Field(
-        default="#de2d26",
+        default=None,
         alias="negative-color",
         description="The negative color to use, if you want one",
     )

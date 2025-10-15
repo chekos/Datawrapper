@@ -438,6 +438,24 @@ Refactored four tests in `tests/functional/test_me.py` to use fully mocked API r
 3. `test_get_my_recently_edited_charts` - Mocks GET requests with various parameters (limit, offset, min_last_edit_step)
 4. `test_get_my_recently_published_charts` - Mocks GET requests with various parameters (limit, offset)
 
+### MultipleColumnChart Negative Color Default Fix (2025-01-15)
+
+Fixed inconsistency in `negative_color` default value for MultipleColumnChart:
+
+**Issue:**
+- MultipleColumnChart had `negative_color` default set to `"#de2d26"` (red color)
+- ColumnChart and StackedBarChart both use `None` as the default
+- This inconsistency meant MultipleColumnChart would always show negative values in red by default, while other chart types required explicit configuration
+
+**Fix:**
+- Changed MultipleColumnChart `negative_color` default from `"#de2d26"` to `None`
+- Now consistent with ColumnChart and StackedBarChart behavior
+- Users must explicitly set a color if they want negative values highlighted
+
+**Test Results:**
+- All 634 tests pass
+- No tests were affected by this change (no tests relied on the specific default value)
+
 ### Mocked User Tests (2025-01-15)
 
 Refactored `test_get_user` in `tests/functional/test_users.py` to use fully mocked API responses:
