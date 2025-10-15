@@ -1,7 +1,7 @@
 from typing import Any, Literal
 
 import pandas as pd
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_serializer
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_serializer, model_validator
 
 from .annos import AreaFill, RangeAnnotation, TextAnnotation
 from .base import BaseChart
@@ -16,15 +16,29 @@ from .serializers import (
 
 
 class LineSymbol(BaseModel):
-    """Configure the symbols for an individual line on a Datawrapper line chart."""
+    """Configure the symbols for an individual line on a Datawrapper line chart.
+    
+    Note: The presence of this object implies symbols are enabled. The enabled field
+    is automatically set to True and should not be set to False.
+    """
 
     model_config = ConfigDict(populate_by_name=True, strict=True)
 
-    #: Whether or not to show symbols
+    #: Whether or not to show symbols (automatically set to True when object exists)
     enabled: bool = Field(
-        default=False,
-        description="Whether or not to show symbols",
+        default=True,
+        description="Whether or not to show symbols (automatically set to True when object exists)",
     )
+
+    @field_validator("enabled")
+    @classmethod
+    def validate_enabled(cls, v: bool) -> bool:
+        """Validate that enabled is not explicitly set to False."""
+        if v is False:
+            raise ValueError(
+                "LineSymbol.enabled cannot be False. To disable symbols, omit the symbols field entirely."
+            )
+        return v
 
     #: The shape of the symbol
     shape: Literal[
@@ -68,15 +82,29 @@ class LineSymbol(BaseModel):
 
 
 class LineValueLabel(BaseModel):
-    """Configure the value labels for an individual line on a Datawrapper line chart."""
+    """Configure the value labels for an individual line on a Datawrapper line chart.
+    
+    Note: The presence of this object implies value labels are enabled. The enabled field
+    is automatically set to True and should not be set to False.
+    """
 
     model_config = ConfigDict(populate_by_name=True, strict=True)
 
-    #: Whether to show the value labels
+    #: Whether to show the value labels (automatically set to True when object exists)
     enabled: bool = Field(
-        default=False,
-        description="Whether to show the value labels",
+        default=True,
+        description="Whether to show the value labels (automatically set to True when object exists)",
     )
+
+    @field_validator("enabled")
+    @classmethod
+    def validate_enabled(cls, v: bool) -> bool:
+        """Validate that enabled is not explicitly set to False."""
+        if v is False:
+            raise ValueError(
+                "LineValueLabel.enabled cannot be False. To disable value labels, omit the value_labels field entirely."
+            )
+        return v
 
     #: Whether to show the last value label
     last: bool = Field(
@@ -213,17 +241,17 @@ class Line(BaseModel):
         description="Line outline",
     )
 
-    #: Symbols to display on the line
-    symbols: LineSymbol = Field(
-        default_factory=LineSymbol,
-        description="Symbols to display on the line",
+    #: Symbols to display on the line (None = disabled, object = enabled)
+    symbols: LineSymbol | None = Field(
+        default=None,
+        description="Symbols to display on the line (None = disabled, object = enabled)",
     )
 
-    #: The value labels for the line
-    value_labels: LineValueLabel = Field(
-        default_factory=LineValueLabel,
+    #: The value labels for the line (None = disabled, object = enabled)
+    value_labels: LineValueLabel | None = Field(
+        default=None,
         alias="valueLabels",
-        description="The value labels for the line",
+        description="The value labels for the line (None = disabled, object = enabled)",
     )
 
     #: Whether or not to connect missing points
@@ -261,22 +289,32 @@ class Line(BaseModel):
             "directLabel": line.direct_label,
             "bgStroke": line.outline,
             "connectMissingPoints": line.connect_missing_points,
-            "symbols": {
+        }
+
+        # Add symbols if configured (None = disabled)
+        if line.symbols is not None:
+            line_dict["symbols"] = {
                 "enabled": line.symbols.enabled,
                 "shape": line.symbols.shape,
                 "style": line.symbols.style,
                 "on": line.symbols.on,
                 "size": line.symbols.size,
                 "opacity": line.symbols.opacity,
-            },
-            "valueLabels": {
+            }
+        else:
+            line_dict["symbols"] = {"enabled": False}
+
+        # Add value labels if configured (None = disabled)
+        if line.value_labels is not None:
+            line_dict["valueLabels"] = {
                 "enabled": line.value_labels.enabled,
                 "last": line.value_labels.last,
                 "first": line.value_labels.first,
                 "showCircles": line.value_labels.show_circles,
                 "maxInnerLabels": line.value_labels.max_inner_labels,
-            },
-        }
+            }
+        else:
+            line_dict["valueLabels"] = {"enabled": False}
 
         # Add dash if set
         if dash_value is not None:
@@ -295,13 +333,17 @@ class Line(BaseModel):
         Returns:
             Dictionary that can be used to initialize a Line instance
         """
-        # Parse symbols - let Pydantic apply Field defaults for missing values
+        # Parse symbols - only create object if enabled in API
         symbols_obj = line_config.get("symbols", {})
-        symbols = LineSymbol.model_validate(symbols_obj)
+        symbols = None
+        if symbols_obj.get("enabled", False):
+            symbols = LineSymbol.model_validate(symbols_obj)
 
-        # Parse value labels - let Pydantic apply Field defaults for missing values
+        # Parse value labels - only create object if enabled in API
         value_labels_obj = line_config.get("valueLabels", {})
-        value_labels = LineValueLabel.model_validate(value_labels_obj)
+        value_labels = None
+        if value_labels_obj.get("enabled", False):
+            value_labels = LineValueLabel.model_validate(value_labels_obj)
 
         # Build the initialization dict, only including values present in API response
         init_dict = {
