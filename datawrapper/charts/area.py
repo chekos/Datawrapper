@@ -5,7 +5,13 @@ from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .serializers import ColorCategory, CustomRange, CustomTicks, ModelListSerializer
+from .serializers import (
+    ColorCategory,
+    CustomRange,
+    CustomTicks,
+    ModelListSerializer,
+    PlotHeight,
+)
 
 
 class AreaChart(BaseChart):
@@ -311,9 +317,11 @@ class AreaChart(BaseChart):
                 "tooltip-x-format": self.tooltip_x_format,
                 "tooltip-number-format": self.tooltip_number_format,
                 # Appearance
-                "plotHeightMode": self.plot_height_mode,
-                "plotHeightFixed": self.plot_height_fixed,
-                "plotHeightRatio": self.plot_height_ratio,
+                **PlotHeight.serialize(
+                    self.plot_height_mode,
+                    self.plot_height_fixed,
+                    self.plot_height_ratio,
+                ),
                 # Annotations
                 "text-annotations": ModelListSerializer.serialize(
                     self.text_annotations, TextAnnotation
@@ -414,12 +422,7 @@ class AreaChart(BaseChart):
             init_data["tooltip_number_format"] = visualize["tooltip-number-format"]
 
         # Appearance
-        if "plotHeightMode" in visualize:
-            init_data["plot_height_mode"] = visualize["plotHeightMode"]
-        if "plotHeightFixed" in visualize:
-            init_data["plot_height_fixed"] = visualize["plotHeightFixed"]
-        if "plotHeightRatio" in visualize:
-            init_data["plot_height_ratio"] = visualize["plotHeightRatio"]
+        init_data.update(PlotHeight.deserialize(visualize))
 
         # Annotations
         init_data["text_annotations"] = TextAnnotation.deserialize_model(

@@ -5,7 +5,13 @@ from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .serializers import ColorCategory, CustomRange, CustomTicks, ModelListSerializer
+from .serializers import (
+    ColorCategory,
+    CustomRange,
+    CustomTicks,
+    ModelListSerializer,
+    PlotHeight,
+)
 
 
 class ColumnChart(BaseChart):
@@ -277,9 +283,11 @@ class ColumnChart(BaseChart):
                     self.category_order,
                 ),
                 "color-by-column": bool(self.color_category),
-                "plotHeightMode": self.plot_height_mode,
-                "plotHeightFixed": self.plot_height_fixed,
-                "plotHeightRatio": self.plot_height_ratio,
+                **PlotHeight.serialize(
+                    self.plot_height_mode,
+                    self.plot_height_fixed,
+                    self.plot_height_ratio,
+                ),
                 # Labels
                 "show-color-key": self.show_color_key,
                 "valueLabels": {
@@ -376,12 +384,9 @@ class ColumnChart(BaseChart):
 
         if "bar-padding" in visualize:
             init_data["bar_padding"] = visualize["bar-padding"]
-        if "plotHeightMode" in visualize:
-            init_data["plot_height_mode"] = visualize["plotHeightMode"]
-        if "plotHeightFixed" in visualize:
-            init_data["plot_height_fixed"] = visualize["plotHeightFixed"]
-        if "plotHeightRatio" in visualize:
-            init_data["plot_height_ratio"] = visualize["plotHeightRatio"]
+
+        # Plot height
+        init_data.update(PlotHeight.deserialize(visualize))
 
         # Labels
         if "show-color-key" in visualize:

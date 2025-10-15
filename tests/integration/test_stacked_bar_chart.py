@@ -175,7 +175,6 @@ class TestStackedBarChartSerialization:
 
         flags = serialized["metadata"]["visualize"]["replace-flags"]
         assert flags["enabled"] is True
-        assert flags["type"] == "4x3"
         assert flags["style"] == "4x3"
 
     def test_serialize_replace_flags_disabled(self):
@@ -190,7 +189,6 @@ class TestStackedBarChartSerialization:
 
         flags = serialized["metadata"]["visualize"]["replace-flags"]
         assert flags["enabled"] is False
-        assert flags["type"] == ""
         assert flags["style"] == ""
 
     def test_serialize_negative_color(self):

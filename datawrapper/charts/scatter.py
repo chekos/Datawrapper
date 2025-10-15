@@ -5,7 +5,7 @@ from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .serializers import ModelListSerializer
+from .serializers import ModelListSerializer, PlotHeight
 
 
 class ScatterPlot(BaseChart):
@@ -560,9 +560,11 @@ class ScatterPlot(BaseChart):
                 "regression": self.regression,
                 "regression-method": self.regression_method,
                 # Appearance
-                "plotHeightMode": self.plot_height_mode,
-                "plotHeightFixed": self.plot_height_fixed,
-                "plotHeightRatio": self.plot_height_ratio,
+                **PlotHeight.serialize(
+                    self.plot_height_mode,
+                    self.plot_height_fixed,
+                    self.plot_height_ratio,
+                ),
                 # Annotations
                 "text-annotations": ModelListSerializer.serialize(
                     self.text_annotations, TextAnnotation
@@ -721,12 +723,7 @@ class ScatterPlot(BaseChart):
             init_data["regression_method"] = visualize["regression-method"]
 
         # Appearance
-        if "plotHeightMode" in visualize:
-            init_data["plot_height_mode"] = visualize["plotHeightMode"]
-        if "plotHeightFixed" in visualize:
-            init_data["plot_height_fixed"] = visualize["plotHeightFixed"]
-        if "plotHeightRatio" in visualize:
-            init_data["plot_height_ratio"] = visualize["plotHeightRatio"]
+        init_data.update(PlotHeight.deserialize(visualize))
 
         # Annotations
         init_data["text_annotations"] = TextAnnotation.deserialize_model(

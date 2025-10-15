@@ -295,8 +295,8 @@ class TestEndToEndWorkflows:
         # Step 5: Verify annotations are in JSON
         visualize = parsed_json["metadata"]["visualize"]
         assert len(visualize["text-annotations"]) == 1
-        # Annotations are stored as dicts with UUID keys, so get the first value
-        text_anno = list(visualize["text-annotations"].values())[0]
+        # Annotations are stored as lists
+        text_anno = visualize["text-annotations"][0]
         assert text_anno["text"] == "Export test"
 
     @pytest.mark.functional

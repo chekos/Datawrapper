@@ -5,7 +5,7 @@ from typing import Any, Literal
 from pydantic import ConfigDict, Field, model_serializer
 
 from .base import BaseChart
-from .serializers import ColorCategory
+from .serializers import ColorCategory, ReplaceFlags
 
 
 class StackedBarChart(BaseChart):
@@ -183,11 +183,7 @@ class StackedBarChart(BaseChart):
                 "color-by-column": self.color_by_column,
                 "group-by-column": self.group_by_column,
                 "thick": self.thick_bars,
-                "replace-flags": {
-                    "enabled": self.replace_flags != "off",
-                    "type": self.replace_flags if self.replace_flags != "off" else "",
-                    "style": self.replace_flags if self.replace_flags != "off" else "",
-                },
+                "replace-flags": ReplaceFlags.serialize(self.replace_flags),
                 "value-label-mode": self.value_label_mode,
                 "stack-percentages": self.stack_percentages,
                 "sort-bars": self.sort_bars,
@@ -250,15 +246,11 @@ class StackedBarChart(BaseChart):
         if "thick" in visualize:
             init_data["thick_bars"] = visualize["thick"]
 
-        # Parse replace-flags
-        replace_flags = visualize.get("replace-flags", {})
-        if isinstance(replace_flags, dict):
-            if replace_flags.get("enabled", False):
-                init_data["replace_flags"] = replace_flags.get("style", "4x3")
-            else:
-                init_data["replace_flags"] = "off"
-        else:
-            init_data["replace_flags"] = "off"
+        # Parse replace-flags using utility
+        if "replace-flags" in visualize:
+            init_data["replace_flags"] = ReplaceFlags.deserialize(
+                visualize["replace-flags"]
+            )
 
         if "value-label-mode" in visualize:
             init_data["value_label_mode"] = visualize["value-label-mode"]

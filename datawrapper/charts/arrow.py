@@ -4,7 +4,7 @@ import pandas as pd
 from pydantic import ConfigDict, Field, model_serializer
 
 from .base import BaseChart
-from .serializers import ColorCategory, CustomRange
+from .serializers import ColorCategory, CustomRange, ReplaceFlags
 
 
 class ArrowChart(BaseChart):
@@ -196,11 +196,7 @@ class ArrowChart(BaseChart):
                 "value-label-format": self.value_label_format,
                 "color-by-column": self.color_by_column,
                 "group-by-column": self.group_by_column,
-                "replace-flags": {
-                    "enabled": self.replace_flags != "off",
-                    "type": self.replace_flags if self.replace_flags != "off" else "",
-                    "style": self.replace_flags if self.replace_flags != "off" else "",
-                },
+                "replace-flags": ReplaceFlags.serialize(self.replace_flags),
                 "show-arrow-key": self.arrow_key,
             }
         )
@@ -259,19 +255,11 @@ class ArrowChart(BaseChart):
             init_data["sort_by"] = "end"
             init_data["sort_ranges"] = False
 
-        # Parse replace-flags
-        replace_flags_obj = visualize.get("replace-flags", {})
-        if isinstance(replace_flags_obj, dict):
-            if replace_flags_obj.get("enabled", False):
-                # Use type or style field (they should be the same)
-                flag_type = replace_flags_obj.get("type") or replace_flags_obj.get(
-                    "style", "4x3"
-                )
-                init_data["replace_flags"] = flag_type
-            else:
-                init_data["replace_flags"] = "off"
-        else:
-            init_data["replace_flags"] = "off"
+        # Parse replace-flags using utility
+        if "replace-flags" in visualize:
+            init_data["replace_flags"] = ReplaceFlags.deserialize(
+                visualize["replace-flags"]
+            )
 
         # Axes
         init_data["custom_range"] = CustomRange.deserialize(

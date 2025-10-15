@@ -5,7 +5,13 @@ from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .serializers import ColorCategory, CustomRange, CustomTicks, ModelListSerializer
+from .serializers import (
+    ColorCategory,
+    CustomRange,
+    CustomTicks,
+    ModelListSerializer,
+    PlotHeight,
+)
 
 
 class MultipleColumnChart(BaseChart):
@@ -380,9 +386,11 @@ class MultipleColumnChart(BaseChart):
                 "bar-padding": self.bar_padding,
                 "color-category": ColorCategory.serialize(self.color_category),
                 "color-by-column": bool(self.color_category),
-                "plotHeightMode": self.plot_height_mode,
-                "plotHeightFixed": self.plot_height_fixed,
-                "plotHeightRatio": self.plot_height_ratio,
+                **PlotHeight.serialize(
+                    self.plot_height_mode,
+                    self.plot_height_fixed,
+                    self.plot_height_ratio,
+                ),
                 "panels": {panel["column"]: panel for panel in self.panels},
                 # Labels
                 "show-color-key": self.show_color_key,
@@ -533,12 +541,8 @@ class MultipleColumnChart(BaseChart):
         else:
             init_data["negative_color"] = "#E31A1C"
 
-        if "plotHeightMode" in visualize:
-            init_data["plot_height_mode"] = visualize["plotHeightMode"]
-        if "plotHeightFixed" in visualize:
-            init_data["plot_height_fixed"] = visualize["plotHeightFixed"]
-        if "plotHeightRatio" in visualize:
-            init_data["plot_height_ratio"] = visualize["plotHeightRatio"]
+        # Plot height
+        init_data.update(PlotHeight.deserialize(visualize))
 
         # Parse panels (dict to list)
         panels_obj = visualize.get("panels", {})

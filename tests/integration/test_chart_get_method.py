@@ -499,7 +499,7 @@ class TestBarChartGet:
                 "visualize": {
                     "replace-flags": {
                         "enabled": True,
-                        "type": "4x3",
+                        "style": "4x3",
                     }
                 },
                 "publish": {"blocks": {}},

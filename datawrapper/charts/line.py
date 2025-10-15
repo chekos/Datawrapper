@@ -6,7 +6,13 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_serial
 from .annos import AreaFill, RangeAnnotation, TextAnnotation
 from .base import BaseChart
 from .models import LineDash, LineWidth
-from .serializers import ColorCategory, CustomRange, CustomTicks, ModelListSerializer
+from .serializers import (
+    ColorCategory,
+    CustomRange,
+    CustomTicks,
+    ModelListSerializer,
+    PlotHeight,
+)
 
 
 class LineSymbol(BaseModel):
@@ -648,9 +654,11 @@ class LineChart(BaseChart):
                 "tooltip-x-format": self.tooltip_x_format,
                 "tooltip-number-format": self.tooltip_number_format,
                 # Appearance
-                "plotHeightMode": self.plot_height_mode,
-                "plotHeightFixed": self.plot_height_fixed,
-                "plotHeightRatio": self.plot_height_ratio,
+                **PlotHeight.serialize(
+                    self.plot_height_mode,
+                    self.plot_height_fixed,
+                    self.plot_height_ratio,
+                ),
                 # Initialize empty structures
                 "lines": {},
                 "text-annotations": ModelListSerializer.serialize(
@@ -782,12 +790,7 @@ class LineChart(BaseChart):
             init_data["tooltip_number_format"] = visualize["tooltip-number-format"]
 
         # Appearance
-        if "plotHeightMode" in visualize:
-            init_data["plot_height_mode"] = visualize["plotHeightMode"]
-        if "plotHeightFixed" in visualize:
-            init_data["plot_height_fixed"] = visualize["plotHeightFixed"]
-        if "plotHeightRatio" in visualize:
-            init_data["plot_height_ratio"] = visualize["plotHeightRatio"]
+        init_data.update(PlotHeight.deserialize(visualize))
 
         # Annotations
         init_data["text_annotations"] = TextAnnotation.deserialize_model(

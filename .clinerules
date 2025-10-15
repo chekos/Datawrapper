@@ -189,20 +189,23 @@ This utility is used by AreaChart, BarChart, ColumnChart, LineChart, MultipleCol
 The `ReplaceFlags` class in `serializers.py` provides utilities for handling the replace-flags configuration:
 
 **API Format vs Python Format:**
-- **API Format**: Nested object with `{"enabled": bool, "type": str}`
+- **API Format**: Nested object with `{"enabled": bool, "style": str}` (note: uses "style" not "type")
 - **Python Format**: Simple string ("off", "4x3", "1x1", "circle")
 
 **Methods:**
 - `ReplaceFlags.serialize(flag_type: str) -> dict`: Converts simple string format to API nested object format
-  - `"off"` → `{"enabled": False, "type": ""}`
-  - `"4x3"` → `{"enabled": True, "type": "4x3"}`
+  - `"off"` → `{"enabled": False, "style": ""}`
+  - `"4x3"` → `{"enabled": True, "style": "4x3"}`
 - `ReplaceFlags.deserialize(api_obj: dict | None) -> str`: Converts API nested object format to simple string format
-  - `{"enabled": True, "type": "4x3"}` → `"4x3"`
-  - `{"enabled": False, "type": ""}` → `"off"`
+  - `{"enabled": True, "style": "4x3"}` → `"4x3"`
+  - `{"enabled": False, "style": ""}` → `"off"`
   - `None` → `"off"`
 
 **Usage:**
-This utility is currently used by BarChart to handle the `replace-flags` field, which controls whether country codes are replaced with flag icons in the visualization.
+This utility is used by BarChart and StackedBarChart to handle the `replace-flags` field, which controls whether country codes are replaced with flag icons in the visualization.
+
+**Important Note:**
+The API uses the field name "style" (not "type") in the nested object. This is different from the initial implementation and was corrected based on actual API responses.
 
 **Example:**
 ```python
@@ -210,11 +213,50 @@ from datawrapper.charts.serializers import ReplaceFlags
 
 # Serialization (Python → API)
 api_format = ReplaceFlags.serialize("4x3")
-# Returns: {"enabled": True, "type": "4x3"}
+# Returns: {"enabled": True, "style": "4x3"}
 
 # Deserialization (API → Python)
-python_format = ReplaceFlags.deserialize({"enabled": True, "type": "4x3"})
+python_format = ReplaceFlags.deserialize({"enabled": True, "style": "4x3"})
 # Returns: "4x3"
+```
+
+### Plot Height Utility
+
+The `PlotHeight` class in `serializers.py` provides utilities for handling chart plot height configuration:
+
+**API Format vs Python Format:**
+- **API Format**: Nested object with `{"mode": str, "fixed": int}` where mode can be "fixed" or "ratio"
+- **Python Format**: Either an integer (for fixed mode) or a float (for ratio mode)
+
+**Methods:**
+- `PlotHeight.serialize(height: int | float) -> dict`: Converts simple numeric format to API nested object format
+  - Integer (e.g., `400`) → `{"mode": "fixed", "fixed": 400}`
+  - Float (e.g., `0.5`) → `{"mode": "ratio", "fixed": 0.5}`
+- `PlotHeight.deserialize(api_obj: dict | None) -> int | float | None`: Converts API nested object format to simple numeric format
+  - `{"mode": "fixed", "fixed": 400}` → `400`
+  - `{"mode": "ratio", "fixed": 0.5}` → `0.5`
+  - `None` → `None`
+
+**Usage:**
+This utility is used by LineChart, AreaChart, ColumnChart, MultipleColumnChart, and ScatterPlot to handle the `plot-height` field in the visualize metadata.
+
+**Example:**
+```python
+from datawrapper.charts.serializers import PlotHeight
+
+# Serialization (Python → API)
+api_format = PlotHeight.serialize(400)  # Fixed height
+# Returns: {"mode": "fixed", "fixed": 400}
+
+api_format = PlotHeight.serialize(0.5)  # Ratio mode
+# Returns: {"mode": "ratio", "fixed": 0.5}
+
+# Deserialization (API → Python)
+python_format = PlotHeight.deserialize({"mode": "fixed", "fixed": 400})
+# Returns: 400
+
+python_format = PlotHeight.deserialize({"mode": "ratio", "fixed": 0.5})
+# Returns: 0.5
 ```
 
 ### Annotations
@@ -279,6 +321,40 @@ if "field-name" in visualize:
 - All 542 unit and integration tests pass
 - No breaking changes introduced
 - Code is more maintainable and follows Pydantic best practices
+
+### Replace Flags Refactoring (2025-01-15)
+
+Created a new `ReplaceFlags` utility class in `serializers.py` to handle the complex nested structure of the `replace-flags` field:
+
+**Changes:**
+- Extracted replace-flags serialization/deserialization logic into dedicated utility class
+- Corrected field name from "type" to "style" based on actual API responses
+- Applied to BarChart and StackedBarChart
+- Created comprehensive unit tests in `tests/unit/serializers/test_replace_flags.py`
+
+**Pattern:**
+```python
+# In chart models
+replace_flags: str = Field(default="off", serialization_alias="replace-flags")
+
+@field_serializer("replace_flags")
+def serialize_replace_flags(self, value: str) -> dict:
+    return ReplaceFlags.serialize(value)
+
+# In deserialization
+if "replace-flags" in visualize:
+    init_data["replace_flags"] = ReplaceFlags.deserialize(visualize["replace-flags"])
+```
+
+**Benefits:**
+- Consistent handling across chart types
+- Cleaner chart model code
+- Easier to test and maintain
+- Follows same pattern as PlotHeight utility
+
+**Test Results:**
+- All 573 unit and integration tests pass
+- New utility properly handles all flag styles (off, 4x3, 1x1, circle)
 
 ### Mocked Folder Tests (2025-01-15)
 

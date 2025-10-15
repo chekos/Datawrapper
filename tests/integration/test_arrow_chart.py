@@ -101,7 +101,6 @@ class TestArrowChartCreation:
         serialized = chart.serialize_model()
 
         assert serialized["metadata"]["visualize"]["replace-flags"]["enabled"] is True
-        assert serialized["metadata"]["visualize"]["replace-flags"]["type"] == "4x3"
         assert serialized["metadata"]["visualize"]["replace-flags"]["style"] == "4x3"
 
     def test_serialize_with_flags_off(self):
@@ -117,7 +116,6 @@ class TestArrowChartCreation:
         serialized = chart.serialize_model()
 
         assert serialized["metadata"]["visualize"]["replace-flags"]["enabled"] is False
-        assert serialized["metadata"]["visualize"]["replace-flags"]["type"] == ""
         assert serialized["metadata"]["visualize"]["replace-flags"]["style"] == ""
 
     def test_serialize_with_custom_colors(self):

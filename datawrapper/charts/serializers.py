@@ -242,7 +242,7 @@ class ReplaceFlags:
     The Datawrapper API uses a nested object format for the replace-flags field:
     {
         "enabled": bool,
-        "type": str  # "4x3", "1x1", "circle", or ""
+        "style": str  # "4x3", "1x1", "circle", or ""
     }
 
     But in our Python models, we use a simpler string format:
@@ -259,17 +259,17 @@ class ReplaceFlags:
             flag_type: The flag type ("off", "4x3", "1x1", "circle")
 
         Returns:
-            Dictionary with "enabled" and "type" keys for the API
+            Dictionary with "enabled" and "style" keys for the API
 
         Example:
             >>> ReplaceFlags.serialize("4x3")
-            {'enabled': True, 'type': '4x3'}
+            {'enabled': True, 'style': '4x3'}
             >>> ReplaceFlags.serialize("off")
-            {'enabled': False, 'type': ''}
+            {'enabled': False, 'style': ''}
         """
         return {
             "enabled": flag_type != "off",
-            "type": flag_type if flag_type != "off" else "",
+            "style": flag_type if flag_type != "off" else "",
         }
 
     @staticmethod
@@ -277,15 +277,15 @@ class ReplaceFlags:
         """Convert API nested object format to simple string format.
 
         Args:
-            api_obj: The API object with "enabled" and "type" keys, or None
+            api_obj: The API object with "enabled" and "style" keys, or None
 
         Returns:
             String flag type ("off", "4x3", "1x1", "circle")
 
         Example:
-            >>> ReplaceFlags.deserialize({"enabled": True, "type": "4x3"})
+            >>> ReplaceFlags.deserialize({"enabled": True, "style": "4x3"})
             '4x3'
-            >>> ReplaceFlags.deserialize({"enabled": False, "type": ""})
+            >>> ReplaceFlags.deserialize({"enabled": False, "style": ""})
             'off'
             >>> ReplaceFlags.deserialize(None)
             'off'
@@ -294,9 +294,80 @@ class ReplaceFlags:
             return "off"
 
         enabled = api_obj.get("enabled", False)
-        flag_type = api_obj.get("type", "")
+        flag_type = api_obj.get("style", "")
 
-        return flag_type if enabled else "off"
+        # If enabled is False or style is empty, return "off"
+        if not enabled or not flag_type:
+            return "off"
+
+        return flag_type
+
+
+class PlotHeight:
+    """Utility class for serializing and deserializing plot height configuration.
+
+    The Datawrapper API uses three separate fields for plot height:
+    - plotHeightMode: "ratio" or "fixed"
+    - plotHeightFixed: numeric value for fixed height
+    - plotHeightRatio: numeric value for ratio height
+
+    This utility provides convenience methods to serialize and deserialize
+    these related fields together.
+    """
+
+    @staticmethod
+    def serialize(mode: str, fixed: int | float, ratio: float) -> dict[str, Any]:
+        """Convert plot height fields to API format.
+
+        Args:
+            mode: The height mode ("ratio" or "fixed")
+            fixed: The fixed height value
+            ratio: The ratio height value
+
+        Returns:
+            Dictionary with plotHeightMode, plotHeightFixed, and plotHeightRatio keys
+
+        Example:
+            >>> PlotHeight.serialize("fixed", 400, 0.5)
+            {'plotHeightMode': 'fixed', 'plotHeightFixed': 400, 'plotHeightRatio': 0.5}
+            >>> PlotHeight.serialize("ratio", 300, 0.75)
+            {'plotHeightMode': 'ratio', 'plotHeightFixed': 300, 'plotHeightRatio': 0.75}
+        """
+        return {
+            "plotHeightMode": mode,
+            "plotHeightFixed": fixed,
+            "plotHeightRatio": ratio,
+        }
+
+    @staticmethod
+    def deserialize(visualize: dict[str, Any]) -> dict[str, Any]:
+        """Extract plot height fields from API response.
+
+        Args:
+            visualize: The visualize section of the API response
+
+        Returns:
+            Dictionary with plot_height_mode, plot_height_fixed, and plot_height_ratio keys
+            (only includes keys that are present in the API response)
+
+        Example:
+            >>> PlotHeight.deserialize(
+            ...     {"plotHeightMode": "fixed", "plotHeightFixed": 400}
+            ... )
+            {'plot_height_mode': 'fixed', 'plot_height_fixed': 400}
+            >>> PlotHeight.deserialize({})
+            {}
+        """
+        result: dict[str, Any] = {}
+
+        if "plotHeightMode" in visualize:
+            result["plot_height_mode"] = visualize["plotHeightMode"]
+        if "plotHeightFixed" in visualize:
+            result["plot_height_fixed"] = visualize["plotHeightFixed"]
+        if "plotHeightRatio" in visualize:
+            result["plot_height_ratio"] = visualize["plotHeightRatio"]
+
+        return result
 
 
 class ModelListSerializer:
