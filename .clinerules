@@ -401,12 +401,31 @@ Refactored four tests in `tests/functional/test_me.py` to use fully mocked API r
 3. `test_get_my_recently_edited_charts` - Mocks GET requests with various parameters (limit, offset, min_last_edit_step)
 4. `test_get_my_recently_published_charts` - Mocks GET requests with various parameters (limit, offset)
 
+### Mocked User Tests (2025-01-15)
+
+Refactored `test_get_user` in `tests/functional/test_users.py` to use fully mocked API responses:
+
+**Test Mocked:**
+- `test_get_user` - Mocks multiple sequential GET requests:
+  1. `get_users()` - Returns list of users
+  2. `get_my_account()` - Returns current user account
+  3. `get_user(user_id)` - Returns specific user details
+  4. `get_recently_edited_charts(user_id)` - Returns user's edited charts
+  5. `get_recently_published_charts(user_id)` - Returns user's published charts
+
 **Changes:**
 - Removed `@pytest.mark.api` decorators from all four tests
 - Added `monkeypatch` parameter to function signatures
 - Created mock response data for all test scenarios
 - Implemented stateful mock functions that track call counts and return appropriate responses
 - Tests now run without requiring `DATAWRAPPER_ACCESS_TOKEN` environment variable
+
+**Changes for test_get_user:**
+- Removed `@pytest.mark.api` decorator
+- Added `monkeypatch` parameter to function signature
+- Created comprehensive mock response data for all five API calls
+- Implemented stateful mock GET function that tracks call count and returns appropriate responses based on sequence
+- Test now runs without requiring `DATAWRAPPER_ACCESS_TOKEN` environment variable
 
 **Benefits:**
 - Tests run faster without network calls
