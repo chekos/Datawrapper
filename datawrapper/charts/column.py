@@ -5,6 +5,7 @@ from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
+from .models import DateFormat, NumberFormat
 from .serializers import (
     ColorCategory,
     CustomRange,
@@ -66,11 +67,11 @@ class ColumnChart(BaseChart):
         description="The custom ticks for the x axis",
     )
 
-    #: The formatting for the x grid labels
-    x_grid_format: str = Field(
+    #: The formatting for the x grid labels (use DateFormat or NumberFormat enum or custom format strings)
+    x_grid_format: DateFormat | NumberFormat | str = Field(
         default="auto",
         alias="x-grid-format",
-        description="The formatting for the x grid labels",
+        description="The formatting for the x grid labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
     )
 
     #: Whether to show the x grid
@@ -98,11 +99,11 @@ class ColumnChart(BaseChart):
         description="The custom ticks for the y axis",
     )
 
-    #: The formatting for the y grid labels
-    y_grid_format: str = Field(
+    #: The formatting for the y grid labels (use DateFormat or NumberFormat enum or custom format strings)
+    y_grid_format: DateFormat | NumberFormat | str = Field(
         default="",
         alias="y-grid-format",
-        description="The formatting for the y grid labels",
+        description="The formatting for the y grid labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
     )
 
     #: Whether to show the y grid lines
@@ -211,11 +212,11 @@ class ColumnChart(BaseChart):
         description="Whether or not to show value labels",
     )
 
-    #: How to format the value labels
-    value_labels_format: str = Field(
+    #: How to format the value labels (use DateFormat or NumberFormat enum or custom format strings)
+    value_labels_format: DateFormat | NumberFormat | str = Field(
         default="",
         alias="value-labels-format",
-        description="How to format the value labels. Customization options can be found at https://academy.datawrapper.de/article/207-custom-number-formats-that-you-can-display-in-datawrapper",
+        description="How to format the value labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
     )
 
     #: Where to place the value labels

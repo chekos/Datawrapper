@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_serial
 
 from .annos import AreaFill, RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .models import LineDash, LineWidth
+from .models import DateFormat, LineDash, LineWidth, NumberFormat
 from .serializers import (
     ColorCategory,
     CustomRange,
@@ -425,11 +425,11 @@ class LineChart(BaseChart):
         description="The custom ticks for the x axis",
     )
 
-    #: The formatting for the x grid labels
-    x_grid_format: str = Field(
+    #: The formatting for the x grid labels (use DateFormat or NumberFormat enum or custom format strings)
+    x_grid_format: DateFormat | NumberFormat | str = Field(
         default="auto",
         alias="x-grid-format",
-        description="The formatting for the x grid labels. Customization options found at https://academy.datawrapper.de/article/164-date-formats-that-datawrapper-recognizes",
+        description="The formatting for the x grid labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
     )
 
     #: Whether to show the x grid
@@ -457,11 +457,11 @@ class LineChart(BaseChart):
         description="The custom ticks for the y axis",
     )
 
-    #: The formatting for the y grid labels
-    y_grid_format: str = Field(
+    #: The formatting for the y grid labels (use DateFormat or NumberFormat enum or custom format strings)
+    y_grid_format: DateFormat | NumberFormat | str = Field(
         default="",
         alias="y-grid-format",
-        description="The formatting for the y grid labels. Customization options can be found at https://academy.datawrapper.de/article/207-custom-number-formats-that-you-can-display-in-datawrapper",
+        description="The formatting for the y grid labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
     )
 
     #: Whether to show the y grid
@@ -575,11 +575,11 @@ class LineChart(BaseChart):
         description="The amount of margin to leave for the right hand side for labels. Zero is automatically calculated.",
     )
 
-    #: The number format for value labels
-    value_labels_format: str = Field(
+    #: The number format for value labels (use DateFormat or NumberFormat enum or custom format strings)
+    value_labels_format: DateFormat | NumberFormat | str = Field(
         default="",
         alias="value-labels-format",
-        description="The number format for value labels. Customization options can be found at https://academy.datawrapper.de/article/207-custom-number-formats-that-you-can-display-in-datawrapper",
+        description="The number format for value labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
     )
 
     #: Whether to color number values labels the same as the line
@@ -600,18 +600,18 @@ class LineChart(BaseChart):
         description="Whether or not to show tooltips on hover",
     )
 
-    #: The format for the x-axis tooltips
-    tooltip_x_format: str = Field(
+    #: The format for the x-axis tooltips (use DateFormat or NumberFormat enum or custom format strings)
+    tooltip_x_format: DateFormat | NumberFormat | str = Field(
         default="",
         alias="tooltip-x-format",
-        description="The format for the x-axis tooltips. Customization options found at https://academy.datawrapper.de/article/164-date-formats-that-datawrapper-recognizes",
+        description="The format for the x-axis tooltips. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
     )
 
-    #: The format of the number tooltip
-    tooltip_number_format: str = Field(
+    #: The format of the number tooltip (use DateFormat or NumberFormat enum or custom format strings)
+    tooltip_number_format: DateFormat | NumberFormat | str = Field(
         default="",
         alias="tooltip-number-format",
-        description="The format of the number tooltip. Customization options can be found at https://academy.datawrapper.de/article/207-custom-number-formats-that-you-can-display-in-datawrapper",
+        description="The format of the number tooltip. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
     )
 
     #

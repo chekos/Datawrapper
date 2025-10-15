@@ -5,6 +5,7 @@ from typing import Any, Literal
 from pydantic import ConfigDict, Field, model_serializer
 
 from .base import BaseChart
+from .models import DateFormat, NumberFormat
 from .serializers import ColorCategory, NegativeColor, ReplaceFlags
 
 
@@ -58,18 +59,18 @@ class StackedBarChart(BaseChart):
         description="Reverse the order of the ranges",
     )
 
-    #: The number format for value labels
-    value_label_format: str = Field(
+    #: The number format for value labels (use DateFormat or NumberFormat enum or custom format strings)
+    value_label_format: DateFormat | NumberFormat | str = Field(
         default="",
         alias="value-label-format",
-        description="The number format for value labels",
+        description="The number format for value labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
     )
 
-    #: The date format
-    date_label_format: str = Field(
+    #: The date format (use DateFormat enum or custom format strings)
+    date_label_format: DateFormat | str = Field(
         default="",
         alias="date-label-format",
-        description="The date format",
+        description="The date format. Use DateFormat enum for common formats or provide custom format strings.",
     )
 
     #: The field you want to use for the value labels

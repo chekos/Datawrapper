@@ -4,6 +4,7 @@ import pandas as pd
 from pydantic import ConfigDict, Field, model_serializer
 
 from .base import BaseChart
+from .models import DateFormat, NumberFormat
 from .serializers import ColorCategory, CustomRange, ReplaceFlags
 
 
@@ -102,11 +103,11 @@ class ArrowChart(BaseChart):
     # Labels & formatting
     #
 
-    #: The number format for value labels
-    value_label_format: str = Field(
+    #: The number format for value labels (use DateFormat or NumberFormat enum or custom format strings)
+    value_label_format: DateFormat | NumberFormat | str = Field(
         default="",
         alias="value-label-format",
-        description="The number format for value labels. Customization options can be found at https://academy.datawrapper.de/article/207-custom-number-formats-that-you-can-display-in-datawrapper",
+        description="The number format for value labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
     )
 
     #: The field you want to use for the value labels

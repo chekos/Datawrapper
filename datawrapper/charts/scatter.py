@@ -5,6 +5,7 @@ from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
+from .models import DateFormat, NumberFormat
 from .serializers import ModelListSerializer, PlotHeight
 
 
@@ -74,11 +75,11 @@ class ScatterPlot(BaseChart):
         description="Set the x-axis on a Logarithmic scale",
     )
 
-    #: Format of the x-axis ticks
-    x_format: str = Field(
+    #: Format of the x-axis ticks (use DateFormat or NumberFormat enum or custom format strings)
+    x_format: DateFormat | NumberFormat | str = Field(
         default="",
         alias="x-format",
-        description="Format of the x-axis ticks",
+        description="Format of the x-axis ticks. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
     )
 
     #: The position of the x-axis ticks and labels
@@ -127,11 +128,11 @@ class ScatterPlot(BaseChart):
         description="Set the y-axis on a Logarithmic scale",
     )
 
-    #: Format of the y-axis ticks
-    y_format: str = Field(
+    #: Format of the y-axis ticks (use DateFormat or NumberFormat enum or custom format strings)
+    y_format: DateFormat | NumberFormat | str = Field(
         default="",
         alias="y-format",
-        description="Format of the y-axis ticks",
+        description="Format of the y-axis ticks. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
     )
 
     #: The position of the y-axis ticks and labels
@@ -281,11 +282,11 @@ class ScatterPlot(BaseChart):
         description="Where to put the value labels on the size legend",
     )
 
-    #: How to format the size legend label values
-    size_legend_label_format: str = Field(
+    #: How to format the size legend label values (use DateFormat or NumberFormat enum or custom format strings)
+    size_legend_label_format: DateFormat | NumberFormat | str = Field(
         default="",
         alias="size-legend-label-format",
-        description="How to format the size legend label values",
+        description="How to format the size legend label values. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
     )
 
     #: Whether to show a size legend title

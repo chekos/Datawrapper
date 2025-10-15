@@ -5,6 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
+from .models import DateFormat, NumberFormat
 from .serializers import ColorCategory, CustomRange, ModelListSerializer, ReplaceFlags
 
 
@@ -180,11 +181,11 @@ class BarChart(BaseChart):
         description="The alignment of the value labels",
     )
 
-    #: The format of the value labels. Customization options can be found at https://academy.datawrapper.de/article/207-custom-number-formats-that-you-can-display-in-datawrapper
-    value_label_format: str = Field(
+    #: The format of the value labels (use DateFormat or NumberFormat enum or custom format strings)
+    value_label_format: DateFormat | NumberFormat | str = Field(
         default="",
         alias="value-label-format",
-        description="The format of the value labels",
+        description="The format of the value labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
     )
 
     #: Whether to swap labels and values
@@ -259,11 +260,11 @@ class BarChart(BaseChart):
         default="top", alias="tick-position", description="The position of the ticks"
     )
 
-    #: The format of the axis labels. Customization options can be found at https://academy.datawrapper.de/article/207-custom-number-formats-that-you-can-display-in-datawrapper
-    axis_label_format: str = Field(
+    #: The format of the axis labels (use DateFormat or NumberFormat enum or custom format strings)
+    axis_label_format: DateFormat | NumberFormat | str = Field(
         default="",
         alias="axis-label-format",
-        description="The format of the axis labels",
+        description="The format of the axis labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
     )
 
     #
