@@ -390,3 +390,67 @@ def test_folder_crud(monkeypatch):
     result = dw.create_folder(name="Test Folder")
     assert result["id"] == 12345
 ```
+
+### Mocked Account and Recently Edited Charts Tests (2025-01-15)
+
+Refactored three tests in `tests/functional/test_me.py` to use fully mocked API responses:
+
+**Tests Mocked:**
+1. `test_get_my_account` - Mocks GET request to retrieve account information
+2. `test_update_my_account` - Mocks PATCH requests to update account information
+3. `test_get_my_recently_edited_charts` - Mocks GET requests with various parameters
+
+**Changes:**
+- Removed `@pytest.mark.api` decorators from all three tests
+- Added `monkeypatch` parameter to function signatures
+- Created mock response data for all test scenarios
+- Implemented stateful mock functions that track call counts and return appropriate responses
+- Tests now run without requiring `DATAWRAPPER_ACCESS_TOKEN` environment variable
+
+**Benefits:**
+- Tests run faster without network calls
+- Tests are more reliable (no dependency on API availability)
+- Tests can run in CI/CD environments without API credentials
+- Follows same pattern as mocked folder tests
+
+**Pattern for GET requests:**
+```python
+def test_get_my_account(monkeypatch):
+    # Define mock response data
+    mock_account = {"id": 12345, "email": "test@example.com", ...}
+
+    def mock_get(self, url, **kwargs):
+        return mock_account
+
+    monkeypatch.setattr("datawrapper.Datawrapper.get", mock_get)
+
+    # Run tests
+    dw = Datawrapper()
+    result = dw.get_my_account()
+    assert result["id"] == 12345
+```
+
+**Pattern for PATCH requests:**
+```python
+def test_update_my_account(monkeypatch):
+    # Define mock response data for different calls
+    mock_account_foobar = {"id": 12345, "name": "Foobar", ...}
+    mock_account_test_user = {"id": 12345, "name": "Test user", ...}
+
+    # Track which call we're on
+    call_count = [0]
+
+    def mock_patch(self, url, **kwargs):
+        call_count[0] += 1
+        if call_count[0] == 1:
+            return mock_account_foobar
+        else:
+            return mock_account_test_user
+
+    monkeypatch.setattr("datawrapper.Datawrapper.patch", mock_patch)
+
+    # Run tests
+    dw = Datawrapper()
+    result1 = dw.update_my_account(name="Foobar")
+    assert result1["name"] == "Foobar"
+```
