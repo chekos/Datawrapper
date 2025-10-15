@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .models import DateFormat, NumberFormat
+from .enums import DateFormat, NumberFormat
 from .serializers import ColorCategory, CustomRange, ModelListSerializer, ReplaceFlags
 
 

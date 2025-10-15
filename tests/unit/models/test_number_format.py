@@ -2,7 +2,7 @@
 
 import pytest
 
-from datawrapper.charts.models import NumberFormat
+from datawrapper.charts.enums import NumberFormat
 
 
 class TestNumberFormat:

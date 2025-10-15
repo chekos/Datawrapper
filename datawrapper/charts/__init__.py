@@ -4,15 +4,13 @@ from .arrow import ArrowChart
 from .bar import BarChart, BarOverlay
 from .base import BaseChart
 from .column import ColumnChart
+from .enums import DateFormat, LineDash, LineWidth, NumberDivisor, NumberFormat
 from .line import AreaFill, Line, LineChart, LineSymbol, LineValueLabel
 from .models import (
     Annotate,
     ColumnFormat,
-    DateFormat,
     Describe,
     Logo,
-    NumberDivisor,
-    NumberFormat,
     Publish,
     PublishBlocks,
     Sharing,
@@ -30,6 +28,8 @@ __all__ = (
     "Annotate",
     "ColumnFormat",
     "DateFormat",
+    "LineDash",
+    "LineWidth",
     "Transform",
     "Describe",
     "Logo",

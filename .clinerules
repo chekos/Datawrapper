@@ -9,6 +9,7 @@ This is a Python library for interacting with the Datawrapper API to create and 
   - `charts/` - Chart-specific implementations
     - `base.py` - BaseChart class with common functionality
     - `models.py` - Pydantic models for API metadata structures
+    - `enums.py` - Enum classes for type-safe configuration (NumberDivisor, NumberFormat, DateFormat, LineWidth, LineDash)
     - `serializers.py` - Utility classes for serialization/deserialization (ColorCategory, CustomRange, CustomTicks, ModelListSerializer, ValueLabels)
     - `annos.py` - Annotation models (TextAnnotation, RangeAnnotation)
     - Individual chart type files: `area.py`, `bar.py`, `column.py`, `line.py`, `multiple_column.py`, `scatter.py`, `stacked_bar.py`, `arrow.py`
@@ -81,7 +82,7 @@ This utility is used by AreaChart, BarChart, ColumnChart, LineChart, MultipleCol
 
 ### Number Divisor
 
-The `NumberDivisor` enum in `models.py` provides a developer-friendly way to specify number formatting divisors:
+The `NumberDivisor` enum in `enums.py` provides a developer-friendly way to specify number formatting divisors:
 
 **Enum Values:**
 - `NumberDivisor.NO_CHANGE` = "0" - No change to the number
@@ -110,7 +111,7 @@ The field has validation to ensure only valid values are accepted. Invalid value
 
 **Example:**
 ```python
-from datawrapper.charts.models import ColumnFormat, NumberDivisor
+from datawrapper.charts import ColumnFormat, NumberDivisor
 
 # Using enum (recommended for clarity)
 col_format = ColumnFormat(
@@ -129,7 +130,7 @@ col_format = ColumnFormat(column="revenue", number_divisor="auto")
 
 ### Number Format
 
-The `NumberFormat` enum in `models.py` provides a developer-friendly way to specify number formatting patterns across all chart types:
+The `NumberFormat` enum in `enums.py` provides a developer-friendly way to specify number formatting patterns across all chart types:
 
 **Enum Values (31 total):**
 
@@ -222,7 +223,7 @@ chart = BarChart(
 
 ### Date Format
 
-The `DateFormat` enum in `models.py` provides a developer-friendly way to specify date formatting patterns across chart types that display dates:
+The `DateFormat` enum in `enums.py` provides a developer-friendly way to specify date formatting patterns across chart types that display dates:
 
 **Enum Values (50 total):**
 
@@ -392,7 +393,7 @@ line = Line(column="temperature")
 
 ### Line Width and Dash Enums
 
-The `LineWidth` and `LineDash` enums in `models.py` provide developer-friendly ways to specify line styling in LineChart configurations:
+The `LineWidth` and `LineDash` enums in `enums.py` provide developer-friendly ways to specify line styling in LineChart configurations:
 
 **LineWidth Enum Values:**
 - `LineWidth.THIN` = "1" - Thin line (1px)
@@ -421,7 +422,7 @@ Both fields have validation to ensure only valid values are accepted. Invalid va
 
 **Example:**
 ```python
-from datawrapper.charts.models import Line, LineWidth, LineDash
+from datawrapper.charts import Line, LineWidth, LineDash
 
 # Using enums (recommended for clarity)
 line = Line(

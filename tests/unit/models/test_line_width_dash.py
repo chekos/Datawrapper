@@ -4,7 +4,7 @@ import pytest
 from pydantic import ValidationError
 
 from datawrapper.charts.line import Line
-from datawrapper.charts.models import LineDash, LineWidth
+from datawrapper.charts.enums import LineDash, LineWidth
 
 
 class TestLineWidthEnum:

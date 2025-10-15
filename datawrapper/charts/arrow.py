@@ -4,7 +4,7 @@ import pandas as pd
 from pydantic import ConfigDict, Field, model_serializer
 
 from .base import BaseChart
-from .models import DateFormat, NumberFormat
+from .enums import DateFormat, NumberFormat
 from .serializers import ColorCategory, CustomRange, ReplaceFlags
 
 

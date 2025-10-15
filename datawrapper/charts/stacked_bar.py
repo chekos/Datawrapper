@@ -5,7 +5,7 @@ from typing import Any, Literal
 from pydantic import ConfigDict, Field, model_serializer
 
 from .base import BaseChart
-from .models import DateFormat, NumberFormat
+from .enums import DateFormat, NumberFormat
 from .serializers import ColorCategory, NegativeColor, ReplaceFlags
 
 
