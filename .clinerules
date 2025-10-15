@@ -214,7 +214,8 @@ This pattern is used by AreaChart, BarChart, ColumnChart, LineChart, MultipleCol
 - Run all tests: `uv run python -m pytest tests/`
 - Run unit tests only: `uv run python -m pytest tests/unit/`
 - Run integration tests: `uv run python -m pytest tests/integration/`
-- Functional tests require `DATAWRAPPER_ACCESS_TOKEN` environment variable
+- Most functional tests require `DATAWRAPPER_ACCESS_TOKEN` environment variable
+- Some functional tests (e.g., `test_folders.py`) use mocked API responses and don't require an API token
 
 ## Recent Changes
 
@@ -245,3 +246,38 @@ if "field-name" in visualize:
 - All 542 unit and integration tests pass
 - No breaking changes introduced
 - Code is more maintainable and follows Pydantic best practices
+
+### Mocked Folder Tests (2025-01-15)
+
+Refactored `tests/functional/test_folders.py` to use fully mocked API responses instead of hitting the live API:
+
+**Changes:**
+- Replaced `@pytest.mark.api` decorator with `monkeypatch` fixtures
+- Created mock response data for all folder operations (get, create, update, delete)
+- Implemented stateful mock functions that track call counts to return appropriate responses
+- Tests now run without requiring `DATAWRAPPER_ACCESS_TOKEN` environment variable
+
+**Benefits:**
+- Tests run faster without network calls
+- Tests are more reliable (no dependency on API availability)
+- Tests can run in CI/CD environments without API credentials
+- Easier to test edge cases and error conditions
+
+**Pattern:**
+```python
+def test_folder_crud(monkeypatch):
+    # Define mock response data
+    mock_folder = {"id": 12345, "name": "Test Folder", ...}
+
+    # Create mock functions with self parameter
+    def mock_post(self, url, **kwargs):
+        return mock_folder
+
+    # Patch the methods
+    monkeypatch.setattr("datawrapper.Datawrapper.post", mock_post)
+
+    # Run tests
+    dw = Datawrapper()
+    result = dw.create_folder(name="Test Folder")
+    assert result["id"] == 12345
+```
