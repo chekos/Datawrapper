@@ -1,7 +1,5 @@
 """Test methods that use the /me endpoint."""
 
-import pytest
-
 from datawrapper import Datawrapper
 
 
@@ -143,9 +141,49 @@ def test_get_my_recently_edited_charts(monkeypatch):
     assert isinstance(four["list"], list)
 
 
-@pytest.mark.api
-def test_get_my_recently_published_charts():
-    """Test my_recently_published_charts."""
+def test_get_my_recently_published_charts(monkeypatch):
+    """Test my_recently_published_charts with mocked API response."""
+    # Mock response data for different calls
+    mock_response_default = {
+        "list": [
+            {"id": "pub123", "title": "Published Chart 1", "publicVersion": 5},
+            {"id": "pub456", "title": "Published Chart 2", "publicVersion": 3},
+            {"id": "pub789", "title": "Published Chart 3", "publicVersion": 2},
+        ],
+        "total": 3,
+    }
+
+    mock_response_limit_1 = {
+        "list": [
+            {"id": "pub123", "title": "Published Chart 1", "publicVersion": 5},
+        ],
+        "total": 3,
+    }
+
+    mock_response_limit_1_offset_2 = {
+        "list": [
+            {"id": "pub789", "title": "Published Chart 3", "publicVersion": 2},
+        ],
+        "total": 3,
+    }
+
+    # Track which call we're on
+    call_count = [0]
+
+    def mock_get(self, url, **kwargs):
+        """Mock get to return different responses based on call count."""
+        call_count[0] += 1
+        if call_count[0] == 1:
+            return mock_response_default
+        elif call_count[0] == 2:
+            return mock_response_limit_1
+        else:
+            return mock_response_limit_1_offset_2
+
+    # Patch the get method
+    monkeypatch.setattr("datawrapper.Datawrapper.get", mock_get)
+
+    # Test
     dw = Datawrapper()
 
     one = dw.get_my_recently_published_charts()

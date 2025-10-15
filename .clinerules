@@ -391,17 +391,18 @@ def test_folder_crud(monkeypatch):
     assert result["id"] == 12345
 ```
 
-### Mocked Account and Recently Edited Charts Tests (2025-01-15)
+### Mocked Account and Chart History Tests (2025-01-15)
 
-Refactored three tests in `tests/functional/test_me.py` to use fully mocked API responses:
+Refactored four tests in `tests/functional/test_me.py` to use fully mocked API responses:
 
 **Tests Mocked:**
 1. `test_get_my_account` - Mocks GET request to retrieve account information
 2. `test_update_my_account` - Mocks PATCH requests to update account information
-3. `test_get_my_recently_edited_charts` - Mocks GET requests with various parameters
+3. `test_get_my_recently_edited_charts` - Mocks GET requests with various parameters (limit, offset, min_last_edit_step)
+4. `test_get_my_recently_published_charts` - Mocks GET requests with various parameters (limit, offset)
 
 **Changes:**
-- Removed `@pytest.mark.api` decorators from all three tests
+- Removed `@pytest.mark.api` decorators from all four tests
 - Added `monkeypatch` parameter to function signatures
 - Created mock response data for all test scenarios
 - Implemented stateful mock functions that track call counts and return appropriate responses
