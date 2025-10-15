@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .serializers import ColorCategory, CustomRange, ModelListSerializer
+from .serializers import ColorCategory, CustomRange, ModelListSerializer, ReplaceFlags
 
 
 class BarOverlay(BaseModel):
@@ -410,10 +410,7 @@ class BarChart(BaseChart):
                 "value-label-alignment": self.value_label_alignment,
                 "value-label-format": self.value_label_format,
                 "swap-labels": self.swap_labels,
-                "replace-flags": {
-                    "enabled": self.replace_flags != "off",
-                    "type": self.replace_flags if self.replace_flags != "off" else "",
-                },
+                "replace-flags": ReplaceFlags.serialize(self.replace_flags),
                 "show-color-key": self.show_color_key,
                 "stack-color-legend": self.stack_color_legend,
                 # Horizontal axis
@@ -516,11 +513,9 @@ class BarChart(BaseChart):
 
         # Replace flags
         if "replace-flags" in visualize:
-            replace_flags_obj = visualize["replace-flags"]
-            if isinstance(replace_flags_obj, dict):
-                enabled = replace_flags_obj.get("enabled", False)
-                flag_type = replace_flags_obj.get("type", "")
-                init_data["replace_flags"] = flag_type if enabled else "off"
+            init_data["replace_flags"] = ReplaceFlags.deserialize(
+                visualize["replace-flags"]
+            )
 
         if "show-color-key" in visualize:
             init_data["show_color_key"] = visualize["show-color-key"]

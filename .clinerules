@@ -173,7 +173,7 @@ line = Line(column="temperature", width=LineWidth.MEDIUM, dash=LineDash.SOLID)
 
 ### Color Category Utility
 
-The `ColorCategory` class in `models.py` provides utilities for handling color category mappings:
+The `ColorCategory` class in `serializers.py` provides utilities for handling color category mappings:
 
 - `ColorCategory.serialize(color_map, category_labels=None, category_order=None, exclude_from_key=None) -> dict`: Converts Python color mappings to the API's expected format with a `map` key and optional additional fields
 - `ColorCategory.deserialize(color_category_obj) -> dict`: Parses the API's color category structure back to Python, returning a dictionary with keys:
@@ -183,6 +183,39 @@ The `ColorCategory` class in `models.py` provides utilities for handling color c
   - `exclude_from_color_key`: Optional list of categories to exclude from the legend
 
 This utility is used by AreaChart, BarChart, ColumnChart, LineChart, MultipleColumnChart, StackedBarChart, and ArrowChart to handle the `color-category` field in the visualize metadata.
+
+### Replace Flags Utility
+
+The `ReplaceFlags` class in `serializers.py` provides utilities for handling the replace-flags configuration:
+
+**API Format vs Python Format:**
+- **API Format**: Nested object with `{"enabled": bool, "type": str}`
+- **Python Format**: Simple string ("off", "4x3", "1x1", "circle")
+
+**Methods:**
+- `ReplaceFlags.serialize(flag_type: str) -> dict`: Converts simple string format to API nested object format
+  - `"off"` → `{"enabled": False, "type": ""}`
+  - `"4x3"` → `{"enabled": True, "type": "4x3"}`
+- `ReplaceFlags.deserialize(api_obj: dict | None) -> str`: Converts API nested object format to simple string format
+  - `{"enabled": True, "type": "4x3"}` → `"4x3"`
+  - `{"enabled": False, "type": ""}` → `"off"`
+  - `None` → `"off"`
+
+**Usage:**
+This utility is currently used by BarChart to handle the `replace-flags` field, which controls whether country codes are replaced with flag icons in the visualization.
+
+**Example:**
+```python
+from datawrapper.charts.serializers import ReplaceFlags
+
+# Serialization (Python → API)
+api_format = ReplaceFlags.serialize("4x3")
+# Returns: {"enabled": True, "type": "4x3"}
+
+# Deserialization (API → Python)
+python_format = ReplaceFlags.deserialize({"enabled": True, "type": "4x3"})
+# Returns: "4x3"
+```
 
 ### Annotations
 
