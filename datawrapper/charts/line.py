@@ -1,11 +1,12 @@
 from typing import Any, Literal
 
 import pandas as pd
-from pydantic import BaseModel, ConfigDict, Field, model_serializer
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_serializer
 
 from .annos import AreaFill, RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .models import ColorCategory, CustomRange, CustomTicks, ModelListSerializer
+from .models import LineDash, LineWidth
+from .serializers import ColorCategory, CustomRange, CustomTicks, ModelListSerializer
 
 
 class LineSymbol(BaseModel):
@@ -127,17 +128,63 @@ class Line(BaseModel):
         description="The interpolation method to use when drawing lines",
     )
 
-    #: The width of the line
-    width: Literal["style0", "style1", "style2", "style3", "invisible"] = Field(
+    #: The width of the line (use LineWidth enum or raw API values)
+    width: LineWidth | str = Field(
         default="style1",
-        description="The width of the line",
+        description="The width of the line. Use LineWidth enum for readability or raw API values (style0, style1, style2, style3, invisible).",
     )
 
-    #: The dashing of the line
-    dash: Literal["style1", "style2", "style3"] | None = Field(
+    #: The dashing of the line (use LineDash enum or raw API values)
+    dash: LineDash | str | None = Field(
         default=None,
-        description="The dashing of the line",
+        description="The dashing of the line. Use LineDash enum for readability or raw API values (style1, style2, style3, style4).",
     )
+
+    @field_validator("width")
+    @classmethod
+    def validate_width(cls, v: LineWidth | str) -> LineWidth | str:
+        """Validate width is a valid value.
+
+        Accepts LineWidth enum values or raw API string values.
+        """
+        # If it's already a LineWidth enum, it's valid
+        if isinstance(v, LineWidth):
+            return v
+
+        # Define valid raw string values
+        valid_values = {"style0", "style1", "style2", "style3", "invisible"}
+
+        if v not in valid_values:
+            raise ValueError(
+                f"Invalid width: {v}. Use LineWidth enum or valid API values: "
+                f"style0, style1, style2, style3, invisible"
+            )
+        return v
+
+    @field_validator("dash")
+    @classmethod
+    def validate_dash(cls, v: LineDash | str | None) -> LineDash | str | None:
+        """Validate dash is a valid value.
+
+        Accepts LineDash enum values, raw API string values, or None.
+        """
+        # None is valid (no dashing)
+        if v is None:
+            return v
+
+        # If it's already a LineDash enum, it's valid
+        if isinstance(v, LineDash):
+            return v
+
+        # Define valid raw string values
+        valid_values = {"style1", "style2", "style3", "style4"}
+
+        if v not in valid_values:
+            raise ValueError(
+                f"Invalid dash: {v}. Use LineDash enum or valid API values: "
+                f"style1, style2, style3, style4"
+            )
+        return v
 
     #: Whether or not to show in the color key
     color_key: bool = Field(
@@ -190,10 +237,20 @@ class Line(BaseModel):
         Returns:
             Dictionary in the API's expected format
         """
+        # Convert enum values to their string representations
+        width_value = (
+            line.width.value if isinstance(line.width, LineWidth) else line.width
+        )
+        dash_value = None
+        if line.dash is not None:
+            dash_value = (
+                line.dash.value if isinstance(line.dash, LineDash) else line.dash
+            )
+
         line_dict = {
             "title": line.title,
             "interpolation": line.interpolation,
-            "width": line.width,
+            "width": width_value,
             "colorKey": line.color_key,
             "directLabel": line.direct_label,
             "bgStroke": line.outline,
@@ -216,8 +273,8 @@ class Line(BaseModel):
         }
 
         # Add dash if set
-        if line.dash is not None:
-            line_dict["dash"] = line.dash
+        if dash_value is not None:
+            line_dict["dash"] = dash_value
 
         return line_dict
 

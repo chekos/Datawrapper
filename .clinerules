@@ -9,6 +9,7 @@ This is a Python library for interacting with the Datawrapper API to create and 
   - `charts/` - Chart-specific implementations
     - `base.py` - BaseChart class with common functionality
     - `models.py` - Pydantic models for API metadata structures
+    - `serializers.py` - Utility classes for serialization/deserialization (ColorCategory, CustomRange, CustomTicks, ModelListSerializer)
     - `annos.py` - Annotation models (TextAnnotation, RangeAnnotation)
     - Individual chart type files: `area.py`, `bar.py`, `column.py`, `line.py`, `multiple_column.py`, `scatter.py`, `stacked_bar.py`, `arrow.py`
 - `tests/` - Test suite
@@ -98,6 +99,54 @@ col_format = ColumnFormat(column="revenue", number_divisor=6)
 
 # Using raw string (also valid)
 col_format = ColumnFormat(column="revenue", number_divisor="auto")
+```
+
+### Line Width and Dash Enums
+
+The `LineWidth` and `LineDash` enums in `models.py` provide developer-friendly ways to specify line styling in LineChart configurations:
+
+**LineWidth Enum Values:**
+- `LineWidth.THIN` = "1" - Thin line (1px)
+- `LineWidth.MEDIUM` = "2" - Medium line (2px)
+- `LineWidth.THICK` = "3" - Thick line (3px)
+- `LineWidth.EXTRA_THICK` = "4" - Extra thick line (4px)
+
+**LineDash Enum Values:**
+- `LineDash.SOLID` = None - Solid line (no dashes)
+- `LineDash.DASHED` = "4,2" - Dashed line pattern
+- `LineDash.DOTTED` = "1,2" - Dotted line pattern
+- `LineDash.DASH_DOT` = "8,2,1,2" - Dash-dot pattern
+- `LineDash.LONG_DASH` = "8,4" - Long dash pattern
+
+**Usage in Line Model:**
+The `Line` model (used in LineChart) has `width` and `dash` fields that accept:
+- Enum values: `LineWidth.THICK`, `LineDash.DASHED`
+- Raw strings: `"3"`, `"4,2"`, `None`
+
+Both fields have validation to ensure only valid values are accepted. Invalid values raise a `ValidationError`.
+
+**Serialization:**
+- Enum values are serialized as their string values (e.g., `LineWidth.THICK` becomes `"3"`)
+- `LineDash.SOLID` (None) is serialized as `None`
+- The API field names are `"width"` and `"dash"`
+
+**Example:**
+```python
+from datawrapper.charts.models import Line, LineWidth, LineDash
+
+# Using enums (recommended for clarity)
+line = Line(
+    column="temperature",
+    width=LineWidth.THICK,
+    dash=LineDash.DASHED,
+    color="#FF0000"
+)
+
+# Using raw strings (also valid)
+line = Line(column="temperature", width="3", dash="4,2")
+
+# Solid line (no dashes)
+line = Line(column="temperature", width=LineWidth.MEDIUM, dash=LineDash.SOLID)
 ```
 
 ### Color Category Utility

@@ -134,14 +134,14 @@ class TestEndToEndWorkflows:
         assert len(visualize["range-annotations"]) == 2
 
         # Step 6: Verify annotation properties are preserved
-        # Annotations are stored as dicts with UUID keys, so convert to list
-        text_annos = list(visualize["text-annotations"].values())
+        # Annotations are now stored as lists
+        text_annos = visualize["text-annotations"]
         assert text_annos[0]["text"] == "Peak"
         assert text_annos[0]["bold"] is True
         assert text_annos[1]["text"] == "Valley"
         assert text_annos[1]["italic"] is True
 
-        range_annos = list(visualize["range-annotations"].values())
+        range_annos = visualize["range-annotations"]
         assert range_annos[0]["type"] == "y"
         assert range_annos[0]["color"] == "#FFFF00"
         assert range_annos[1]["type"] == "x"

@@ -1,6 +1,6 @@
 """Tests for the CustomRange utility class."""
 
-from datawrapper.charts.models import CustomRange
+from datawrapper.charts.serializers import CustomRange
 
 
 class TestCustomRangeSerialize:

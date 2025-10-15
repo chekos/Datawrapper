@@ -5,7 +5,7 @@ from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .models import ColorCategory, CustomRange, CustomTicks, ModelListSerializer
+from .serializers import ColorCategory, CustomRange, CustomTicks, ModelListSerializer
 
 
 class ColumnChart(BaseChart):

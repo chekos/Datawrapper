@@ -1,7 +1,7 @@
 """Tests for the ModelListSerializer utility."""
 
 from datawrapper.charts.annos import RangeAnnotation, TextAnnotation
-from datawrapper.charts.models import ModelListSerializer
+from datawrapper.charts.serializers import ModelListSerializer
 
 
 def test_serialize_empty_list():

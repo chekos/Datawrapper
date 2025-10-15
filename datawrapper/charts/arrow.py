@@ -4,7 +4,7 @@ import pandas as pd
 from pydantic import ConfigDict, Field, model_serializer
 
 from .base import BaseChart
-from .models import ColorCategory, CustomRange
+from .serializers import ColorCategory, CustomRange
 
 
 class ArrowChart(BaseChart):

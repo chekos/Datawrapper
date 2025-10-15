@@ -1,6 +1,6 @@
 """Unit tests for ColorCategory utility class."""
 
-from datawrapper.charts.models import ColorCategory
+from datawrapper.charts.serializers import ColorCategory
 
 
 class TestColorCategorySerialize:

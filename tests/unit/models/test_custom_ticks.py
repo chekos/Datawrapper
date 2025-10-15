@@ -1,6 +1,6 @@
 """Unit tests for the CustomTicks serialization/deserialization helper."""
 
-from datawrapper.charts.models import CustomTicks
+from datawrapper.charts.serializers import CustomTicks
 
 
 class TestCustomTicksSerialization:
