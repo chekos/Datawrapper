@@ -427,11 +427,16 @@ class MultipleColumnChart(BaseChart):
         visualize = metadata.get("visualize", {})
 
         # Layout
-        init_data["grid_layout"] = visualize.get("gridLayout", "fixedCount")
-        init_data["grid_column"] = visualize.get("gridColumnCount", 2)
-        init_data["grid_column_mobile"] = visualize.get("gridColumnCountMobile", 2)
-        init_data["grid_column_width"] = visualize.get("gridColumnMinWidth", 200)
-        init_data["grid_row_height"] = visualize.get("gridRowHeightFixed", 140)
+        if "gridLayout" in visualize:
+            init_data["grid_layout"] = visualize["gridLayout"]
+        if "gridColumnCount" in visualize:
+            init_data["grid_column"] = visualize["gridColumnCount"]
+        if "gridColumnCountMobile" in visualize:
+            init_data["grid_column_mobile"] = visualize["gridColumnCountMobile"]
+        if "gridColumnMinWidth" in visualize:
+            init_data["grid_column_width"] = visualize["gridColumnMinWidth"]
+        if "gridRowHeightFixed" in visualize:
+            init_data["grid_row_height"] = visualize["gridRowHeightFixed"]
 
         # Parse sort object
         sort_obj = visualize.get("sort", {})
@@ -451,9 +456,12 @@ class MultipleColumnChart(BaseChart):
         init_data["custom_ticks_x"] = CustomTicks.deserialize(
             visualize.get("custom-ticks-x", "")
         )
-        init_data["x_grid_format"] = visualize.get("x-grid-format", "auto")
-        init_data["x_grid_labels"] = visualize.get("x-grid-labels", "on")
-        init_data["x_grid_all"] = visualize.get("x-grid", "off")
+        if "x-grid-format" in visualize:
+            init_data["x_grid_format"] = visualize["x-grid-format"]
+        if "x-grid-labels" in visualize:
+            init_data["x_grid_labels"] = visualize["x-grid-labels"]
+        if "x-grid" in visualize:
+            init_data["x_grid_all"] = visualize["x-grid"]
 
         # Parse grid-lines-x
         grid_lines_x = visualize.get("grid-lines-x", {})
@@ -472,14 +480,16 @@ class MultipleColumnChart(BaseChart):
         init_data["custom_ticks_y"] = CustomTicks.deserialize(
             visualize.get("custom-ticks-y", "")
         )
-        init_data["y_grid_format"] = visualize.get("y-grid-format", "")
+        if "y-grid-format" in visualize:
+            init_data["y_grid_format"] = visualize["y-grid-format"]
 
         # Parse grid-lines (can be bool or string "show")
-        grid_lines_val = visualize.get("grid-lines", True)
-        if isinstance(grid_lines_val, str):
-            init_data["y_grid"] = grid_lines_val == "show"
-        else:
-            init_data["y_grid"] = bool(grid_lines_val)
+        if "grid-lines" in visualize:
+            grid_lines_val = visualize["grid-lines"]
+            if isinstance(grid_lines_val, str):
+                init_data["y_grid"] = grid_lines_val == "show"
+            else:
+                init_data["y_grid"] = bool(grid_lines_val)
 
         # Parse yAxisLabels - check both yAxisLabels object and y-grid-labels field
         y_axis_labels = visualize.get("yAxisLabels", {})
@@ -492,20 +502,22 @@ class MultipleColumnChart(BaseChart):
             init_data["y_grid_label_align"] = y_axis_labels.get("alignment", "left")
         else:
             # Fall back to y-grid-labels field
-            init_data["y_grid_labels"] = visualize.get("y-grid-labels", "outside")
-            init_data["y_grid_label_align"] = visualize.get(
-                "y-grid-label-align", "left"
-            )
+            if "y-grid-labels" in visualize:
+                init_data["y_grid_labels"] = visualize["y-grid-labels"]
+            if "y-grid-label-align" in visualize:
+                init_data["y_grid_label_align"] = visualize["y-grid-label-align"]
 
         # Appearance
-        base_color_val = visualize.get("base-color", "#809cae")
-        # Handle case where base-color is 0 (integer) - convert to default color
-        if isinstance(base_color_val, int):
-            init_data["base_color"] = "#809cae"
-        else:
-            init_data["base_color"] = base_color_val
+        if "base-color" in visualize:
+            base_color_val = visualize["base-color"]
+            # Handle case where base-color is 0 (integer) - convert to default color
+            if isinstance(base_color_val, int):
+                init_data["base_color"] = "#3182bd"
+            else:
+                init_data["base_color"] = base_color_val
 
-        init_data["bar_padding"] = visualize.get("bar-padding", 30)
+        if "bar-padding" in visualize:
+            init_data["bar_padding"] = visualize["bar-padding"]
 
         # Parse color-category using utility
         color_data = ColorCategory.deserialize(visualize.get("color-category"))
@@ -521,9 +533,12 @@ class MultipleColumnChart(BaseChart):
         else:
             init_data["negative_color"] = "#E31A1C"
 
-        init_data["plot_height_mode"] = visualize.get("plotHeightMode", "fixed")
-        init_data["plot_height_fixed"] = visualize.get("plotHeightFixed", 300)
-        init_data["plot_height_ratio"] = visualize.get("plotHeightRatio", 0.5)
+        if "plotHeightMode" in visualize:
+            init_data["plot_height_mode"] = visualize["plotHeightMode"]
+        if "plotHeightFixed" in visualize:
+            init_data["plot_height_fixed"] = visualize["plotHeightFixed"]
+        if "plotHeightRatio" in visualize:
+            init_data["plot_height_ratio"] = visualize["plotHeightRatio"]
 
         # Parse panels (dict to list)
         panels_obj = visualize.get("panels", {})
@@ -535,10 +550,14 @@ class MultipleColumnChart(BaseChart):
             init_data["panels"] = []
 
         # Labels
-        init_data["label_colors"] = visualize.get("label-colors", False)
-        init_data["show_color_key"] = visualize.get("show-color-key", False)
-        init_data["label_margin"] = visualize.get("label-margin", 0)
-        init_data["x_grid_label_all"] = visualize.get("xGridLabelAllColumns", False)
+        if "label-colors" in visualize:
+            init_data["label_colors"] = visualize["label-colors"]
+        if "show-color-key" in visualize:
+            init_data["show_color_key"] = visualize["show-color-key"]
+        if "label-margin" in visualize:
+            init_data["label_margin"] = visualize["label-margin"]
+        if "xGridLabelAllColumns" in visualize:
+            init_data["x_grid_label_all"] = visualize["xGridLabelAllColumns"]
 
         # Parse valueLabels
         value_labels_obj = visualize.get("valueLabels", {})

@@ -233,17 +233,22 @@ class ArrowChart(BaseChart):
         axes = metadata.get("axes", {})
 
         # Customize arrows
-        init_data["y_grid"] = visualize.get("y-grid", "on")
-        init_data["reverse_order"] = visualize.get("reverse-order", False)
-        init_data["thick_arrows"] = visualize.get("thick-arrows", True)
+        if "y-grid" in visualize:
+            init_data["y_grid"] = visualize["y-grid"]
+        if "reverse-order" in visualize:
+            init_data["reverse_order"] = visualize["reverse-order"]
+        if "thick-arrows" in visualize:
+            init_data["thick_arrows"] = visualize["thick-arrows"]
 
         # Parse color-category using utility
         color_data = ColorCategory.deserialize(visualize.get("color-category"))
         init_data["color_category"] = color_data["color_category"]
 
         # Labels & formatting
-        init_data["range_value_labels"] = visualize.get("range-value-labels", "")
-        init_data["value_label_format"] = visualize.get("value-label-format", "")
+        if "range-value-labels" in visualize:
+            init_data["range_value_labels"] = visualize["range-value-labels"]
+        if "value-label-format" in visualize:
+            init_data["value_label_format"] = visualize["value-label-format"]
 
         # Sorting & ordering
         sort_range_obj = visualize.get("sort-range", {})
@@ -272,15 +277,21 @@ class ArrowChart(BaseChart):
         init_data["custom_range"] = CustomRange.deserialize(
             visualize.get("custom-range")
         )
-        init_data["range_extent"] = visualize.get("range-extent", "nice")
+        if "range-extent" in visualize:
+            init_data["range_extent"] = visualize["range-extent"]
 
         # Parse axes section
-        init_data["axis_start"] = axes.get("start", "")
-        init_data["axis_end"] = axes.get("end", "")
+        if "start" in axes:
+            init_data["axis_start"] = axes["start"]
+        if "end" in axes:
+            init_data["axis_end"] = axes["end"]
 
         # Features
-        init_data["color_by_column"] = visualize.get("color-by-column", False)
-        init_data["group_by_column"] = visualize.get("group-by-column", False)
-        init_data["arrow_key"] = visualize.get("show-arrow-key", False)
+        if "color-by-column" in visualize:
+            init_data["color_by_column"] = visualize["color-by-column"]
+        if "group-by-column" in visualize:
+            init_data["group_by_column"] = visualize["group-by-column"]
+        if "show-arrow-key" in visualize:
+            init_data["arrow_key"] = visualize["show-arrow-key"]
 
         return init_data

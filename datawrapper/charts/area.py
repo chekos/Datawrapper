@@ -351,8 +351,10 @@ class AreaChart(BaseChart):
         init_data["custom_ticks_x"] = CustomTicks.deserialize(
             visualize.get("custom-ticks-x", "")
         )
-        init_data["x_grid_format"] = visualize.get("x-grid-format", "auto")
-        init_data["x_grid"] = visualize.get("x-grid", "off")
+        if "x-grid-format" in visualize:
+            init_data["x_grid_format"] = visualize["x-grid-format"]
+        if "x-grid" in visualize:
+            init_data["x_grid"] = visualize["x-grid"]
 
         # Vertical axis (Y-axis)
         init_data["custom_range_y"] = CustomRange.deserialize(
@@ -362,43 +364,62 @@ class AreaChart(BaseChart):
             visualize.get("custom-ticks-y", "")
         )
 
-        init_data["y_grid_format"] = visualize.get("y-grid-format", "")
-        init_data["y_grid"] = visualize.get("y-grid", "on")
-        init_data["y_grid_labels"] = visualize.get("y-grid-labels", "auto")
-        init_data["y_grid_label_align"] = visualize.get("y-grid-label-align", "left")
+        if "y-grid-format" in visualize:
+            init_data["y_grid_format"] = visualize["y-grid-format"]
+        if "y-grid" in visualize:
+            init_data["y_grid"] = visualize["y-grid"]
+        if "y-grid-labels" in visualize:
+            init_data["y_grid_labels"] = visualize["y-grid-labels"]
+        if "y-grid-label-align" in visualize:
+            init_data["y_grid_label_align"] = visualize["y-grid-label-align"]
 
         # Customize areas
-        init_data["base_color"] = visualize.get("base-color", "#4682b4")
+        if "base-color" in visualize:
+            init_data["base_color"] = visualize["base-color"]
 
         # Parse area_opacity (may come as string or float)
-        area_opacity_val = visualize.get("area-opacity", 0.8)
-        init_data["area_opacity"] = float(area_opacity_val) if area_opacity_val else 0.8
+        if "area-opacity" in visualize:
+            area_opacity_val = visualize["area-opacity"]
+            init_data["area_opacity"] = (
+                float(area_opacity_val) if area_opacity_val else 0.8
+            )
 
-        init_data["interpolation"] = visualize.get("interpolation", "linear")
-        init_data["sort_areas"] = visualize.get("sort-areas", "keep")
-        init_data["stack_areas"] = visualize.get("stack-areas", False)
-        init_data["stack_to_100"] = visualize.get("stack-to-100", False)
-        init_data["area_separator_lines"] = visualize.get("area-separator-lines", False)
-        init_data["area_separator_color"] = visualize.get(
-            "area-separator-color", "#4682b4"
-        )
+        if "interpolation" in visualize:
+            init_data["interpolation"] = visualize["interpolation"]
+        if "sort-areas" in visualize:
+            init_data["sort_areas"] = visualize["sort-areas"]
+        if "stack-areas" in visualize:
+            init_data["stack_areas"] = visualize["stack-areas"]
+        if "stack-to-100" in visualize:
+            init_data["stack_to_100"] = visualize["stack-to-100"]
+        if "area-separator-lines" in visualize:
+            init_data["area_separator_lines"] = visualize["area-separator-lines"]
+        if "area-separator-color" in visualize:
+            init_data["area_separator_color"] = visualize["area-separator-color"]
 
         # Parse color-category using utility
         color_data = ColorCategory.deserialize(visualize.get("color-category"))
         init_data["color_category"] = color_data["color_category"]
 
         # Labels
-        init_data["show_color_key"] = visualize.get("show-color-key", False)
+        if "show-color-key" in visualize:
+            init_data["show_color_key"] = visualize["show-color-key"]
 
         # Tooltips
-        init_data["show_tooltips"] = visualize.get("show-tooltips", True)
-        init_data["tooltip_x_format"] = visualize.get("tooltip-x-format", "")
-        init_data["tooltip_number_format"] = visualize.get("tooltip-number-format", "")
+        if "show-tooltips" in visualize:
+            init_data["show_tooltips"] = visualize["show-tooltips"]
+        if "tooltip-x-format" in visualize:
+            init_data["tooltip_x_format"] = visualize["tooltip-x-format"]
+        if "tooltip-number-format" in visualize:
+            init_data["tooltip_number_format"] = visualize["tooltip-number-format"]
 
         # Appearance
-        init_data["plot_height_mode"] = visualize.get("plotHeightMode", "fixed")
-        init_data["plot_height_fixed"] = visualize.get("plotHeightFixed", 300)
-        init_data["plot_height_ratio"] = visualize.get("plotHeightRatio", 0.5)
+        if "plotHeightMode" in visualize:
+            init_data["plot_height_mode"] = visualize["plotHeightMode"]
+        if "plotHeightFixed" in visualize:
+            init_data["plot_height_fixed"] = visualize["plotHeightFixed"]
+        if "plotHeightRatio" in visualize:
+            init_data["plot_height_ratio"] = visualize["plotHeightRatio"]
 
         # Annotations
         init_data["text_annotations"] = TextAnnotation.deserialize_model(

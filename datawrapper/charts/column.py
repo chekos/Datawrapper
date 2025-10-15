@@ -326,16 +326,16 @@ class ColumnChart(BaseChart):
         init_data["custom_ticks_x"] = CustomTicks.deserialize(
             visualize.get("custom-ticks-x", "")
         )
-        init_data["x_grid_format"] = visualize.get("x-grid-format", "auto")
+        if "x-grid-format" in visualize:
+            init_data["x_grid_format"] = visualize["x-grid-format"]
 
         # Parse grid-lines-x
-        grid_lines_x = visualize.get("grid-lines-x", {})
-        if isinstance(grid_lines_x, dict):
-            enabled = grid_lines_x.get("enabled", False)
-            grid_type = grid_lines_x.get("type", "")
-            init_data["x_grid"] = grid_type if enabled else "off"
-        else:
-            init_data["x_grid"] = "off"
+        if "grid-lines-x" in visualize:
+            grid_lines_x = visualize["grid-lines-x"]
+            if isinstance(grid_lines_x, dict):
+                enabled = grid_lines_x.get("enabled", False)
+                grid_type = grid_lines_x.get("type", "")
+                init_data["x_grid"] = grid_type if enabled else "off"
 
         # Vertical axis (Y-axis)
         init_data["custom_range_y"] = CustomRange.deserialize(
@@ -344,57 +344,60 @@ class ColumnChart(BaseChart):
         init_data["custom_ticks_y"] = CustomTicks.deserialize(
             visualize.get("custom-ticks", "")
         )
-        init_data["y_grid_format"] = visualize.get("y-grid-format", "")
-        init_data["y_grid"] = visualize.get("grid-lines", True)
+        if "y-grid-format" in visualize:
+            init_data["y_grid_format"] = visualize["y-grid-format"]
+        if "grid-lines" in visualize:
+            init_data["y_grid"] = visualize["grid-lines"]
 
         # Parse yAxisLabels
-        y_axis_labels = visualize.get("yAxisLabels", {})
-        if isinstance(y_axis_labels, dict):
-            enabled = y_axis_labels.get("enabled", True)
-            placement = y_axis_labels.get("placement", "outside")
-            init_data["y_grid_labels"] = placement if enabled else "off"
-            init_data["y_grid_label_align"] = y_axis_labels.get("alignment", "left")
-        else:
-            init_data["y_grid_labels"] = "outside"
-            init_data["y_grid_label_align"] = "left"
+        if "yAxisLabels" in visualize:
+            y_axis_labels = visualize["yAxisLabels"]
+            if isinstance(y_axis_labels, dict):
+                enabled = y_axis_labels.get("enabled", True)
+                placement = y_axis_labels.get("placement", "outside")
+                init_data["y_grid_labels"] = placement if enabled else "off"
+                if "alignment" in y_axis_labels:
+                    init_data["y_grid_label_align"] = y_axis_labels["alignment"]
 
         # Appearance
-        init_data["base_color"] = visualize.get("base-color", "#4682b4")
+        if "base-color" in visualize:
+            init_data["base_color"] = visualize["base-color"]
 
         # Parse negativeColor
-        negative_color_obj = visualize.get("negativeColor", {})
-        if isinstance(negative_color_obj, dict):
-            enabled = negative_color_obj.get("enabled", False)
-            color_value = negative_color_obj.get("value", "#E31A1C")
-            init_data["negative_color"] = color_value if enabled else None
-        else:
-            init_data["negative_color"] = None
+        if "negativeColor" in visualize:
+            negative_color_obj = visualize["negativeColor"]
+            if isinstance(negative_color_obj, dict):
+                enabled = negative_color_obj.get("enabled", False)
+                color_value = negative_color_obj.get("value", "#E31A1C")
+                init_data["negative_color"] = color_value if enabled else None
 
         # Parse color-category using utility
         init_data.update(ColorCategory.deserialize(visualize.get("color-category")))
 
-        init_data["bar_padding"] = visualize.get("bar-padding", 30)
-        init_data["plot_height_mode"] = visualize.get("plotHeightMode", "fixed")
-        init_data["plot_height_fixed"] = visualize.get("plotHeightFixed", 300)
-        init_data["plot_height_ratio"] = visualize.get("plotHeightRatio", 0.5)
+        if "bar-padding" in visualize:
+            init_data["bar_padding"] = visualize["bar-padding"]
+        if "plotHeightMode" in visualize:
+            init_data["plot_height_mode"] = visualize["plotHeightMode"]
+        if "plotHeightFixed" in visualize:
+            init_data["plot_height_fixed"] = visualize["plotHeightFixed"]
+        if "plotHeightRatio" in visualize:
+            init_data["plot_height_ratio"] = visualize["plotHeightRatio"]
 
         # Labels
-        init_data["show_color_key"] = visualize.get("show-color-key", False)
+        if "show-color-key" in visualize:
+            init_data["show_color_key"] = visualize["show-color-key"]
 
         # Parse valueLabels
-        value_labels_obj = visualize.get("valueLabels", {})
-        if isinstance(value_labels_obj, dict):
-            enabled = value_labels_obj.get("enabled", False)
-            show = value_labels_obj.get("show", "hover")
-            init_data["value_labels"] = show if enabled else "off"
-            init_data["value_labels_format"] = value_labels_obj.get("format", "")
-            init_data["value_labels_placement"] = value_labels_obj.get(
-                "placement", "outside"
-            )
-        else:
-            init_data["value_labels"] = "hover"
-            init_data["value_labels_format"] = ""
-            init_data["value_labels_placement"] = "outside"
+        if "valueLabels" in visualize:
+            value_labels_obj = visualize["valueLabels"]
+            if isinstance(value_labels_obj, dict):
+                enabled = value_labels_obj.get("enabled", False)
+                show = value_labels_obj.get("show", "hover")
+                init_data["value_labels"] = show if enabled else "off"
+                if "format" in value_labels_obj:
+                    init_data["value_labels_format"] = value_labels_obj["format"]
+                if "placement" in value_labels_obj:
+                    init_data["value_labels_placement"] = value_labels_obj["placement"]
 
         # Annotations
         init_data["text_annotations"] = TextAnnotation.deserialize_model(

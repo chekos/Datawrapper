@@ -228,19 +228,27 @@ class StackedBarChart(BaseChart):
         axes = api_response.get("axes", metadata.get("axes", {}))
 
         # Parse stacked bar specific fields
-        init_data["reverse_order"] = visualize.get("reverse-order", False)
+        if "reverse-order" in visualize:
+            init_data["reverse_order"] = visualize["reverse-order"]
 
         # Parse color-category using utility
         color_data = ColorCategory.deserialize(visualize.get("color-category"))
         init_data["color_category"] = color_data["color_category"]
 
-        init_data["range_value_labels"] = visualize.get("range-value-labels", "")
-        init_data["show_color_key"] = visualize.get("show-color-key", False)
-        init_data["value_label_format"] = visualize.get("value-label-format", "")
-        init_data["date_label_format"] = visualize.get("date-label-format", "")
-        init_data["color_by_column"] = visualize.get("color-by-column", False)
-        init_data["group_by_column"] = visualize.get("group-by-column", False)
-        init_data["thick_bars"] = visualize.get("thick", False)
+        if "range-value-labels" in visualize:
+            init_data["range_value_labels"] = visualize["range-value-labels"]
+        if "show-color-key" in visualize:
+            init_data["show_color_key"] = visualize["show-color-key"]
+        if "value-label-format" in visualize:
+            init_data["value_label_format"] = visualize["value-label-format"]
+        if "date-label-format" in visualize:
+            init_data["date_label_format"] = visualize["date-label-format"]
+        if "color-by-column" in visualize:
+            init_data["color_by_column"] = visualize["color-by-column"]
+        if "group-by-column" in visualize:
+            init_data["group_by_column"] = visualize["group-by-column"]
+        if "thick" in visualize:
+            init_data["thick_bars"] = visualize["thick"]
 
         # Parse replace-flags
         replace_flags = visualize.get("replace-flags", {})
@@ -252,12 +260,18 @@ class StackedBarChart(BaseChart):
         else:
             init_data["replace_flags"] = "off"
 
-        init_data["value_label_mode"] = visualize.get("value-label-mode", "left")
-        init_data["stack_percentages"] = visualize.get("stack-percentages", False)
-        init_data["sort_bars"] = visualize.get("sort-bars", False)
-        init_data["sort_by"] = visualize.get("sort-by", "")
-        init_data["base_color"] = visualize.get("base-color", 0)
-        init_data["block_labels"] = visualize.get("block-labels", False)
+        if "value-label-mode" in visualize:
+            init_data["value_label_mode"] = visualize["value-label-mode"]
+        if "stack-percentages" in visualize:
+            init_data["stack_percentages"] = visualize["stack-percentages"]
+        if "sort-bars" in visualize:
+            init_data["sort_bars"] = visualize["sort-bars"]
+        if "sort-by" in visualize:
+            init_data["sort_by"] = visualize["sort-by"]
+        if "base-color" in visualize:
+            init_data["base_color"] = visualize["base-color"]
+        if "block-labels" in visualize:
+            init_data["block_labels"] = visualize["block-labels"]
 
         # Parse negativeColor
         negative_color = visualize.get("negativeColor", {})

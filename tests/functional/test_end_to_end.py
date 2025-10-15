@@ -195,7 +195,7 @@ class TestEndToEndWorkflows:
         assert visualize["thick"] is True
         assert visualize["sort-bars"] is True
         assert visualize["reverse-order"] is True
-        assert visualize["custom-range"] == (0, 100)
+        assert visualize["custom-range"] == [0, 100]
         assert visualize["show-color-key"] is True
         assert len(visualize["color-category"]["map"]) == 3
 

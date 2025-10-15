@@ -627,9 +627,12 @@ class ScatterPlot(BaseChart):
             init_data["x_range"] = ["", ""]
             init_data["x_ticks"] = []
 
-        init_data["x_format"] = visualize.get("x-format", "")
-        init_data["x_position"] = visualize.get("x-pos", "bottom")
-        init_data["x_grid_lines"] = visualize.get("x-grid-lines", "on")
+        if "x-format" in visualize:
+            init_data["x_format"] = visualize["x-format"]
+        if "x-pos" in visualize:
+            init_data["x_position"] = visualize["x-pos"]
+        if "x-grid-lines" in visualize:
+            init_data["x_grid_lines"] = visualize["x-grid-lines"]
 
         # Parse y-axis
         y_axis = visualize.get("y-axis", {})
@@ -642,63 +645,88 @@ class ScatterPlot(BaseChart):
             init_data["y_range"] = ["", ""]
             init_data["y_ticks"] = []
 
-        init_data["y_format"] = visualize.get("y-format", "")
-        init_data["y_position"] = visualize.get("y-pos", "bottom")
-        init_data["y_grid_lines"] = visualize.get("y-grid-lines", "on")
+        if "y-format" in visualize:
+            init_data["y_format"] = visualize["y-format"]
+        if "y-pos" in visualize:
+            init_data["y_position"] = visualize["y-pos"]
+        if "y-grid-lines" in visualize:
+            init_data["y_grid_lines"] = visualize["y-grid-lines"]
 
         # Colors
-        init_data["base_color"] = visualize.get("base-color", "#3182bd")
-        init_data["opacity"] = visualize.get("opacity", 1.0)
-        init_data["outlines"] = visualize.get("outlines", False)
-        init_data["color_outline"] = visualize.get("color-outline", "#000000")
-        init_data["show_color_key"] = visualize.get("show-color-key", False)
+        if "base-color" in visualize:
+            init_data["base_color"] = visualize["base-color"]
+        if "opacity" in visualize:
+            init_data["opacity"] = visualize["opacity"]
+        if "outlines" in visualize:
+            init_data["outlines"] = visualize["outlines"]
+        if "color-outline" in visualize:
+            init_data["color_outline"] = visualize["color-outline"]
+        if "show-color-key" in visualize:
+            init_data["show_color_key"] = visualize["show-color-key"]
 
         # Size
-        init_data["size"] = visualize.get("size", "fixed")
-        init_data["fixed_size"] = visualize.get("fixed-size", 5)
-        init_data["max_size"] = visualize.get("max-size", 25)
-        init_data["responsive_symbol_size"] = visualize.get(
-            "responsive-symbol-size", False
-        )
-        init_data["show_size_legend"] = visualize.get("show-size-legend", False)
-        init_data["size_legend_position"] = visualize.get(
-            "size-legend-position", "above"
-        )
-        init_data["legend_offset_x"] = visualize.get("legend-offset-x", 0)
-        init_data["legend_offset_y"] = visualize.get("legend-offset-y", 0)
-        init_data["size_legend_values_format"] = visualize.get(
-            "size-legend-values-setting", "auto"
-        )
-        init_data["size_legend_values"] = visualize.get("size-legend-values", [])
-        init_data["size_legend_label_position"] = visualize.get(
-            "size-legend-label-position", "below"
-        )
-        init_data["size_legend_label_format"] = visualize.get(
-            "size-legend-label-format", ""
-        )
-        init_data["size_legend_title_enabled"] = visualize.get(
-            "size-legend-title-enabled", False
-        )
-        init_data["size_legend_title"] = visualize.get("size-legend-title", "")
-        init_data["size_legend_title_position"] = visualize.get(
-            "size-legend-title-position", "left"
-        )
-        init_data["size_legend_title_width"] = visualize.get(
-            "size-legend-title-width", 200
-        )
+        if "size" in visualize:
+            init_data["size"] = visualize["size"]
+        if "fixed-size" in visualize:
+            init_data["fixed_size"] = visualize["fixed-size"]
+        if "max-size" in visualize:
+            init_data["max_size"] = visualize["max-size"]
+        if "responsive-symbol-size" in visualize:
+            init_data["responsive_symbol_size"] = visualize["responsive-symbol-size"]
+        if "show-size-legend" in visualize:
+            init_data["show_size_legend"] = visualize["show-size-legend"]
+        if "size-legend-position" in visualize:
+            init_data["size_legend_position"] = visualize["size-legend-position"]
+        if "legend-offset-x" in visualize:
+            init_data["legend_offset_x"] = visualize["legend-offset-x"]
+        if "legend-offset-y" in visualize:
+            init_data["legend_offset_y"] = visualize["legend-offset-y"]
+        if "size-legend-values-setting" in visualize:
+            init_data["size_legend_values_format"] = visualize[
+                "size-legend-values-setting"
+            ]
+        if "size-legend-values" in visualize:
+            init_data["size_legend_values"] = visualize["size-legend-values"]
+        if "size-legend-label-position" in visualize:
+            init_data["size_legend_label_position"] = visualize[
+                "size-legend-label-position"
+            ]
+        if "size-legend-label-format" in visualize:
+            init_data["size_legend_label_format"] = visualize[
+                "size-legend-label-format"
+            ]
+        if "size-legend-title-enabled" in visualize:
+            init_data["size_legend_title_enabled"] = visualize[
+                "size-legend-title-enabled"
+            ]
+        if "size-legend-title" in visualize:
+            init_data["size_legend_title"] = visualize["size-legend-title"]
+        if "size-legend-title-position" in visualize:
+            init_data["size_legend_title_position"] = visualize[
+                "size-legend-title-position"
+            ]
+        if "size-legend-title-width" in visualize:
+            init_data["size_legend_title_width"] = visualize["size-legend-title-width"]
 
         # Shape
-        init_data["shape"] = visualize.get("shape", "fixed")
-        init_data["fixed_shape"] = visualize.get("fixed-shape", "symbolCircle")
+        if "shape" in visualize:
+            init_data["shape"] = visualize["shape"]
+        if "fixed-shape" in visualize:
+            init_data["fixed_shape"] = visualize["fixed-shape"]
 
         # Trend line
-        init_data["regression"] = visualize.get("regression", False)
-        init_data["regression_method"] = visualize.get("regression-method", "linear")
+        if "regression" in visualize:
+            init_data["regression"] = visualize["regression"]
+        if "regression-method" in visualize:
+            init_data["regression_method"] = visualize["regression-method"]
 
         # Appearance
-        init_data["plot_height_mode"] = visualize.get("plotHeightMode", "fixed")
-        init_data["plot_height_fixed"] = visualize.get("plotHeightFixed", 300)
-        init_data["plot_height_ratio"] = visualize.get("plotHeightRatio", 0.5)
+        if "plotHeightMode" in visualize:
+            init_data["plot_height_mode"] = visualize["plotHeightMode"]
+        if "plotHeightFixed" in visualize:
+            init_data["plot_height_fixed"] = visualize["plotHeightFixed"]
+        if "plotHeightRatio" in visualize:
+            init_data["plot_height_ratio"] = visualize["plotHeightRatio"]
 
         # Annotations
         init_data["text_annotations"] = TextAnnotation.deserialize_model(
@@ -708,12 +736,16 @@ class ScatterPlot(BaseChart):
             visualize.get("range-annotations")
         )
 
-        init_data["custom_lines"] = visualize.get("custom-lines", "")
+        if "custom-lines" in visualize:
+            init_data["custom_lines"] = visualize["custom-lines"]
 
         # Labeling
-        init_data["auto_labels"] = visualize.get("auto-labels", True)
-        init_data["add_labels"] = visualize.get("add-labels", [])
-        init_data["highlight_labeled"] = visualize.get("highlight-labeled", True)
+        if "auto-labels" in visualize:
+            init_data["auto_labels"] = visualize["auto-labels"]
+        if "add-labels" in visualize:
+            init_data["add_labels"] = visualize["add-labels"]
+        if "highlight-labeled" in visualize:
+            init_data["highlight_labeled"] = visualize["highlight-labeled"]
 
         # Tooltips
         tooltip = visualize.get("tooltip", {})

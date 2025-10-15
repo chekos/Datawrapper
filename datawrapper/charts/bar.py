@@ -499,74 +499,95 @@ class BarChart(BaseChart):
         axes = metadata.get("axes", {})
 
         # Labels
-        init_data["label_column"] = axes.get("labels", "")
-        init_data["label_alignment"] = visualize.get("label-alignment", "left")
-        init_data["block_labels"] = visualize.get("block-labels", False)
-        init_data["show_value_labels"] = visualize.get("show-value-labels", True)
-        init_data["value_label_alignment"] = visualize.get(
-            "value-label-alignment", "left"
-        )
-        init_data["value_label_format"] = visualize.get("value-label-format", "")
-        init_data["swap_labels"] = visualize.get("swap-labels", False)
+        if "labels" in axes:
+            init_data["label_column"] = axes["labels"]
+        if "label-alignment" in visualize:
+            init_data["label_alignment"] = visualize["label-alignment"]
+        if "block-labels" in visualize:
+            init_data["block_labels"] = visualize["block-labels"]
+        if "show-value-labels" in visualize:
+            init_data["show_value_labels"] = visualize["show-value-labels"]
+        if "value-label-alignment" in visualize:
+            init_data["value_label_alignment"] = visualize["value-label-alignment"]
+        if "value-label-format" in visualize:
+            init_data["value_label_format"] = visualize["value-label-format"]
+        if "swap-labels" in visualize:
+            init_data["swap_labels"] = visualize["swap-labels"]
 
         # Replace flags
-        replace_flags_obj = visualize.get("replace-flags", {})
-        if isinstance(replace_flags_obj, dict):
-            enabled = replace_flags_obj.get("enabled", False)
-            flag_type = replace_flags_obj.get("type", "")
-            init_data["replace_flags"] = flag_type if enabled else "off"
-        else:
-            init_data["replace_flags"] = "off"
+        if "replace-flags" in visualize:
+            replace_flags_obj = visualize["replace-flags"]
+            if isinstance(replace_flags_obj, dict):
+                enabled = replace_flags_obj.get("enabled", False)
+                flag_type = replace_flags_obj.get("type", "")
+                init_data["replace_flags"] = flag_type if enabled else "off"
 
-        init_data["show_color_key"] = visualize.get("show-color-key", False)
-        init_data["stack_color_legend"] = visualize.get("stack-color-legend", False)
+        if "show-color-key" in visualize:
+            init_data["show_color_key"] = visualize["show-color-key"]
+        if "stack-color-legend" in visualize:
+            init_data["stack_color_legend"] = visualize["stack-color-legend"]
 
         # Horizontal axis
-        init_data["bar_column"] = axes.get("bars", "")
+        if "bars" in axes:
+            init_data["bar_column"] = axes["bars"]
         init_data["custom_range"] = CustomRange.deserialize(
             visualize.get("custom-range")
         )
-        init_data["force_grid"] = visualize.get("force-grid", False)
+        if "force-grid" in visualize:
+            init_data["force_grid"] = visualize["force-grid"]
 
         # Parse custom grid lines (comes as comma-separated string)
-        grid_lines_str = visualize.get("custom-grid-lines", "")
-        if grid_lines_str:
-            init_data["custom_grid_lines"] = [
-                float(x.strip()) if x.strip() else x.strip()
-                for x in grid_lines_str.split(",")
-            ]
-        else:
-            init_data["custom_grid_lines"] = []
+        if "custom-grid-lines" in visualize:
+            grid_lines_str = visualize["custom-grid-lines"]
+            if grid_lines_str:
+                init_data["custom_grid_lines"] = [
+                    float(x.strip()) if x.strip() else x.strip()
+                    for x in grid_lines_str.split(",")
+                ]
 
-        init_data["tick_position"] = visualize.get("tick-position", "top")
-        init_data["axis_label_format"] = visualize.get("axis-label-format", "")
+        if "tick-position" in visualize:
+            init_data["tick_position"] = visualize["tick-position"]
+        if "axis-label-format" in visualize:
+            init_data["axis_label_format"] = visualize["axis-label-format"]
 
         # Appearance
-        init_data["base_color"] = visualize.get("base-color", "#4682b4")
-        init_data["color_column"] = axes.get("colors", "")
+        if "base-color" in visualize:
+            init_data["base_color"] = visualize["base-color"]
+        if "colors" in axes:
+            init_data["color_column"] = axes["colors"]
 
         # Parse color-category using utility
         init_data.update(ColorCategory.deserialize(visualize.get("color-category")))
 
-        init_data["rules"] = visualize.get("rules", False)
-        init_data["thick"] = visualize.get("thick", False)
-        init_data["background"] = visualize.get("background", False)
+        if "rules" in visualize:
+            init_data["rules"] = visualize["rules"]
+        if "thick" in visualize:
+            init_data["thick"] = visualize["thick"]
+        if "background" in visualize:
+            init_data["background"] = visualize["background"]
 
         # Sorting and grouping
-        init_data["sort_bars"] = visualize.get("sort-bars", False)
-        init_data["reverse_order"] = visualize.get("reverse-order", False)
-        init_data["group_by_column"] = axes.get("groups", "")
-        init_data["show_group_labels"] = visualize.get("show-group-labels", True)
-        init_data["show_category_labels"] = visualize.get("show-category-labels", True)
+        if "sort-bars" in visualize:
+            init_data["sort_bars"] = visualize["sort-bars"]
+        if "reverse-order" in visualize:
+            init_data["reverse_order"] = visualize["reverse-order"]
+        if "groups" in axes:
+            init_data["group_by_column"] = axes["groups"]
+        if "show-group-labels" in visualize:
+            init_data["show_group_labels"] = visualize["show-group-labels"]
+        if "show-category-labels" in visualize:
+            init_data["show_category_labels"] = visualize["show-category-labels"]
 
         # Overlays (list of BarOverlay objects)
-        overlays_list = visualize.get("overlays", [])
-        init_data["overlays"] = [
-            BarOverlay.model_validate(overlay) for overlay in overlays_list
-        ]
+        if "overlays" in visualize:
+            overlays_list = visualize["overlays"]
+            init_data["overlays"] = [
+                BarOverlay.model_validate(overlay) for overlay in overlays_list
+            ]
 
         # Annotations
-        init_data["highlighted_series"] = visualize.get("highlighted-series", [])
+        if "highlighted-series" in visualize:
+            init_data["highlighted_series"] = visualize["highlighted-series"]
 
         # Annotations
         init_data["text_annotations"] = TextAnnotation.deserialize_model(

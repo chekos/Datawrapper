@@ -289,40 +289,42 @@ class Line(BaseModel):
         Returns:
             Dictionary that can be used to initialize a Line instance
         """
-        # Parse symbols
+        # Parse symbols - let Pydantic apply Field defaults for missing values
         symbols_obj = line_config.get("symbols", {})
-        symbols = {
-            "enabled": symbols_obj.get("enabled", False),
-            "shape": symbols_obj.get("shape", "circle"),
-            "style": symbols_obj.get("style", "fill"),
-            "on": symbols_obj.get("on", "last"),
-            "size": symbols_obj.get("size", 6),
-            "opacity": symbols_obj.get("opacity", 1.0),
-        }
+        symbols = LineSymbol.model_validate(symbols_obj)
 
-        # Parse value labels
+        # Parse value labels - let Pydantic apply Field defaults for missing values
         value_labels_obj = line_config.get("valueLabels", {})
-        value_labels = {
-            "enabled": value_labels_obj.get("enabled", False),
-            "last": value_labels_obj.get("last", False),
-            "first": value_labels_obj.get("first", False),
-            "show_circles": value_labels_obj.get("showCircles", False),
-            "max_inner_labels": value_labels_obj.get("maxInnerLabels", 0),
-        }
+        value_labels = LineValueLabel.model_validate(value_labels_obj)
 
-        return {
+        # Build the initialization dict, only including values present in API response
+        init_dict = {
             "column": line_name,
-            "title": line_config.get("title", ""),
-            "interpolation": line_config.get("interpolation", "linear"),
-            "width": line_config.get("width", "style1"),
-            "dash": line_config.get("dash"),
-            "color_key": line_config.get("colorKey", False),
-            "direct_label": line_config.get("directLabel", False),
-            "outline": line_config.get("bgStroke", False),
             "symbols": symbols,
             "value_labels": value_labels,
-            "connect_missing_points": line_config.get("connectMissingPoints", False),
         }
+
+        # Add optional fields only if present in API response
+        if "title" in line_config:
+            init_dict["title"] = line_config["title"]
+        if "interpolation" in line_config:
+            init_dict["interpolation"] = line_config["interpolation"]
+        if "width" in line_config:
+            init_dict["width"] = line_config["width"]
+
+        # Always include dash field (None if not present in API response)
+        init_dict["dash"] = line_config.get("dash")
+
+        if "colorKey" in line_config:
+            init_dict["color_key"] = line_config["colorKey"]
+        if "directLabel" in line_config:
+            init_dict["direct_label"] = line_config["directLabel"]
+        if "bgStroke" in line_config:
+            init_dict["outline"] = line_config["bgStroke"]
+        if "connectMissingPoints" in line_config:
+            init_dict["connect_missing_points"] = line_config["connectMissingPoints"]
+
+        return init_dict
 
 
 class LineChart(BaseChart):
@@ -703,8 +705,10 @@ class LineChart(BaseChart):
         init_data["custom_ticks_x"] = CustomTicks.deserialize(
             visualize.get("custom-ticks-x", "")
         )
-        init_data["x_grid_format"] = visualize.get("x-grid-format", "auto")
-        init_data["x_grid"] = visualize.get("x-grid", "off")
+        if "x-grid-format" in visualize:
+            init_data["x_grid_format"] = visualize["x-grid-format"]
+        if "x-grid" in visualize:
+            init_data["x_grid"] = visualize["x-grid"]
 
         # Vertical axis (Y-axis)
         init_data["custom_range_y"] = CustomRange.deserialize(
@@ -714,17 +718,26 @@ class LineChart(BaseChart):
             visualize.get("custom-ticks-y", "")
         )
 
-        init_data["y_grid_format"] = visualize.get("y-grid-format", "")
-        init_data["y_grid"] = visualize.get("y-grid", "on")
-        init_data["y_grid_labels"] = visualize.get("y-grid-labels", "auto")
-        init_data["y_grid_label_align"] = visualize.get("y-grid-label-align", "left")
-        init_data["scale_y"] = visualize.get("scale-y", "linear")
-        init_data["y_grid_subdivide"] = visualize.get("y-grid-subdivide", True)
+        if "y-grid-format" in visualize:
+            init_data["y_grid_format"] = visualize["y-grid-format"]
+        if "y-grid" in visualize:
+            init_data["y_grid"] = visualize["y-grid"]
+        if "y-grid-labels" in visualize:
+            init_data["y_grid_labels"] = visualize["y-grid-labels"]
+        if "y-grid-label-align" in visualize:
+            init_data["y_grid_label_align"] = visualize["y-grid-label-align"]
+        if "scale-y" in visualize:
+            init_data["scale_y"] = visualize["scale-y"]
+        if "y-grid-subdivide" in visualize:
+            init_data["y_grid_subdivide"] = visualize["y-grid-subdivide"]
 
         # Customize lines
-        init_data["base_color"] = visualize.get("base-color", "#4682b4")
-        init_data["interpolation"] = visualize.get("interpolation", "linear")
-        init_data["connector_lines"] = visualize.get("connector-lines", False)
+        if "base-color" in visualize:
+            init_data["base_color"] = visualize["base-color"]
+        if "interpolation" in visualize:
+            init_data["interpolation"] = visualize["interpolation"]
+        if "connector-lines" in visualize:
+            init_data["connector_lines"] = visualize["connector-lines"]
 
         # Parse color-category using utility
         color_data = ColorCategory.deserialize(visualize.get("color-category"))
@@ -749,21 +762,32 @@ class LineChart(BaseChart):
         ]
 
         # Labels
-        init_data["stack_color_legend"] = visualize.get("stack-color-legend", False)
-        init_data["label_colors"] = visualize.get("label-colors", False)
-        init_data["label_margin"] = visualize.get("label-margin", 0)
-        init_data["value_labels_format"] = visualize.get("value-labels-format", "")
-        init_data["value_label_colors"] = visualize.get("value-label-colors", False)
+        if "stack-color-legend" in visualize:
+            init_data["stack_color_legend"] = visualize["stack-color-legend"]
+        if "label-colors" in visualize:
+            init_data["label_colors"] = visualize["label-colors"]
+        if "label-margin" in visualize:
+            init_data["label_margin"] = visualize["label-margin"]
+        if "value-labels-format" in visualize:
+            init_data["value_labels_format"] = visualize["value-labels-format"]
+        if "value-label-colors" in visualize:
+            init_data["value_label_colors"] = visualize["value-label-colors"]
 
         # Tooltips
-        init_data["show_tooltips"] = visualize.get("show-tooltips", True)
-        init_data["tooltip_x_format"] = visualize.get("tooltip-x-format", "")
-        init_data["tooltip_number_format"] = visualize.get("tooltip-number-format", "")
+        if "show-tooltips" in visualize:
+            init_data["show_tooltips"] = visualize["show-tooltips"]
+        if "tooltip-x-format" in visualize:
+            init_data["tooltip_x_format"] = visualize["tooltip-x-format"]
+        if "tooltip-number-format" in visualize:
+            init_data["tooltip_number_format"] = visualize["tooltip-number-format"]
 
         # Appearance
-        init_data["plot_height_mode"] = visualize.get("plotHeightMode", "fixed")
-        init_data["plot_height_fixed"] = visualize.get("plotHeightFixed", 300)
-        init_data["plot_height_ratio"] = visualize.get("plotHeightRatio", 0.5)
+        if "plotHeightMode" in visualize:
+            init_data["plot_height_mode"] = visualize["plotHeightMode"]
+        if "plotHeightFixed" in visualize:
+            init_data["plot_height_fixed"] = visualize["plotHeightFixed"]
+        if "plotHeightRatio" in visualize:
+            init_data["plot_height_ratio"] = visualize["plotHeightRatio"]
 
         # Annotations
         init_data["text_annotations"] = TextAnnotation.deserialize_model(
