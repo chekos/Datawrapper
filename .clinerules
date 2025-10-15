@@ -21,7 +21,6 @@ This is a Python library for interacting with the Datawrapper API to create and 
     - `test_basemaps.py` - Fully mocked tests for basemap operations (get_basemaps, get_basemap, get_basemap_key)
     - `test_login_tokens.py` - Fully mocked tests for login token operations (create, get, delete)
     - Some tests may still require API tokens for end-to-end testing
-  - `samples/` - Sample chart JSON files for testing
 
 ## Key Patterns
 
@@ -127,6 +126,49 @@ col_format = ColumnFormat(column="revenue", number_divisor=6)
 # Using raw string (also valid)
 col_format = ColumnFormat(column="revenue", number_divisor="auto")
 ```
+
+### LineSymbol and LineValueLabel Pattern
+
+The `LineSymbol` and `LineValueLabel` classes in `line.py` follow an "enabled by presence" pattern where providing the object automatically implies it should be enabled:
+
+**API Format vs Python Format:**
+- **API Format**: Nested object with `{"enabled": bool, ...other fields}`
+- **Python Format**: Optional object (None = disabled, object = enabled with `enabled=True` automatically set)
+
+**Key Features:**
+- `enabled` field defaults to `True` in both classes
+- Validators prevent explicitly setting `enabled=False` (raises `ValueError` with helpful message)
+- To disable: omit the field entirely (set to `None`)
+- To enable: provide the object with desired configuration
+
+**Serialization:**
+- When object is provided: Serializes full object with `enabled=True`
+- When object is `None`: Serializes `{"enabled": False}`
+
+**Deserialization:**
+- When API has `enabled=True`: Returns object instance
+- When API has `enabled=False`: Returns `None`
+
+**Usage in Line Model:**
+```python
+from datawrapper.charts.line import Line, LineSymbol, LineValueLabel
+
+# Enabled (clean API - no need to set enabled=True)
+line = Line(
+    column="temperature",
+    symbols=LineSymbol(shape="circle", size=5),
+    value_labels=LineValueLabel(last=True, first=True)
+)
+
+# Disabled (just omit the fields)
+line = Line(column="temperature")
+```
+
+**Benefits:**
+- More intuitive API - presence implies enablement
+- Prevents invalid states (can't have object with enabled=False)
+- Consistent with other utilities (NegativeColor, PlotHeight, etc.)
+- Cleaner code - no redundant enabled=True everywhere
 
 ### Line Width and Dash Enums
 
