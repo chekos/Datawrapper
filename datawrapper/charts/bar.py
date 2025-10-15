@@ -270,11 +270,11 @@ class BarChart(BaseChart):
     # Appearance
     #
 
-    #: The default color for the chart
+    #: The default color for the chart (palette index or hex string)
     base_color: str | int = Field(
-        default="#4682b4",
+        default=0,
         alias="base-color",
-        description="The default color for the chart",
+        description="The default color for the chart (palette index or hex string)",
     )
 
     #: The column with the color for the bars

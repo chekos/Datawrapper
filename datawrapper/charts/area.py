@@ -129,11 +129,11 @@ class AreaChart(BaseChart):
     # Customize areas
     #
 
-    #: The base color for layers
+    #: The base color for layers (palette index or hex string)
     base_color: str | int = Field(
-        default="#4682b4",
+        default=0,
         alias="base-color",
-        description="The base color for layers",
+        description="The base color for layers (palette index or hex string)",
     )
 
     #: The opacity of the areas

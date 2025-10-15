@@ -461,11 +461,11 @@ class LineChart(BaseChart):
     # Customize lines
     #
 
-    #: The base color for lines
+    #: The base color for lines (palette index or hex string)
     base_color: str | int = Field(
-        default="#4682b4",
+        default=0,
         alias="base-color",
-        description="The base color for lines",
+        description="The base color for lines (palette index or hex string)",
     )
 
     #: The interpolation method to use when drawing lines

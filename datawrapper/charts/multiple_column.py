@@ -209,11 +209,11 @@ class MultipleColumnChart(BaseChart):
     # Appearance
     #
 
-    #: The base color for the chart
-    base_color: str = Field(
-        default="#3182bd",
+    #: The base color for the chart (palette index or hex string)
+    base_color: str | int = Field(
+        default=0,
         alias="base-color",
-        description="The base color for the chart",
+        description="The base color for the chart (palette index or hex string)",
     )
 
     #: The negative color to use, if you want one
@@ -515,12 +515,7 @@ class MultipleColumnChart(BaseChart):
 
         # Appearance
         if "base-color" in visualize:
-            base_color_val = visualize["base-color"]
-            # Handle case where base-color is 0 (integer) - convert to default color
-            if isinstance(base_color_val, int):
-                init_data["base_color"] = "#3182bd"
-            else:
-                init_data["base_color"] = base_color_val
+            init_data["base_color"] = visualize["base-color"]
 
         if "bar-padding" in visualize:
             init_data["bar_padding"] = visualize["bar-padding"]

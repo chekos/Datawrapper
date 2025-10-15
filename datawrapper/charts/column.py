@@ -129,11 +129,11 @@ class ColumnChart(BaseChart):
     # Appearance
     #
 
-    #: The base color for the chart
+    #: The base color for the chart (palette index or hex string)
     base_color: str | int = Field(
-        default="#4682b4",
+        default=0,
         alias="base-color",
-        description="The base color for the chart",
+        description="The base color for the chart (palette index or hex string)",
     )
 
     #: The negative color to use, if you want one

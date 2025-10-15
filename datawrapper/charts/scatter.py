@@ -152,11 +152,11 @@ class ScatterPlot(BaseChart):
     # Color
     #
 
-    #: The default color (can be hex string or palette index)
+    #: The default color (palette index or hex string)
     base_color: str | int = Field(
-        default="#3182bd",
+        default=0,
         alias="base-color",
-        description="The default color (can be hex string or palette index)",
+        description="The default color (palette index or hex string)",
     )
 
     #: The opacity of the points
