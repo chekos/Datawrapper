@@ -15,7 +15,12 @@ This is a Python library for interacting with the Datawrapper API to create and 
 - `tests/` - Test suite
   - `unit/` - Unit tests
   - `integration/` - Integration tests
-  - `functional/` - Functional tests (require API token)
+  - `functional/` - Functional tests
+    - Most tests use mocked API calls (no API token required)
+    - `test_datawrapper.py` - Fully mocked tests for basic Datawrapper operations (get_charts, get_folders, fork, copy, usage)
+    - `test_basemaps.py` - Fully mocked tests for basemap operations (get_basemaps, get_basemap, get_basemap_key)
+    - `test_login_tokens.py` - Fully mocked tests for login token operations (create, get, delete)
+    - Some tests may still require API tokens for end-to-end testing
   - `samples/` - Sample chart JSON files for testing
 
 ## Key Patterns
@@ -371,3 +376,48 @@ python_format = ValueLabels.deserialize(
 - The `enabled` field in the nested `valueLabels` object controls on/off (True for hover or always, False for off)
 - The separate `value-labels-always` field controls hover vs always behavior
 - This utility standardizes value label handling across different chart types while respecting their unique API requirements
+
+## Testing Patterns
+
+### Mocking API Calls
+
+The functional tests in `tests/functional/test_datawrapper.py` use Python's `unittest.mock` to mock all API calls, allowing tests to run without requiring an API token or making actual HTTP requests.
+
+**Key Mocking Patterns:**
+
+1. **Mock HTTP Methods**: Use `patch.object(Datawrapper, "method_name")` to mock the underlying HTTP methods (`get`, `post`, `patch`, `put`, `delete`)
+
+2. **Mock External Dependencies**: Mock external libraries like `pandas.read_csv` and `pathlib.Path.open` to avoid actual file I/O or network requests
+
+3. **Setup Return Values**: Configure mocks with appropriate return values that match the expected API response structure
+
+4. **Verify Calls**: Use assertions to verify that the expected API calls were made with the correct parameters
+
+**Example:**
+```python
+from unittest.mock import patch
+from datawrapper import Datawrapper
+
+def test_create_chart():
+    with patch.object(Datawrapper, "post") as mock_post:
+        # Setup mock response
+        mock_post.return_value = {
+            "id": "test123",
+            "title": "Test Chart",
+            "type": "d3-bars"
+        }
+
+        # Call the method
+        dw = Datawrapper()
+        result = dw.create_chart(title="Test Chart", chart_type="d3-bars")
+
+        # Verify
+        assert result["id"] == "test123"
+        mock_post.assert_called_once()
+```
+
+**Benefits:**
+- Tests run faster without network I/O
+- Tests are more reliable (no dependency on external API availability)
+- Tests can run in CI/CD environments without API credentials
+- Easier to test edge cases and error conditions
