@@ -103,11 +103,9 @@ class TestStackedBarChartCreation:
         chart = StackedBarChart(
             title="Negative Color Chart",
             data=df,
-            negative_color_enabled=True,
-            negative_color_value="#ff0000",
+            negative_color="#ff0000",
         )
-        assert chart.negative_color_enabled is True
-        assert chart.negative_color_value == "#ff0000"
+        assert chart.negative_color == "#ff0000"
 
     def test_create_with_all_options(self):
         """Test creating a chart with many options."""
@@ -197,8 +195,7 @@ class TestStackedBarChartSerialization:
         chart = StackedBarChart(
             title="Test",
             data=df,
-            negative_color_enabled=True,
-            negative_color_value="#ff0000",
+            negative_color="#ff0000",
         )
         serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
 
@@ -311,7 +308,7 @@ class TestStackedBarChartParsing:
             assert chart.base_color == 0
             assert chart.show_color_key is True
             assert chart.color_by_column is True
-            assert chart.negative_color_enabled is False
+            assert chart.negative_color is None
 
     def test_parse_media_trust_sample(self):
         """Test parsing the media-trust.json sample."""

@@ -10,6 +10,7 @@ from .serializers import (
     CustomRange,
     CustomTicks,
     ModelListSerializer,
+    NegativeColor,
     PlotHeight,
 )
 
@@ -272,10 +273,7 @@ class ColumnChart(BaseChart):
                 },
                 # Appearance
                 "base-color": self.base_color,
-                "negativeColor": {
-                    "value": self.negative_color if self.negative_color else "#E31A1C",
-                    "enabled": self.negative_color is not None,
-                },
+                "negativeColor": NegativeColor.serialize(self.negative_color),
                 "bar-padding": self.bar_padding,
                 "color-category": ColorCategory.serialize(
                     self.color_category,
@@ -373,11 +371,9 @@ class ColumnChart(BaseChart):
 
         # Parse negativeColor
         if "negativeColor" in visualize:
-            negative_color_obj = visualize["negativeColor"]
-            if isinstance(negative_color_obj, dict):
-                enabled = negative_color_obj.get("enabled", False)
-                color_value = negative_color_obj.get("value", "#E31A1C")
-                init_data["negative_color"] = color_value if enabled else None
+            init_data["negative_color"] = NegativeColor.deserialize(
+                visualize["negativeColor"]
+            )
 
         # Parse color-category using utility
         init_data.update(ColorCategory.deserialize(visualize.get("color-category")))

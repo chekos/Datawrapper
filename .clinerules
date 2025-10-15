@@ -220,6 +220,43 @@ python_format = ReplaceFlags.deserialize({"enabled": True, "style": "4x3"})
 # Returns: "4x3"
 ```
 
+### Negative Color Utility
+
+The `NegativeColor` class in `serializers.py` provides utilities for handling negative color configuration:
+
+**API Format vs Python Format:**
+- **API Format**: Nested object with `{"enabled": bool, "value": str}` where value is a color hex code
+- **Python Format**: Simple string (color hex code like "#ff0000") or None
+
+**Methods:**
+- `NegativeColor.serialize(color: str | None) -> dict | None`: Converts simple color string to API nested object format
+  - `"#ff0000"` → `{"enabled": True, "value": "#ff0000"}`
+  - `None` → `None`
+- `NegativeColor.deserialize(api_obj: dict | None) -> str | None`: Converts API nested object format to simple color string
+  - `{"enabled": True, "value": "#ff0000"}` → `"#ff0000"`
+  - `{"enabled": False, "value": ""}` → `None`
+  - `None` → `None`
+
+**Usage:**
+This utility is used by ColumnChart, MultipleColumnChart, and StackedBarChart to handle the `negativeColor` field in the visualize metadata. It consolidates what were previously two separate fields (`negative_color_enabled` and `negative_color_value`) into a single, more intuitive field.
+
+**Example:**
+```python
+from datawrapper.charts.serializers import NegativeColor
+
+# Serialization (Python → API)
+api_format = NegativeColor.serialize("#ff0000")
+# Returns: {"enabled": True, "value": "#ff0000"}
+
+# Deserialization (API → Python)
+python_format = NegativeColor.deserialize({"enabled": True, "value": "#ff0000"})
+# Returns: "#ff0000"
+
+# When disabled
+python_format = NegativeColor.deserialize({"enabled": False, "value": ""})
+# Returns: None
+```
+
 ### Plot Height Utility
 
 The `PlotHeight` class in `serializers.py` provides utilities for handling chart plot height configuration:

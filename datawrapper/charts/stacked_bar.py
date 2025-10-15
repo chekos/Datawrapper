@@ -5,7 +5,7 @@ from typing import Any, Literal
 from pydantic import ConfigDict, Field, model_serializer
 
 from .base import BaseChart
-from .serializers import ColorCategory, ReplaceFlags
+from .serializers import ColorCategory, NegativeColor, ReplaceFlags
 
 
 class StackedBarChart(BaseChart):
@@ -144,18 +144,11 @@ class StackedBarChart(BaseChart):
         description="Whether to use block labels",
     )
 
-    #: Negative color configuration
-    negative_color_enabled: bool = Field(
-        default=False,
-        alias="negative-color-enabled",
-        description="Whether negative color is enabled",
-    )
-
-    #: The color to use for negative values
-    negative_color_value: str = Field(
-        default="#E31A1C",
-        alias="negative-color-value",
-        description="The color to use for negative values",
+    #: The negative color to use, if you want one
+    negative_color: str | None = Field(
+        default=None,
+        alias="negative-color",
+        description="The negative color to use, if you want one",
     )
 
     #: The column to use for grouping (when group_by_column is enabled)
@@ -190,10 +183,7 @@ class StackedBarChart(BaseChart):
                 "sort-by": self.sort_by,
                 "base-color": self.base_color,
                 "block-labels": self.block_labels,
-                "negativeColor": {
-                    "enabled": self.negative_color_enabled,
-                    "value": self.negative_color_value,
-                },
+                "negativeColor": NegativeColor.serialize(self.negative_color),
             }
         )
 
@@ -266,13 +256,10 @@ class StackedBarChart(BaseChart):
             init_data["block_labels"] = visualize["block-labels"]
 
         # Parse negativeColor
-        negative_color = visualize.get("negativeColor", {})
-        if isinstance(negative_color, dict):
-            init_data["negative_color_enabled"] = negative_color.get("enabled", False)
-            init_data["negative_color_value"] = negative_color.get("value", "#E31A1C")
-        else:
-            init_data["negative_color_enabled"] = False
-            init_data["negative_color_value"] = "#E31A1C"
+        if "negativeColor" in visualize:
+            init_data["negative_color"] = NegativeColor.deserialize(
+                visualize["negativeColor"]
+            )
 
         # Parse groups column from axes
         if isinstance(axes, dict):
