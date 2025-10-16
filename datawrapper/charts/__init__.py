@@ -9,6 +9,7 @@ from .line import AreaFill, Line, LineChart, LineSymbol, LineValueLabel
 from .models import (
     Annotate,
     ColumnFormat,
+    ColumnFormatList,
     Describe,
     Logo,
     Publish,
@@ -27,6 +28,7 @@ __all__ = (
     "TextAnnotation",
     "Annotate",
     "ColumnFormat",
+    "ColumnFormatList",
     "DateFormat",
     "LineDash",
     "LineWidth",

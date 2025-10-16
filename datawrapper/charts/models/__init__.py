@@ -11,15 +11,15 @@ from .api_sections import (
 )
 from .transforms import ColumnFormat, ColumnFormatList, Transform
 
-__all__ = (
+__all__ = [
     "Annotate",
+    "ColumnFormat",
+    "ColumnFormatList",
     "Describe",
     "Logo",
     "Publish",
     "PublishBlocks",
     "Sharing",
     "Transform",
-    "ColumnFormat",
-    "ColumnFormatList",
     "Visualize",
-)
+]

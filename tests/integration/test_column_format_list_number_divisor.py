@@ -1,6 +1,6 @@
 """Integration tests for ColumnFormatList with number_divisor field."""
 
-from datawrapper.charts.models import ColumnFormat, ColumnFormatList, NumberDivisor
+from datawrapper.charts import ColumnFormat, ColumnFormatList, NumberDivisor
 
 
 class TestColumnFormatListNumberDivisor:

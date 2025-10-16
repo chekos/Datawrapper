@@ -3,7 +3,7 @@
 import pytest
 from pydantic import ValidationError
 
-from datawrapper.charts.models import ColumnFormat, NumberDivisor
+from datawrapper.charts import ColumnFormat, NumberDivisor
 
 
 class TestNumberDivisorEnum:

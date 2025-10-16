@@ -1,9 +1,6 @@
 """Tests for the DateFormat enum."""
 
-import pytest
-from pydantic import ValidationError
-
-from datawrapper.charts.models import ColumnFormat, DateFormat
+from datawrapper.charts import ColumnFormat, DateFormat
 
 
 class TestDateFormatEnum:
@@ -13,18 +10,18 @@ class TestDateFormatEnum:
         """Test that all enum values have correct string representations."""
         # Basic/Auto
         assert DateFormat.AUTO.value == "auto"
-        
+
         # Year formats
         assert DateFormat.YEAR_FULL.value == "YYYY"
         assert DateFormat.YEAR_TWO_DIGIT.value == "YY"
         assert DateFormat.YEAR_ABBREVIATED.value == "'YY"
         assert DateFormat.YEAR_ABBREVIATED_FIRST.value == "YYYY~~'YY"
-        
+
         # Quarter formats
         assert DateFormat.QUARTER.value == "Q"
         assert DateFormat.YEAR_QUARTER.value == "YYYY [Q]Q"
         assert DateFormat.YEAR_QUARTER_MULTILINE.value == "YYYY|[Q]Q"
-        
+
         # Month formats
         assert DateFormat.MONTH_FULL.value == "MMMM"
         assert DateFormat.MONTH_ABBREVIATED.value == "MMM"
@@ -32,29 +29,29 @@ class TestDateFormatEnum:
         assert DateFormat.MONTH_NUMBER.value == "M"
         assert DateFormat.MONTH_ABBREVIATED_WITH_YEAR.value == "MMM 'YY"
         assert DateFormat.YEAR_MONTH_MULTILINE.value == "YYYY|MMM"
-        
+
         # Week formats
         assert DateFormat.WEEK_OF_YEAR_PADDED.value == "ww"
         assert DateFormat.WEEK_OF_YEAR.value == "w"
         assert DateFormat.WEEK_OF_YEAR_ORDINAL.value == "wo"
-        
+
         # Day of month formats
         assert DateFormat.DAY_PADDED.value == "DD"
         assert DateFormat.DAY.value == "D"
         assert DateFormat.DAY_ORDINAL.value == "Do"
         assert DateFormat.MONTH_DAY_MULTILINE.value == "MMM|DD"
         assert DateFormat.MONTH_DAY_YEAR_FULL.value == "MMMM D, YYYY"
-        
+
         # Day of week formats
         assert DateFormat.DAY_OF_WEEK_FULL.value == "dddd"
         assert DateFormat.DAY_OF_WEEK_SHORT.value == "ddd"
         assert DateFormat.DAY_OF_WEEK_MIN.value == "dd"
         assert DateFormat.DAY_OF_WEEK_NUMBER.value == "d"
-        
+
         # Sport season formats
         assert DateFormat.SPORT_SEASON_FULL.value == "BB"
         assert DateFormat.SPORT_SEASON_ABBREVIATED.value == "B"
-        
+
         # Time formats
         assert DateFormat.HOUR_24_PADDED.value == "HH"
         assert DateFormat.HOUR_24.value == "H"
@@ -69,15 +66,15 @@ class TestDateFormatEnum:
         assert DateFormat.MILLISECOND.value == "SSS"
         assert DateFormat.AM_PM_UPPER.value == "A"
         assert DateFormat.AM_PM_LOWER.value == "a"
-        
+
         # Timezone formats
         assert DateFormat.TIMEZONE_OFFSET.value == "Z"
         assert DateFormat.TIMEZONE_OFFSET_NO_COLON.value == "ZZ"
-        
+
         # Unix timestamp formats
         assert DateFormat.UNIX_TIMESTAMP_SECONDS.value == "X"
         assert DateFormat.UNIX_TIMESTAMP_MILLISECONDS.value == "x"
-        
+
         # Localized formats
         assert DateFormat.LOCALE_DATE_SHORT.value == "L"
         assert DateFormat.LOCALE_DATE_LONG.value == "LL"
@@ -102,7 +99,9 @@ class TestDateFormatEnum:
     def test_enum_serialization(self):
         """Test that DateFormat enum serializes correctly."""
         col_format = ColumnFormat(
-            column="date_column", type="date", number_format=DateFormat.MONTH_ABBREVIATED_WITH_YEAR
+            column="date_column",
+            type="date",
+            number_format=DateFormat.MONTH_ABBREVIATED_WITH_YEAR,
         )
 
         # Serialize to dict
