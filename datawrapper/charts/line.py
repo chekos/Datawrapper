@@ -1,11 +1,17 @@
 from typing import Any, Literal
 
 import pandas as pd
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_serializer, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_validator,
+    model_serializer,
+)
 
 from .annos import AreaFill, RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .models import DateFormat, LineDash, LineWidth, NumberFormat
+from .enums import DateFormat, LineDash, LineWidth, NumberFormat
 from .serializers import (
     ColorCategory,
     CustomRange,
@@ -17,7 +23,7 @@ from .serializers import (
 
 class LineSymbol(BaseModel):
     """Configure the symbols for an individual line on a Datawrapper line chart.
-    
+
     Note: The presence of this object implies symbols are enabled. The enabled field
     is automatically set to True and should not be set to False.
     """
@@ -83,7 +89,7 @@ class LineSymbol(BaseModel):
 
 class LineValueLabel(BaseModel):
     """Configure the value labels for an individual line on a Datawrapper line chart.
-    
+
     Note: The presence of this object implies value labels are enabled. The enabled field
     is automatically set to True and should not be set to False.
     """
