@@ -17,7 +17,9 @@ class TestConnectorLine:
         assert connector.type == "straight"
         assert connector.circle is False
         assert connector.stroke == 1
-        assert connector.enabled is False
+        assert (
+            connector.enabled is True
+        )  # Always True with "enabled by presence" pattern
         assert connector.arrow_head == "lines"
         assert connector.circle_style == "solid"
         assert connector.circle_radius == 15
@@ -31,7 +33,6 @@ class TestConnectorLine:
             type="curveRight",
             circle=True,
             stroke=3,
-            enabled=True,
             arrowHead="triangle",
             circleStyle="dashed",
             circleRadius=20,
@@ -42,7 +43,7 @@ class TestConnectorLine:
         assert connector.type == "curveRight"
         assert connector.circle is True
         assert connector.stroke == 3
-        assert connector.enabled is True
+        assert connector.enabled is True  # Always True
         assert connector.arrow_head == "triangle"
         assert connector.circle_style == "dashed"
         assert connector.circle_radius == 20
@@ -64,7 +65,7 @@ class TestConnectorLine:
     @pytest.mark.unit
     def test_connector_line_serialization(self, assert_valid_serialization):
         """Test ConnectorLine serialization."""
-        connector = ConnectorLine(type="curveLeft", enabled=True, stroke=2)
+        connector = ConnectorLine(type="curveLeft", stroke=2)
         assert_valid_serialization(connector)
 
 
@@ -96,7 +97,7 @@ class TestTextAnnotation:
     @pytest.mark.unit
     def test_text_annotation_full(self):
         """Test TextAnnotation with all fields."""
-        connector = ConnectorLine(enabled=True)
+        connector = ConnectorLine()
         annotation = TextAnnotation(
             text="Full Test",
             x=50,
@@ -167,7 +168,7 @@ class TestTextAnnotation:
     @pytest.mark.unit
     def test_text_annotation_connector_line_dict(self):
         """Test TextAnnotation with connector line as dict."""
-        connector_dict = {"type": "curveRight", "enabled": True, "stroke": 2}
+        connector_dict = {"type": "curveRight", "stroke": 2}
 
         annotation = TextAnnotation(
             text="Test", x=10, y=20, connectorLine=connector_dict
@@ -175,7 +176,9 @@ class TestTextAnnotation:
 
         serialized = annotation.serialize_model()
         assert serialized["connectorLine"]["type"] == "curveRight"
-        assert serialized["connectorLine"]["enabled"] is True
+        assert (
+            serialized["connectorLine"]["enabled"] is True
+        )  # Always True when present
         assert serialized["connectorLine"]["stroke"] == 2
 
     @pytest.mark.unit

@@ -348,16 +348,18 @@ chart = LineChart(
 - Maintains full backwards compatibility with raw strings
 - Works seamlessly with NumberFormat enum
 
-### LineSymbol and LineValueLabel Pattern
+### Enabled by Presence Pattern
 
-The `LineSymbol` and `LineValueLabel` classes in `line.py` follow an "enabled by presence" pattern where providing the object automatically implies it should be enabled:
+Several classes follow an "enabled by presence" pattern where providing the object automatically implies it should be enabled. This pattern is used by:
+- `LineSymbol` and `LineValueLabel` in `line.py`
+- `ConnectorLine` in `annos.py`
 
 **API Format vs Python Format:**
 - **API Format**: Nested object with `{"enabled": bool, ...other fields}`
 - **Python Format**: Optional object (None = disabled, object = enabled with `enabled=True` automatically set)
 
 **Key Features:**
-- `enabled` field defaults to `True` in both classes
+- `enabled` field defaults to `True` in all classes
 - Validators prevent explicitly setting `enabled=False` (raises `ValueError` with helpful message)
 - To disable: omit the field entirely (set to `None`)
 - To enable: provide the object with desired configuration
@@ -370,25 +372,37 @@ The `LineSymbol` and `LineValueLabel` classes in `line.py` follow an "enabled by
 - When API has `enabled=True`: Returns object instance
 - When API has `enabled=False`: Returns `None`
 
-**Usage in Line Model:**
+**Usage Examples:**
+
 ```python
+# LineSymbol and LineValueLabel in Line Model
 from datawrapper.charts.line import Line, LineSymbol, LineValueLabel
 
-# Enabled (clean API - no need to set enabled=True)
 line = Line(
     column="temperature",
     symbols=LineSymbol(shape="circle", size=5),
     value_labels=LineValueLabel(last=True, first=True)
 )
 
+# ConnectorLine in TextAnnotation
+from datawrapper.charts.annos import TextAnnotation, ConnectorLine
+
+anno = TextAnnotation(
+    text="Important point",
+    x=10,
+    y=20,
+    connector_line=ConnectorLine(type="curveRight", stroke=2)
+)
+
 # Disabled (just omit the fields)
 line = Line(column="temperature")
+anno = TextAnnotation(text="No connector", x=10, y=20)
 ```
 
 **Benefits:**
 - More intuitive API - presence implies enablement
 - Prevents invalid states (can't have object with enabled=False)
-- Consistent with other utilities (NegativeColor, PlotHeight, etc.)
+- Consistent pattern across the library
 - Cleaner code - no redundant enabled=True everywhere
 
 ### Line Width and Dash Enums

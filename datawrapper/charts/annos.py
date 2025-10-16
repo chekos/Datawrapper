@@ -1,16 +1,36 @@
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class ConnectorLine(BaseModel):
-    """A base class for the Datawrapper API's 'connector-line' attribute."""
+    """A base class for the Datawrapper API's 'connector-line' attribute.
+
+    Note: The presence of this object implies the connector line is enabled. The enabled field
+    is automatically set to True and should not be set to False.
+    """
 
     model_config = ConfigDict(
         populate_by_name=True,
         strict=True,
         json_schema_extra={"examples": [{"type": "straight", "enabled": True}]},
     )
+
+    #: Whether or not to show the connector line (automatically set to True when object exists)
+    enabled: bool = Field(
+        default=True,
+        description="Whether or not to show the connector line (automatically set to True when object exists)",
+    )
+
+    @field_validator("enabled")
+    @classmethod
+    def validate_enabled(cls, v: bool) -> bool:
+        """Validate that enabled is not explicitly set to False."""
+        if v is False:
+            raise ValueError(
+                "ConnectorLine.enabled cannot be False. To disable connector lines, omit the connector_line field entirely."
+            )
+        return v
 
     #: The type of connector line
     type: Literal["straight", "curveRight", "curveLeft"] = Field(
@@ -26,11 +46,6 @@ class ConnectorLine(BaseModel):
     #: The stroke width of the connector line
     stroke: Literal[1, 2, 3] = Field(
         default=1, description="The stroke width of the connector line"
-    )
-
-    #: Whether or not to show the connector line
-    enabled: bool = Field(
-        default=False, description="Whether or not to show the connector line"
     )
 
     #: The arrow head of the connector line
@@ -161,11 +176,11 @@ class TextAnnotation(BaseModel):
         description="Whether or not to show the annotation on desktop",
     )
 
-    #: The connector line for the annotation
-    connector_line: ConnectorLine | dict[Any, Any] = Field(
-        default_factory=ConnectorLine,
+    #: The connector line for the annotation (None = disabled, object = enabled)
+    connector_line: ConnectorLine | dict[Any, Any] | None = Field(
+        default=None,
         alias="connectorLine",
-        description="The connector line for the annotation",
+        description="The connector line for the annotation (None = disabled, object = enabled)",
     )
 
     #: Whether or not to show a mobile fallback
@@ -195,17 +210,19 @@ class TextAnnotation(BaseModel):
             "underline": self.underline,
             "showMobile": self.show_mobile,
             "showDesktop": self.show_desktop,
-            "connectorLine": {},
             "mobileFallback": self.mobile_fallback,
         }
 
-        # Add any connector line
-        if isinstance(self.connector_line, dict):
-            model["connectorLine"] = ConnectorLine.model_validate(
-                self.connector_line
-            ).model_dump(by_alias=True)
-        elif isinstance(self.connector_line, ConnectorLine):
-            model["connectorLine"] = self.connector_line.model_dump(by_alias=True)
+        # Add connector line if configured (None = disabled)
+        if self.connector_line is not None:
+            if isinstance(self.connector_line, dict):
+                model["connectorLine"] = ConnectorLine.model_validate(
+                    self.connector_line
+                ).model_dump(by_alias=True)
+            else:
+                model["connectorLine"] = self.connector_line.model_dump(by_alias=True)
+        else:
+            model["connectorLine"] = {"enabled": False}
 
         return model
 
@@ -225,9 +242,22 @@ class TextAnnotation(BaseModel):
 
         # Handle dict format (UUID keys -> annotation data)
         if isinstance(api_data, dict):
-            return [
-                {**anno_data, "id": anno_id} for anno_id, anno_data in api_data.items()
-            ]
+            result = []
+            for anno_id, anno_data in api_data.items():
+                # Create a copy to avoid modifying the original
+                anno_dict = {**anno_data, "id": anno_id}
+
+                # Handle connector line deserialization (enabled by presence pattern)
+                if "connectorLine" in anno_dict:
+                    connector = anno_dict["connectorLine"]
+                    if isinstance(connector, dict):
+                        # If enabled is False or missing, set to None (disabled)
+                        if not connector.get("enabled", False):
+                            anno_dict["connectorLine"] = None
+                        # Otherwise keep the connector line object (enabled)
+
+                result.append(anno_dict)
+            return result
 
         # Handle list format (already deserialized or legacy)
         return list(api_data)
