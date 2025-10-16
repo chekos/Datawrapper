@@ -7,13 +7,13 @@ Clone the repository. Move into the directory on your terminal.
 Install dependencies for development.
 
 ```sh
-pipenv install --dev
+uv sync
 ```
 
 Install pre-commit to run a battery of automatic quick fixes against your work.
 
 ```sh
-pipenv run pre-commit install
+uv run pre-commit install
 ```
 
 ### Tests
@@ -21,19 +21,19 @@ pipenv run pre-commit install
 You can run unit tests to verify the library is working with the following:
 
 ```bash
-pipenv run python -m pytest --cov -sv
+uv run pytest --cov -sv
 ```
 
-We also enforce flake8, handled primarily via pre-commit. You can run it manually like so:
+We also enforce ruff for linting, handled primarily via pre-commit. You can run it manually like so:
 
 ```bash
-pipenv run flake8 ./datawrapper
+uv run ruff check ./datawrapper
 ```
 
 We also enforce static typing with mypy, also handled via pre-commit. You can run it manually like so:
 
 ```bash
-pipenv run mypy ./datawrapper --ignore-missing-imports
+uv run mypy ./datawrapper --ignore-missing-imports
 ```
 
 ### Before submitting
