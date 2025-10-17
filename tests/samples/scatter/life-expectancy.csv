@@ -1,0 +1,384 @@
+country	countries	health	gdp	population	continent	year	year_a
+Malawi	all	30.3	350	737000	Africa	1800	1800_a
+Equatorial Guinea	all	29.8	356	80377	Africa	1800	1800_a
+Solomon Islands	all	25.1	363	56998	Australia	1800	1800_a
+Mozambique	all	30.28	390	1982324	Africa	1800	1800_a
+Gabon	all	30.6	390	158227	Africa	1800	1800_a
+Lesotho	all	32.8	393	276361	Africa	1800	1800_a
+Greenland	all	33.87	393	9584	North America	1800	1800_a
+Botswana	all	33.6	397	121000	Africa	1800	1800_a
+Chad	all	30.9	418	1432000	Africa	1800	1800_a
+Burundi	all	31.5	418	899097	Africa	1800	1800_a
+Central African Republic	all	30	424	479444	Africa	1800	1800_a
+Rwanda	all	31.8	431	928368	Africa	1800	1800_a
+Niger	all	30.8	446	1244861	Africa	1800	1800_a
+Guinea	all	29.5	450	983959	Africa	1800	1800_a
+Uganda	all	25.3	464	2101397	Africa	1800	1800_a
+Burkina Faso	all	29.2	480	1665421	Africa	1800	1800_a
+Congo, Dem. Rep.	all	31.6	485	5163819	Africa	1800	1800_a
+Swaziland	all	32.3	490	86000	Africa	1800	1800_a
+Senegal	all	25.2	497	1009886	Africa	1800	1800_a
+Uzbekistan	all	26.93	502	1919159	Asia	1800	1800_a
+South Sudan	all	26.67	507	1027378	Africa	1800	1800_a
+Kyrgyz Republic	all	23.94	508	530343	Asia	1800	1800_a
+Armenia	all	34	514	413326	Asia	1800	1800_a
+Micronesia, Fed. Sts.	all	26.7	518	16416	Australia	1800	1800_a
+Sudan	all	31.4	518	3994154	Africa	1800	1800_a
+Timor-Leste	all	28.95	521	137262	Australia	1800	1800_a
+Ethiopia	all	29.7	523	2948990	Africa	1800	1800_a
+Mauritania	all	32	527	382696	Africa	1800	1800_a
+Ecuador	all	32.9	529	500000	South America	1800	1800_a
+Cape Verde	all	33.8	529	55716	Africa	1800	1800_a
+Eritrea	all	30.2	532	205010	Africa	1800	1800_a
+Namibia	all	32.4	540	229000	Africa	1800	1800_a
+Georgia	all	31.87	543	1072178	Asia	1800	1800_a
+Papua New Guinea	all	31.5	546	754894	Australia	1800	1800_a
+Kiribati	all	24.9	551	17876	Australia	1800	1800_a
+Tajikistan	all	24.24	556	466629	Asia	1800	1800_a
+Tanzania	all	32.2	562	3019768	Africa	1800	1800_a
+Madagascar	all	30.5	573	1543133	Africa	1800	1800_a
+Congo, Rep.	all	32.7	575	314465	Africa	1800	1800_a
+South Korea	South Korea	25.8	576	9395000	Asia	1800	1800_a
+North Korea	all	26	579	4345000	Asia	1800	1800_a
+Belize	all	26.5	579	25526	North America	1800	1800_a
+Vanuatu	all	24.3	585	27791	Australia	1800	1800_a
+Mongolia	all	31.8	592	619000	Asia	1800	1800_a
+Benin	all	31	597	636559	Africa	1800	1800_a
+Mali	all	26.41	603	1403398	Africa	1800	1800_a
+Afghanistan	all	28.21	603	3280000	Asia	1800	1800_a
+Belarus	all	36.2	608	2355081	Europe	1800	1800_a
+Angola	all	26.98	618	1567028	Africa	1800	1800_a
+Moldova	all	33.15	621	712558	Europe	1800	1800_a
+Cameroon	all	28.75	626	1860054	Africa	1800	1800_a
+Bhutan	all	28.8	629	89989	Asia	1800	1800_a
+Haiti	all	29	633	723000	North America	1800	1800_a
+Nepal	all	32.8	654	3881000	Asia	1800	1800_a
+New Zealand	all	34.05	658	100000	Australia	1800	1800_a
+Tonga	all	28.2	663	18658	Australia	1800	1800_a
+Zambia	all	32.6	663	747000	Africa	1800	1800_a
+Dominican Republic	all	29.9	667	89000	North America	1800	1800_a
+Albania	all	35.4	667	410445	Europe	1800	1800_a
+Bosnia and Herzegovina	all	35.1	669	851806	Europe	1800	1800_a
+Honduras	all	33.9	675	126118	North America	1800	1800_a
+Togo	all	31.3	682	445985	Africa	1800	1800_a
+Venezuela	all	32.2	682	718000	South America	1800	1800_a
+Macedonia, FYR	all	36.1	690	391865	Europe	1800	1800_a
+Somalia	Somalia	29.4	694	991488	Africa	1800	1800_a
+Ghana	all	28	696	2016034	Africa	1800	1800_a
+Comoros	all	32.1	696	56346	Africa	1800	1800_a
+Morocco	all	33.1	715	2503218	Africa	1800	1800_a
+Tunisia	all	28.8	716	862029	Africa	1800	1800_a
+Algeria	all	28.82	716	2503218	Africa	1800	1800_a
+Sierra Leone	all	25.1	734	794264	Africa	1800	1800_a
+Latvia	all	33	751	590588	Europe	1800	1800_a
+Djibouti	all	29.9	752	22848	Africa	1800	1800_a
+Antigua and Barbuda	all	33.54	757	37000	North America	1800	1800_a
+Ukraine	all	36.6	763	11215490	Europe	1800	1800_a
+Azerbaijan	all	29.17	775	879960	Asia	1800	1800_a
+Costa Rica	all	30.21	775	51987	North America	1800	1800_a
+Guinea-Bissau	all	32	777	218167	Africa	1800	1800_a
+Malta	all	28.7	781	134072	Europe	1800	1800_a
+Fiji	all	26.1	785	130533	Australia	1800	1800_a
+Egypt	all	33	791	4243515	Africa	1800	1800_a
+Seychelles	all	37	792	12522	Africa	1800	1800_a
+Liberia	all	31.1	797	313543	Africa	1800	1800_a
+Cote d'Ivoire	all	31.16	812	1088530	Africa	1800	1800_a
+Gambia	all	28.8	813	103274	Africa	1800	1800_a
+Australia	all	34.05	815	351014	Australia	1800	1800_a
+Romania	all	35.7	815	5464085	Europe	1800	1800_a
+Aruba	all	34.42	833	19286	North America	1800	1800_a
+Paraguay	all	35.5	835	143000	South America	1800	1800_a
+St. Vincent and the Grenadines	all	25.99	838	25781	North America	1800	1800_a
+Myanmar	all	30.8	840	3506000	Asia	1800	1800_a
+Maldives	all	32.65	842	42378	Asia	1800	1800_a
+Saudi Arabia	all	32.1	846	2091000	Asia	1800	1800_a
+Panama	all	32.9	847	78842	North America	1800	1800_a
+Sao Tome and Principe	all	31	850	22731	Africa	1800	1800_a
+Nigeria	all	30.4	851	12100855	Africa	1800	1800_a
+Cyprus	all	38.5	853	184392	Europe	1800	1800_a
+Kenya	all	25.5	854	2574000	Africa	1800	1800_a
+Bolivia	all	33	854	1100000	South America	1800	1800_a
+Guatemala	all	25.8	857	458965	North America	1800	1800_a
+Vietnam	all	32	861	6551000	Asia	1800	1800_a
+Lao	all	31.9	864	470000	Asia	1800	1800_a
+Cuba	all	32.2	864	345043	North America	1800	1800_a
+Zimbabwe	all	33.7	869	1085814	Africa	1800	1800_a
+St. Lucia	all	28.01	874	24000	North America	1800	1800_a
+Bangladesh	all	25.5	876	19227358	Asia	1800	1800_a
+Yemen	all	23.39	877	2593000	Asia	1800	1800_a
+Israel	all	32	879	209954	Asia	1800	1800_a
+Sri Lanka	all	32.6	898	1213000	Asia	1800	1800_a
+Cambodia	all	35	903	2090000	Asia	1800	1800_a
+Barbados	all	32.12	913	81729	North America	1800	1800_a
+Oman	all	32.3	915	318000	Asia	1800	1800_a
+Iceland	all	42.85	926	61428	Europe	1800	1800_a
+Thailand	all	30.4	931	4665000	Asia	1800	1800_a
+Estonia	all	36.14	938	334136	Europe	1800	1800_a
+Mauritius	all	28.7	940	62865	Africa	1800	1800_a
+Turkmenistan	all	24	943	367215	Asia	1800	1800_a
+Grenada	all	31.4	959	29409	North America	1800	1800_a
+Philippines	all	30.9	962	1894389	Asia	1800	1800_a
+Colombia	all	32	963	1206000	South America	1800	1800_a
+Iraq	all	31.2	970	1076920	Asia	1800	1800_a
+Nicaragua	Nicaragua	25.4	973	219387	North America	1800	1800_a
+El Salvador	all	28.7	974	248000	North America	1800	1800_a
+Jordan	all	31.7	976	217000	Asia	1800	1800_a
+Iran	all	25.6	977	6269721	Asia	1800	1800_a
+China	China	32	985	321675013	Asia	1800	1800_a
+Macao, China	all	34.7	992	17311	Asia	1800	1800_a
+Indonesia	all	30	994	16108545	Asia	1800	1800_a
+Taiwan	all	28.3	996		Asia	1800	1800_a
+Malaysia	all	30.6	997	287000	Asia	1800	1800_a
+United Arab Emirates	all	30.7	998	40153	Asia	1800	1800_a
+Hong Kong, China	all	34.9	1007	20000	Asia	1800	1800_a
+Pakistan	all	25.8	1021	13123633	Asia	1800	1800_a
+Singapore	all	29.1	1021	30000	Asia	1800	1800_a
+Chile	all	32	1026	771447	South America	1800	1800_a
+Libya	all	33.1	1050	531472	Africa	1800	1800_a
+Japan	all	36.4	1050	30294378	Asia	1800	1800_a
+India	India	25.44	1052	168574895	Asia	1800	1800_a
+Montenegro	all	35.4	1057	126582	Europe	1800	1800_a
+Lebanon	all	29.7	1081	332000	Asia	1800	1800_a
+Syria	all	31.1	1081	1337000	Asia	1800	1800_a
+Bulgaria	all	35.8	1089	1992320	Europe	1800	1800_a
+Kuwait	Kuwait	26	1097	81280	Asia	1800	1800_a
+Qatar	all	30.8	1097	14092	Asia	1800	1800_a
+Brazil	all	32	1109	3639636	South America	1800	1800_a
+Kazakhstan	all	26.2	1140	2041282	Asia	1800	1800_a
+Jamaica	all	34.2	1170	401000	North America	1800	1800_a
+Peru	all	35.7	1204	1314151	South America	1800	1800_a
+Poland	all	35.9	1213	9508747	Europe	1800	1800_a
+Guyana	all	31.12	1214	166034	South America	1800	1800_a
+West Bank and Gaza	all	32.1	1220	165944	Asia	1800	1800_a
+Turkey	all	35	1221	9773456	Asia	1800	1800_a
+Trinidad and Tobago	all	32.9	1230	60000	North America	1800	1800_a
+Bahrain	all	30.3	1235	64474	Asia	1800	1800_a
+Finland	all	36.57	1244	977662	Europe	1800	1800_a
+Hungary	all	36	1249	3499771	Europe	1800	1800_a
+Lithuania	all	28.9	1270	778655	Europe	1800	1800_a
+Norway	all	37.92	1278	868570	Europe	1800	1800_a
+Canada	all	39	1314	645526	North America	1800	1800_a
+Serbia	all	35.5	1358	2147197	Europe	1800	1800_a
+Greece	all	36.6	1371	2151155	Europe	1800	1800_a
+Puerto Rico	all	30.43	1375	155000	North America	1800	1800_a
+Mexico	all	26.9	1379	6181708	North America	1800	1800_a
+Samoa	all	25.4	1400	47300	Australia	1800	1800_a
+Slovenia	all	36.6	1409	469664	Europe	1800	1800_a
+Sweden	all	32.16	1414	2354189	Europe	1800	1800_a
+Slovak Republic	all	36.4	1427	2140651	Europe	1800	1800_a
+Russia	all	29.57	1430	31088398	Europe	1800	1800_a
+Bahamas	all	35.18	1445	27350	North America	1800	1800_a
+Ireland	all	38.3	1447	4064749	Europe	1800	1800_a
+Luxembourg	all	36.9	1453	127030	Europe	1800	1800_a
+South Africa	South Africa	33.5	1480	1440820	Africa	1800	1800_a
+Argentina	all	33.2	1507	534000	South America	1800	1800_a
+Brunei	all	29.2	1512	2128	Asia	1800	1800_a
+Spain	all	29.5	1518	11549294	Europe	1800	1800_a
+Suriname	all	32.9	1636	80721	South America	1800	1800_a
+Germany	all	38.37	1639	22886919	Europe	1800	1800_a
+Portugal	all	35.6	1685	3033454	Europe	1800	1800_a
+Uruguay	all	32.9	1758	55000	South America	1800	1800_a
+France	all	33.97	1803	29355111	Europe	1800	1800_a
+Austria	all	34.4	1848	3205587	Europe	1800	1800_a
+Czech Republic	all	34.95	1915	5516349	Europe	1800	1800_a
+Denmark	all	37.41	2013	1062514	Europe	1800	1800_a
+United States	United States	39.41	2128	6801854	North America	1800	1800_a
+Italy	all	29.69	2225	18822234	Europe	1800	1800_a
+Belgium	all	40	2412	3138137	Europe	1800	1800_a
+Switzerland	all	38	2701	1826051	Europe	1800	1800_a
+United Kingdom	United Kingdom	38.65	3431	12327466	Europe	1800	1800_a
+Netherlands	Netherlands	39.86	4235	2254522	Europe	1800	1800_a
+Central African Republic	all	49.6	599	4900274	Africa	2015	2015_a
+Somalia	Somalia	54.2	624	10787104	Africa	2015	2015_a
+Burundi	all	61.4	777	11178921	Africa	2015	2015_a
+Malawi	all	60.5	799	17215232	Africa	2015	2015_a
+Congo, Dem. Rep.	all	60.8	809	77266814	Africa	2015	2015_a
+Niger	all	61	943	19899120	Africa	2015	2015_a
+Liberia	all	63.2	958	4503438	Africa	2015	2015_a
+Eritrea	all	60.7	1129	5227791	Africa	2015	2015_a
+Mozambique	all	57.1	1176	27977863	Africa	2015	2015_a
+Guinea	all	59.1	1225	12608590	Africa	2015	2015_a
+Guinea-Bissau	all	55.6	1386	1844325	Africa	2015	2015_a
+North Korea	all	72.1	1390	25155317	Asia	2015	2015_a
+Madagascar	all	63.5	1400	24235390	Africa	2015	2015_a
+Togo	all	61.5	1433	7304578	Africa	2015	2015_a
+Comoros	all	68.1	1472	788474	Africa	2015	2015_a
+Ethiopia	all	65.2	1520	99390750	Africa	2015	2015_a
+Rwanda	all	65.9	1549	11609666	Africa	2015	2015_a
+Gambia	all	68.1	1644	1990924	Africa	2015	2015_a
+Burkina Faso	all	60.9	1654	18105570	Africa	2015	2015_a
+Uganda	all	61.3	1680	39032383	Africa	2015	2015_a
+Mali	all	60.2	1684	17599694	Africa	2015	2015_a
+Haiti	all	64.3	1710	10711067	North America	2015	2015_a
+Zimbabwe	all	59.3	1801	15602751	Africa	2015	2015_a
+Kiribati	all	63	1824	112423	Australia	2015	2015_a
+Benin	all	62.3	1830	10879829	Africa	2015	2015_a
+Afghanistan	all	53.8	1925	32526562	Asia	2015	2015_a
+Solomon Islands	all	64	2047	583591	Australia	2015	2015_a
+Sierra Leone	all	57.1	2085	6453184	Africa	2015	2015_a
+Timor-Leste	all	72.4	2086	1184765	Australia	2015	2015_a
+Chad	all	57.4	2191	14037472	Africa	2015	2015_a
+Senegal	all	65.3	2251	15129273	Africa	2015	2015_a
+Nepal	all	69.7	2352	28513700	Asia	2015	2015_a
+Papua New Guinea	all	60.9	2529	7619321	Australia	2015	2015_a
+Tanzania	all	64.1	2571	53470420	Africa	2015	2015_a
+Tajikistan	all	72.4	2582	8481855	Asia	2015	2015_a
+Lesotho	all	47.1	2598	2135022	Africa	2015	2015_a
+Cameroon	all	59.4	2897	23344179	Africa	2015	2015_a
+Kenya	all	65.1	2898	46050302	Africa	2015	2015_a
+Vanuatu	all	64.9	2912	264652	Australia	2015	2015_a
+Sao Tome and Principe	all	68	3003	190344	Africa	2015	2015_a
+South Sudan	all	56.1	3047	12339812	Africa	2015	2015_a
+Djibouti	all	63.8	3139	887861	Africa	2015	2015_a
+Bangladesh	all	70.4	3161	160995642	Asia	2015	2015_a
+Kyrgyz Republic	all	69.8	3245	5939962	Asia	2015	2015_a
+Cambodia	all	69.4	3267	15577899	Asia	2015	2015_a
+Cote d'Ivoire	all	59.1	3491	22701556	Africa	2015	2015_a
+Micronesia, Fed. Sts.	all	68.9	3510	104460	Australia	2015	2015_a
+Marshall Islands	all	66.9	3661	52993	Australia	2015	2015_a
+Mauritania	all	69.7	3877	4067564	Africa	2015	2015_a
+Yemen	all	66	3887	26832215	Asia	2015	2015_a
+Sudan	all	67.5	3975	40234882	Africa	2015	2015_a
+Myanmar	all	68	4012	53897154	Asia	2015	2015_a
+Zambia	all	56.7	4034	16211767	Africa	2015	2015_a
+Ghana	all	65.3	4099	27409893	Africa	2015	2015_a
+Honduras	all	73	4270	8075060	North America	2015	2015_a
+West Bank and Gaza	all	74.6	4319	4668466	Asia	2015	2015_a
+Syria	all	68.2	4637	18502413	Asia	2015	2015_a
+Nicaragua	Nicaragua	78	4712	6082032	North America	2015	2015_a
+Pakistan	all	65.9	4743	188924874	Asia	2015	2015_a
+Moldova	all	73.9	4896	4068897	Europe	2015	2015_a
+Tonga	all	71.5	5069	106170	Australia	2015	2015_a
+Lao	all	67.1	5212	6802023	Asia	2015	2015_a
+Samoa	all	73.2	5558	193228	Australia	2015	2015_a
+Uzbekistan	all	71.8	5598	29893488	Asia	2015	2015_a
+Vietnam	all	75.4	5623	93447601	Asia	2015	2015_a
+Nigeria	all	64.6	5727	182201962	Africa	2015	2015_a
+India	India	67.2	5903	1311050527	Asia	2015	2015_a
+Swaziland	all	51.8	6095	1286970	Africa	2015	2015_a
+Congo, Rep.	all	61.5	6220	4620330	Africa	2015	2015_a
+Bolivia	all	73.2	6295	10724705	South America	2015	2015_a
+Cape Verde	all	72.9	6514	520502	Africa	2015	2015_a
+Guyana	all	66.8	6816	767085	South America	2015	2015_a
+Philippines	all	71	6876	100699395	Asia	2015	2015_a
+Guatemala	all	72.6	7279	16342897	North America	2015	2015_a
+Morocco	all	74.6	7319	34377511	Africa	2015	2015_a
+Georgia	all	72.9	7474	3999812	Asia	2015	2015_a
+Angola	all	59.6	7615	25021974	Africa	2015	2015_a
+Armenia	all	74.7	7763	3017712	Asia	2015	2015_a
+El Salvador	all	74.9	7776	6126583	North America	2015	2015_a
+Fiji	all	65.8	7925	892145	Australia	2015	2015_a
+Bhutan	all	72.7	7983	774830	Asia	2015	2015_a
+Paraguay	all	74.4	8219	6639123	South America	2015	2015_a
+Ukraine	all	71.5	8449	44823765	Europe	2015	2015_a
+Belize	all	71.7	8501	359287	North America	2015	2015_a
+Jamaica	all	75	8606	2793335	North America	2015	2015_a
+Bosnia and Herzegovina	all	78.9	9833	3810416	Europe	2015	2015_a
+St. Lucia	all	74.8	9997	184999	North America	2015	2015_a
+Namibia	all	64.2	10040	2458830	Africa	2015	2015_a
+St. Vincent and the Grenadines	all	71.2	10435	109462	North America	2015	2015_a
+Dominica	all	73.1	10503	72680	North America	2015	2015_a
+Indonesia	all	71.1	10504	257563815	Asia	2015	2015_a
+Albania	all	78	10620	2896679	Europe	2015	2015_a
+Sri Lanka	all	77.6	10624	20715010	Asia	2015	2015_a
+Ecuador	all	75.9	10996	16144363	South America	2015	2015_a
+Egypt	all	71.5	11031	91508084	Africa	2015	2015_a
+Tunisia	all	77.6	11126	11253554	Africa	2015	2015_a
+Grenada	all	71.5	11593	106825	North America	2015	2015_a
+Jordan	all	78.5	11752	7594547	Asia	2015	2015_a
+Mongolia	all	67.1	11819	2959134	Asia	2015	2015_a
+Peru	all	79.5	11903	31376670	South America	2015	2015_a
+South Africa	South Africa	61.3	12509	54490406	Africa	2015	2015_a
+Macedonia, FYR	all	76.5	12547	2078453	Europe	2015	2015_a
+Colombia	all	78	12761	48228704	South America	2015	2015_a
+Dominican Republic	all	75.3	12837	10528391	North America	2015	2015_a
+Serbia	all	76.2	12908	8850975	Europe	2015	2015_a
+Barbados	all	75.7	12984	284215	North America	2015	2015_a
+China	China	76.2	13334	1376048943	Asia	2015	2015_a
+Algeria	all	76.4	13434	39666519	Africa	2015	2015_a
+Costa Rica	all	80.3	14132	4807850	North America	2015	2015_a
+Maldives	all	80	14408	363657	Asia	2015	2015_a
+Thailand	all	74.7	14512	67959359	Asia	2015	2015_a
+Iraq	all	67.4	14646	36423395	Asia	2015	2015_a
+Montenegro	all	77.2	14833	625781	Europe	2015	2015_a
+Brazil	all	74.4	15441	207847528	South America	2015	2015_a
+Iran	all	74.6	15573	79109272	Asia	2015	2015_a
+Venezuela	all	74.8	15753	31108083	South America	2015	2015_a
+Turkmenistan	all	70	15865	5373502	Asia	2015	2015_a
+Bulgaria	all	74.8	16371	7149787	Europe	2015	2015_a
+Mexico	all	75.9	16850	127017224	North America	2015	2015_a
+Azerbaijan	all	72.9	16986	9753968	Asia	2015	2015_a
+Lebanon	all	78.9	17050	5850743	Asia	2015	2015_a
+Suriname	all	72	17125	542975	South America	2015	2015_a
+Botswana	all	58.7	17196	2262485	Africa	2015	2015_a
+Libya	all	74.1	17261	6278438	Africa	2015	2015_a
+Argentina	all	76.5	17344	43416755	South America	2015	2015_a
+Belarus	all	71	17415	9495826	Europe	2015	2015_a
+Mauritius	all	74.5	18350	1273212	Africa	2015	2015_a
+Gabon	all	65.9	18627	1725292	Africa	2015	2015_a
+Romania	all	75.2	19203	19511324	Europe	2015	2015_a
+Turkey	all	79.2	19360	78665830	Asia	2015	2015_a
+Croatia	all	77.8	20260	4240317	Europe	2015	2015_a
+Uruguay	all	76.8	20438	3431555	South America	2015	2015_a
+Panama	all	78.2	20485	3929141	North America	2015	2015_a
+Antigua and Barbuda	all	76.4	21049	91818	North America	2015	2015_a
+Cuba	all	78.2	21291	11389562	North America	2015	2015_a
+Chile	all	79.4	22465	17948141	South America	2015	2015_a
+Bahamas	all	73.7	22818	388019	North America	2015	2015_a
+Russia	all	71	23038	143456918	Europe	2015	2015_a
+Latvia	all	75.4	23282	1970503	Europe	2015	2015_a
+Kazakhstan	all	70.2	23468	17625226	Asia	2015	2015_a
+Hungary	all	76.7	24200	9855023	Europe	2015	2015_a
+Malaysia	all	75.3	24320	30331007	Asia	2015	2015_a
+Poland	all	77.6	24787	38611794	Europe	2015	2015_a
+Greece	all	81	25430	10954617	Europe	2015	2015_a
+Seychelles	all	74.1	25684	96471	Africa	2015	2015_a
+Portugal	all	80.8	26437	10349803	Europe	2015	2015_a
+Lithuania	all	75.2	26665	2878405	Europe	2015	2015_a
+Estonia	all	77.8	26812	1312558	Europe	2015	2015_a
+Slovak Republic	all	77.6	27204	5426258	Europe	2015	2015_a
+Greenland	all	72.1	27763	56186	North America	2015	2015_a
+Slovenia	all	80.9	28550	2067526	Europe	2015	2015_a
+Czech Republic	all	78.8	29437	10543186	Europe	2015	2015_a
+Cyprus	all	81.8	29797	1165300	Europe	2015	2015_a
+Trinidad and Tobago	all	72.4	30113	1360088	North America	2015	2015_a
+Malta	all	82.1	30265	418670	Europe	2015	2015_a
+Equatorial Guinea	all	61	31087	845060	Africa	2015	2015_a
+Israel	all	82.1	31590	8064036	Asia	2015	2015_a
+Spain	all	82.6	32979	46121699	Europe	2015	2015_a
+Italy	all	82.2	33297	59797685	Europe	2015	2015_a
+Puerto Rico	all	78.5	33604	3683238	North America	2015	2015_a
+New Zealand	all	81.4	34186	4528526	Australia	2015	2015_a
+South Korea	South Korea	81	34644	50293439	Asia	2015	2015_a
+Japan	all	83.2	36162	126573481	Asia	2015	2015_a
+Aruba	all	75.72	37138	103889	North America	2015	2015_a
+France	all	81.8	37599	64395345	Europe	2015	2015_a
+United Kingdom	United Kingdom	81	38225	64715810	Europe	2015	2015_a
+Finland	all	80.9	38923	5503457	Europe	2015	2015_a
+Belgium	all	80.5	41240	11299192	Europe	2015	2015_a
+Iceland	all	83.3	42182	329425	Europe	2015	2015_a
+Taiwan	all	79.5	42948		Asia	2015	2015_a
+Canada	all	81.7	43294	35939927	North America	2015	2015_a
+Denmark	all	80.4	43495	5669081	Europe	2015	2015_a
+Germany	all	80.8	44053	80688545	Europe	2015	2015_a
+Australia	all	82.3	44056	23968973	Australia	2015	2015_a
+Bahrain	all	79.1	44138	1377237	Asia	2015	2015_a
+Austria	all	81.3	44401	8544586	Europe	2015	2015_a
+Sweden	all	82.1	44892	9779426	Europe	2015	2015_a
+Netherlands	Netherlands	81.3	45784	16924929	Europe	2015	2015_a
+Andorra	all	84.8	46577	70473	Europe	2015	2015_a
+Bermuda	all	78.5	47081	62004	North America	2015	2015_a
+Ireland	all	81.7	47758	4688465	Europe	2015	2015_a
+Oman	all	77.2	48226	4490541	Asia	2015	2015_a
+Saudi Arabia	all	79.5	52469	31540372	Asia	2015	2015_a
+United States	United States	79.1	53354	321773631	North America	2015	2015_a
+Hong Kong, China	all	83.73	53874	7287983	Asia	2015	2015_a
+Switzerland	all	83	56118	8298663	Europe	2015	2015_a
+United Arab Emirates	all	75.4	60749	9156963	Asia	2015	2015_a
+Norway	all	82	64304	5210967	Europe	2015	2015_a
+Brunei	all	77.1	73003	423188	Asia	2015	2015_a
+Singapore	all	82	80794	5603740	Asia	2015	2015_a
+Kuwait	Kuwait	80.3	82633	3892115	Asia	2015	2015_a
+Luxembourg	all	82.2	88314	567110	Europe	2015	2015_a
+Qatar	all	79.7	132877	2235355	Asia	2015	2015_a
+Macao, China	all	80.82	148374	587606	Asia	2015	2015_a

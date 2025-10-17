@@ -1,0 +1,497 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "rcVbZ",
+        "language": "en-IE",
+        "theme": "datawrapper",
+        "chartHash": "0b2319273422170048515b5dcaf90acc",
+        "id": "rcVbZ",
+        "type": "d3-lines",
+        "title": "New COVID-19 cases in Berlin",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {
+              "20azca858m": {
+                "id": "20azca858m",
+                "row": 0,
+                "time": 1592404219100,
+                "value": "New cases",
+                "column": 1,
+                "ignored": false,
+                "previous": "new",
+                "_index": 0
+              },
+              "sfr5gsdyqd": {
+                "id": "sfr5gsdyqd",
+                "row": 0,
+                "time": 1592404227900,
+                "value": "Deaths per day",
+                "column": 2,
+                "ignored": false,
+                "previous": "new.deaths",
+                "_index": 1
+              },
+              "msx4hqxlem": {
+                "id": "msx4hqxlem",
+                "row": 0,
+                "time": 1592404230300,
+                "value": "Cases",
+                "column": 1,
+                "ignored": false,
+                "previous": "New cases",
+                "_index": 2
+              },
+              "q1d2c2zl5z": {
+                "id": "q1d2c2zl5z",
+                "row": 0,
+                "time": 1592404233100,
+                "value": "Deaths",
+                "column": 2,
+                "ignored": false,
+                "previous": "Deaths per day",
+                "_index": 3
+              },
+              "510q1oc6qp": {
+                "id": "510q1oc6qp",
+                "row": 0,
+                "time": 1592404242500,
+                "value": "7-day average",
+                "column": 3,
+                "ignored": false,
+                "previous": "new.avg",
+                "_index": 4
+              },
+              "z9itkm7dbu": {
+                "id": "z9itkm7dbu",
+                "row": 0,
+                "time": 1592404256500,
+                "value": "Loess prediction",
+                "column": 4,
+                "ignored": false,
+                "previous": "pred",
+                "_index": 5
+              },
+              "hbceabq1vq": {
+                "id": "hbceabq1vq",
+                "row": 0,
+                "time": 1592479137000,
+                "value": "Hospitalized",
+                "column": 4,
+                "ignored": false,
+                "previous": "new.hospitalized",
+                "_index": 6
+              },
+              "sexj3uxhfq": {
+                "id": "sexj3uxhfq",
+                "row": 0,
+                "time": 1592479280100,
+                "value": "ICU",
+                "column": 4,
+                "ignored": false,
+                "previous": "new.icu",
+                "_index": 7
+              }
+            },
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-format": {
+              "baseline": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "auto",
+                "number-divisor": 0,
+                "number-prepend": ""
+              }
+            },
+            "external-data": "https://gist.githubusercontent.com/gka/251c6026c7ca33ab8e64ecd13a98a4c9/raw/covid19-cases-berlin.csv",
+            "upload-method": "copy",
+            "use-datawrapper-cdn": false
+          },
+          "describe": {
+            "source-name": "<a href=\"https://www.berlin.de/sen/gpg/service/presse/2020/\">City of Berlin</a> (<a href=\"https://github.com/jakubvalenta/covid-berlin-data\">dataset on github</a>)",
+            "source-url": "",
+            "intro": "",
+            "byline": "Gregor Aisch",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": "",
+            "computed-columns": [
+              {
+                "name": "baseline",
+                "formula": "0"
+              }
+            ]
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "auto": true
+            },
+            "lines": {
+              "new": {
+                "width": "style3",
+                "directLabel": false
+              },
+              "pred": {
+                "dash": "style2",
+                "width": "invisible",
+                "directLabel": false
+              },
+              "new.avg": {
+                "directLabel": false
+              },
+              "baseline": {
+                "width": "invisible",
+                "directLabel": false
+              },
+              "new.deaths": {
+                "width": "style3",
+                "directLabel": false
+              }
+            },
+            "x-grid": "on",
+            "y-grid": "on",
+            "scale-y": "linear",
+            "overlays": {},
+            "base-color": 5,
+            "label-colors": false,
+            "label-margin": 0,
+            "stack-to-100": false,
+            "interpolation": "monotone-x",
+            "show-tooltips": true,
+            "x-grid-format": "MMM|DD",
+            "y-grid-format": "0,0.[00]",
+            "y-grid-labels": "auto",
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "new": "#80bc9f00",
+                "pred": "#00000087",
+                "new.avg": "#4b937a",
+                "new.deaths": "#ffffff00"
+              }
+            },
+            "custom-range-x": [
+              "2020-03-01",
+              "2020-07-07"
+            ],
+            "custom-range-y": [
+              "0",
+              ""
+            ],
+            "custom-ticks-x": "",
+            "custom-ticks-y": "",
+            "plotHeightMode": "fixed",
+            "variate-colors": false,
+            "connector-lines": true,
+            "plotHeightFixed": 371.9886169433594,
+            "plotHeightRatio": 0.5,
+            "text-annotations": {
+              "6moswfbp8d": {
+                "bg": true,
+                "dx": -5,
+                "dy": 0,
+                "id": "6moswfbp8d",
+                "bold": false,
+                "size": 12,
+                "text": "Schools\nclosed",
+                "align": "tr",
+                "color": "#9a9a9a",
+                "italic": true,
+                "position": {
+                  "x": "2020/03/17",
+                  "y": "245"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 0
+              },
+              "7eso1kuh00": {
+                "bg": true,
+                "dx": 6,
+                "dy": -2,
+                "id": "7eso1kuh00",
+                "bold": false,
+                "size": 12,
+                "text": "Schools\npartially\nreopened",
+                "align": "tl",
+                "color": "#9a9a9a",
+                "italic": true,
+                "position": {
+                  "x": "2020/05/29 11:32",
+                  "y": "1070.4017"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 1
+              },
+              "dwue6yeze1": {
+                "bg": true,
+                "dx": 0,
+                "dy": -29.5,
+                "id": "dwue6yeze1",
+                "bold": true,
+                "size": 13,
+                "text": "COVID-19\ncases per day",
+                "align": "bl",
+                "color": "#80bc9f",
+                "width": 14.58,
+                "italic": false,
+                "position": {
+                  "x": "2020/04/03 01:14",
+                  "y": 252
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": true,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 2
+              },
+              "gu6fhthgk4": {
+                "bg": false,
+                "dx": 56,
+                "dy": 9.5,
+                "id": "gu6fhthgk4",
+                "bold": true,
+                "size": 13,
+                "text": "7-day moving\naverage",
+                "align": "bl",
+                "color": "#568a7b",
+                "italic": false,
+                "position": {
+                  "x": "2020/04/07 13:35",
+                  "y": "135.3484"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": true,
+                  "arrowHead": false,
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 3
+              }
+            },
+            "y-grid-subdivide": true,
+            "custom-area-fills": {
+              "h94bv979wx": {
+                "id": "h94bv979wx",
+                "to": "baseline",
+                "from": "new",
+                "color": "#c3e8d5",
+                "opacity": 0.7,
+                "colorNegative": "#E31A1C",
+                "interpolation": "step-before",
+                "useMixedColors": false,
+                "_index": 0
+              },
+              "caym9qr917": {
+                "id": "caym9qr917",
+                "to": "baseline",
+                "from": "new.deaths",
+                "color": "#7668ae",
+                "opacity": 0.62,
+                "colorNegative": "#E31A1C",
+                "interpolation": "step-before",
+                "useMixedColors": false,
+                "_index": 1
+              }
+            },
+            "range-annotations": {
+              "1kjb2bnfgl": {
+                "id": "1kjb2bnfgl",
+                "type": "x",
+                "color": "#333333",
+                "display": "line",
+                "opacity": "7",
+                "position": {
+                  "x0": "2020/05/29  00:00",
+                  "x1": "2020/05/29 16:47",
+                  "y0": "2020/05/29  00:00",
+                  "y1": "2020/05/29 12:00"
+                },
+                "strokeType": "solid",
+                "strokeWidth": 3,
+                "_index": 0
+              },
+              "yqkchuf814": {
+                "id": "yqkchuf814",
+                "type": "x",
+                "color": "#333333",
+                "display": "line",
+                "opacity": "5",
+                "position": {
+                  "x0": "2020/03/17 00:00",
+                  "x1": "2020/03/17 12:00",
+                  "y0": "2020/03/17 00:00",
+                  "y1": "2020/03/17 12:00"
+                },
+                "strokeType": "solid",
+                "strokeWidth": 3,
+                "_index": 1
+              }
+            },
+            "value-label-colors": false,
+            "y-grid-label-align": "left",
+            "value-labels-format": "0,0.[00]",
+            "tooltip-number-format": "0,0.[00]"
+          },
+          "axes": {
+            "x": "date"
+          },
+          "publish": {
+            "embed-width": 662,
+            "embed-height": 502,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": true,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {
+              "unit": "mm",
+              "scale": 1,
+              "width": "159",
+              "height": "129",
+              "include": "full",
+              "colorMode": "rgb",
+              "fullVectorMode": true
+            },
+            "text": "#333333",
+            "background": "#ffffff",
+            "export-svg": {
+              "width": 600,
+              "height": 489,
+              "include": "full",
+              "fullVectorMode": true
+            },
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"New COVID-19 cases in Berlin\" aria-label=\"Interactive line chart\" id=\"datawrapper-chart-RnWgL\" src=\"https://datawrapper.dwcdn.net/RnWgL/16/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"662\" height=\"505\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"New COVID-19 cases in Berlin\" aria-label=\"Interactive line chart\" id=\"datawrapper-chart-RnWgL\" src=\"https://datawrapper.dwcdn.net/RnWgL/16/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"505\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:505px\" id=\"datawrapper-vis-RnWgL\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/RnWgL/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-RnWgL\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/RnWgL/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "chart-height": 414,
+            "embed-heights": {
+              "100": 648,
+              "200": 547,
+              "300": 504,
+              "400": 504,
+              "500": 489,
+              "700": 489,
+              "800": 489,
+              "900": 489,
+              "1000": 489
+            }
+          },
+          "annotate": {
+            "notes": "The dashed line shows a Loess prediction for highlighting the underlying trend. Last updated on July 7."
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "externalData": "",
+        "utf8": false,
+        "createdAt": "2025-10-11T15:56:41.000Z",
+        "lastModifiedAt": "2025-10-11T15:56:42.000Z",
+        "forkedFrom": "RnWgL",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089281975-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089281975-1"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089281975-2"
+            },
+            "chart-height": {
+              "__@t$__": "54089281975-3"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-3"
+  },
+  "data": "0-0"
+}

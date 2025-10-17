@@ -13,7 +13,7 @@ import pandas as pd
 import requests as r
 from IPython.display import IFrame, Image
 
-from .exceptions import FailedRequestError, InvalidRequestError
+from .exceptions import FailedRequestError, InvalidRequestError, RateLimitError
 
 logger = logging.getLogger(__name__)
 
@@ -121,12 +121,14 @@ class Datawrapper:
             kwargs["json"] = data
 
         # Make the request
-        response = r.delete(url, **kwargs)
+        response = r.delete(url, **kwargs)  # type: ignore[arg-type]
 
         # Handle the response
         if response.ok:
             return True
         logger.error(f"Delete request failed with status code {response.status_code}.")
+        if response.status_code == 429:
+            raise RateLimitError(response)
         raise FailedRequestError(response)
 
     def get(self, url: str, params: dict | None = None, timeout: int = 15) -> Any:
@@ -170,6 +172,8 @@ class Datawrapper:
             return response.content
         # If not, raise an exception
         logger.error(f"Get request failed with status code {response.status_code}.")
+        if response.status_code == 429:
+            raise RateLimitError(response)
         raise FailedRequestError(response)
 
     def patch(
@@ -214,7 +218,7 @@ class Datawrapper:
             kwargs["data"] = json.dumps(data)
 
         # Make the request
-        response = r.patch(url, **kwargs)
+        response = r.patch(url, **kwargs)  # type: ignore[arg-type]
 
         # Check if the request was successful
         if response.ok:
@@ -222,6 +226,8 @@ class Datawrapper:
             return response.json()
         # If not, raise an exception
         logger.error(f"Patch request failed with status code {response.status_code}.")
+        if response.status_code == 429:
+            raise RateLimitError(response)
         raise FailedRequestError(response)
 
     def post(
@@ -266,7 +272,7 @@ class Datawrapper:
             kwargs["data"] = json.dumps(data)
 
         # Make the request
-        response = r.post(url, **kwargs)
+        response = r.post(url, **kwargs)  # type: ignore[arg-type]
 
         # Check if the request was successful
         if response.ok:
@@ -276,12 +282,14 @@ class Datawrapper:
             return True
         # If not, raise an exception
         logger.error(f"Post request failed with status code {response.status_code}.")
+        if response.status_code == 429:
+            raise RateLimitError(response)
         raise FailedRequestError(response)
 
     def put(
         self,
         url: str,
-        data: dict | None = None,
+        data: dict | bytes | None = None,
         timeout: int = 15,
         extra_headers: dict | None = None,
         dump_data: bool = True,
@@ -292,8 +300,8 @@ class Datawrapper:
         ----------
         url : str
             The URL to request.
-        data : dict
-            A dictionary of data to pass to the request, by default None
+        data : dict | bytes
+            A dictionary of data to pass to the request, or raw bytes when dump_data is False, by default None
         timeout : int, optional
             The timeout for the request in seconds, by default 15
         extra_headers : dict, optional
@@ -325,12 +333,14 @@ class Datawrapper:
                 kwargs["data"] = data
 
         # Make the request
-        response = r.put(url, **kwargs)
+        response = r.put(url, **kwargs)  # type: ignore[arg-type]
 
         # Handle the response
         if response.ok:
             return True
         logger.error(f"Put request failed with status code {response.status_code}.")
+        if response.status_code == 429:
+            raise RateLimitError(response)
         raise FailedRequestError(response)
 
     #
@@ -2012,7 +2022,7 @@ class Datawrapper:
         workspace_slug: str,
         member_ids: list[int],
         role: str,
-    ) -> bool:
+    ) -> dict:
         """Update workspace members' roles.
 
         Parameters
@@ -2364,7 +2374,7 @@ class Datawrapper:
         team_id: str,
         member_ids: list[int],
         role: str = "member",
-    ) -> bool:
+    ) -> dict:
         """Modify the role of users in a workspace team.
 
         Parameters

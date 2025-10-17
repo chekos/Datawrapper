@@ -1,0 +1,278 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "2zxrg",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "60ae21308eb5638dcd41646a3bbf3941",
+        "id": "2zxrg",
+        "type": "d3-arrow-plot",
+        "title": "Many European countries bring income inequality down with taxes. The US and Mexico: Not so much.",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {},
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-format": {
+              "Gini after taxes": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "n3",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Gini before taxes": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "n3",
+                "number-divisor": 0,
+                "number-prepend": ""
+              }
+            },
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "OECD",
+            "source-url": "http://www.oecd.org/social/income-distribution-database.htm",
+            "intro": "Income inequality (gini index) in selected OECD countries in 2014, before and after taxes. A gini index of 0 means that every household earns exactly the same income, while an index of 1 means that one household in the country makes all the income. <b>The lower the Gini index, the more equal the income is distributed in a country.</b>",
+            "byline": "Lisa Charlotte Rost, Datawrapper",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": ""
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "auto": true
+            },
+            "rules": false,
+            "thick": false,
+            "x-grid": "off",
+            "y-grid": "on",
+            "scale-y": "linear",
+            "sort-by": "Gini before taxes",
+            "labeling": "right",
+            "sort-bars": false,
+            "background": false,
+            "base-color": 9,
+            "force-grid": false,
+            "sort-range": {
+              "by": "end",
+              "enabled": true
+            },
+            "swap-labels": false,
+            "block-labels": false,
+            "custom-range": [
+              "0.15",
+              "0.6"
+            ],
+            "fill-between": false,
+            "label-colors": false,
+            "label-margin": 0,
+            "line-symbols": false,
+            "range-extent": "custom",
+            "interpolation": "linear",
+            "reverse-order": false,
+            "show-tooltips": true,
+            "tick-position": "bottom",
+            "x-tick-format": "YYYY",
+            "y-grid-format": "0,0.[00]",
+            "y-grid-labels": "auto",
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "<b>Mexico</b>": "#c71e1d",
+                "<b>United States</b>": "#c71e1d"
+              },
+              "categoryOrder": [],
+              "categoryLabels": {
+                "bars": "bars",
+                "France": "France",
+                "Finland": "Finland",
+                "Germany": "Germany",
+                "United States": "United States"
+              },
+              "palette": [],
+              "excludeFromKey": []
+            },
+            "show-arrow-key": true,
+            "show-color-key": false,
+            "color-by-column": true,
+            "group-by-column": false,
+            "label-alignment": "right",
+            "line-symbols-on": "both",
+            "value-label-row": false,
+            "y-grid-subdivide": true,
+            "custom-grid-lines": "",
+            "date-label-format": "YYYY",
+            "line-symbols-size": 3.5,
+            "show-group-labels": true,
+            "show-value-labels": true,
+            "line-symbols-shape": "circle",
+            "range-value-labels": "both",
+            "value-label-format": "0.[0]",
+            "compact-group-labels": false,
+            "line-symbols-opacity": 1,
+            "show-category-labels": true,
+            "area-fill-color-below": "#cccccc",
+            "value-label-alignment": "left",
+            "value-label-visibility": "always",
+            "area-fill-color-between": "#cccccc",
+            "custom-area-fills": {},
+            "range-annotations": {},
+            "text-annotations": {},
+            "overlays": {},
+            "thick-arrows": false,
+            "stack-color-legend": false,
+            "replace-flags": {
+              "enabled": false,
+              "style": "4x3"
+            },
+            "negativeColor": {
+              "enabled": false,
+              "value": "#E31A1C"
+            }
+          },
+          "axes": {
+            "end": "Gini after taxes",
+            "start": "Gini before taxes",
+            "colors": "Country",
+            "labels": "Country"
+          },
+          "publish": {
+            "embed-width": 543,
+            "embed-height": 416,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {
+              "unit": "mm",
+              "scale": 1,
+              "width": 119,
+              "height": 263,
+              "include": "full",
+              "colorMode": "rgb"
+            },
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Many European countries bring income inequality down with taxes. The US and Mexico: Not so much.\" aria-label=\"Arrow Plot\" id=\"datawrapper-chart-cjX4C\" src=\"https://datawrapper.dwcdn.net/cjX4C/1/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"543\" height=\"411\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Many European countries bring income inequality down with taxes. The US and Mexico: Not so much.\" aria-label=\"Arrow Plot\" id=\"datawrapper-chart-cjX4C\" src=\"https://datawrapper.dwcdn.net/cjX4C/1/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"411\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"])for(var e in a.data[\"datawrapper-height\"]){var t=document.getElementById(\"datawrapper-chart-\"+e)||document.querySelector(\"iframe[src*='\"+e+\"']\");t&&(t.style.height=a.data[\"datawrapper-height\"][e]+\"px\")}}))}();\n</script>"
+            },
+            "chart-height": 240,
+            "embed-heights": {
+              "100": 1583,
+              "200": 1170,
+              "300": 1052,
+              "400": 1010,
+              "500": 993,
+              "700": 934,
+              "800": 934,
+              "900": 934,
+              "1000": 909
+            }
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T18:05:36.000Z",
+        "lastModifiedAt": "2025-10-11T18:05:37.000Z",
+        "forkedFrom": "cjX4C",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "data": {
+            "upload-method": {
+              "__@t$__": "54089208729-1"
+            }
+          },
+          "visualize": {
+            "thick-arrows": {
+              "__@t$__": "54089208729-1"
+            },
+            "stack-color-legend": {
+              "__@t$__": "54089208729-1"
+            },
+            "color-category": {
+              "palette": {
+                "__@t$__": "54089208729-1"
+              },
+              "categoryOrder": {
+                "__@t$__": "54089208729-1"
+              },
+              "excludeFromKey": {
+                "__@t$__": "54089208729-1"
+              }
+            },
+            "replace-flags": {
+              "enabled": {
+                "__@t$__": "54089208729-1"
+              },
+              "style": {
+                "__@t$__": "54089208729-1"
+              }
+            },
+            "negativeColor": {
+              "enabled": {
+                "__@t$__": "54089208729-1"
+              },
+              "value": {
+                "__@t$__": "54089208729-1"
+              }
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089208729-1"
+            }
+          },
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089208729-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089208729-1"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-1"
+  },
+  "data": "0-0"
+}

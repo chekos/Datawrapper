@@ -1,0 +1,953 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "G8KYf",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "7bb670a1a404fa3f14050f53ff1fc96c",
+        "id": "G8KYf",
+        "type": "d3-area",
+        "title": "Nearly half of all plastic ever manufactured has been made since 2000",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {
+              "lnh8j1mn8a": {
+                "id": "lnh8j1mn8a",
+                "row": 1,
+                "time": 1528395249293,
+                "value": "-",
+                "column": 2,
+                "ignored": false,
+                "_index": 0
+              },
+              "uq9akjkhvj": {
+                "id": "uq9akjkhvj",
+                "row": 2,
+                "time": 1528395253530,
+                "value": "-",
+                "column": 2,
+                "ignored": false,
+                "_index": 1
+              },
+              "fiwclcshlf": {
+                "id": "fiwclcshlf",
+                "row": 3,
+                "time": 1528395253530,
+                "value": "-",
+                "column": 2,
+                "ignored": false,
+                "_index": 2
+              },
+              "e7so9rwnkt": {
+                "id": "e7so9rwnkt",
+                "row": 4,
+                "time": 1528395253530,
+                "value": "-",
+                "column": 2,
+                "ignored": false,
+                "_index": 3
+              },
+              "uqidky0hpi": {
+                "id": "uqidky0hpi",
+                "row": 5,
+                "time": 1528395253530,
+                "value": "-",
+                "column": 2,
+                "ignored": false,
+                "_index": 4
+              },
+              "8oxlbpa83k": {
+                "id": "8oxlbpa83k",
+                "row": 6,
+                "time": 1528395253530,
+                "value": "-",
+                "column": 2,
+                "ignored": false,
+                "_index": 5
+              },
+              "1c02r2tvah": {
+                "id": "1c02r2tvah",
+                "row": 7,
+                "time": 1528395253531,
+                "value": "-",
+                "column": 2,
+                "ignored": false,
+                "_index": 6
+              },
+              "d4npdpwbkp": {
+                "id": "d4npdpwbkp",
+                "row": 8,
+                "time": 1528395253531,
+                "value": "-",
+                "column": 2,
+                "ignored": false,
+                "_index": 7
+              },
+              "e1osmfn430": {
+                "id": "e1osmfn430",
+                "row": 9,
+                "time": 1528395253531,
+                "value": "-",
+                "column": 2,
+                "ignored": false,
+                "_index": 8
+              },
+              "s2eabja4iq": {
+                "id": "s2eabja4iq",
+                "row": 10,
+                "time": 1528395253532,
+                "value": "-",
+                "column": 2,
+                "ignored": false,
+                "_index": 9
+              },
+              "ekskgig7do": {
+                "id": "ekskgig7do",
+                "row": 11,
+                "time": 1528395253532,
+                "value": "-",
+                "column": 2,
+                "ignored": false,
+                "_index": 10
+              },
+              "jdcsdjs08p": {
+                "id": "jdcsdjs08p",
+                "row": 12,
+                "time": 1528395253532,
+                "value": "-",
+                "column": 2,
+                "ignored": false,
+                "_index": 11
+              },
+              "lac5vf13f7": {
+                "id": "lac5vf13f7",
+                "row": 13,
+                "time": 1528395253532,
+                "value": "-",
+                "column": 2,
+                "ignored": false,
+                "_index": 12
+              },
+              "17vjyb6zmr": {
+                "id": "17vjyb6zmr",
+                "row": 14,
+                "time": 1528395253532,
+                "value": "-",
+                "column": 2,
+                "ignored": false,
+                "_index": 13
+              },
+              "6khfm4b13y": {
+                "id": "6khfm4b13y",
+                "row": 15,
+                "time": 1528395253533,
+                "value": "-",
+                "column": 2,
+                "ignored": false,
+                "_index": 14
+              },
+              "k2n81j7k9i": {
+                "id": "k2n81j7k9i",
+                "row": 17,
+                "time": 1528395259143,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 15
+              },
+              "uq78v0kw2n": {
+                "id": "uq78v0kw2n",
+                "row": 18,
+                "time": 1528395259143,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 16
+              },
+              "kl8x9aevnb": {
+                "id": "kl8x9aevnb",
+                "row": 19,
+                "time": 1528395259143,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 17
+              },
+              "0k7qlv9ywu": {
+                "id": "0k7qlv9ywu",
+                "row": 20,
+                "time": 1528395259143,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 18
+              },
+              "2kd748lz4h": {
+                "id": "2kd748lz4h",
+                "row": 21,
+                "time": 1528395259143,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 19
+              },
+              "8qhgxgl8w2": {
+                "id": "8qhgxgl8w2",
+                "row": 22,
+                "time": 1528395259143,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 20
+              },
+              "cj3ooi8net": {
+                "id": "cj3ooi8net",
+                "row": 23,
+                "time": 1528395259143,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 21
+              },
+              "beuueirh5a": {
+                "id": "beuueirh5a",
+                "row": 24,
+                "time": 1528395259144,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 22
+              },
+              "vr2s1ucbx1": {
+                "id": "vr2s1ucbx1",
+                "row": 25,
+                "time": 1528395259144,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 23
+              },
+              "osan3e82rc": {
+                "id": "osan3e82rc",
+                "row": 26,
+                "time": 1528395259144,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 24
+              },
+              "nb13tqa3ve": {
+                "id": "nb13tqa3ve",
+                "row": 27,
+                "time": 1528395259144,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 25
+              },
+              "l42uj5sfxm": {
+                "id": "l42uj5sfxm",
+                "row": 28,
+                "time": 1528395259144,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 26
+              },
+              "s0m5ign94z": {
+                "id": "s0m5ign94z",
+                "row": 29,
+                "time": 1528395259144,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 27
+              },
+              "j6v2toddtz": {
+                "id": "j6v2toddtz",
+                "row": 30,
+                "time": 1528395259145,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 28
+              },
+              "rl4h850t4v": {
+                "id": "rl4h850t4v",
+                "row": 31,
+                "time": 1528395259145,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 29
+              },
+              "fl4425e0iy": {
+                "id": "fl4425e0iy",
+                "row": 32,
+                "time": 1528395259145,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 30
+              },
+              "n77w2omcal": {
+                "id": "n77w2omcal",
+                "row": 33,
+                "time": 1528395259145,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 31
+              },
+              "ileyyqvzuv": {
+                "id": "ileyyqvzuv",
+                "row": 34,
+                "time": 1528395259145,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 32
+              },
+              "wq91n1dyx9": {
+                "id": "wq91n1dyx9",
+                "row": 35,
+                "time": 1528395259145,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 33
+              },
+              "92neiah1wf": {
+                "id": "92neiah1wf",
+                "row": 36,
+                "time": 1528395259146,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 34
+              },
+              "ybvrlgx4im": {
+                "id": "ybvrlgx4im",
+                "row": 37,
+                "time": 1528395259146,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 35
+              },
+              "aqbavp3iyp": {
+                "id": "aqbavp3iyp",
+                "row": 38,
+                "time": 1528395259146,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 36
+              },
+              "0qwb9ixwg9": {
+                "id": "0qwb9ixwg9",
+                "row": 39,
+                "time": 1528395259146,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 37
+              },
+              "5d0rty4dzi": {
+                "id": "5d0rty4dzi",
+                "row": 40,
+                "time": 1528395259146,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 38
+              },
+              "zbq8hocx0c": {
+                "id": "zbq8hocx0c",
+                "row": 41,
+                "time": 1528395259146,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 39
+              },
+              "pfnawrrr95": {
+                "id": "pfnawrrr95",
+                "row": 42,
+                "time": 1528395259147,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 40
+              },
+              "vq7fqcsajb": {
+                "id": "vq7fqcsajb",
+                "row": 43,
+                "time": 1528395259147,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 41
+              },
+              "ldd2r2vcu9": {
+                "id": "ldd2r2vcu9",
+                "row": 44,
+                "time": 1528395259147,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 42
+              },
+              "idk0emhmvn": {
+                "id": "idk0emhmvn",
+                "row": 45,
+                "time": 1528395259147,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 43
+              },
+              "6dq51h964b": {
+                "id": "6dq51h964b",
+                "row": 46,
+                "time": 1528395259148,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 44
+              },
+              "02oqnxsgoa": {
+                "id": "02oqnxsgoa",
+                "row": 47,
+                "time": 1528395259148,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 45
+              },
+              "i1j1kjjyjj": {
+                "id": "i1j1kjjyjj",
+                "row": 48,
+                "time": 1528395259148,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 46
+              },
+              "glsdlhnf9i": {
+                "id": "glsdlhnf9i",
+                "row": 49,
+                "time": 1528395259148,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 47
+              },
+              "26liom6830": {
+                "id": "26liom6830",
+                "row": 50,
+                "time": 1528395259148,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 48
+              },
+              "85b7lb4q2m": {
+                "id": "85b7lb4q2m",
+                "row": 51,
+                "time": 1528395259149,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 49
+              },
+              "iv0d2dn3qy": {
+                "id": "iv0d2dn3qy",
+                "row": 52,
+                "time": 1528395259149,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 50
+              },
+              "zqdse6lqqt": {
+                "id": "zqdse6lqqt",
+                "row": 53,
+                "time": 1528395259149,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 51
+              },
+              "cfoy8bbd1x": {
+                "id": "cfoy8bbd1x",
+                "row": 54,
+                "time": 1528395259149,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 52
+              },
+              "gfpjoljpl3": {
+                "id": "gfpjoljpl3",
+                "row": 55,
+                "time": 1528395259150,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 53
+              },
+              "sshgfn7dre": {
+                "id": "sshgfn7dre",
+                "row": 56,
+                "time": 1528395259150,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 54
+              },
+              "dc2k439gek": {
+                "id": "dc2k439gek",
+                "row": 57,
+                "time": 1528395259150,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 55
+              },
+              "t47igwbc6": {
+                "id": "t47igwbc6",
+                "row": 58,
+                "time": 1528395259150,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 56
+              },
+              "4l8cgnoxwv": {
+                "id": "4l8cgnoxwv",
+                "row": 59,
+                "time": 1528395259151,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 57
+              },
+              "hm224tk59v": {
+                "id": "hm224tk59v",
+                "row": 60,
+                "time": 1528395259151,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 58
+              },
+              "7z7f3gu6mq": {
+                "id": "7z7f3gu6mq",
+                "row": 61,
+                "time": 1528395259151,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 59
+              },
+              "ktl69aexaj": {
+                "id": "ktl69aexaj",
+                "row": 62,
+                "time": 1528395259151,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 60
+              },
+              "z65j1gbe61": {
+                "id": "z65j1gbe61",
+                "row": 63,
+                "time": 1528395259152,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 61
+              },
+              "w56hzpl7hj": {
+                "id": "w56hzpl7hj",
+                "row": 64,
+                "time": 1528395259152,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 62
+              },
+              "vrxy4t39hp": {
+                "id": "vrxy4t39hp",
+                "row": 65,
+                "time": 1528395259152,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 63
+              },
+              "v9mwy27zcg": {
+                "id": "v9mwy27zcg",
+                "row": 66,
+                "time": 1528395259153,
+                "value": "-",
+                "column": 3,
+                "ignored": false,
+                "_index": 64
+              }
+            },
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-format": {
+              "total": {
+                "type": "auto",
+                "ignore": true,
+                "number-append": "",
+                "number-format": "n1",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "Until 2000": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "n1",
+                "number-divisor": 0,
+                "number-prepend": ""
+              }
+            },
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "Roland Geyer, University of California, Santa Barbara",
+            "source-url": "http://advances.sciencemag.org/content/3/7/e1700782.full",
+            "intro": "",
+            "byline": "",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": "",
+            "hide-title": true
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false
+            },
+            "lines": {
+              "Since 2000": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                }
+              },
+              "Until 2000": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                }
+              }
+            },
+            "x-grid": "off",
+            "y-grid": "ticks",
+            "scale-y": "linear",
+            "overlays": {},
+            "base-color": 0,
+            "sort-areas": "keep",
+            "stack-areas": false,
+            "area-opacity": "1",
+            "label-colors": false,
+            "label-margin": 0,
+            "stack-to-100": false,
+            "interpolation": "linear",
+            "show-tooltips": true,
+            "x-grid-format": "YYYY",
+            "y-grid-format": "0,0.[00]",
+            "y-grid-labels": "outside",
+            "color-category": {
+              "map": {
+                "Since 2000": "#1d81a2",
+                "Until 2000": "#c8cbcd"
+              }
+            },
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-range-y": [
+              "",
+              ""
+            ],
+            "custom-ticks-x": "",
+            "custom-ticks-y": "",
+            "plotHeightMode": "fixed",
+            "show-color-key": false,
+            "plotHeightFixed": 346,
+            "plotHeightRatio": 0.5,
+            "text-annotations": {
+              "pzo5lp3ss3": {
+                "bg": false,
+                "dx": "3",
+                "dy": 0,
+                "id": "pzo5lp3ss3",
+                "bold": false,
+                "size": 23,
+                "text": "44%<br/>",
+                "align": "br",
+                "color": "#ffffff",
+                "italic": false,
+                "position": {
+                  "x": "2012M6",
+                  "y": 150
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 0
+              },
+              "xbzrdfufs6": {
+                "dx": 0,
+                "dy": 0,
+                "id": "xbzrdfufs6",
+                "bold": true,
+                "size": 12,
+                "text": "of all<br/>plastic ever<br/>manufactured",
+                "align": "tr",
+                "color": "#ffffff",
+                "italic": false,
+                "position": {
+                  "x": "2012M6",
+                  "y": 150
+                },
+                "underline": false,
+                "connectorLine": {},
+                "mobileFallback": false,
+                "_index": 1
+              },
+              "qeu7nkgxwv": {
+                "dx": 0,
+                "dy": 0,
+                "id": "qeu7nkgxwv",
+                "bold": true,
+                "size": 19,
+                "text": "Nearly half of all plastic<br/>ever manufactured ",
+                "align": "bl",
+                "color": "#1d81a2",
+                "italic": false,
+                "position": {
+                  "x": "1950M01",
+                  "y": 300
+                },
+                "underline": false,
+                "connectorLine": {},
+                "mobileFallback": false,
+                "_index": 2
+              },
+              "c8zr0hge7c": {
+                "dx": 0,
+                "dy": 0,
+                "id": "c8zr0hge7c",
+                "bold": false,
+                "size": 18,
+                "text": "has been made<br/>since 2000",
+                "align": "tl",
+                "color": "#000000",
+                "italic": false,
+                "position": {
+                  "x": "1950M01",
+                  "y": 300
+                },
+                "underline": false,
+                "connectorLine": {},
+                "mobileFallback": false,
+                "_index": 3
+              },
+              "e5zkdc3kk5": {
+                "dx": 0,
+                "dy": 0,
+                "id": "e5zkdc3kk5",
+                "bold": true,
+                "size": 13,
+                "text": "Global plastic production",
+                "align": "bl",
+                "color": "#4a4a4a",
+                "italic": false,
+                "position": {
+                  "x": "1950M01",
+                  "y": 113
+                },
+                "underline": false,
+                "connectorLine": {},
+                "mobileFallback": false,
+                "_index": 4
+              },
+              "sq42sj9n3j": {
+                "dx": 0,
+                "dy": 0,
+                "id": "sq42sj9n3j",
+                "bold": false,
+                "size": 13,
+                "text": "in millions of tons",
+                "align": "tl",
+                "color": "#5d5d5d",
+                "italic": true,
+                "position": {
+                  "x": "1950M01",
+                  "y": 113
+                },
+                "underline": false,
+                "connectorLine": {},
+                "mobileFallback": false,
+                "_index": 5
+              }
+            },
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "range-annotations": {
+              "ua8vjl48sr": {
+                "id": "ua8vjl48sr",
+                "type": "x",
+                "color": "#ffffff",
+                "display": "range",
+                "opacity": "0",
+                "position": {
+                  "x0": "1952M11",
+                  "x1": "1994M8",
+                  "y0": "1952M11",
+                  "y1": "1994M8"
+                },
+                "strokeType": "solid",
+                "strokeWidth": 1,
+                "_index": 0
+              }
+            },
+            "stack-color-legend": false,
+            "y-grid-label-align": "right",
+            "area-separator-color": "background",
+            "area-separator-lines": false,
+            "reverse-color-legend": false
+          },
+          "axes": {},
+          "publish": {
+            "embed-width": 610,
+            "embed-height": 406,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {
+              "unit": "mm",
+              "scale": 1,
+              "width": "161",
+              "height": "102",
+              "include": "full",
+              "colorMode": "rgb",
+              "fullVectorMode": true
+            },
+            "export-svg": {
+              "width": 610,
+              "height": 384,
+              "fullVectorMode": true
+            },
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Nearly half of all plastic ever manufactured has been made since 2000\" aria-label=\"Interactive area chart\" id=\"datawrapper-chart-byHi2\" src=\"https://datawrapper.dwcdn.net/byHi2/5/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"610\" height=\"405\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Nearly half of all plastic ever manufactured has been made since 2000\" aria-label=\"Interactive area chart\" id=\"datawrapper-chart-byHi2\" src=\"https://datawrapper.dwcdn.net/byHi2/5/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"405\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:405px\" id=\"datawrapper-vis-byHi2\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/byHi2/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-byHi2\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/byHi2/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "chart-height": 373,
+            "embed-heights": {
+              "100": 384,
+              "200": 384,
+              "300": 384,
+              "400": 384,
+              "500": 384,
+              "700": 384,
+              "800": 384,
+              "900": 384,
+              "1000": 384
+            }
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T17:54:47.000Z",
+        "lastModifiedAt": "2025-10-11T17:54:48.000Z",
+        "forkedFrom": "byHi2",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089268123-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089268123-1"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089268123-2"
+            },
+            "chart-height": {
+              "__@t$__": "54089268123-3"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-3"
+  },
+  "data": "0-0"
+}

@@ -1,0 +1,873 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "VtbeB",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "9584f083686678ee66f29cd3ccdf2ed1",
+        "id": "VtbeB",
+        "type": "d3-scatter-plot",
+        "title": "Higher Risk of Job Automation in Lower Paying Jobs",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {
+              "1c1c1c1c1c": {
+                "row": 0,
+                "value": "Average annual wage",
+                "column": 3,
+                "ignored": false,
+                "id": "1c1c1c1c1c",
+                "_index": 0
+              },
+              "1d1d1d1d1d": {
+                "row": 0,
+                "value": "Averageannual wage",
+                "column": 3,
+                "ignored": false,
+                "id": "1d1d1d1d1d",
+                "_index": 1
+              },
+              "1e1e1e1e1e": {
+                "row": 0,
+                "value": "Average&lt;br&gt;annual wage",
+                "column": 3,
+                "ignored": false,
+                "id": "1e1e1e1e1e",
+                "_index": 2
+              },
+              "1f1f1f1f1f": {
+                "row": 0,
+                "value": "Average annual wage",
+                "column": 3,
+                "ignored": false,
+                "id": "1f1f1f1f1f",
+                "_index": 3
+              },
+              "1g1g1g1g1g": {
+                "row": 227,
+                "value": "Ambulance Drivers and Attendants",
+                "column": 5,
+                "ignored": false,
+                "id": "1g1g1g1g1g",
+                "_index": 4
+              },
+              "1h1h1h1h1h": {
+                "row": 668,
+                "value": "Hosts and Hostesses",
+                "column": 5,
+                "ignored": false,
+                "id": "1h1h1h1h1h",
+                "_index": 5
+              },
+              "1i1i1i1i1i": {
+                "row": 41,
+                "value": "Secondary School Teachers, Except Special and Career/Technical Education",
+                "column": 11,
+                "ignored": false,
+                "id": "1i1i1i1i1i",
+                "_index": 6
+              },
+              "1j1j1j1j1j": {
+                "row": 71,
+                "value": "Education Administrators, Preschool and Childcare Center/Program",
+                "column": 11,
+                "ignored": false,
+                "id": "1j1j1j1j1j",
+                "_index": 7
+              }
+            },
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "charset-fixed": true,
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "FREY & OSBORNE, BUREAU OF LABOR STATISTICS",
+            "source-url": "",
+            "intro": "",
+            "byline": "",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": "",
+            "computed-columns": []
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "auto": true
+            },
+            "base": "#c4c4c4",
+            "size": "dynamic",
+            "rules": false,
+            "shape": "fixed",
+            "thick": false,
+            "x-pos": "off",
+            "y-pos": "right",
+            "symbol": [],
+            "x-axis": {
+              "range": [
+                -0.1,
+                1.1
+              ],
+              "ticks": [
+                0.2,
+                0.4,
+                0.6,
+                0.8
+              ],
+              "log": false
+            },
+            "x-grid": "off",
+            "y-axis": {
+              "log": true,
+              "range": [
+                12000,
+                250000
+              ],
+              "ticks": [
+                200000,
+                100000,
+                50000,
+                25000
+              ]
+            },
+            "opacity": 0.86,
+            "tooltip": {
+              "body": "Income:  ${{ average_ann_wage }}<br>\nProbability: {{ FORMAT(prob * 100,\"0\") }}%<br>\nNumber of employed: {{ employed_may2016 }}",
+              "title": "{{ occupation }}",
+              "legacy": {
+                "body": "Income:  ${{ average_ann_wage }}<br>\nProbability: {{ round(prob * 100) }}%<br>\nNumber of employed: {{ employed_may2016 }}",
+                "title": "{{ occupation }}",
+                "fields": {
+                  "prob": "prob",
+                  "medWage": "medWage",
+                  "____code": "_ - code",
+                  "____rank": "_ - rank",
+                  "education": "education",
+                  "occupation": "occupation",
+                  "probability": "probability",
+                  "numbEmployed": "numbEmployed",
+                  "median_ann_wage": "median_ann_wage",
+                  "average_ann_wage": "average_ann_wage",
+                  "employed_may2016": "employed_may2016"
+                }
+              },
+              "sticky": false,
+              "enabled": true,
+              "migrated": true
+            },
+            "loess-bw": 0.75,
+            "max-size": 29.34,
+            "outlines": true,
+            "x-format": "0,0.[00]%",
+            "y-format": "0a",
+            "color-key": null,
+            "sort-bars": "keep",
+            "add-labels": [],
+            "background": false,
+            "base-color": 7,
+            "color-base": null,
+            "fixed-size": 5.64,
+            "loess-iter": 0,
+            "regression": true,
+            "auto-labels": true,
+            "swap-labels": false,
+            "block-labels": false,
+            "fixed-symbol": "symbolCircle",
+            "label-format": "YYYY",
+            "x-grid-lines": "on",
+            "y-grid-lines": "on",
+            "color-outline": "#fff",
+            "custom-colors": null,
+            "chart-type-set": true,
+            "show-color-key": true,
+            "highlight-range": null,
+            "label-alignment": "left",
+            "text-annotations": {
+              "1c1c1c1c1c": {
+                "x": null,
+                "y": null,
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "bold": false,
+                "size": 14,
+                "text": "Most likely to\nbe automated ",
+                "align": "mr",
+                "color": "#000000",
+                "italic": false,
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "id": "1c1c1c1c1c",
+                "_index": 0,
+                "position": {
+                  "x": 1,
+                  "y": 14000
+                }
+              },
+              "1d1d1d1d1d": {
+                "x": null,
+                "y": null,
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "bold": false,
+                "size": 14,
+                "text": "Least likely to\nbe automated",
+                "align": "ml",
+                "color": "#000000",
+                "italic": false,
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "id": "1d1d1d1d1d",
+                "_index": 1,
+                "position": {
+                  "x": 0,
+                  "y": 14000
+                }
+              },
+              "1e1e1e1e1e": {
+                "x": null,
+                "y": null,
+                "bg": false,
+                "dx": 5,
+                "dy": 0,
+                "bold": false,
+                "size": 16,
+                "text": "→",
+                "align": "bl",
+                "color": "#000000",
+                "italic": false,
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "id": "1e1e1e1e1e",
+                "_index": 2,
+                "position": {
+                  "x": 1,
+                  "y": 14000
+                }
+              },
+              "1f1f1f1f1f": {
+                "x": null,
+                "y": null,
+                "bg": false,
+                "dx": -5,
+                "dy": 0,
+                "bold": false,
+                "size": 16,
+                "text": "←",
+                "align": "br",
+                "color": "#000000",
+                "italic": false,
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "id": "1f1f1f1f1f",
+                "_index": 3,
+                "position": {
+                  "x": 0,
+                  "y": 14000
+                }
+              }
+            },
+            "date-label-format": "YYYY",
+            "hide-value-labels": false,
+            "highlight-labeled": true,
+            "range-annotations": {},
+            "regression-method": "exponential",
+            "value-label-format": "0,0.[00]",
+            "value-label-alignment": "left",
+            "custom-area-fills": {},
+            "overlays": {},
+            "color-by-column": true,
+            "color-category": {
+              "map": {
+                "Master's degree": "#1d81a2",
+                "Bachelor's degree": "#00a669",
+                "Associate's degree": "#00a669",
+                "Postsecondary nondegree award": "#ffd500",
+                "Doctoral or professional degree": "#1d81a2",
+                "No formal educational credential": "#e74c41",
+                "High school diploma or equivalent": "#ea985f"
+              },
+              "palette": [],
+              "categoryOrder": [],
+              "categoryLabels": {
+                "High school diploma or equivalent": "High school diploma or equivalent",
+                "Bachelor's degree": "Bachelor & Associate's degree",
+                "Postsecondary nondegree award": "Postsecondary non-degree award",
+                "Associate's degree": "Bachelor & Associate's degree",
+                "No formal educational credential": "No formal education",
+                "Doctoral or professional degree": "Doctoral & Master's degree",
+                "Master's degree": "Doctoral & Master's degree",
+                "Some college, no degree": "Some college, no degree"
+              },
+              "excludeFromKey": []
+            },
+            "stack-color-legend": false,
+            "responsive-symbol-size": false,
+            "shape-size-version": 1,
+            "custom-lines": "",
+            "show-size-legend": false,
+            "size-legend-position": "above",
+            "size-legend-type": "stacked",
+            "size-legend-values-setting": "auto",
+            "size-legend-title-enabled": true,
+            "size-legend-title-position": "left",
+            "size-legend-title-width": 200,
+            "size-legend-label-format": "auto",
+            "size-legend-label-position": "right",
+            "legend-offset-x": 0,
+            "legend-offset-y": 0,
+            "hover-highlight": true,
+            "plotHeightMode": "fixed",
+            "plotHeightFixed": 544.3229370117188,
+            "plotHeightRatio": 0.5,
+            "negativeColor": {
+              "enabled": false,
+              "value": "#E31A1C"
+            }
+          },
+          "axes": {
+            "x": "prob",
+            "y": "medWage",
+            "size": "numbEmployed",
+            "color": "education",
+            "labels": "short occupation"
+          },
+          "publish": {
+            "embed-width": 748,
+            "embed-height": 683,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "text": "#000000",
+            "background": "#ffffff",
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Higher Risk of Job Automation in Lower Paying Jobs\" aria-label=\"chart\" id=\"datawrapper-chart-6A7hp\" src=\"https://datawrapper.dwcdn.net/6A7hp/2/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"748\" height=\"647\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Higher Risk of Job Automation in Lower Paying Jobs\" aria-label=\"chart\" id=\"datawrapper-chart-6A7hp\" src=\"https://datawrapper.dwcdn.net/6A7hp/2/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"647\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"])for(var e in a.data[\"datawrapper-height\"]){var t=document.getElementById(\"datawrapper-chart-\"+e)||document.querySelector(\"iframe[src*='\"+e+\"']\");t&&(t.style.height=a.data[\"datawrapper-height\"][e]+\"px\")}}))}();\n</script>"
+            },
+            "chart-height": 544.3229370117188,
+            "embed-heights": {
+              "100": 647,
+              "200": 647,
+              "300": 647,
+              "400": 647,
+              "500": 647,
+              "700": 647,
+              "800": 647,
+              "900": 647,
+              "1000": 647
+            }
+          },
+          "annotate": {
+            "notes": "Inspired by a <a href=\"https://www.bloomberg.com/graphics/2017-jobs-automation-risk/\">Bloomberg chart.</a>"
+          },
+          "custom": {
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T20:06:57.000Z",
+        "lastModifiedAt": "2025-10-11T20:06:58.000Z",
+        "forkedFrom": "6A7hp",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "data": {
+            "upload-method": {
+              "__@t$__": "54089293682-1"
+            }
+          },
+          "visualize": {
+            "x-axis": {
+              "log": {
+                "__@t$__": "54089293682-1"
+              }
+            },
+            "base-color": {
+              "__@t$__": "54089293682-1"
+            },
+            "color-by-column": {
+              "__@t$__": "54089293682-1"
+            },
+            "color-category": {
+              "map": {
+                "Master's degree": {
+                  "__@t$__": "54089293682-1"
+                },
+                "Bachelor's degree": {
+                  "__@t$__": "54089293682-1"
+                },
+                "Associate's degree": {
+                  "__@t$__": "54089293682-1"
+                },
+                "Postsecondary nondegree award": {
+                  "__@t$__": "54089293682-1"
+                },
+                "Doctoral or professional degree": {
+                  "__@t$__": "54089293682-1"
+                },
+                "No formal educational credential": {
+                  "__@t$__": "54089293682-1"
+                },
+                "High school diploma or equivalent": {
+                  "__@t$__": "54089293682-1"
+                }
+              },
+              "palette": {
+                "__@t$__": "54089293682-1"
+              },
+              "categoryOrder": {
+                "__@t$__": "54089293682-2"
+              },
+              "categoryLabels": {
+                "High school diploma or equivalent": {
+                  "__@t$__": "54089293682-1"
+                },
+                "Bachelor's degree": {
+                  "__@t$__": "54089293682-1"
+                },
+                "Postsecondary nondegree award": {
+                  "__@t$__": "54089293682-1"
+                },
+                "Associate's degree": {
+                  "__@t$__": "54089293682-1"
+                },
+                "No formal educational credential": {
+                  "__@t$__": "54089293682-1"
+                },
+                "Doctoral or professional degree": {
+                  "__@t$__": "54089293682-1"
+                },
+                "Master's degree": {
+                  "__@t$__": "54089293682-1"
+                },
+                "Some college, no degree": {
+                  "__@t$__": "54089293682-1"
+                }
+              },
+              "excludeFromKey": {
+                "__@t$__": "54089293682-2"
+              }
+            },
+            "stack-color-legend": {
+              "__@t$__": "54089293682-1"
+            },
+            "max-size": {
+              "__@t$__": "54089293682-1"
+            },
+            "responsive-symbol-size": {
+              "__@t$__": "54089293682-1"
+            },
+            "fixed-size": {
+              "__@t$__": "54089293682-1"
+            },
+            "shape-size-version": {
+              "__@t$__": "54089293682-1"
+            },
+            "custom-lines": {
+              "__@t$__": "54089293682-1"
+            },
+            "text-annotations": {
+              "1c1c1c1c1c": {
+                "position": {
+                  "x": {
+                    "__@t$__": "54089293682-1"
+                  },
+                  "y": {
+                    "__@t$__": "54089293682-1"
+                  }
+                },
+                "x": {
+                  "__@t$__": "54089293682-1"
+                },
+                "y": {
+                  "__@t$__": "54089293682-1"
+                }
+              },
+              "1d1d1d1d1d": {
+                "position": {
+                  "x": {
+                    "__@t$__": "54089293682-1"
+                  },
+                  "y": {
+                    "__@t$__": "54089293682-1"
+                  }
+                },
+                "x": {
+                  "__@t$__": "54089293682-1"
+                },
+                "y": {
+                  "__@t$__": "54089293682-1"
+                }
+              },
+              "1e1e1e1e1e": {
+                "position": {
+                  "x": {
+                    "__@t$__": "54089293682-1"
+                  },
+                  "y": {
+                    "__@t$__": "54089293682-1"
+                  }
+                },
+                "x": {
+                  "__@t$__": "54089293682-1"
+                },
+                "y": {
+                  "__@t$__": "54089293682-1"
+                }
+              },
+              "1f1f1f1f1f": {
+                "position": {
+                  "x": {
+                    "__@t$__": "54089293682-1"
+                  },
+                  "y": {
+                    "__@t$__": "54089293682-1"
+                  }
+                },
+                "x": {
+                  "__@t$__": "54089293682-1"
+                },
+                "y": {
+                  "__@t$__": "54089293682-1"
+                }
+              }
+            },
+            "show-size-legend": {
+              "__@t$__": "54089293682-1"
+            },
+            "size-legend-position": {
+              "__@t$__": "54089293682-1"
+            },
+            "size-legend-type": {
+              "__@t$__": "54089293682-1"
+            },
+            "size-legend-values-setting": {
+              "__@t$__": "54089293682-1"
+            },
+            "size-legend-title-enabled": {
+              "__@t$__": "54089293682-1"
+            },
+            "size-legend-title-position": {
+              "__@t$__": "54089293682-1"
+            },
+            "size-legend-title-width": {
+              "__@t$__": "54089293682-1"
+            },
+            "size-legend-label-format": {
+              "__@t$__": "54089293682-1"
+            },
+            "size-legend-label-position": {
+              "__@t$__": "54089293682-1"
+            },
+            "legend-offset-x": {
+              "__@t$__": "54089293682-1"
+            },
+            "legend-offset-y": {
+              "__@t$__": "54089293682-1"
+            },
+            "hover-highlight": {
+              "__@t$__": "54089293682-1"
+            },
+            "plotHeightMode": {
+              "__@t$__": "54089293682-1"
+            },
+            "plotHeightFixed": {
+              "__@t$__": "54089293682-1"
+            },
+            "plotHeightRatio": {
+              "__@t$__": "54089293682-1"
+            },
+            "color-key": {
+              "base": {
+                "id": {
+                  "__@t$__": "54089293682-1"
+                },
+                "color": {
+                  "__@t$__": "54089293682-1"
+                },
+                "index": {
+                  "__@t$__": "54089293682-1"
+                },
+                "label": {
+                  "__@t$__": "54089293682-1"
+                },
+                "def_lbl": {
+                  "__@t$__": "54089293682-1"
+                },
+                "__@t$__": "54089293682-1"
+              },
+              "Master's degree": {
+                "id": {
+                  "__@t$__": "54089293682-1"
+                },
+                "col": {
+                  "__@t$__": "54089293682-1"
+                },
+                "color": {
+                  "__@t$__": "54089293682-1"
+                },
+                "index": {
+                  "__@t$__": "54089293682-1"
+                },
+                "label": {
+                  "__@t$__": "54089293682-1"
+                },
+                "def_lbl": {
+                  "__@t$__": "54089293682-1"
+                },
+                "__@t$__": "54089293682-1"
+              },
+              "Bachelor's degree": {
+                "id": {
+                  "__@t$__": "54089293682-1"
+                },
+                "col": {
+                  "__@t$__": "54089293682-1"
+                },
+                "color": {
+                  "__@t$__": "54089293682-1"
+                },
+                "index": {
+                  "__@t$__": "54089293682-1"
+                },
+                "label": {
+                  "__@t$__": "54089293682-1"
+                },
+                "def_lbl": {
+                  "__@t$__": "54089293682-1"
+                },
+                "__@t$__": "54089293682-1"
+              },
+              "Associate's degree": {
+                "col": {
+                  "__@t$__": "54089293682-1"
+                },
+                "hide": {
+                  "__@t$__": "54089293682-1"
+                },
+                "color": {
+                  "__@t$__": "54089293682-1"
+                },
+                "label": {
+                  "__@t$__": "54089293682-1"
+                },
+                "__@t$__": "54089293682-1"
+              },
+              "Postsecondary nondegree award": {
+                "id": {
+                  "__@t$__": "54089293682-1"
+                },
+                "col": {
+                  "__@t$__": "54089293682-1"
+                },
+                "color": {
+                  "__@t$__": "54089293682-1"
+                },
+                "index": {
+                  "__@t$__": "54089293682-1"
+                },
+                "label": {
+                  "__@t$__": "54089293682-1"
+                },
+                "__@t$__": "54089293682-1"
+              },
+              "Doctoral or professional degree": {
+                "col": {
+                  "__@t$__": "54089293682-1"
+                },
+                "hide": {
+                  "__@t$__": "54089293682-1"
+                },
+                "color": {
+                  "__@t$__": "54089293682-1"
+                },
+                "label": {
+                  "__@t$__": "54089293682-1"
+                },
+                "__@t$__": "54089293682-1"
+              },
+              "No formal educational credential": {
+                "id": {
+                  "__@t$__": "54089293682-1"
+                },
+                "col": {
+                  "__@t$__": "54089293682-1"
+                },
+                "color": {
+                  "__@t$__": "54089293682-1"
+                },
+                "index": {
+                  "__@t$__": "54089293682-1"
+                },
+                "label": {
+                  "__@t$__": "54089293682-1"
+                },
+                "__@t$__": "54089293682-1"
+              },
+              "High school diploma or equivalent": {
+                "id": {
+                  "__@t$__": "54089293682-1"
+                },
+                "col": {
+                  "__@t$__": "54089293682-1"
+                },
+                "color": {
+                  "__@t$__": "54089293682-1"
+                },
+                "index": {
+                  "__@t$__": "54089293682-1"
+                },
+                "label": {
+                  "__@t$__": "54089293682-1"
+                },
+                "__@t$__": "54089293682-1"
+              },
+              "__@t$__": "54089293682-1"
+            },
+            "color-base": {
+              "__@t$__": "54089293682-1"
+            },
+            "custom-colors": {
+              "Master's degree": {
+                "__@t$__": "54089293682-1"
+              },
+              "Bachelor's degree": {
+                "__@t$__": "54089293682-1"
+              },
+              "Associate's degree": {
+                "__@t$__": "54089293682-1"
+              },
+              "Postsecondary nondegree award": {
+                "__@t$__": "54089293682-1"
+              },
+              "Doctoral or professional degree": {
+                "__@t$__": "54089293682-1"
+              },
+              "No formal educational credential": {
+                "__@t$__": "54089293682-1"
+              },
+              "High school diploma or equivalent": {
+                "__@t$__": "54089293682-1"
+              },
+              "__@t$__": "54089293682-1"
+            },
+            "highlight-range": {
+              "__@t$__": "54089293682-1"
+            },
+            "opacity": {
+              "__@t$__": "54089293682-2"
+            },
+            "negativeColor": {
+              "enabled": {
+                "__@t$__": "54089293682-2"
+              },
+              "value": {
+                "__@t$__": "54089293682-2"
+              }
+            }
+          },
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089293682-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089293682-1"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089293682-3"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-3"
+  },
+  "data": "0-0"
+}

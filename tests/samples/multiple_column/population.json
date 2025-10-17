@@ -1,0 +1,475 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "8kNfG",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "20f9dbf59201ecdac1cecf24ceccabb0",
+        "id": "8kNfG",
+        "type": "multiple-columns",
+        "title": "Population of the world's largest cities, 1950 to 2035",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {},
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "Our World in Data",
+            "source-url": "https://ourworldindata.org/urbanization",
+            "intro": "",
+            "byline": "",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": ""
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "url": "https://www.datawrapper.de/_/8kNfG",
+              "auto": false
+            },
+            "sort": {
+              "by": "end",
+              "enabled": true,
+              "reverse": false
+            },
+            "lines": {},
+            "panels": {
+              "Delhi": {
+                "title": "Delhi, <span style=\"color:gray; font-weight: normal;\">India</span>"
+              },
+              "Dhaka": {
+                "title": "Dhaka, <span style=\"color:gray; font-weight: normal;\"> Bangladesh </span>"
+              },
+              "Lagos": {
+                "title": "Lagos, <span style=\"color:gray; font-weight: normal;\">Nigeria</span>"
+              },
+              "Paris": {
+                "title": "Paris, <span style=\"color:gray; font-weight: normal;\">France</span>"
+              },
+              "Tokyo": {
+                "title": "Tokyo, <span style=\"color:gray; font-weight: normal;\">Japan</span>"
+              },
+              "Beijing": {
+                "title": "Beijing, <span style=\"color:gray; font-weight: normal;\">China</span>"
+              },
+              "Mumbai (Bombay)": {
+                "title": "Mumbai, <span style=\"color:gray; font-weight: normal;\">India</span>"
+              },
+              "New York-Newark": {
+                "title": "New York/Newark, <span style=\"color:gray; font-weight: normal;\">U.S.</span>"
+              }
+            },
+            "x-grid": "off",
+            "y-grid": "off",
+            "scale-y": "linear",
+            "overlays": {},
+            "base-color": "#c9a291",
+            "gridLayout": "fixedCount",
+            "highlights": [],
+            "bar-padding": 60,
+            "valueLabels": {
+              "enabled": false,
+              "placement": "outside",
+              "preventOverlap": true
+            },
+            "label-colors": false,
+            "label-margin": 0,
+            "interpolation": "linear",
+            "negativeColor": {
+              "value": "#E31A1C",
+              "enabled": false
+            },
+            "reverse-order": false,
+            "rotate-labels": "auto",
+            "show-tooltips": true,
+            "x-grid-format": "auto",
+            "x-grid-labels": "on",
+            "y-grid-format": "0.[0]a",
+            "y-grid-labels": "inside",
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "2025": "#c71e1d"
+              },
+              "categoryOrder": [],
+              "categoryLabels": {
+                "2025": "...for 2025"
+              },
+              "excludeFromKey": [
+                "1950",
+                "1955",
+                "1960",
+                "1965",
+                "1970",
+                "1975",
+                "1980",
+                "1985",
+                "1990",
+                "1995",
+                "2000",
+                "2005",
+                "2010",
+                "2015",
+                "2035",
+                "2030",
+                "2020"
+              ]
+            },
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-range-y": [
+              "",
+              ""
+            ],
+            "custom-ticks-x": "",
+            "custom-ticks-y": "",
+            "plotHeightMode": "fixed",
+            "show-color-key": false,
+            "xGridAlignment": "baseline",
+            "color-by-column": true,
+            "connector-lines": true,
+            "gridColumnCount": 4,
+            "plotHeightFixed": 300,
+            "plotHeightRatio": 0.5,
+            "colorPanelTitles": false,
+            "panelSortIndexes": {},
+            "text-annotations": {
+              "qlTwCClb1c": {
+                "bg": false,
+                "dx": -21,
+                "dy": -8,
+                "id": "qlTwCClb1c",
+                "bold": false,
+                "size": 13,
+                "text": "Projection",
+                "align": "tr",
+                "color": "#858585",
+                "width": 37.37470210984441,
+                "italic": false,
+                "position": {
+                  "x": "2018/04/30 15:23",
+                  "y": "36224085.8571",
+                  "plot": "Mumbai (Bombay)"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": true,
+                  "arrowHead": false,
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": true,
+                  "targetPadding": 0
+                },
+                "mobileFallback": true,
+                "showInAllPlots": false,
+                "_index": 0
+              },
+              "cmtkTn9Hf2": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "cmtkTn9Hf2",
+                "bold": false,
+                "size": 13,
+                "text": "Paris 2035",
+                "align": "tl",
+                "color": "#858585",
+                "width": 37.37470210984441,
+                "italic": false,
+                "position": {
+                  "x": "1947/07/03 01:00",
+                  "y": "16409201.2857",
+                  "plot": "Delhi"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": true,
+                "showInAllPlots": false,
+                "_index": 1
+              },
+              "5VhMgwbBmC": {
+                "bg": true,
+                "dx": -21,
+                "dy": -29,
+                "id": "5VhMgwbBmC",
+                "bold": false,
+                "size": 13,
+                "text": "<b style=\"color:#b73229\">2025 population:</b>\n34.7M",
+                "align": "tr",
+                "color": "#494949",
+                "width": 66.2872075155731,
+                "italic": false,
+                "position": {
+                  "x": "2023/07/14 22:34",
+                  "y": "33128010.1429",
+                  "plot": "Delhi"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": true,
+                  "arrowHead": false,
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 0
+                },
+                "mobileFallback": true,
+                "showInAllPlots": false,
+                "_index": 2
+              },
+              "ykOPYX70kW": {
+                "bg": true,
+                "dx": 0,
+                "dy": 0,
+                "id": "ykOPYX70kW",
+                "bold": false,
+                "size": 13,
+                "text": "Paris grew the most between 1851 to 1856 (by over 20%).",
+                "align": "tl",
+                "color": "#494949",
+                "width": 66.2872075155731,
+                "italic": false,
+                "position": {
+                  "x": "1947/10/03 18:05",
+                  "y": "43097373.9429",
+                  "plot": "Paris"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": true,
+                "showInAllPlots": false,
+                "_index": 3
+              },
+              "yQIOCa36wT": {
+                "bg": true,
+                "dx": 0,
+                "dy": 0,
+                "id": "yQIOCa36wT",
+                "bold": false,
+                "size": 13,
+                "text": "Lagos is expected to double in size by 2035 compared to 2015.",
+                "align": "tl",
+                "color": "#494949",
+                "width": 71.9286719849836,
+                "italic": false,
+                "position": {
+                  "x": "1947/07/03 01:00",
+                  "y": "43096075.7522",
+                  "plot": "Lagos"
+                },
+                "underline": false,
+                "showMobile": false,
+                "showDesktop": false,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": true,
+                "showInAllPlots": false,
+                "_index": 4
+              }
+            },
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "gridRowHeightMode": "fixed",
+            "range-annotations": {
+              "gYi6VGb7lA": {
+                "id": "gYi6VGb7lA",
+                "type": "y",
+                "color": "#888",
+                "display": "line",
+                "opacity": 76,
+                "position": {
+                  "x0": "2009/01/23 14:50",
+                  "x1": "2009/01/23 14:50",
+                  "y0": "11765087.7143",
+                  "y1": "13622733.1429",
+                  "plot": "Paris"
+                },
+                "strokeType": "dotted",
+                "strokeWidth": 2,
+                "showInAllPlots": true,
+                "_index": 0
+              },
+              "abr7XsuQVb": {
+                "id": "abr7XsuQVb",
+                "type": "x",
+                "color": "#888",
+                "display": "range",
+                "opacity": 18,
+                "position": {
+                  "x0": "2018/01/01 13:22",
+                  "x1": "2037/07/02 01:00",
+                  "y0": "26626251.1429",
+                  "y1": "27245466.2857",
+                  "plot": "Mumbai (Bombay)"
+                },
+                "strokeType": "solid",
+                "strokeWidth": 1,
+                "showInAllPlots": true,
+                "_index": 1
+              }
+            },
+            "gridColumnMinWidth": 200,
+            "gridRowHeightFixed": 140,
+            "gridRowHeightRatio": 1,
+            "independentYScales": false,
+            "stack-color-legend": false,
+            "value-label-colors": true,
+            "y-grid-label-align": "left",
+            "syncMultipleTooltips": true,
+            "xGridLabelAllColumns": false,
+            "yGridLabelAllColumns": false,
+            "gridColumnCountMobile": 2,
+            "independentYScalesRounded": true
+          },
+          "axes": {},
+          "publish": {
+            "embed-width": 640,
+            "embed-height": 459,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": false,
+              "download-image": false
+            },
+            "export-pdf": {
+              "unit": "mm",
+              "scale": 1,
+              "width": 169.333,
+              "border": {
+                "width": 0
+              },
+              "height": 139.965,
+              "include": "full",
+              "colorMode": "rgb",
+              "ligatures": true,
+              "transparent": false,
+              "fullVectorMode": true
+            },
+            "export-svg": {
+              "width": 640,
+              "height": 529,
+              "include": "full",
+              "transparent": false,
+              "fullVectorMode": true
+            },
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Population of the world's largest cities, 1950 to 2035\" aria-label=\"Multiple Columns\" id=\"datawrapper-chart-ZEBmw\" src=\"https://datawrapper.dwcdn.net/ZEBmw/1/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"640\" height=\"460\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Population of the world's largest cities, 1950 to 2035\" aria-label=\"Multiple Columns\" id=\"datawrapper-chart-ZEBmw\" src=\"https://datawrapper.dwcdn.net/ZEBmw/1/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"460\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:460px\" id=\"datawrapper-vis-ZEBmw\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/ZEBmw/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-ZEBmw\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/ZEBmw/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "autoDarkMode": false,
+            "chart-height": 390
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T19:52:23.000Z",
+        "lastModifiedAt": "2025-10-11T19:52:24.000Z",
+        "forkedFrom": "ZEBmw",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089220513-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089220513-1"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089220513-2"
+            },
+            "chart-height": {
+              "__@t$__": "54089220513-3"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-3"
+  },
+  "data": "0-0"
+}

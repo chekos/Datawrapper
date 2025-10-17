@@ -2,16 +2,6 @@
 
 A lightweight Python wrapper for the Datawrapper API
 
-[![PyPI Version](https://img.shields.io/pypi/v/datawrapper.svg)](https://pypi.python.org/pypi/datawrapper)
-[![Monthly downloads](https://img.shields.io/pypi/dm/datawrapper)](https://img.shields.io/pypi/dm/datawrappe)
-[![Python Version](https://img.shields.io/pypi/pyversions/datawrapper.svg)](https://pypi.org/project/datawrapper/)
-[![Dependencies Status](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen.svg)](https://github.com/chekos/datawrapper/pulls?utf8=%E2%9C%93&q=is%3Apr%20author%3Aapp%2Fdependabot)
-
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/chekos/datawrapper/blob/master/.pre-commit-config.yaml)
-[![Semantic Versions](https://img.shields.io/badge/%F0%9F%9A%80-semantic%20versions-informational.svg)](https://github.com/chekos/datawrapper/releases)
-[![License](https://img.shields.io/github/license/chekos/datawrapper)](https://github.com/chekos/datawrapper/blob/master/LICENSE)
-
 ## Features
 
 * Create, get, update, export and delete charts, tables and maps
@@ -26,6 +16,34 @@ A lightweight Python wrapper for the Datawrapper API
 ```bash
 uv install datawrapper
 ```
+
+## Quick Start
+
+Create beautiful charts with type-safe, object-oriented Python:
+
+```python
+from datawrapper.charts import BarChart, NumberFormat
+
+# Create a bar chart with type-safe configuration
+chart = BarChart(
+    title="Top Programming Languages 2024",
+    data={"Language": ["Python", "JavaScript", "Java"], "Users": [45.3, 38.2, 30.5]},
+    axis_label_format=NumberFormat.ONE_DECIMAL,  # Type-safe enum
+    value_label_format=NumberFormat.ABBREVIATED,  # IDE autocomplete support
+)
+
+# Create and publish (uses DATAWRAPPER_ACCESS_TOKEN environment variable)
+chart_id = chart.create()
+chart.publish()
+```
+
+**Benefits of the OOP approach:**
+- 🎯 **Type safety** - Catch errors before runtime with Pydantic validation
+- 💡 **IDE autocomplete** - Discover available options as you type
+- 📖 **Readable code** - Use semantic enum names instead of cryptic format strings
+- 🔧 **Flexible** - Mix OOP with low-level API calls when needed
+
+See the [full documentation](https://datawrapper.readthedocs.io/) for comprehensive guides on all chart types.
 
 ### Contributing
 

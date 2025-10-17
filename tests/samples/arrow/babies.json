@@ -1,0 +1,396 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "YG69c",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "a3fabc9cd20e52ca02af5381d9a5835b",
+        "id": "YG69c",
+        "type": "d3-arrow-plot",
+        "title": "Far fewer babies share the most popular names now than in 1950",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {},
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-order": [
+              0,
+              1,
+              3,
+              2,
+              4
+            ],
+            "column-format": {
+              "X.1": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "auto",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "top1_F": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "auto",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "top2_F": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "auto",
+                "number-divisor": 0,
+                "number-prepend": ""
+              },
+              "top3_F": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "auto",
+                "number-divisor": 0,
+                "number-prepend": ""
+              }
+            },
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "Social Security Administration",
+            "source-url": "https://www.ssa.gov/oact/babynames/numberUSbirths.html",
+            "intro": "Share of newborn girls and boys who were given the year's most popular names in 2022 and 1950",
+            "byline": "Lisa Charlotte Muth",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": "",
+            "hide-title": false
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [
+              "2020"
+            ],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "url": "https://www.datawrapper.de/_/YG69c",
+              "auto": false
+            },
+            "rules": false,
+            "thick": false,
+            "x-grid": "on",
+            "y-grid": "on",
+            "scale-y": "linear",
+            "sort-by": "1950",
+            "category": "direct",
+            "labeling": "top",
+            "overlays": {},
+            "color-key": true,
+            "sort-bars": false,
+            "background": false,
+            "base-color": 0,
+            "force-grid": false,
+            "grid-lines": "show",
+            "range-ends": {
+              "shape": "circle",
+              "enabled": true
+            },
+            "sort-range": {
+              "by": "start",
+              "enabled": false
+            },
+            "bar-padding": 60,
+            "base-color2": 3,
+            "label-space": 30,
+            "line-dashes": {
+              "top10_F": 1,
+              "top10_M": 1
+            },
+            "line-widths": {
+              "top10_F": 1,
+              "top10_M": 1,
+              "top50_F": 1,
+              "top50_M": 1
+            },
+            "range-color": "fixed",
+            "sort-values": false,
+            "swap-labels": false,
+            "valueLabels": {
+              "show": "hover",
+              "enabled": true,
+              "placement": "outside"
+            },
+            "yAxisLabels": {
+              "enabled": true,
+              "alignment": "left",
+              "placement": "outside"
+            },
+            "block-labels": false,
+            "custom-range": [
+              "0",
+              "100"
+            ],
+            "custom-ticks": "",
+            "disable-tabs": false,
+            "grid-lines-x": {
+              "type": "ticks",
+              "enabled": false
+            },
+            "label-colors": false,
+            "label-margin": 0,
+            "line-symbols": false,
+            "range-extent": "nice",
+            "thick-arrows": true,
+            "totalsLabels": false,
+            "interpolation": "monotone-x",
+            "replace-flags": {
+              "style": "4x3",
+              "enabled": false
+            },
+            "reverse-order": false,
+            "rotate-labels": "auto",
+            "show-tooltips": true,
+            "tick-position": "top",
+            "x-grid-format": "auto",
+            "x-tick-format": "YYYY",
+            "y-grid-format": "0.[0]%",
+            "y-grid-labels": "auto",
+            "absolute-scale": false,
+            "categoryLabels": {
+              "enabled": true,
+              "position": "direct"
+            },
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "1880": "#482437",
+                "1950": "#bcbcbc",
+                "2020": "#187072",
+                "top10_F": "#d55c00",
+                "top10_M": "#007f98",
+                "top50_F": "#d55c00",
+                "top50_M": "#007f98",
+                "Boys' names": "#00807f",
+                "Girls' names": "#cc4717"
+              },
+              "palette": [],
+              "categoryOrder": [],
+              "categoryLabels": {},
+              "excludeFromKey": []
+            },
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-range-y": [
+              "",
+              "100"
+            ],
+            "custom-ticks-x": "",
+            "custom-ticks-y": "",
+            "negative-color": false,
+            "series-padding": 60,
+            "show-arrow-key": true,
+            "show-color-key": false,
+            "color-by-column": true,
+            "connector-lines": true,
+            "group-by-column": true,
+            "highlight-range": true,
+            "label-alignment": "right",
+            "line-symbols-on": "both",
+            "text-annotations": {
+              "1c1c1c1c1c": {
+                "bg": false,
+                "dx": 36,
+                "dy": -29,
+                "id": "1c1c1c1c1c",
+                "bold": false,
+                "size": 13,
+                "text": "Starting around 1985, we see a sharp decline of babies with the top 50 names.  ",
+                "align": "bl",
+                "color": false,
+                "width": 19.544747631839375,
+                "italic": false,
+                "position": {
+                  "x": "1983/02/22 12:12",
+                  "y": "56.5217",
+                  "group": "Girls' names"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "curveLeft",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": true,
+                  "arrowHead": false,
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 0
+                },
+                "mobileFallback": true,
+                "_index": 0
+              }
+            },
+            "tooltip-x-format": "ll",
+            "y-grid-subdivide": true,
+            "custom-area-fills": {
+              "1c1c1c1c1c": {
+                "id": "1c1c1c1c1c",
+                "to": "top10_M",
+                "from": "top10_F",
+                "color": "#e0e0e0",
+                "opacity": 0.3,
+                "interpolation": "monotone-x",
+                "_index": 0
+              },
+              "1d1d1d1d1d": {
+                "id": "1d1d1d1d1d",
+                "to": "top50_M",
+                "from": "top50_F",
+                "color": "#e0e0e0",
+                "opacity": 0.3,
+                "interpolation": "monotone-x",
+                "_index": 1
+              }
+            },
+            "custom-grid-lines": "0,5,10,20,30, 40,50,75,100",
+            "date-label-format": "YYYY",
+            "fixed-range-color": "#cccccc",
+            "line-symbols-size": 3.5,
+            "line-value-labels": false,
+            "range-annotations": {},
+            "show-group-labels": true,
+            "show-value-labels": true,
+            "line-symbols-shape": "circle",
+            "range-value-labels": "both",
+            "stack-color-legend": false,
+            "value-label-format": "0%",
+            "y-grid-label-align": "left",
+            "compact-group-labels": false,
+            "line-symbols-opacity": 1,
+            "show-category-labels": true,
+            "tooltip-number-format": "0,0.[00]",
+            "value-label-alignment": "left",
+            "value-label-visibility": "always",
+            "tooltip-use-custom-formats": false,
+            "line-symbols-shape-multiple": {},
+            "negativeColor": {
+              "enabled": false,
+              "value": "#E31A1C"
+            }
+          },
+          "axes": {
+            "x": "year",
+            "end": "2022",
+            "start": "1950",
+            "colors": "Gender",
+            "groups": "Gender",
+            "labels": "<b>Top</b> name"
+          },
+          "publish": {
+            "embed-width": 674,
+            "embed-height": 542,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Far fewer babies share the most popular names now than in 1950\" aria-label=\"Arrow Plot\" id=\"datawrapper-chart-B9EKi\" src=\"https://datawrapper.dwcdn.net/B9EKi/1/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"674\" height=\"565\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Far fewer babies share the most popular names now than in 1950\" aria-label=\"Arrow Plot\" id=\"datawrapper-chart-B9EKi\" src=\"https://datawrapper.dwcdn.net/B9EKi/1/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"565\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data[\"datawrapper-height\"][t]+\"px\";r.style.height=d}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:565px\" id=\"datawrapper-vis-B9EKi\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/B9EKi/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-B9EKi\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/B9EKi/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "autoDarkMode": false,
+            "chart-height": 446
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T18:05:54.000Z",
+        "lastModifiedAt": "2025-10-11T18:05:55.000Z",
+        "forkedFrom": "B9EKi",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "visualize": {
+            "color-category": {
+              "categoryOrder": {
+                "__@t$__": "54089277154-1"
+              }
+            },
+            "text-annotations": {
+              "1c1c1c1c1c": {
+                "position": {
+                  "group": {
+                    "__@t$__": "54089277154-1"
+                  }
+                }
+              }
+            },
+            "negativeColor": {
+              "enabled": {
+                "__@t$__": "54089277154-1"
+              },
+              "value": {
+                "__@t$__": "54089277154-1"
+              }
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089277154-1"
+            },
+            "chart-height": {
+              "__@t$__": "54089277154-2"
+            }
+          },
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089277154-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089277154-1"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-2"
+  },
+  "data": "0-0"
+}

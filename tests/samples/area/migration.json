@@ -1,0 +1,708 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "y71E1",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "66cb4d4a7657e4bf6be56bcbd8e37ba4",
+        "id": "y71E1",
+        "type": "d3-area",
+        "title": "Migration to the US by world region, 1820-2009",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {},
+            "transpose": true,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "Department of Homeland Security",
+            "source-url": "http://metrocosm.com/wp-content/uploads/2016/05/usa-immigration-data.xlsx",
+            "intro": "The numbers are recorded by decade. For example, the numbers recorded for 1905 tell us the number of immigrants between 1900 and 1910.",
+            "byline": "Mirko Lorenz",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": ""
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "auto": true
+            },
+            "lines": {
+              "China": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "India": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Italy": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Africa": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Mexico": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Russia": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Germany": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Ireland": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Oceania": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Caribbean": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Philippines": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Rest of Asia": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Not Specified": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "South America": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Rest of Europe": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "United Kingdom": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Austria-Hungary": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Central America": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Rest of America": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Norway and Sweden": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              },
+              "Canada and Newfoundland": {
+                "symbols": {
+                  "on": "both",
+                  "size": 3.5,
+                  "shape": "circle",
+                  "enabled": false,
+                  "opacity": 1
+                },
+                "labelLastValue": false
+              }
+            },
+            "rules": false,
+            "thick": false,
+            "x-grid": "off",
+            "y-grid": "on",
+            "scale-y": "linear",
+            "sort-by": "first",
+            "category": "direct",
+            "overlays": {},
+            "sort-asc": true,
+            "color-key": true,
+            "normalize": false,
+            "background": true,
+            "base-color": 0,
+            "grid-lines": "show",
+            "sort-areas": "keep",
+            "bar-padding": 60,
+            "label-space": 30,
+            "mirror-bars": false,
+            "resort-bars": false,
+            "sort-values": false,
+            "stack-areas": true,
+            "valueLabels": {
+              "show": "hover",
+              "enabled": true
+            },
+            "yAxisLabels": {
+              "enabled": true,
+              "alignment": "left",
+              "placement": "outside"
+            },
+            "area-opacity": 1,
+            "connect-bars": false,
+            "custom-range": [
+              "",
+              ""
+            ],
+            "custom-ticks": "",
+            "label-colors": false,
+            "label-margin": 0,
+            "stack-to-100": false,
+            "interpolation": "natural",
+            "reverse-order": false,
+            "rotate-labels": "auto",
+            "show-tooltips": true,
+            "x-grid-format": "YYYY",
+            "y-grid-format": "0.[00]a",
+            "y-grid-labels": "auto",
+            "absolute-scale": false,
+            "categoryLabels": {
+              "enabled": true,
+              "position": "direct"
+            },
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "Asia": "#e65341",
+                "China": "#b4241c",
+                "India": "#cd3d2e",
+                "Italy": "#48adc0",
+                "Africa": "#009a69",
+                "Europe": "#00658d",
+                "Mexico": "#ffca76",
+                "Russia": "#329a9b",
+                "Germany": "#004765",
+                "Ireland": "#3a96b8",
+                "Oceania": "#003f65",
+                "Caribbean": "#ffe59c",
+                "Philippines": "#dc464b",
+                "Rest of Asia": "#E65340",
+                "Not Specified": "#181818",
+                "South America": "#ffbb7f",
+                "Rest of Europe": "#005d71",
+                "United Kingdom": "#257085",
+                "Austria-Hungary": "#1d81a2",
+                "Central America": "#ffdc6b",
+                "Rest of America": "#fffbb1",
+                "Norway and Sweden": "#2b8589",
+                "Canada and Newfoundland": "#ffa126",
+                "N. America, Cuba, Carribean": "#6c1300"
+              }
+            },
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-ticks-x": "",
+            "custom-ticks-y": "",
+            "negative-color": false,
+            "plotHeightMode": "fixed",
+            "series-padding": 60,
+            "show-color-key": false,
+            "use-line-color": false,
+            "label-alignment": "left",
+            "plotHeightFixed": 388,
+            "plotHeightRatio": 0.5,
+            "text-annotations": {
+              "e58p38p9cx": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "e58p38p9cx",
+                "bold": true,
+                "size": 20,
+                "text": "E U R O P E",
+                "align": "mc",
+                "color": "#fefefe",
+                "italic": false,
+                "position": {
+                  "x": "1896/07/27 16:00",
+                  "y": "1329923.3141"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 0
+              },
+              "luete3xu3y": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "luete3xu3y",
+                "bold": true,
+                "size": 14,
+                "text": "A S I A ",
+                "align": "mr",
+                "color": "#121212",
+                "italic": false,
+                "position": {
+                  "x": "2000M5",
+                  "y": 2500000
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 1
+              },
+              "8pk0vvyc9r": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "8pk0vvyc9r",
+                "bold": true,
+                "size": 10,
+                "text": "A M E -\nR I C A",
+                "align": "mc",
+                "color": "#222222",
+                "width": 9.12573673870334,
+                "italic": false,
+                "position": {
+                  "x": "1994/08/01 20:41",
+                  "y": "6134172.0713"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 2
+              },
+              "ehwn8jkzm2": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "ehwn8jkzm2",
+                "bold": false,
+                "size": 11,
+                "text": "Germany",
+                "align": "ml",
+                "color": "#d2d2d2",
+                "italic": true,
+                "position": {
+                  "x": "1851/01/04 01:21",
+                  "y": "439746.2628"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 3
+              },
+              "2nu4xzojjc": {
+                "bg": false,
+                "dx": 3,
+                "dy": 0,
+                "id": "2nu4xzojjc",
+                "bold": false,
+                "size": 11,
+                "text": "World <br/>War I",
+                "align": "tl",
+                "color": "#575757",
+                "italic": true,
+                "position": {
+                  "x": "1914M07",
+                  "y": "8000000.000000002"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 4
+              },
+              "e440j95ax3": {
+                "bg": false,
+                "dx": 3,
+                "dy": 0,
+                "id": "e440j95ax3",
+                "bold": false,
+                "size": 11,
+                "text": "World <br/>War II",
+                "align": "tl",
+                "color": "#575757",
+                "italic": true,
+                "position": {
+                  "x": "1939M09",
+                  "y": "3000000.000000002"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 5
+              }
+            },
+            "tooltip-x-format": "YYYY",
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "date-label-format": "YYYY",
+            "hide-group-labels": false,
+            "hide-value-labels": false,
+            "range-annotations": {
+              "zcruk5w41u": {
+                "id": "zcruk5w41u",
+                "type": "x",
+                "color": "#333333",
+                "display": "range",
+                "opacity": "10",
+                "position": {
+                  "x0": "1939M09",
+                  "x1": "1945M09",
+                  "y0": "1939M09",
+                  "y1": "1945M09"
+                },
+                "strokeType": "solid",
+                "strokeWidth": 1,
+                "_index": 0
+              },
+              "59hnbu5lfp": {
+                "id": "59hnbu5lfp",
+                "type": "x",
+                "color": "#333333",
+                "display": "range",
+                "opacity": "14",
+                "position": {
+                  "x0": "1914M07",
+                  "x1": "1918M11",
+                  "y0": "1914M07",
+                  "y1": "1918M11"
+                },
+                "strokeType": "solid",
+                "strokeWidth": 1,
+                "_index": 1
+              }
+            },
+            "independent-scales": false,
+            "space-between-cols": 10,
+            "stack-color-legend": false,
+            "value-label-format": "0,0.[00]",
+            "y-grid-label-align": "right",
+            "area-separator-color": "#181818",
+            "area-separator-lines": false,
+            "compact-group-labels": false,
+            "reverse-color-legend": false,
+            "tooltip-number-format": "0.00a",
+            "custom-range-y": [
+              "",
+              ""
+            ]
+          },
+          "axes": {
+            "x": "Region and country of last residence 1"
+          },
+          "publish": {
+            "embed-width": 633,
+            "embed-height": 528,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": false,
+              "download-image": false
+            },
+            "export-pdf": {
+              "unit": "mm",
+              "scale": 1,
+              "width": "159",
+              "height": "128",
+              "include": "full",
+              "colorMode": "rgb",
+              "ligatures": true,
+              "fullVectorMode": true
+            },
+            "text": "#333333",
+            "background": "#f9f9f9",
+            "export-svg": {
+              "width": 600,
+              "height": 482,
+              "include": "full",
+              "fullVectorMode": true
+            },
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Migration to the US by world region, 1820-2009\" aria-label=\"Interactive area chart\" id=\"datawrapper-chart-HFvPh\" src=\"https://datawrapper.dwcdn.net/HFvPh/10/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"633\" height=\"502\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Migration to the US by world region, 1820-2009\" aria-label=\"Interactive area chart\" id=\"datawrapper-chart-HFvPh\" src=\"https://datawrapper.dwcdn.net/HFvPh/10/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"502\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:502px\" id=\"datawrapper-vis-HFvPh\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/HFvPh/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-HFvPh\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/HFvPh/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "chart-height": 394,
+            "embed-heights": {
+              "100": 617,
+              "200": 533,
+              "300": 519,
+              "400": 505,
+              "500": 505,
+              "700": 505,
+              "800": 491,
+              "900": 491,
+              "1000": 491
+            }
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T17:52:02.000Z",
+        "lastModifiedAt": "2025-10-11T17:52:03.000Z",
+        "forkedFrom": "HFvPh",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "visualize": {
+            "custom-range-y": {
+              "__@t$__": "54089289554-1"
+            },
+            "area-opacity": {
+              "__@t$__": "54089289554-2"
+            }
+          },
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089289554-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089289554-1"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089289554-3"
+            },
+            "chart-height": {
+              "__@t$__": "54089289554-4"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-4"
+  },
+  "data": "0-0"
+}

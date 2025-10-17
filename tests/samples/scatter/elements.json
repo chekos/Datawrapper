@@ -1,0 +1,319 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "Xims4",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "738a1743915ce5a704236b4601c8b426",
+        "id": "Xims4",
+        "type": "d3-scatter-plot",
+        "title": "When were chemical elements discovered?",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {},
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-format": {
+              "time range": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "auto",
+                "number-prepend": ""
+              },
+              "in Humans in %": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "-",
+                "number-prepend": ""
+              },
+              "in Universe in %": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": "",
+                "number-format": "-",
+                "number-prepend": ""
+              }
+            },
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "periodictable.com",
+            "source-url": "http://periodictable.com",
+            "intro": "",
+            "byline": "Lisa Charlotte Muth, Datawrapper",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": "",
+            "hide-title": false
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false
+            },
+            "base": "#b9723e",
+            "size": "fixed",
+            "shape": "fixed",
+            "x-pos": "off",
+            "y-pos": "off",
+            "symbol": {
+              "after mendeleev": 2,
+              "before mendeleev": 1
+            },
+            "x-axis": {
+              "log": false,
+              "range": [
+                0.6,
+                18.4
+              ],
+              "ticks": []
+            },
+            "x-grid": "off",
+            "y-axis": {
+              "log": false,
+              "range": [
+                7.4,
+                0
+              ],
+              "ticks": []
+            },
+            "y-grid": "on",
+            "opacity": 1,
+            "scale-y": "linear",
+            "tooltip": {
+              "body": "<b>{{ in_universe_in }}%</b> of the universe and <b>{{ in_humans_in }}%</b> of a human body consists of {{ name }}.\n<br><br>\n{{ lifetime_text }}",
+              "title": "<big>{{ name }}</big> <br><small>Atomic weight: {{ mass }}</small>",
+              "legacy": {
+                "body": "<b>{{ in_Universe_in__ }}%</b> of the universe and <b>{{ in_Humans_in__ }}%</b> of a human body consists of {{ Name }}.\n<br><br>\n{{ lifetime_text }}",
+                "title": "<big>{{ Name }}</big> <br><small>Atomic weight: {{ mass }}</small>",
+                "fields": {
+                  "Name": "Name",
+                  "mass": "mass",
+                  "Block": "Block",
+                  "Color": "Color",
+                  "Group": "Group",
+                  "Phase": "Phase",
+                  "Period": "Period",
+                  "Series": "Series",
+                  "Symbol": "Symbol",
+                  "Valence": "Valence",
+                  "Lifetime": "Lifetime",
+                  "time_range": "time range",
+                  "atomic_number": "atomic number",
+                  "lifetime_text": "lifetime-text",
+                  "in_Humans_in__": "in Humans in %",
+                  "in_Universe_in__": "in Universe in %",
+                  "Atomic_Radius_in_pm": "Atomic Radius in pm",
+                  "Covalent_Radius_in__pm": "Covalent Radius in  pm",
+                  "Boiling_Point_in_celsius": "Boiling Point in celsius"
+                }
+              },
+              "sticky": false,
+              "enabled": true,
+              "migrated": true
+            },
+            "labeling": "right",
+            "loess-bw": 0.75,
+            "max-size": 24.82,
+            "outlines": false,
+            "overlays": {},
+            "x-format": "0a",
+            "y-format": "0a",
+            "add-labels": [],
+            "base-color": 4,
+            "fixed-size": 20,
+            "loess-iter": 0,
+            "regression": false,
+            "auto-labels": true,
+            "custom-lines": "",
+            "fill-between": false,
+            "fixed-symbol": "symbolCircle",
+            "label-colors": false,
+            "label-format": "YYYY",
+            "label-margin": 0,
+            "line-symbols": false,
+            "x-grid-lines": "off",
+            "y-grid-lines": "off",
+            "color-outline": "#fff",
+            "interpolation": "linear",
+            "negativeColor": {
+              "value": "#E31A1C",
+              "enabled": false
+            },
+            "x-tick-format": "YYYY",
+            "y-grid-format": "0,0.[00]",
+            "y-grid-labels": "auto",
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "d": "#d3a558",
+                "f": "#ffdaba",
+                "p": "#15607a",
+                "s": "#ffca76",
+                "BC": "#b9723e",
+                "Gas": "#ffca76",
+                "Red": "#e03a2f",
+                "Gold": "#e17700",
+                "Gray": "#5e5e5e",
+                "null": "#ffffff",
+                "Black": "#2e2c29",
+                "Solid": "#c71e1d",
+                "Copper": "#b55343",
+                "Liquid": "#15607a",
+                "Silver": "#c4c4c4",
+                "Yellow": "#ffca76",
+                "Colorless": "#ffffff",
+                "SlateGray": "#00dca6",
+                "since 2000": "#151a1a",
+                "after mendeleev": "#15607a",
+                "before mendeleev": "#d3a558"
+              },
+              "palette": [],
+              "categoryOrder": [],
+              "categoryLabels": {
+                "BC": "BC",
+                "since 2000": "since 2000",
+                "after mendeleev": "after Mendeleev",
+                "before mendeleev": "before Mendeleev"
+              },
+              "excludeFromKey": []
+            },
+            "plotHeightMode": "fixed",
+            "show-color-key": true,
+            "color-by-column": true,
+            "hover-highlight": true,
+            "legend-offset-x": 0,
+            "legend-offset-y": 0,
+            "line-symbols-on": "both",
+            "plotHeightFixed": 280,
+            "plotHeightRatio": 0.5,
+            "show-size-legend": false,
+            "size-legend-type": "stacked",
+            "text-annotations": {},
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "highlight-labeled": false,
+            "line-symbols-size": 3.5,
+            "line-value-labels": false,
+            "range-annotations": {},
+            "regression-method": "linear",
+            "line-symbols-shape": "circle",
+            "shape-size-version": 1,
+            "stack-color-legend": false,
+            "y-grid-label-align": "left",
+            "line-symbols-opacity": 1,
+            "size-legend-position": "above",
+            "area-fill-color-below": "#cccccc",
+            "responsive-symbol-size": false,
+            "area-fill-color-between": "#cccccc",
+            "size-legend-title-width": 200,
+            "size-legend-label-format": "auto",
+            "size-legend-title-enabled": true,
+            "size-legend-label-position": "right",
+            "size-legend-title-position": "left",
+            "size-legend-values-setting": "auto"
+          },
+          "axes": {
+            "x": "Group",
+            "y": "Period",
+            "size": "Period",
+            "color": "time range",
+            "shape": "time range",
+            "labels": "Symbol"
+          },
+          "publish": {
+            "embed-width": 640,
+            "embed-height": 380,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"When were chemical elements discovered?\" aria-label=\"Scatter Plot\" id=\"datawrapper-chart-z62cb\" src=\"https://datawrapper.dwcdn.net/z62cb/11/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"640\" height=\"376\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"When were chemical elements discovered?\" aria-label=\"Scatter Plot\" id=\"datawrapper-chart-z62cb\" src=\"https://datawrapper.dwcdn.net/z62cb/11/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"376\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:376px\" id=\"datawrapper-vis-z62cb\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/z62cb/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-z62cb\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/z62cb/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "chart-height": 308,
+            "embed-heights": {
+              "100": 526.0078120000001,
+              "200": 476.007812,
+              "300": 451.007812,
+              "400": 451.007812,
+              "500": 426.007812,
+              "700": 426.007812,
+              "800": 426.007812,
+              "900": 426.007812,
+              "1000": 426.007812
+            }
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T20:08:58.000Z",
+        "lastModifiedAt": "2025-10-11T20:08:59.000Z",
+        "forkedFrom": "z62cb",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "visualize": {
+            "opacity": {
+              "__@t$__": "54089209179-1"
+            }
+          },
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089209179-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089209179-1"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089209179-2"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-2"
+  },
+  "data": "0-0"
+}

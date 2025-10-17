@@ -1,0 +1,180 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "rF2RO",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "39a5dcc6061c056c380dfbdfbddde18e",
+        "id": "rF2RO",
+        "type": "d3-lines",
+        "title": "Global land temperature in July, 1753-2015",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {},
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-format": {
+              "LandAverageTemperature": {
+                "type": "auto",
+                "ignore": false,
+                "number-append": " °C",
+                "number-format": "-",
+                "number-divisor": 0,
+                "number-prepend": ""
+              }
+            },
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "Berkeley Earth",
+            "source-url": "https://www.kaggle.com/berkeleyearth/climate-change-earth-surface-temperature-data/download",
+            "intro": "",
+            "byline": "",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": ""
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "auto": true
+            },
+            "lines": {
+              "lower": {
+                "width": "invisible",
+                "directLabel": false
+              },
+              "upper": {
+                "width": "invisible",
+                "directLabel": false
+              },
+              "LandAverageTemperature": {
+                "directLabel": false
+              }
+            },
+            "x-grid": "off",
+            "y-grid": "on",
+            "scale-y": "linear",
+            "overlays": {},
+            "base-color": 2,
+            "label-colors": false,
+            "label-margin": 0,
+            "interpolation": "monotone-x",
+            "show-tooltips": true,
+            "x-grid-format": "YYYY",
+            "y-grid-format": "0.[0]",
+            "y-grid-labels": "auto",
+            "chart-type-set": true,
+            "color-category": {
+              "map": {}
+            },
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-range-y": [
+              "8",
+              ""
+            ],
+            "custom-ticks-x": "",
+            "custom-ticks-y": "",
+            "plotHeightMode": "fixed",
+            "variate-colors": false,
+            "connector-lines": true,
+            "plotHeightFixed": 312,
+            "plotHeightRatio": 0.5,
+            "text-annotations": {},
+            "y-grid-subdivide": true,
+            "custom-area-fills": {
+              "1c1c1c1c1c": {
+                "id": "1c1c1c1c1c",
+                "to": "upper",
+                "from": "lower",
+                "color": "#bcbcbc",
+                "opacity": 0.49,
+                "colorNegative": "#E31A1C",
+                "useMixedColors": false,
+                "_index": 0
+              }
+            },
+            "range-annotations": {},
+            "value-label-colors": false,
+            "y-grid-label-align": "left",
+            "value-labels-format": "0,0.[00]",
+            "tooltip-number-format": "0,0.[00]"
+          },
+          "axes": {
+            "x": "year"
+          },
+          "publish": {
+            "embed-width": 547,
+            "embed-height": 428,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Global land temperature in July, 1753-2015\" aria-label=\"Interactive line chart\" id=\"datawrapper-chart-BsBaq\" src=\"https://datawrapper.dwcdn.net/BsBaq/4/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"547\" height=\"404\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Global land temperature in July, 1753-2015\" aria-label=\"Interactive line chart\" id=\"datawrapper-chart-BsBaq\" src=\"https://datawrapper.dwcdn.net/BsBaq/4/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"404\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"])for(var e in a.data[\"datawrapper-height\"]){var t=document.getElementById(\"datawrapper-chart-\"+e)||document.querySelector(\"iframe[src*='\"+e+\"']\");t&&(t.style.height=a.data[\"datawrapper-height\"][e]+\"px\")}}))}();\n</script>"
+            },
+            "chart-height": 339,
+            "embed-heights": {
+              "100": 627,
+              "200": 524,
+              "300": 499,
+              "400": 485,
+              "500": 460,
+              "700": 460,
+              "800": 460,
+              "900": 460,
+              "1000": 460
+            }
+          },
+          "annotate": {
+            "notes": "Grey part: the 95% confidence interval around the average."
+          },
+          "custom": {
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T15:53:17.000Z",
+        "lastModifiedAt": "2025-10-11T15:53:23.000Z",
+        "forkedFrom": "BsBaq",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {},
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-0"
+  },
+  "data": "0-0"
+}

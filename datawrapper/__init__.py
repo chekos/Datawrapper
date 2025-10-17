@@ -11,6 +11,75 @@ try:
 except PackageNotFoundError:  # pragma: no cover
     __version__ = "unknown"
 
+from datawrapper.charts import (
+    Annotate,
+    AreaChart,
+    AreaFill,
+    ArrowChart,
+    BarChart,
+    BarOverlay,
+    BaseChart,
+    ColumnChart,
+    ColumnFormat,
+    ConnectorLine,
+    Describe,
+    Line,
+    LineChart,
+    LineSymbol,
+    LineValueLabel,
+    MultipleColumnChart,
+    RangeAnnotation,
+    ScatterPlot,
+    StackedBarChart,
+    TextAnnotation,
+    Transform,
+)
+from datawrapper.charts.enums import (
+    DateFormat,
+    LineDash,
+    LineWidth,
+    NumberDivisor,
+    NumberFormat,
+)
+from datawrapper.exceptions import (
+    FailedRequestError,
+    InvalidRequestError,
+    RateLimitError,
+)
+from datawrapper.flags import get_country_flag
+
 from .__main__ import Datawrapper
 
-__all__ = ["Datawrapper"]
+__all__ = [
+    "Datawrapper",
+    "BaseChart",
+    "Annotate",
+    "ColumnFormat",
+    "Transform",
+    "Describe",
+    "BarChart",
+    "BarOverlay",
+    "ColumnChart",
+    "LineChart",
+    "Line",
+    "LineSymbol",
+    "LineValueLabel",
+    "AreaFill",
+    "AreaChart",
+    "ArrowChart",
+    "MultipleColumnChart",
+    "ScatterPlot",
+    "StackedBarChart",
+    "TextAnnotation",
+    "RangeAnnotation",
+    "ConnectorLine",
+    "DateFormat",
+    "LineDash",
+    "LineWidth",
+    "NumberDivisor",
+    "NumberFormat",
+    "get_country_flag",
+    "FailedRequestError",
+    "InvalidRequestError",
+    "RateLimitError",
+]

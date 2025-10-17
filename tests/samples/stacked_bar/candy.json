@@ -1,0 +1,240 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "woCUn",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "8399800b971e8a183a6ddd73dd4b90e0",
+        "id": "woCUn",
+        "type": "d3-bars-stacked",
+        "title": "Bounty &amp; Snickers are the two most controversial candy bars in Celebrations",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {
+              "v6ms4nnwv5": {
+                "id": "v6ms4nnwv5",
+                "row": 8,
+                "value": "<b>Bounty</b>",
+                "column": 0,
+                "ignored": false,
+                "_index": 0
+              },
+              "gp98o48scp": {
+                "id": "gp98o48scp",
+                "row": 7,
+                "value": "<b>Snickers</b>",
+                "column": 0,
+                "ignored": false,
+                "_index": 1
+              }
+            },
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-format": {
+              "Neutral + Don't know": {
+                "type": "text",
+                "ignore": true
+              }
+            },
+            "external-data": "https://docs.google.com/spreadsheets/d/1Y4Te-OF0DMG3vjI5EOSYRHKVghKpDaG5EtQSpTrkKVk/export?format=csv&id=1Y4Te-OF0DMG3vjI5EOSYRHKVghKpDaG5EtQSpTrkKVk",
+            "upload-method": "external-data",
+            "use-datawrapper-cdn": true
+          },
+          "describe": {
+            "source-name": "YouGov, November 2017",
+            "source-url": "https://yougov.co.uk/news/2017/12/13/ranked-best-christmas-chocolates/",
+            "intro": "Replies to the question <i>\"Which one, if any, of the following best describes how\nmuch you like or dislike each of the following chocolates?\"</i>, asked to 1855 people from Great Britain who have eaten Celebrations selection chocolates before.",
+            "byline": "Lisa Charlotte Muth, Datawrapper",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": "",
+            "computed-columns": {
+              "Neutral + Don't know": "do_nt_know + neutral"
+            }
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false
+            },
+            "rules": true,
+            "thick": true,
+            "x-grid": "off",
+            "y-grid": "on",
+            "scale-y": "linear",
+            "sort-by": "I like them a lot",
+            "labeling": "right",
+            "overlays": {},
+            "sort-bars": true,
+            "background": false,
+            "base-color": 2,
+            "force-grid": false,
+            "swap-labels": false,
+            "block-labels": false,
+            "custom-range": [
+              "",
+              ""
+            ],
+            "fill-between": false,
+            "label-colors": false,
+            "label-margin": 0,
+            "line-symbols": false,
+            "range-extent": "nice",
+            "thick-arrows": false,
+            "interpolation": "linear",
+            "replace-flags": {
+              "style": "4x3",
+              "enabled": false
+            },
+            "reverse-order": false,
+            "show-tooltips": true,
+            "tick-position": "top",
+            "totals-labels": false,
+            "x-tick-format": "YYYY",
+            "y-grid-format": "0,0.[00]",
+            "y-grid-labels": "auto",
+            "color-category": {
+              "map": {
+                "Neutral": "#dadada",
+                "Don't know": "#f9f9f9",
+                "I like them": "#f47851",
+                "2  I like them": "#73b1ce",
+                "I dislike them": "#5d9cb8",
+                "4  I dislike them": "#ff6954",
+                "I like them a lot": "#b03210",
+                "I dislike them a lot": "#15607a",
+                "Neutral + Don't know": "#15607a",
+                "Neutrals and Don't know": "#dadada",
+                "3  I neither like nor dislike them": "#cccccc",
+                "1 I like them a lot (they are my favourite or one of my favourites)": "#15607a",
+                "5  I dislike them a lot (they are my least favourite or one of my least favourites)": "#c71e1d"
+              },
+              "palette": [],
+              "categoryOrder": [
+                "I like them a lot",
+                "I like them",
+                "Neutrals and Don't know",
+                "I dislike them",
+                "I dislike them a lot"
+              ],
+              "categoryLabels": {}
+            },
+            "show-color-key": true,
+            "color-by-column": true,
+            "group-by-column": false,
+            "label-alignment": "right",
+            "line-symbols-on": "both",
+            "text-annotations": {},
+            "value-label-mode": "left",
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "custom-grid-lines": "0,25,50,75,100",
+            "date-label-format": "YYYY",
+            "line-symbols-size": 3.5,
+            "range-annotations": {},
+            "show-group-labels": true,
+            "show-value-labels": true,
+            "stack-percentages": true,
+            "line-symbols-shape": "circle",
+            "stack-color-legend": false,
+            "value-label-format": "0%",
+            "compact-group-labels": false,
+            "line-symbols-opacity": 1,
+            "show-category-labels": true,
+            "area-fill-color-below": "#cccccc",
+            "value-label-alignment": "left",
+            "totals-labels-position": "before",
+            "value-label-visibility": "always",
+            "area-fill-color-between": "#cccccc"
+          },
+          "axes": {},
+          "publish": {
+            "embed-width": 431,
+            "embed-height": 595,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Bounty &amp;amp; Snickers are the two most controversial candy bars in Celebrations\" aria-label=\"Stacked Bars\" id=\"datawrapper-chart-j1qJy\" src=\"https://datawrapper.dwcdn.net/j1qJy/12/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"431\" height=\"573\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Bounty &amp;amp; Snickers are the two most controversial candy bars in Celebrations\" aria-label=\"Stacked Bars\" id=\"datawrapper-chart-j1qJy\" src=\"https://datawrapper.dwcdn.net/j1qJy/12/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"573\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:573px\" id=\"datawrapper-vis-j1qJy\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/j1qJy/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-j1qJy\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/j1qJy/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "chart-height": 340,
+            "embed-heights": {
+              "100": 1191,
+              "200": 767,
+              "300": 649,
+              "400": 593,
+              "500": 579,
+              "700": 548,
+              "800": 492,
+              "900": 492,
+              "1000": 492
+            }
+          },
+          "annotate": {
+            "notes": "The names refer to the UK version of candy bars. The European \"Mars\" is sold as \"Milky Way\" in the US, while the European \"Milky Way\" resembles the 3 Musketeers experience. \"Galaxy\" and \"Galaxy Caramel\" are sold as \"Dove\" and \"Dove Caramel\" in many countries, including Continental Europe.   "
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "externalData": "https://static.dwcdn.net/data/woCUn.csv",
+        "utf8": false,
+        "createdAt": "2025-10-11T20:20:43.000Z",
+        "lastModifiedAt": "2025-10-11T20:20:47.000Z",
+        "forkedFrom": "j1qJy",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089252852-1"
+            }
+          },
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089252852-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089252852-1"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-1"
+  },
+  "data": "0-0"
+}

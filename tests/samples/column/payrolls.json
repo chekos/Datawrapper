@@ -1,0 +1,205 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "4o25S",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "01838247848c1fcf1c5c70bb85f4c6aa",
+        "id": "4o25S",
+        "type": "column-chart",
+        "title": "Monthly change in US private payrolls",
+        "lastEditStep": 5,
+        "publishedAt": "2025-10-01T13:42:55.000Z",
+        "publicUrl": "https://datawrapper.dwcdn.net/4o25S/1/",
+        "publicVersion": 1,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {},
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-order": [],
+            "column-format": {},
+            "upload-method": "copy",
+            "use-datawrapper-cdn": true
+          },
+          "describe": {
+            "source-name": "Sources: ADP, LSEG",
+            "source-url": "https://www.reuters.com/",
+            "intro": "Private-sector employers shed 32,000 positions in September.",
+            "byline": "",
+            "aria-description": "A column chart titled \"Monthly change in US private payrolls\" that tracks the metric over the past year.",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": "",
+            "hide-title": false
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "url": "",
+              "auto": false
+            },
+            "compare": {
+              "enabled": false,
+              "differenceLabel": true
+            },
+            "sort-by": "first",
+            "category": "direct",
+            "labeling": "top",
+            "overlays": {},
+            "color-key": true,
+            "base-color": "#7ec5ef",
+            "grid-lines": true,
+            "bar-padding": 30,
+            "label-space": 30,
+            "sort-values": false,
+            "valueLabels": {
+              "show": "always",
+              "format": "+1,000",
+              "enabled": true,
+              "placement": "outside"
+            },
+            "yAxisLabels": {
+              "enabled": true,
+              "alignment": "left",
+              "placement": "outside"
+            },
+            "custom-range": [
+              "",
+              ""
+            ],
+            "custom-ticks": "",
+            "disable-tabs": true,
+            "grid-lines-x": {
+              "type": "",
+              "enabled": false
+            },
+            "totalsLabels": false,
+            "negativeColor": {
+              "value": "#E31A1C",
+              "enabled": false
+            },
+            "reverse-order": false,
+            "rotate-labels": "auto",
+            "x-grid-format": "auto",
+            "y-grid-format": "+1a",
+            "absolute-scale": false,
+            "categoryLabels": {
+              "enabled": true,
+              "position": "color-key"
+            },
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "2025-09": "#3075b7"
+              },
+              "palette": [],
+              "categoryOrder": [],
+              "categoryLabels": {},
+              "excludeFromKey": []
+            },
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-ticks-x": "",
+            "plotHeightMode": "fixed",
+            "series-padding": 60,
+            "show-color-key": false,
+            "xGridAlignment": "baseline",
+            "color-by-column": true,
+            "plotHeightFixed": 300,
+            "plotHeightRatio": 0.5,
+            "text-annotations": {},
+            "custom-area-fills": {},
+            "range-annotations": {},
+            "stack-color-legend": false,
+            "reverse-color-legend": false
+          },
+          "axes": {
+            "column": "ADP private-sector jobs"
+          },
+          "publish": {
+            "embed-width": 600,
+            "embed-height": 503,
+            "blocks": {
+              "logo": {
+                "id": "reuters",
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": false,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Monthly change in US private payrolls\" aria-label=\"Column Chart\" id=\"datawrapper-chart-4o25S\" src=\"https://datawrapper.dwcdn.net/4o25S/1/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"600\" height=\"400\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Monthly change in US private payrolls\" aria-label=\"Column Chart\" id=\"datawrapper-chart-4o25S\" src=\"https://datawrapper.dwcdn.net/4o25S/1/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"400\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data[\"datawrapper-height\"][t]+\"px\";r.style.height=d}}})}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:400px\" id=\"datawrapper-vis-4o25S\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/4o25S/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-4o25S\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/4o25S/full.png\" alt=\"A column chart titled &quot;Monthly change in US private payrolls&quot; that tracks the metric over the past year.\" /></noscript></div>"
+            },
+            "autoDarkMode": false,
+            "force-attribution": false,
+            "chart-height": 387
+          },
+          "annotate": {
+            "notes": "Data are seasonally adjusted.",
+            "byline": ""
+          },
+          "custom": {
+            "tr-connect": false,
+            "tr-root-slug": "AUTOMATED-202509",
+            "tr-wild-slug": "ADP-JOBS-13M"
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-01T13:42:52.000Z",
+        "lastModifiedAt": "2025-10-01T13:43:04.000Z",
+        "authorId": 540892,
+        "folderId": 300059,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089268529-6"
+            },
+            "chart-height": {
+              "__@t$__": "54089268529-7"
+            }
+          },
+          "visualize": {
+            "valueLabels": {
+              "show": {
+                "__@t$__": "54089268529-3"
+              },
+              "placement": {
+                "__@t$__": "54089268529-6"
+              }
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-7"
+  },
+  "data": "0-0"
+}

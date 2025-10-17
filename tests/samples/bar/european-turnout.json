@@ -1,0 +1,333 @@
+{
+    "chart": {
+      "crdt": {
+        "data": {
+          "publicId": "u3Jwc",
+          "language": "en-US",
+          "theme": "datawrapper",
+          "chartHash": "f581296593605b2567753e23c34c723b",
+          "id": "u3Jwc",
+          "type": "d3-bars",
+          "title": "European countries with lowest &amp; highest voter turnout",
+          "lastEditStep": 3,
+          "publicVersion": 0,
+          "deleted": false,
+          "forkable": false,
+          "isFork": false,
+          "metadata": {
+            "data": {
+              "changes": {},
+              "transpose": false,
+              "vertical-header": true,
+              "horizontal-header": true,
+              "charset-fixed": true,
+              "column-format": {},
+              "upload-method": "copy"
+            },
+            "describe": {
+              "source-name": "Parties & Elections, 2024",
+              "source-url": "http://www.parties-and-elections.eu/",
+              "intro": "",
+              "byline": "",
+              "aria-description": "",
+              "number-format": "-",
+              "number-divisor": 0,
+              "number-append": "",
+              "number-prepend": "",
+              "hide-title": false
+            },
+            "visualize": {
+              "dark-mode-invert": true,
+              "highlighted-series": [
+                "Malta (2022)",
+                "Turkey (2023)",
+                "Belgium (2024)",
+                "Romania (2020)",
+                "Bulgaria (2024)",
+                "Albania (2021)"
+              ],
+              "highlighted-values": [],
+              "sharing": {
+                "enabled": false,
+                "auto": true
+              },
+              "rules": true,
+              "thick": false,
+              "x-grid": "off",
+              "overlays": {},
+              "sort-bars": true,
+              "background": true,
+              "base-color": 7,
+              "force-grid": false,
+              "grid-lines": "auto",
+              "swap-labels": false,
+              "block-labels": false,
+              "custom-range": [
+                "",
+                100
+              ],
+              "range-extent": "nice",
+              "thick-arrows": false,
+              "value-labels": "auto",
+              "negativeColor": {
+                "value": "#E31A1C",
+                "enabled": false
+              },
+              "replace-flags": {
+                "style": "4x3",
+                "enabled": false
+              },
+              "reverse-order": true,
+              "rotate-labels": false,
+              "tick-position": "top",
+              "chart-type-set": true,
+              "color-category": {
+                "map": {
+                  "red": "#d62728",
+                  "grey": "#cacaca",
+                  "Malta": "#257f66",
+                  "green": "#267c87",
+                  "France": "#bd0017",
+                  "Kosovo": "#bd0017",
+                  "Sweden": "#257f66",
+                  "Turkey": "#257f66",
+                  "Albania": "#bd0017",
+                  "Belgium": "#257f66",
+                  "Denmark": "#257f66",
+                  "Germany": "#cccccc",
+                  "Romania": "#bd0017",
+                  "Slovenia": "#bd0017",
+                  "Luxembourg": "#257f66",
+                  "Switzerland": "#bd0017",
+                  "Malta (2017)": "#267c87",
+                  "Malta (2022)": "#267c87",
+                  "Spain (2019)": "#c4c4c4",
+                  "Spain (2023)": "#c4c4c4",
+                  "France (2017)": "#c4c4c4",
+                  "France (2024)": "#c4c4c4",
+                  "Kosovo (2017)": "#c71e1d",
+                  "Kosovo (2019)": "#c71e1d",
+                  "Norway (2017)": "#c4c4c4",
+                  "Sweden (2014)": "#267c87",
+                  "Sweden (2022)": "#c4c4c4",
+                  "Turkey (2015)": "#267c87",
+                  "Turkey (2023)": "#267c87",
+                  "Albania (2017)": "#c71e1d",
+                  "Albania (2021)": "#c71e1d",
+                  "Belgium (2014)": "#267c87",
+                  "Belgium (2019)": "#267c87",
+                  "Belgium (2024)": "#267c87",
+                  "Denmark (2015)": "#267c87",
+                  "Germany (2017)": "#c4c4c4",
+                  "Germany (2021)": "#c4c4c4",
+                  "Romania (2016)": "#c71e1d",
+                  "Romania (2020)": "#c71e1d",
+                  "United Kingdom": "#cccccc",
+                  "Bulgaria (2024)": "#c71e1d",
+                  "Slovenia (2017)": "#c71e1d",
+                  "Luxembourg (2013)": "#267c87",
+                  "Luxembourg (2018)": "#267c87",
+                  "Switzerland (2015)": "#bd0017",
+                  "Switzerland (2019)": "#c71e1d",
+                  "<b>Malta (2022)</b>": "#267c87",
+                  "<b>Turkey (2015)</b>": "#267c87",
+                  "<b>Turkey (2023)</b>": "#267c87",
+                  "<b>Albania (2021)</b>": "#c71e1d",
+                  "<b>Belgium (2014)</b>": "#267c87",
+                  "<b>Belgium (2024)</b>": "#267c87",
+                  "<b>Romania (2020)</b>": "#c71e1d",
+                  "United Kingdom (2017)": "#c4c4c4",
+                  "United Kingdom (2019)": "#c4c4c4",
+                  "United Kingdom (2024)": "#c4c4c4",
+                  "<b>Bulgaria (2024)</b>": "#c71e1d",
+                  "<b>Luxembourg (2013)</b>": "#267c87"
+                },
+                "palette": [],
+                "categoryOrder": [
+                  "Romania (2020)",
+                  "Malta (2022)",
+                  "Turkey (2023)",
+                  "Belgium (2024)",
+                  "Bulgaria (2024)",
+                  "Albania (2021)",
+                  "United Kingdom (2024)",
+                  "Germany (2021)",
+                  "Sweden (2022)",
+                  "Spain (2023)",
+                  "France (2024)"
+                ],
+                "categoryLabels": {
+                  "red": "European countries with the lowest turnout in the last federal election",
+                  "bars": "",
+                  "grey": "",
+                  "Malta": "",
+                  "green": "...with highest turnout",
+                  "France": "",
+                  "Kosovo": "",
+                  "Sweden": "",
+                  "Turkey": "",
+                  "Albania": "",
+                  "Belgium": "",
+                  "Denmark": "",
+                  "Germany": "",
+                  "Romania": "",
+                  "Slovenia": "",
+                  "Luxembourg": "",
+                  "Switzerland": "",
+                  "Malta (2017)": "...with the highest turnout",
+                  "Malta (2022)": "…..with the highest turnout",
+                  "Spain (2019)": "for comparison",
+                  "Spain (2023)": "for comparison",
+                  "France (2017)": "for comparison",
+                  "France (2024)": "for comparison",
+                  "Kosovo (2017)": "European countries with the lowest turnout in the last federal election",
+                  "Kosovo (2019)": "European countries with the lowest turnout in their last national elections",
+                  "Norway (2017)": "for comparison",
+                  "Sweden (2014)": "",
+                  "Sweden (2022)": "for comparison",
+                  "Turkey (2015)": "",
+                  "Turkey (2023)": "…..with the highest turnout",
+                  "Albania (2017)": "European countries with the lowest turnout in their last national elections",
+                  "Albania (2021)": "European countries with the lowest turnout in their last national elections",
+                  "Belgium (2014)": "...with highest turnout",
+                  "Belgium (2019)": "...with the highest turnout",
+                  "Belgium (2024)": "…..with the highest turnout",
+                  "Denmark (2015)": "",
+                  "Germany (2017)": "for comparison",
+                  "Germany (2021)": "for comparison",
+                  "Romania (2016)": "European countries with the lowest turnout in the last federal election",
+                  "Romania (2020)": "European countries with the lowest turnout in their last national elections",
+                  "United Kingdom": "",
+                  "Bulgaria (2024)": "European countries with the lowest turnout in their last national elections",
+                  "Slovenia (2017)": "European countries with the lowest turnout in the last federal election",
+                  "Luxembourg (2013)": "...with highest turnout",
+                  "Luxembourg (2018)": "...with the highest turnout",
+                  "Switzerland (2015)": "",
+                  "Switzerland (2019)": "European countries with the lowest turnout in their last national elections",
+                  "<b>Malta (2022)</b>": "…..with the highest turnout",
+                  "<b>Turkey (2015)</b>": "",
+                  "<b>Turkey (2023)</b>": "…..with the highest turnout",
+                  "<b>Albania (2021)</b>": "European countries with the lowest turnout in their last national elections",
+                  "<b>Belgium (2014)</b>": "",
+                  "<b>Belgium (2024)</b>": "…..with the highest turnout",
+                  "<b>Romania (2020)</b>": "European countries with the lowest turnout in their last national elections",
+                  "United Kingdom (2017)": "for comparison",
+                  "United Kingdom (2019)": "for comparison",
+                  "United Kingdom (2024)": "for comparison",
+                  "<b>Bulgaria (2024)</b>": "European countries with the lowest turnout in their last national elections",
+                  "<b>Luxembourg (2013)</b>": ""
+                },
+                "excludeFromKey": []
+              },
+              "show-color-key": true,
+              "color-by-column": true,
+              "group-by-column": false,
+              "label-alignment": "left",
+              "value-label-row": false,
+              "text-annotations": {},
+              "axis-label-format": "",
+              "custom-area-fills": {},
+              "custom-grid-lines": "",
+              "date-label-format": "YYYY",
+              "range-annotations": {},
+              "show-group-labels": true,
+              "show-value-labels": true,
+              "stack-color-legend": false,
+              "value-label-format": "0.[0]%",
+              "compact-group-labels": false,
+              "show-category-labels": true,
+              "ignore-missing-values": false,
+              "value-label-alignment": "left",
+              "value-label-visibility": "always"
+            },
+            "axes": {
+              "groups": "Country"
+            },
+            "publish": {
+              "embed-width": 546,
+              "embed-height": 467,
+              "blocks": {
+                "logo": {
+                  "enabled": false
+                },
+                "embed": false,
+                "download-pdf": false,
+                "download-svg": false,
+                "get-the-data": true,
+                "download-image": false
+              },
+              "export-pdf": {
+                "unit": "mm",
+                "scale": 1,
+                "width": 143,
+                "height": 88,
+                "include": "full",
+                "colorMode": "rgb",
+                "fullVectorMode": true
+              },
+              "export-svg": {
+                "width": 539,
+                "height": 332,
+                "include": "full",
+                "fullVectorMode": true
+              },
+              "embed-codes": {
+                "embed-method-iframe": "<iframe title=\"European countries with lowest &amp;amp; highest voter turnout\" aria-label=\"Bar Chart\" id=\"datawrapper-chart-FdWeD\" src=\"https://datawrapper.dwcdn.net/FdWeD/9/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"546\" height=\"464\" data-external=\"1\"></iframe>",
+                "embed-method-responsive": "<iframe title=\"European countries with lowest &amp;amp; highest voter turnout\" aria-label=\"Bar Chart\" id=\"datawrapper-chart-FdWeD\" src=\"https://datawrapper.dwcdn.net/FdWeD/9/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"464\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+                "embed-method-web-component": "<div style=\"min-height:464px\" id=\"datawrapper-vis-FdWeD\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/FdWeD/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-FdWeD\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/FdWeD/full.png\" alt=\"\" /></noscript></div>"
+              },
+              "chart-height": 377
+            },
+            "annotate": {
+              "notes": "Voting is compulsory in Belgium."
+            },
+            "custom": {
+              "archive-note": "",
+              "tr-lynx-interactive-only": false,
+              "tr-connect": false,
+              "tr-wild-slug": "",
+              "tr-root-slug": ""
+            }
+          },
+          "utf8": false,
+          "createdAt": "2025-04-20T11:32:03.000Z",
+          "lastModifiedAt": "2025-04-20T11:32:04.000Z",
+          "forkedFrom": "FdWeD",
+          "organizationId": "thomson-reuters",
+          "authorId": 540892
+        },
+        "timestamps": {
+          "metadata": {
+            "custom": {
+              "tr-lynx-interactive-only": {
+                "__@t$__": "54089203209-1"
+              },
+              "tr-connect": {
+                "__@t$__": "54089203209-1"
+              },
+              "tr-wild-slug": {
+                "__@t$__": "54089203209-1"
+              },
+              "tr-root-slug": {
+                "__@t$__": "54089203209-1"
+              }
+            },
+            "publish": {
+              "embed-height": {
+                "__@t$__": "54089203209-2"
+              }
+            }
+          }
+        },
+        "pathsToItemArrays": [
+          "metadata.visualize.custom-area-fills",
+          "metadata.visualize.range-annotations",
+          "metadata.visualize.text-annotations",
+          "metadata.visualize.overlays",
+          "metadata.data.changes"
+        ]
+      },
+      "clock": "0-2"
+    },
+    "data": "0-0"
+  }

@@ -1,0 +1,277 @@
+{
+    "chart": {
+        "crdt": {
+            "data": {
+                "publicId": "SiLNI",
+                "language": "en-US",
+                "theme": "datawrapper",
+                "chartHash": "553b423b5bc98ccc0bf720c0919f8e8c",
+                "id": "SiLNI",
+                "type": "d3-bars",
+                "title": "Score of Happiness<br>",
+                "lastEditStep": 3,
+                "publicVersion": 0,
+                "deleted": false,
+                "forkable": false,
+                "isFork": false,
+                "metadata": {
+                    "data": {
+                        "changes": {},
+                        "transpose": false,
+                        "vertical-header": true,
+                        "horizontal-header": true,
+                        "upload-method": "copy"
+                    },
+                    "describe": {
+                        "source-name": "World Happiness Report 2019",
+                        "source-url": "https://worldhappiness.report/ed/2019/changing-world-happiness/",
+                        "intro": "The ranking is based on life evaluations (the average answer to the question how people evaluate the quality of their current lives on a scale of 0 to 10) for each country, averaged over the years 2016-2018.",
+                        "byline": "Daniela Haake",
+                        "aria-description": "",
+                        "number-format": "-",
+                        "number-divisor": 0,
+                        "number-append": "",
+                        "number-prepend": ""
+                    },
+                    "visualize": {
+                        "dark-mode-invert": true,
+                        "highlighted-series": [],
+                        "highlighted-values": [],
+                        "sharing": {
+                            "enabled": false,
+                            "auto": true
+                        },
+                        "rules": false,
+                        "thick": false,
+                        "x-grid": "off",
+                        "y-grid": "on",
+                        "scale-y": "linear",
+                        "labeling": "right",
+                        "overlays": {
+                            "1c1c1c1c1c": {
+                                "id": "1c1c1c1c1c",
+                                "to": "Whisker-low",
+                                "from": "Whisker-high",
+                                "type": "range",
+                                "color": "#858585",
+                                "title": "95% Confidence Interval",
+                                "opacity": 0.7,
+                                "pattern": "diagonal-up",
+                                "labelDirectly": true,
+                                "_index": 0
+                            }
+                        },
+                        "sort-bars": false,
+                        "background": false,
+                        "base-color": 0,
+                        "force-grid": false,
+                        "line-dashes": {},
+                        "line-widths": {},
+                        "swap-labels": false,
+                        "block-labels": false,
+                        "custom-range": [
+                            "",
+                            ""
+                        ],
+                        "label-colors": false,
+                        "label-margin": 0,
+                        "line-symbols": false,
+                        "range-extent": "nice",
+                        "thick-arrows": false,
+                        "interpolation": "linear",
+                        "negativeColor": {
+                            "value": "#E31A1C",
+                            "enabled": false
+                        },
+                        "replace-flags": {
+                            "style": "4x3",
+                            "enabled": false
+                        },
+                        "reverse-order": false,
+                        "show-tooltips": true,
+                        "tick-position": "top",
+                        "x-tick-format": "auto",
+                        "y-grid-format": "auto",
+                        "y-grid-labels": "auto",
+                        "chart-type-set": true,
+                        "color-category": {
+                            "map": {
+                                "Asia": "#ec6951",
+                                "Africa": "#8c1946",
+                                "Europe": "#ff9f51",
+                                "Oceania": "#e7d5c2",
+                                "3. Norway": "#f7d503",
+                                "7. Sweden": "#f7d503",
+                                "9. Canada": "#ef7f35",
+                                "93. China": "#c2c101",
+                                "1. Finland": "#f7d503",
+                                "140. India": "#c2c101",
+                                "147. Haiti": "#ef7f35",
+                                "149. Syria": "#c2c101",
+                                "151. Yemen": "#c2c101",
+                                "2. Denmark": "#f7d503",
+                                "4. Iceland": "#f7d503",
+                                "68. Russia": "#c2c101",
+                                "95. Bhutan": "#c2c101",
+                                "10. Austria": "#f7d503",
+                                "150. Malawi": "#2c7f67",
+                                "152. Rwanda": "#2c7f67",
+                                "17. Germany": "#f7d503",
+                                "148. Botswana": "#2c7f67",
+                                "153. Tanzania": "#2c7f67",
+                                "North America": "#e7d5c2",
+                                "5. Netherlands": "#f7d503",
+                                "6. Switzerland": "#f7d503",
+                                "8. New Zealand": "#ae5b3e",
+                                "154. Afghanistan": "#c2c101",
+                                "156. South Sudan": "#2c7f67",
+                                "19. United States": "#ef7f35",
+                                "15. United Kingdom": "#f7d503",
+                                "155. Central African Republic": "#2c7f67"
+                            },
+                            "palette": [],
+                            "categoryOrder": [],
+                            "categoryLabels": {
+                                "Oceania": "Oceania & North America",
+                                "3. Norway": "Europe",
+                                "7. Sweden": "Europe",
+                                "9. Canada": "North America",
+                                "93. China": "Asia",
+                                "1. Finland": "Europe",
+                                "140. India": "Asia",
+                                "147. Haiti": "North America",
+                                "149. Syria": "Asia",
+                                "151. Yemen": "Asia",
+                                "2. Denmark": "Europe",
+                                "4. Iceland": "Europe",
+                                "68. Russia": "Asia",
+                                "95. Bhutan": "Asia",
+                                "10. Austria": "Europe",
+                                "150. Malawi": "Africa",
+                                "152. Rwanda": "Africa",
+                                "17. Germany": "Europe",
+                                "148. Botswana": "Africa",
+                                "153. Tanzania": "Africa",
+                                "North America": "Oceania & North America",
+                                "5. Netherlands": "Europe",
+                                "6. Switzerland": "Europe",
+                                "8. New Zealand": "Oceania",
+                                "154. Afghanistan": "Asia",
+                                "156. South Sudan": "Africa",
+                                "19. United States": "North America",
+                                "15. United Kingdom": "Europe",
+                                "155. Central African Republic": "Africa"
+                            },
+                            "excludeFromKey": []
+                        },
+                        "custom-range-x": [
+                            "",
+                            ""
+                        ],
+                        "custom-range-y": [
+                            "",
+                            ""
+                        ],
+                        "custom-ticks-x": "",
+                        "custom-ticks-y": "",
+                        "show-color-key": true,
+                        "color-by-column": true,
+                        "connector-lines": true,
+                        "group-by-column": false,
+                        "label-alignment": "left",
+                        "line-symbols-on": "both",
+                        "value-label-row": false,
+                        "text-annotations": {},
+                        "tooltip-x-format": "ll",
+                        "y-grid-subdivide": true,
+                        "custom-area-fills": {},
+                        "custom-grid-lines": "",
+                        "date-label-format": "YYYY",
+                        "line-symbols-size": 3.5,
+                        "line-value-labels": false,
+                        "range-annotations": {},
+                        "show-group-labels": true,
+                        "show-value-labels": true,
+                        "line-symbols-shape": "circle",
+                        "stack-color-legend": false,
+                        "value-label-format": "0,0.[00]",
+                        "y-grid-label-align": "left",
+                        "compact-group-labels": false,
+                        "line-symbols-opacity": 1,
+                        "show-category-labels": true,
+                        "tooltip-number-format": "0,0.[00]",
+                        "value-label-alignment": "left",
+                        "value-label-visibility": "always",
+                        "tooltip-use-custom-formats": false,
+                        "line-symbols-shape-multiple": {}
+                    },
+                    "axes": {
+                        "x": "Country",
+                        "bars": "Happiness score",
+                        "colors": "Continent",
+                        "labels": "Country"
+                    },
+                    "publish": {
+                        "embed-width": 550,
+                        "embed-height": 855,
+                        "blocks": {
+                            "logo": {
+                                "enabled": false
+                            },
+                            "embed": false,
+                            "download-pdf": false,
+                            "download-svg": false,
+                            "get-the-data": true,
+                            "download-image": false
+                        },
+                        "export-pdf": {
+                            "unit": "mm",
+                            "scale": 1,
+                            "width": "159",
+                            "height": "226",
+                            "include": "full",
+                            "colorMode": "rgb",
+                            "ligatures": true,
+                            "fullVectorMode": true
+                        },
+                        "export-svg": {
+                            "width": 600,
+                            "height": 856,
+                            "include": "full",
+                            "fullVectorMode": true
+                        },
+                        "embed-codes": {
+                            "embed-method-iframe": "<iframe title=\"Score of Happiness\" aria-label=\"Bar Chart\" id=\"datawrapper-chart-o7hof\" src=\"https://datawrapper.dwcdn.net/o7hof/2/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"550\" height=\"855\" data-external=\"1\"></iframe>",
+                            "embed-method-responsive": "<iframe title=\"Score of Happiness\" aria-label=\"Bar Chart\" id=\"datawrapper-chart-o7hof\" src=\"https://datawrapper.dwcdn.net/o7hof/2/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"855\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data[\"datawrapper-height\"][t]+\"px\";r.style.height=d}}})}();\n</script>",
+                            "embed-method-web-component": "<div style=\"min-height:855px\" id=\"datawrapper-vis-o7hof\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/o7hof/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-o7hof\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/o7hof/full.png\" alt=\"Score of Happiness (Bar Chart)\" /></noscript></div>"
+                        },
+                        "chart-height": 723
+                    },
+                    "annotate": {
+                        "notes": ""
+                    },
+                    "custom": {
+                        "archive-note": ""
+                    }
+                },
+                "utf8": false,
+                "createdAt": "2025-10-05T19:22:18.000Z",
+                "lastModifiedAt": "2025-10-05T19:22:20.000Z",
+                "forkedFrom": "o7hof",
+                "organizationId": "5TyD7GtQ",
+                "authorId": 182176,
+                "workspace": "XphsSLAUvT"
+            },
+            "timestamps": {},
+            "pathsToItemArrays": [
+                "metadata.visualize.custom-area-fills",
+                "metadata.visualize.range-annotations",
+                "metadata.visualize.text-annotations",
+                "metadata.visualize.overlays",
+                "metadata.data.changes"
+            ]
+        },
+        "clock": "0-0"
+    },
+    "data": "0-0"
+}

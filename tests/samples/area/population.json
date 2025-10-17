@@ -1,0 +1,566 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "FMSBc",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "b7ee1e2eccb3082bfce91f445bf20991",
+        "id": "FMSBc",
+        "type": "d3-area",
+        "title": "Europe and Asia lose population share, Africa gains",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {},
+            "transpose": true,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "charset-fixed": true,
+            "column-format": {
+              "Asia": {
+                "ignore": true
+              },
+              "Oceania": {
+                "ignore": true
+              }
+            },
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "UN World Population Prospects, 2017",
+            "source-url": "https://esa.un.org/unpd/wpp/Publications/Files/WPP2017_KeyFindings.pdf",
+            "intro": "<strong>Share of the world population, of all continents</strong>, in 1950, 2017, 2030, 2050 and 2100, according to the UN World Population Prospect from 2017.",
+            "byline": "Lisa Charlotte Muth, Datawrapper",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": "",
+            "computed-columns": {
+              "Asia and Oceania": "asia +oceania"
+            }
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "auto": true
+            },
+            "lines": {
+              "Africa": {
+                "symbols": {
+                  "on": "both",
+                  "shape": "circle",
+                  "enabled": false
+                },
+                "labelLastValue": false
+              },
+              "Europe": {
+                "symbols": {
+                  "on": "both",
+                  "shape": "circle",
+                  "enabled": false
+                },
+                "labelLastValue": false
+              },
+              "Asia and Oceania": {
+                "symbols": {
+                  "on": "both",
+                  "shape": "circle",
+                  "enabled": false
+                },
+                "labelLastValue": false
+              },
+              "Northern America": {
+                "symbols": {
+                  "on": "both",
+                  "shape": "circle",
+                  "enabled": false
+                },
+                "labelLastValue": false
+              },
+              "Latin America and the Caribbean": {
+                "symbols": {
+                  "on": "both",
+                  "shape": "circle",
+                  "enabled": false
+                },
+                "labelLastValue": false
+              }
+            },
+            "rules": false,
+            "thick": false,
+            "margin": "0",
+            "x-grid": "off",
+            "y-grid": "ticks",
+            "padding": "5",
+            "scale-y": "linear",
+            "sort-by": "first",
+            "overlays": {},
+            "color-key": {
+              "Asia": {
+                "id": "Asia",
+                "col": "#70b5f6",
+                "color": "#70b5f6",
+                "label": "Asia"
+              },
+              "bars": {
+                "id": "bars",
+                "color": "#18a1cd",
+                "label": "bars",
+                "def_lbl": "X.1"
+              },
+              "Africa": {
+                "id": "Africa",
+                "col": "#d62728",
+                "color": "#d62728",
+                "label": "Africa"
+              },
+              "Europe": {
+                "id": "Europe",
+                "col": "#ffd500",
+                "color": "#ffd500",
+                "label": "Europe"
+              },
+              "Europe ": {
+                "id": "Europe ",
+                "col": "#fdd62e",
+                "color": "#fdd62e",
+                "label": "Europe "
+              },
+              "Oceania": {
+                "id": "Oceania",
+                "col": "#e0e0e0",
+                "color": "#e0e0e0",
+                "label": "Oceania"
+              },
+              "Oceania ": {
+                "id": "Oceania ",
+                "col": "#dfd8c9",
+                "color": "#dfd8c9",
+                "label": "undefined, Latin America and the Caribbean",
+                "def_lbl": "undefined, Latin America and the Caribbean"
+              },
+              "Asia and Oceania": {
+                "id": "Asia and Oceania",
+                "col": "#ffbf57",
+                "color": "#ffbf57",
+                "label": "Asia and Oceania"
+              },
+              "Northern America": {
+                "id": "Northern America",
+                "col": "#c9c2b3",
+                "color": "#c9c2b3",
+                "label": "undefined, Northern America ",
+                "def_lbl": "undefined, Northern America "
+              },
+              "Northern America ": {
+                "col": "#c9c2b3",
+                "hide": true,
+                "color": "#c9c2b3",
+                "label": "Northern America "
+              },
+              "Latin America and the Caribbean": {
+                "col": "#dfd8c9",
+                "hide": true,
+                "color": "#dfd8c9",
+                "label": "Latin America and the Caribbean"
+              },
+              "Latin America and the Caribbean ": {
+                "id": "Latin America and the Caribbean ",
+                "col": "#dfd7c9",
+                "color": "#dfd7c9",
+                "label": "Latin America and the Caribbean "
+              }
+            },
+            "normalize": false,
+            "sort-bars": "keep",
+            "background": false,
+            "base-color": "#87caff",
+            "grid-lines": "auto",
+            "sort-areas": "keep",
+            "label-space": 30,
+            "sort-arrows": "keep",
+            "stack-areas": true,
+            "swap-labels": false,
+            "area-opacity": 0.95,
+            "block-labels": false,
+            "connect-bars": false,
+            "label-colors": false,
+            "label-margin": 0,
+            "stack-to-100": false,
+            "value-labels": "auto",
+            "interpolation": "monotone-x",
+            "margin-mobile": 10,
+            "reverse-order": false,
+            "rotate-labels": false,
+            "show-tooltips": true,
+            "x-grid-format": "YYYY",
+            "y-grid-format": "0%",
+            "y-grid-labels": "auto",
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "Asia": "#70b5f6",
+                "Africa": "#d62728",
+                "Europe": "#ffd500",
+                "Europe ": "#fdd62e",
+                "Oceania": "#e0e0e0",
+                "Oceania ": "#dfd8c9",
+                "Asia and Oceania": "#ffbf57",
+                "Northern America": "#c9c2b3",
+                "Northern America ": "#c9c2b3",
+                "Latin America and the Caribbean": "#dfd8c9",
+                "Latin America and the Caribbean ": "#dfd7c9"
+              }
+            },
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-range-y": [
+              "",
+              ""
+            ],
+            "custom-ticks-x": "",
+            "custom-ticks-y": "",
+            "outside-labels": true,
+            "padding-mobile": 35,
+            "plotHeightMode": "fixed",
+            "show-arrow-key": true,
+            "show-color-key": true,
+            "direct-labeling": false,
+            "highlight-range": false,
+            "label-alignment": "left",
+            "plotHeightFixed": 550,
+            "plotHeightRatio": 0.5,
+            "range-end-color": 3,
+            "same-as-desktop": true,
+            "text-annotations": {
+              "6a2svwr01g": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "6a2svwr01g",
+                "bold": false,
+                "size": 15,
+                "text": "...in Europe",
+                "align": "bl",
+                "color": "#777777",
+                "italic": false,
+                "position": {
+                  "x": 1954.3,
+                  "y": 31.3
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 0
+              },
+              "lha59b5gkp": {
+                "bg": false,
+                "dx": 1,
+                "dy": 0,
+                "id": "lha59b5gkp",
+                "bold": true,
+                "size": 16,
+                "text": "...in Africa",
+                "align": "bl",
+                "color": "#ffffff",
+                "italic": false,
+                "position": {
+                  "x": 1954.5,
+                  "y": 3.6
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 1
+              },
+              "q5c8sllhe1": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "q5c8sllhe1",
+                "bold": false,
+                "size": 15,
+                "text": "Share of world population <br/>that lives in Asia",
+                "align": "tl",
+                "color": "#525252",
+                "italic": false,
+                "position": {
+                  "x": 1954.3,
+                  "y": 97.3
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 2
+              },
+              "af81k3ww69": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "af81k3ww69",
+                "bold": false,
+                "size": 13,
+                "text": "Projection<br/>",
+                "align": "tl",
+                "color": "#707070",
+                "italic": false,
+                "position": {
+                  "x": 2021,
+                  "y": 97
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 3
+              },
+              "erdkum03m5": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "erdkum03m5",
+                "bold": false,
+                "size": 13,
+                "text": "↑<br/>40%<br/>in 2100<br/>↓",
+                "align": "mr",
+                "color": "#ff9e87",
+                "italic": false,
+                "position": {
+                  "x": 2098.3,
+                  "y": 20
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 4
+              },
+              "5cifsyhr0z": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "5cifsyhr0z",
+                "bold": false,
+                "size": 12,
+                "text": "↑<br/>43%<br/>in 2100<br/>↓",
+                "align": "mr",
+                "color": "#ffffc4",
+                "italic": false,
+                "position": {
+                  "x": 2098.3,
+                  "y": 77.9
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 5
+              }
+            },
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "custom-grid-lines": "",
+            "date-label-format": "YYYY",
+            "group-slice-after": "5",
+            "hide-value-labels": false,
+            "range-annotations": {
+              "xnmlsp7rp1": {
+                "id": "xnmlsp7rp1",
+                "type": "x",
+                "color": "#000000",
+                "display": "range",
+                "opacity": "100",
+                "position": {
+                  "x0": 2016.9,
+                  "x1": 2100,
+                  "y0": 2016.9,
+                  "y1": 2100
+                },
+                "strokeType": "solid",
+                "strokeWidth": 1,
+                "_index": 0
+              }
+            },
+            "range-start-color": 0,
+            "label-space-mobile": 30,
+            "range-value-labels": "none",
+            "stack-color-legend": false,
+            "value-label-format": "0,0.[00]",
+            "y-grid-label-align": "left",
+            "area-separator-color": "background",
+            "area-separator-lines": false,
+            "compact-group-labels": false,
+            "reverse-color-legend": false,
+            "ignore-missing-values": false,
+            "tooltip-number-format": "0,0.[00]",
+            "value-label-alignment": "left",
+            "direct-labeling-mobile": "always"
+          },
+          "axes": {
+            "x": "X.1"
+          },
+          "publish": {
+            "embed-width": 689,
+            "embed-height": 722,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "text": "#000000",
+            "background": "#ffffff",
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Europe and Asia lose population share, Africa gains\" aria-label=\"Interactive area chart\" id=\"datawrapper-chart-cImRg\" src=\"https://datawrapper.dwcdn.net/cImRg/12/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"689\" height=\"717\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Europe and Asia lose population share, Africa gains\" aria-label=\"Interactive area chart\" id=\"datawrapper-chart-cImRg\" src=\"https://datawrapper.dwcdn.net/cImRg/12/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"717\" data-external=\"1\"></iframe><script type=\"text/javascript\">!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n</script>",
+              "embed-method-web-component": "<div style=\"min-height:717px\" id=\"datawrapper-vis-cImRg\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/cImRg/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-cImRg\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/cImRg/full.png\" alt=\"\" /></noscript></div>"
+            },
+            "autoDarkMode": false,
+            "chart-height": 609,
+            "embed-heights": {
+              "100": 937.007812,
+              "200": 739.0078120000001,
+              "300": 682.0078120000001,
+              "400": 682.0078120000001,
+              "500": 666.0078120000001,
+              "700": 641.0078120000001,
+              "800": 641.0078120000001,
+              "900": 624.0078120000001,
+              "1000": 624.0078120000001
+            },
+            "onetime-access-token": "Al9CdcBk53SBtqz2lwJAKhejaw8nWEA1"
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+            "archive-note": "",
+            "tr-connect": false,
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-10-11T17:55:55.000Z",
+        "lastModifiedAt": "2025-10-11T17:55:56.000Z",
+        "forkedFrom": "cImRg",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "custom": {
+            "tr-connect": {
+              "__@t$__": "54089231841-1"
+            },
+            "tr-lynx-interactive-only": {
+              "__@t$__": "54089231841-1"
+            }
+          },
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089231841-2"
+            },
+            "chart-height": {
+              "__@t$__": "54089231841-3"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-3"
+  },
+  "data": "0-0"
+}
