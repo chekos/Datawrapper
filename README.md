@@ -22,7 +22,7 @@ uv install datawrapper
 Create beautiful charts with type-safe, object-oriented Python:
 
 ```python
-from datawrapper.charts import BarChart, NumberFormat
+from datawrapper import BarChart, NumberFormat
 
 # Create a bar chart with type-safe configuration
 chart = BarChart(
