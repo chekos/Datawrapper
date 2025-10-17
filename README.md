@@ -22,12 +22,13 @@ uv install datawrapper
 Create beautiful charts with type-safe, object-oriented Python:
 
 ```python
+import pandas as pd
 from datawrapper import BarChart, NumberFormat
 
 # Create a bar chart with type-safe configuration
 chart = BarChart(
     title="Top Programming Languages 2024",
-    data={"Language": ["Python", "JavaScript", "Java"], "Users": [45.3, 38.2, 30.5]},
+    data=pd.DataFrame({"Language": ["Python", "JavaScript", "Java"], "Users": [45.3, 38.2, 30.5]}),
     axis_label_format=NumberFormat.ONE_DECIMAL,  # Type-safe enum
     value_label_format=NumberFormat.ABBREVIATED,  # IDE autocomplete support
 )
