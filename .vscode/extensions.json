@@ -2,7 +2,6 @@
     "recommendations": [
         "ms-python.python",
         "ms-toolsai.jupyter",
-        "charliermarsh.ruff",
-        "elagil.pre-commit-helper"
+        "charliermarsh.ruff"
     ]
 }
