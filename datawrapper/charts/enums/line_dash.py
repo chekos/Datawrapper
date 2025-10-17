@@ -18,7 +18,7 @@ class LineDash(str, Enum):
         >>> Line(column="sales", dash="style3")
     """
 
-    SOLID = "style1"
-    SHORT_DASH = "style2"
-    MEDIUM_DASH = "style3"
-    LONG_DASH = "style4"
+    SOLID = "style0"
+    SHORT_DASH = "style1"
+    MEDIUM_DASH = "style2"
+    LONG_DASH = "style3"

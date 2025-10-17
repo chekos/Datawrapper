@@ -19,8 +19,8 @@ class LineWidth(str, Enum):
         >>> Line(column="sales", width="style3")
     """
 
-    THINNEST = "style0"
-    THIN = "style1"
-    MEDIUM = "style2"
-    THICK = "style3"
+    THINNEST = "style3"
+    THIN = "style0"
+    MEDIUM = "style1"
+    THICK = "style2"
     INVISIBLE = "invisible"
