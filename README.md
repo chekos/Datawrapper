@@ -36,13 +36,6 @@ chart = BarChart(
 chart_id = chart.create()
 chart.publish()
 ```
-
-**Benefits of the OOP approach:**
-- 🎯 **Type safety** - Catch errors before runtime with Pydantic validation
-- 💡 **IDE autocomplete** - Discover available options as you type
-- 📖 **Readable code** - Use semantic enum names instead of cryptic format strings
-- 🔧 **Flexible** - Mix OOP with low-level API calls when needed
-
 See the [full documentation](https://datawrapper.readthedocs.io/) for comprehensive guides on all chart types.
 
 ### Contributing
