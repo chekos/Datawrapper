@@ -1,0 +1,113 @@
+# Quick Start Guide
+
+This guide will help you create your first Datawrapper chart using the object-oriented Python API. You'll learn the basics of chart creation, configuration, and publishing.
+
+## Prerequisites
+
+- Python 3.9 or higher
+- An account at [datawrapper.de](https://www.datawrapper.de/)
+- A Datawrapper API token with appropriate permissions
+
+## Installation
+
+Install the datawrapper package using uv (recommended) or pip:
+
+```bash
+# Using uv (recommended)
+uv add datawrapper
+
+# Or using pip
+pip install datawrapper
+```
+
+## Getting Your API Token
+
+1. Log in to your Datawrapper account
+2. Go to Settings → API Tokens
+3. Click "Create new token"
+4. Give it a descriptive name (e.g., "Python Scripts")
+5. Copy the token and store it securely
+6. Set it as an environment variable named `DATAWRAPPER_ACCESS_TOKEN`
+
+## Creating your first chart
+
+Let's create a simple bar chart showing programming language popularity:
+
+```python
+import pandas as pd
+from datawrapper import BarChart, NumberFormat
+
+# Set up your data
+data = pd.DataFrame(
+    {
+        "Language": ["Python", "JavaScript", "TypeScript", "Java", "C#"],
+        "Percentage": [49.3, 62.3, 38.5, 30.5, 27.1],
+    }
+)
+
+# Create a bar chart
+chart = BarChart(
+    title="Most Popular Programming Languages 2024",
+    intro="Based on Stack Overflow Developer Survey",
+    data=data,
+    value_label_format=NumberFormat.ONE_DECIMAL,
+    source_name="Stack Overflow",
+    source_url="https://insights.stackoverflow.com/survey/2024",
+    byline="Datawrapper Quickstart Guide",
+)
+
+# Create the chart on Datawrapper (uses DATAWRAPPER_ACCESS_TOKEN environment variable)
+chart_id = chart.create()
+print(f"Chart created! ID: {chart_id}")
+
+# You could also provide the token at runtime
+# chart_id = chart.create(access_token="your_token_here")
+
+# Publish the chart
+chart.publish()
+```
+
+## Updating an existing chart
+
+```python
+# Get the chart from the API
+chart = chart.get(chart_id)
+
+# Make a change
+chart.title = "Most Popular Programming Languages in 2024!!!"
+chart.update()
+chart.publish()
+```
+
+## Exporting a chart
+
+Download your chart as an image:
+
+```python
+# Export as PNG (default)
+chart.export(output="png", filepath="chart.png")
+
+# Export as SVG
+chart.export(output="svg", filepath="chart.svg")
+
+# Export as PDF
+chart.export(output="pdf", filepath="chart.pdf")
+
+# High resolution PNG
+chart.export(output="png", filepath="chart.png", scale=2)
+```
+
+## Creating multiple charts
+
+```python
+from datawrapper import BarChart, LineChart
+
+
+for category in ["Sales", "Revenue", "Profit"]:
+    chart = BarChart(
+        title=f"{category} by Region", data=get_data_for_category(category)
+    )
+    chart_id = chart.create()
+```
+
+Happy charting! 📊

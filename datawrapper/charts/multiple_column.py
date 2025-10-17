@@ -261,6 +261,31 @@ class MultipleColumnChart(BaseChart):
     )
 
     #
+    # Tooltips
+    #
+
+    #: Whether or not to show tooltips on hover
+    show_tooltips: bool = Field(
+        default=True,
+        alias="show-tooltips",
+        description="Whether or not to show tooltips on hover",
+    )
+
+    #: Whether to show tooltips synchronously across all panels
+    sync_multiple_tooltips: bool = Field(
+        default=False,
+        alias="syncMultipleTooltips",
+        description="Whether to show tooltips synchronously across all panels",
+    )
+
+    #: The format for the y-axis values in tooltips (use DateFormat or NumberFormat enum or custom format strings)
+    tooltip_number_format: DateFormat | NumberFormat | str = Field(
+        default="",
+        alias="tooltip-number-format",
+        description="The format for the y-axis values in tooltips. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
+    )
+
+    #
     # Labels
     #
 
@@ -385,6 +410,10 @@ class MultipleColumnChart(BaseChart):
                     self.plot_height_ratio,
                 ),
                 "panels": {panel["column"]: panel for panel in self.panels},
+                # Tooltips
+                "show-tooltips": self.show_tooltips,
+                "syncMultipleTooltips": self.sync_multiple_tooltips,
+                "tooltip-number-format": self.tooltip_number_format,
                 # Labels
                 "show-color-key": self.show_color_key,
                 "label-colors": self.label_colors,
@@ -536,6 +565,14 @@ class MultipleColumnChart(BaseChart):
             ]
         else:
             init_data["panels"] = []
+
+        # Tooltips
+        if "show-tooltips" in visualize:
+            init_data["show_tooltips"] = visualize["show-tooltips"]
+        if "syncMultipleTooltips" in visualize:
+            init_data["sync_multiple_tooltips"] = visualize["syncMultipleTooltips"]
+        if "tooltip-number-format" in visualize:
+            init_data["tooltip_number_format"] = visualize["tooltip-number-format"]
 
         # Labels
         if "label-colors" in visualize:

@@ -17,6 +17,34 @@ A lightweight Python wrapper for the Datawrapper API
 uv install datawrapper
 ```
 
+## Quick Start
+
+Create beautiful charts with type-safe, object-oriented Python:
+
+```python
+from datawrapper.charts import BarChart, NumberFormat
+
+# Create a bar chart with type-safe configuration
+chart = BarChart(
+    title="Top Programming Languages 2024",
+    data={"Language": ["Python", "JavaScript", "Java"], "Users": [45.3, 38.2, 30.5]},
+    axis_label_format=NumberFormat.ONE_DECIMAL,  # Type-safe enum
+    value_label_format=NumberFormat.ABBREVIATED,  # IDE autocomplete support
+)
+
+# Create and publish (uses DATAWRAPPER_ACCESS_TOKEN environment variable)
+chart_id = chart.create()
+chart.publish()
+```
+
+**Benefits of the OOP approach:**
+- 🎯 **Type safety** - Catch errors before runtime with Pydantic validation
+- 💡 **IDE autocomplete** - Discover available options as you type
+- 📖 **Readable code** - Use semantic enum names instead of cryptic format strings
+- 🔧 **Flexible** - Mix OOP with low-level API calls when needed
+
+See the [full documentation](https://datawrapper.readthedocs.io/) for comprehensive guides on all chart types.
+
 ### Contributing
 
 Clone the repository. Move into the directory on your terminal.

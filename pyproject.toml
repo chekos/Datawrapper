@@ -57,8 +57,8 @@ test = [
 docs = [
     "sphinx",
     "sphinx-autobuild",
-    "sphinxcontrib-mermaid",
     "myst-parser",
+    "sphinx_rtd_theme",
 ]
 mypy = [
     "mypy",

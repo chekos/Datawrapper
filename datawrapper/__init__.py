@@ -34,6 +34,13 @@ from datawrapper.charts import (
     TextAnnotation,
     Transform,
 )
+from datawrapper.charts.enums import (
+    DateFormat,
+    LineDash,
+    LineWidth,
+    NumberDivisor,
+    NumberFormat,
+)
 from datawrapper.exceptions import (
     FailedRequestError,
     InvalidRequestError,
@@ -66,6 +73,11 @@ __all__ = [
     "TextAnnotation",
     "RangeAnnotation",
     "ConnectorLine",
+    "DateFormat",
+    "LineDash",
+    "LineWidth",
+    "NumberDivisor",
+    "NumberFormat",
     "get_country_flag",
     "FailedRequestError",
     "InvalidRequestError",
