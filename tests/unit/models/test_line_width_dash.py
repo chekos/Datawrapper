@@ -3,8 +3,8 @@
 import pytest
 from pydantic import ValidationError
 
-from datawrapper.charts.line import Line
 from datawrapper.charts.enums import LineDash, LineWidth
+from datawrapper.charts.line import Line
 
 
 class TestLineWidthEnum:
@@ -12,17 +12,17 @@ class TestLineWidthEnum:
 
     def test_enum_values(self):
         """Test that enum values are correct."""
-        assert LineWidth.THINNEST.value == "style0"
-        assert LineWidth.THIN.value == "style1"
-        assert LineWidth.MEDIUM.value == "style2"
-        assert LineWidth.THICK.value == "style3"
+        assert LineWidth.THINNEST.value == "style3"
+        assert LineWidth.THIN.value == "style0"
+        assert LineWidth.MEDIUM.value == "style1"
+        assert LineWidth.THICK.value == "style2"
         assert LineWidth.INVISIBLE.value == "invisible"
 
     def test_line_with_enum_width(self):
         """Test creating a Line with LineWidth enum."""
         line = Line(column="sales", width=LineWidth.THICK)
         assert line.width == LineWidth.THICK
-        assert line.width.value == "style3"
+        assert line.width.value == "style2"
 
     def test_line_with_string_width(self):
         """Test creating a Line with raw string width (backwards compatibility)."""
@@ -42,7 +42,7 @@ class TestLineWidthEnum:
         """Test that enum width values serialize correctly."""
         line = Line(column="sales", width=LineWidth.THICK)
         serialized = Line.serialize_model(line)
-        assert serialized["width"] == "style3"
+        assert serialized["width"] == "style2"
 
     def test_line_width_serialization_string(self):
         """Test that string width values serialize correctly."""
@@ -54,15 +54,15 @@ class TestLineWidthEnum:
         """Test that width values deserialize correctly."""
         api_data = {
             "title": "Sales",
-            "width": "style3",
+            "width": "style2",
             "interpolation": "linear",
         }
         line_dict = Line.deserialize_model("sales", api_data)
-        assert line_dict["width"] == "style3"
+        assert line_dict["width"] == "style2"
 
         # Can create Line from deserialized data
         line = Line(**line_dict)
-        assert line.width == "style3"
+        assert line.width == "style2"
 
     def test_all_width_values_valid(self):
         """Test that all enum values are valid."""
@@ -80,16 +80,16 @@ class TestLineDashEnum:
 
     def test_enum_values(self):
         """Test that enum values are correct."""
-        assert LineDash.SOLID.value == "style1"
-        assert LineDash.SHORT_DASH.value == "style2"
-        assert LineDash.MEDIUM_DASH.value == "style3"
-        assert LineDash.LONG_DASH.value == "style4"
+        assert LineDash.SOLID.value == "style0"
+        assert LineDash.SHORT_DASH.value == "style1"
+        assert LineDash.MEDIUM_DASH.value == "style2"
+        assert LineDash.LONG_DASH.value == "style3"
 
     def test_line_with_enum_dash(self):
         """Test creating a Line with LineDash enum."""
         line = Line(column="sales", dash=LineDash.MEDIUM_DASH)
         assert line.dash == LineDash.MEDIUM_DASH
-        assert line.dash.value == "style3"
+        assert line.dash.value == "style2"
 
     def test_line_with_string_dash(self):
         """Test creating a Line with raw string dash (backwards compatibility)."""
@@ -108,13 +108,13 @@ class TestLineDashEnum:
 
         error_msg = str(exc_info.value)
         assert "Invalid dash" in error_msg
-        assert "style1, style2, style3, style4" in error_msg
+        assert "style0, style1, style2, style3" in error_msg
 
     def test_line_dash_serialization_enum(self):
         """Test that enum dash values serialize correctly."""
         line = Line(column="sales", dash=LineDash.LONG_DASH)
         serialized = Line.serialize_model(line)
-        assert serialized["dash"] == "style4"
+        assert serialized["dash"] == "style3"
 
     def test_line_dash_serialization_string(self):
         """Test that string dash values serialize correctly."""
@@ -132,15 +132,15 @@ class TestLineDashEnum:
         """Test that dash values deserialize correctly."""
         api_data = {
             "title": "Sales",
-            "dash": "style3",
+            "dash": "style2",
             "interpolation": "linear",
         }
         line_dict = Line.deserialize_model("sales", api_data)
-        assert line_dict["dash"] == "style3"
+        assert line_dict["dash"] == "style2"
 
         # Can create Line from deserialized data
         line = Line(**line_dict)
-        assert line.dash == "style3"
+        assert line.dash == "style2"
 
     def test_line_dash_deserialization_none(self):
         """Test that missing dash deserializes to None."""
@@ -207,22 +207,22 @@ class TestLineWidthAndDashTogether:
             dash=LineDash.LONG_DASH,
         )
         serialized = Line.serialize_model(line)
-        assert serialized["width"] == "style3"
-        assert serialized["dash"] == "style4"
+        assert serialized["width"] == "style2"
+        assert serialized["dash"] == "style3"
 
     def test_deserialization_with_both(self):
         """Test deserialization with both width and dash."""
         api_data = {
             "title": "Sales",
-            "width": "style3",
-            "dash": "style4",
+            "width": "style2",
+            "dash": "style3",
             "interpolation": "linear",
         }
         line_dict = Line.deserialize_model("sales", api_data)
-        assert line_dict["width"] == "style3"
-        assert line_dict["dash"] == "style4"
+        assert line_dict["width"] == "style2"
+        assert line_dict["dash"] == "style3"
 
         # Can create Line from deserialized data
         line = Line(**line_dict)
-        assert line.width == "style3"
-        assert line.dash == "style4"
+        assert line.width == "style2"
+        assert line.dash == "style3"

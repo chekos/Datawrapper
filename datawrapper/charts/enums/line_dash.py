@@ -5,10 +5,10 @@ class LineDash(str, Enum):
     """Line dash pattern options for line charts.
 
     These values control the dash pattern of lines in charts:
-    - SOLID (style1) = No dashes (default)
-    - SHORT_DASH (style2) = Short dashes (2.3,2 pattern)
-    - MEDIUM_DASH (style3) = Medium dashes (5,3 pattern)
-    - LONG_DASH (style4) = Long dashes (7.5,3 pattern)
+    - SOLID (style0) = No dashes (default)
+    - SHORT_DASH (style1) = Short dashes (2.3,2 pattern)
+    - MEDIUM_DASH (style2) = Medium dashes (5,3 pattern)
+    - LONG_DASH (style3) = Long dashes (7.5,3 pattern)
 
     Examples:
         >>> # Using enum (recommended - more readable)

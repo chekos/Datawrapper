@@ -217,12 +217,12 @@ class Line(BaseModel):
             return v
 
         # Define valid raw string values
-        valid_values = {"style1", "style2", "style3", "style4"}
+        valid_values = {"style0", "style1", "style2", "style3"}
 
         if v not in valid_values:
             raise ValueError(
                 f"Invalid dash: {v}. Use LineDash enum or valid API values: "
-                f"style1, style2, style3, style4"
+                f"style0, style1, style2, style3"
             )
         return v
 
