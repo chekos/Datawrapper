@@ -107,20 +107,15 @@ def test_base_chart_duplicate_success():
     }
     mock_client.copy_chart.return_value = mock_copy_info
 
-    # Mock get_chart response for the duplicated chart
-    mock_copied_chart_full = {
-        "id": "copy456",
-        "title": "Original Chart (Duplicate)",
-        "type": "d3-bars",
-        "metadata": {
-            "visualize": {},
-            "describe": {},
-            "data": {},
-        },
-    }
-    mock_client.get_chart.return_value = mock_copied_chart_full
+    with (
+        patch.object(ColumnChart, "_get_client", return_value=mock_client),
+        patch.object(ColumnChart, "get") as mock_get,
+    ):
+        # Configure mock_get to return a new chart instance
+        mock_duplicated_chart = ColumnChart(title="Original Chart (Duplicate)")
+        mock_duplicated_chart.chart_id = "copy456"
+        mock_get.return_value = mock_duplicated_chart
 
-    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
         # Create original chart
         original_chart = ColumnChart(title="Original Chart")
         original_chart.create()
@@ -134,8 +129,8 @@ def test_base_chart_duplicate_success():
         # Verify copy_chart was called
         mock_client.copy_chart.assert_called_once_with(chart_id="original123")
 
-        # Verify get_chart was called to fetch full data
-        mock_client.get_chart.assert_called_once_with(chart_id="copy456")
+        # Verify get was called to fetch full chart data
+        mock_get.assert_called_once_with(chart_id="copy456", access_token=None)
 
         # Verify the duplicated chart is a new instance
         assert isinstance(copied_chart, ColumnChart)
@@ -236,21 +231,15 @@ def test_base_chart_fork_success():
     }
     mock_client.fork_chart.return_value = mock_fork_info
 
-    # Mock get_chart response for the forked chart
-    mock_forked_chart_full = {
-        "id": "fork123",
-        "title": "Original Chart (Fork)",
-        "type": "d3-bars",
-        "forkedFrom": "original789",
-        "metadata": {
-            "visualize": {},
-            "describe": {},
-            "data": {},
-        },
-    }
-    mock_client.get_chart.return_value = mock_forked_chart_full
+    with (
+        patch.object(ColumnChart, "_get_client", return_value=mock_client),
+        patch.object(ColumnChart, "get") as mock_get,
+    ):
+        # Configure mock_get to return a new chart instance
+        mock_forked_chart = ColumnChart(title="Original Chart (Fork)")
+        mock_forked_chart.chart_id = "fork123"
+        mock_get.return_value = mock_forked_chart
 
-    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
         # Create original chart
         original_chart = ColumnChart(title="Original Chart")
         original_chart.create()
@@ -264,8 +253,8 @@ def test_base_chart_fork_success():
         # Verify fork_chart was called
         mock_client.fork_chart.assert_called_once_with(chart_id="original789")
 
-        # Verify get_chart was called to fetch full data
-        mock_client.get_chart.assert_called_once_with(chart_id="fork123")
+        # Verify get was called to fetch full chart data
+        mock_get.assert_called_once_with(chart_id="fork123", access_token=None)
 
         # Verify the forked chart is a new instance
         assert isinstance(forked_chart, ColumnChart)
@@ -365,26 +354,26 @@ def test_base_chart_fork_with_access_token():
     }
     mock_client.fork_chart.return_value = mock_fork_info
 
-    # Mock get_chart response
-    mock_forked_chart_full = {
-        "id": "fork444",
-        "title": "Original Chart (Fork)",
-        "type": "d3-bars",
-        "metadata": {
-            "visualize": {},
-            "describe": {},
-            "data": {},
-        },
-    }
-    mock_client.get_chart.return_value = mock_forked_chart_full
+    with (
+        patch.object(ColumnChart, "_get_client", return_value=mock_client),
+        patch.object(ColumnChart, "get") as mock_get,
+    ):
+        # Configure mock_get to return a new chart instance
+        mock_forked_chart = ColumnChart(title="Original Chart (Fork)")
+        mock_forked_chart.chart_id = "fork444"
+        mock_get.return_value = mock_forked_chart
 
-    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
         # Create chart with custom token
         chart = ColumnChart(title="Original Chart")
         chart.create(access_token="custom_token")
 
         # Fork with custom token
         forked_chart = chart.fork(access_token="custom_token")
+
+        # Verify get was called with custom token
+        mock_get.assert_called_once_with(
+            chart_id="fork444", access_token="custom_token"
+        )
 
         # Verify the forked chart
         assert isinstance(forked_chart, ColumnChart)
@@ -413,26 +402,26 @@ def test_base_chart_duplicate_with_access_token():
     }
     mock_client.copy_chart.return_value = mock_copy_info
 
-    # Mock get_chart response for duplicated chart
-    mock_copied_chart_full = {
-        "id": "copy666",
-        "title": "Original Chart (Duplicate)",
-        "type": "d3-bars",
-        "metadata": {
-            "visualize": {},
-            "describe": {},
-            "data": {},
-        },
-    }
-    mock_client.get_chart.return_value = mock_copied_chart_full
+    with (
+        patch.object(ColumnChart, "_get_client", return_value=mock_client),
+        patch.object(ColumnChart, "get") as mock_get,
+    ):
+        # Configure mock_get to return a new chart instance
+        mock_duplicated_chart = ColumnChart(title="Original Chart (Duplicate)")
+        mock_duplicated_chart.chart_id = "copy666"
+        mock_get.return_value = mock_duplicated_chart
 
-    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
         # Create chart with custom token
         chart = ColumnChart(title="Original Chart")
         chart.create(access_token="custom_token")
 
         # Duplicate with custom token
         copied_chart = chart.duplicate(access_token="custom_token")
+
+        # Verify get was called with custom token
+        mock_get.assert_called_once_with(
+            chart_id="copy666", access_token="custom_token"
+        )
 
         # Verify the duplicated chart
         assert isinstance(copied_chart, ColumnChart)
