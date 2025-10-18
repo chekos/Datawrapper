@@ -1,4 +1,5 @@
 import os
+import warnings
 from io import StringIO
 from pathlib import Path
 from typing import Any, Literal
@@ -363,6 +364,45 @@ class BaseChart(BaseModel):
     #
     # Deserialization methods for parsing API responses and input data
     #
+
+    @model_validator(mode="before")
+    @classmethod
+    def warn_on_unrecognized_fields(cls, data: dict[str, Any]) -> dict[str, Any]:
+        """Warn users about unrecognized fields that don't match model fields or aliases.
+
+        This validator checks incoming data against the model's defined fields and their
+        aliases, issuing warnings for any keys that don't match. This helps catch typos
+        and misunderstandings about the API without breaking initialization.
+        """
+        if not isinstance(data, dict):
+            return data
+
+        # Get all valid field names and aliases for this class
+        valid_keys = set()
+        for field_name, field_info in cls.model_fields.items():
+            # Add the Python field name
+            valid_keys.add(field_name)
+            # Add the alias if it exists
+            if field_info.alias:
+                valid_keys.add(field_info.alias)
+
+        # Check for unrecognized keys (excluding private attributes)
+        unrecognized = []
+        for key in data.keys():
+            if not key.startswith("_") and key not in valid_keys:
+                unrecognized.append(key)
+
+        # Emit warnings for unrecognized fields
+        if unrecognized:
+            warnings.warn(
+                f"{cls.__name__} received unrecognized field(s): {', '.join(sorted(unrecognized))}. "
+                f"These fields will be ignored. Check for typos or refer to the documentation "
+                f"for valid field names.",
+                UserWarning,
+                stacklevel=2,
+            )
+
+        return data
 
     @model_validator(mode="before")
     @classmethod
