@@ -115,10 +115,12 @@ class TestLineInterpolationEnum:
         interpolations = [
             (LineInterpolation.LINEAR, "linear"),
             (LineInterpolation.STEP, "step"),
-            (LineInterpolation.STEP_AFTER, "stepAfter"),
-            (LineInterpolation.STEP_BEFORE, "stepBefore"),
+            (LineInterpolation.STEP_AFTER, "step-after"),
+            (LineInterpolation.STEP_BEFORE, "step-before"),
             (LineInterpolation.CARDINAL, "cardinal"),
             (LineInterpolation.MONOTONE, "monotone"),
+            (LineInterpolation.MONOTONE_X, "monotone-x"),
+            (LineInterpolation.NATURAL, "natural"),
         ]
         for enum_val, expected in interpolations:
             chart = LineChart(title="Test", interpolation=enum_val)

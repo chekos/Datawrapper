@@ -528,8 +528,8 @@ from datawrapper.charts.enums import GridDisplay, LineWidth, NumberFormat
 - `LineInterpolation.LINEAR` = "linear" - Linear interpolation
 - `LineInterpolation.MONOTONE` = "monotone" - Monotone cubic interpolation
 - `LineInterpolation.STEP` = "step" - Step function
-- `LineInterpolation.STEP_AFTER` = "stepAfter" - Step after
-- `LineInterpolation.STEP_BEFORE` = "stepBefore" - Step before
+- `LineInterpolation.STEP_AFTER` = "step-after" - Step after
+- `LineInterpolation.STEP_BEFORE` = "step-before" - Step before
 - `LineInterpolation.CARDINAL` = "cardinal" - Cardinal spline
 - `LineInterpolation.BASIS` = "basis" - B-spline
 
