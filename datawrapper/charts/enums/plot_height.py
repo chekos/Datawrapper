@@ -17,7 +17,7 @@ class PlotHeightMode(str, Enum):
         >>> chart = LineChart(
         ...     title="Temperature",
         ...     plot_height_mode=PlotHeightMode.RATIO,
-        ...     plot_height=0.5,
+        ...     plot_height_ratio=0.5,
         ... )
     """
 
