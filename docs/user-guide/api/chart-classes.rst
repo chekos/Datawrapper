@@ -14,16 +14,23 @@ Base Chart
    :inherited-members:
    :show-inheritance:
 
-Bar Chart
----------
-.. autoclass:: BarChart
+Area Chart
+----------
+.. autoclass:: AreaChart
    :members:
    :inherited-members:
    :show-inheritance:
 
-Line Chart
-----------
-.. autoclass:: LineChart
+Arrow Chart
+-----------
+.. autoclass:: ArrowChart
+   :members:
+   :inherited-members:
+   :show-inheritance:
+
+Bar Chart
+---------
+.. autoclass:: BarChart
    :members:
    :inherited-members:
    :show-inheritance:
@@ -35,9 +42,16 @@ Column Chart
    :inherited-members:
    :show-inheritance:
 
-Area Chart
+Line Chart
 ----------
-.. autoclass:: AreaChart
+.. autoclass:: LineChart
+   :members:
+   :inherited-members:
+   :show-inheritance:
+
+Multiple Column Chart
+---------------------
+.. autoclass:: MultipleColumnChart
    :members:
    :inherited-members:
    :show-inheritance:
@@ -52,20 +66,6 @@ Scatter Plot
 Stacked Bar Chart
 -----------------
 .. autoclass:: StackedBarChart
-   :members:
-   :inherited-members:
-   :show-inheritance:
-
-Arrow Chart
------------
-.. autoclass:: ArrowChart
-   :members:
-   :inherited-members:
-   :show-inheritance:
-
-Multiple Column Chart
----------------------
-.. autoclass:: MultipleColumnChart
    :members:
    :inherited-members:
    :show-inheritance:
