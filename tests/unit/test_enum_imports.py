@@ -78,7 +78,7 @@ class TestEnumValues:
         assert GridDisplay.ON.value == "on"
         assert GridDisplay.OFF.value == "off"
         assert LineInterpolation.LINEAR.value == "linear"
-        assert LineInterpolation.MONOTONE.value == "monotone"
+        assert LineInterpolation.MONOTONE.value == "monotone-x"
         assert ScatterShape.CIRCLE.value == "symbolCircle"
         assert ScatterShape.SQUARE.value == "symbolSquare"
         assert ScatterSize.FIXED.value == "fixed"

@@ -51,7 +51,7 @@ class TestAreaChartCreation:
             data=pd.DataFrame({"year": ["2020"], "Value": [100]}),
             stack_areas=True,
             area_opacity=0.9,
-            interpolation="monotone",
+            interpolation="curved",
         )
 
         serialized = chart.serialize_model()
@@ -60,7 +60,7 @@ class TestAreaChartCreation:
         assert serialized["title"] == "Test Chart"
         assert serialized["metadata"]["visualize"]["stack-areas"] is True
         assert serialized["metadata"]["visualize"]["area-opacity"] == 0.9
-        assert serialized["metadata"]["visualize"]["interpolation"] == "monotone"
+        assert serialized["metadata"]["visualize"]["interpolation"] == "curved"
 
     def test_serialize_with_stacking(self):
         """Test serializing with area stacking options."""

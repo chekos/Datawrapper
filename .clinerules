@@ -526,7 +526,7 @@ from datawrapper.charts.enums import GridDisplay, LineWidth, NumberFormat
 
 **LineInterpolation** (`interpolation.py`):
 - `LineInterpolation.LINEAR` = "linear" - Linear interpolation
-- `LineInterpolation.MONOTONE` = "monotone" - Monotone cubic interpolation
+- `LineInterpolation.MONOTONE` = "monotone-x" - Monotone cubic interpolation
 - `LineInterpolation.STEP` = "step" - Step function
 - `LineInterpolation.STEP_AFTER` = "step-after" - Step after
 - `LineInterpolation.STEP_BEFORE` = "step-before" - Step before
@@ -650,7 +650,7 @@ line_legacy = Line(
     column="temperature",
     width="3",
     dash="4,2",
-    interpolation="monotone"
+    interpolation="curved"
 )
 ```
 

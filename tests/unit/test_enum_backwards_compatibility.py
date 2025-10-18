@@ -118,8 +118,9 @@ class TestLineInterpolationEnum:
             (LineInterpolation.STEP_AFTER, "step-after"),
             (LineInterpolation.STEP_BEFORE, "step-before"),
             (LineInterpolation.CARDINAL, "cardinal"),
-            (LineInterpolation.MONOTONE, "monotone"),
+            (LineInterpolation.MONOTONE, "monotone-x"),
             (LineInterpolation.MONOTONE_X, "monotone-x"),
+            (LineInterpolation.CURVED, "monotone-x"),
             (LineInterpolation.NATURAL, "natural"),
         ]
         for enum_val, expected in interpolations:
@@ -499,7 +500,7 @@ class TestEnumSerialization:
             x_grid=GridDisplay.TICKS,
         )
         serialized = chart.serialize_model()
-        assert serialized["metadata"]["visualize"]["interpolation"] == "monotone"
+        assert serialized["metadata"]["visualize"]["interpolation"] == "monotone-x"
         assert serialized["metadata"]["visualize"]["x-grid"] == "ticks"
 
     def test_scatter_plot_serialization(self):
