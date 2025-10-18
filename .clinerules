@@ -1037,11 +1037,117 @@ duplicate = chart.duplicate(access_token="custom_token")
 fork = chart.fork(access_token="custom_token")
 ```
 
+**Get Display URLs Method:**
+```python
+def get_display_urls(self, access_token: str | None = None) -> list[dict]:
+    """Get the URLs for the published chart, table or map.
+
+    Args:
+        access_token: Optional API access token
+
+    Returns:
+        list[dict]: List of display URL dictionaries
+
+    Raises:
+        ValueError: If no chart_id is set
+    """
+    if not self.chart_id:
+        raise ValueError("No chart_id set. Use create() first or set chart_id manually.")
+    client = self._get_client(access_token)
+    return client.get_chart_display_urls(chart_id=self.chart_id)
+```
+
+**Get Iframe Code Method:**
+```python
+def get_iframe_code(self, responsive: bool = False, access_token: str | None = None) -> str:
+    """Get the iframe embed code for the chart, table, or map.
+
+    Args:
+        responsive: Whether to return responsive iframe code
+        access_token: Optional API access token
+
+    Returns:
+        str: The iframe embed code
+
+    Raises:
+        ValueError: If no chart_id is set
+    """
+    if not self.chart_id:
+        raise ValueError("No chart_id set. Use create() first or set chart_id manually.")
+    client = self._get_client(access_token)
+    return client.get_iframe_code(chart_id=self.chart_id, responsive=responsive)
+```
+
+**Get Editor URL Method:**
+```python
+def get_editor_url(self) -> str:
+    """Get the Datawrapper editor URL for this chart.
+
+    Returns:
+        str: The Datawrapper editor URL
+
+    Raises:
+        ValueError: If no chart_id is set
+    """
+    if not self.chart_id:
+        raise ValueError("No chart_id set. Use create() first or set chart_id manually.")
+    return f"https://app.datawrapper.de/thomson-reuters/edit/{self.chart_id}/visualize#refine"
+```
+
+**Get PNG URL Method:**
+```python
+def get_png_url(self) -> str:
+    """Get the fallback PNG image URL for noscript tags.
+
+    Returns:
+        str: The PNG image URL
+
+    Raises:
+        ValueError: If no chart_id is set
+    """
+    if not self.chart_id:
+        raise ValueError("No chart_id set. Use create() first or set chart_id manually.")
+    return f"https://datawrapper.dwcdn.net/{self.chart_id}/full.png"
+```
+
+**Design Decisions:**
+- `get_display_urls()` and `get_iframe_code()` call the Datawrapper API via the client
+- `get_editor_url()` and `get_png_url()` construct URLs directly without API calls
+- All methods validate that `chart_id` is set before proceeding
+- Methods that need API access accept optional `access_token` parameter
+- URL construction methods don't need access tokens since they don't call the API
+
+**Usage Examples:**
+```python
+from datawrapper.charts import LineChart
+
+# Get display URLs
+chart = LineChart.get(chart_id="abc123")
+urls = chart.get_display_urls()
+print(urls)  # [{"url": "https://...", "type": "..."}, ...]
+
+# Get iframe code
+iframe = chart.get_iframe_code()
+responsive_iframe = chart.get_iframe_code(responsive=True)
+
+# Get editor URL
+editor_url = chart.get_editor_url()
+print(editor_url)  # "https://app.datawrapper.de/thomson-reuters/edit/abc123/visualize#refine"
+
+# Get PNG URL for noscript tags
+png_url = chart.get_png_url()
+print(png_url)  # "https://datawrapper.dwcdn.net/abc123/full.png"
+
+# With custom access token (for API methods)
+urls = chart.get_display_urls(access_token="custom_token")
+iframe = chart.get_iframe_code(responsive=True, access_token="custom_token")
+```
+
 **Testing:**
 Comprehensive tests for these operations are in `tests/functional/test_base_chart_operations.py`:
 - All tests use fully mocked API calls (no API token required)
 - Tests cover successful operations, error cases, and custom access tokens
-- Test functions: `test_base_chart_delete_success`, `test_base_chart_delete_no_chart_id`, `test_base_chart_duplicate_success`, `test_base_chart_duplicate_invalid_response`, `test_base_chart_fork_success`, etc.
+- Test functions: `test_base_chart_delete_success`, `test_base_chart_delete_no_chart_id`, `test_base_chart_duplicate_success`, `test_base_chart_duplicate_invalid_response`, `test_base_chart_fork_success`, `test_get_display_urls_success`, `test_get_display_urls_no_chart_id`, `test_get_display_urls_custom_token`, `test_get_iframe_code_success`, `test_get_iframe_code_responsive`, `test_get_iframe_code_no_chart_id`, `test_get_iframe_code_custom_token`, `test_get_editor_url_success`, `test_get_editor_url_no_chart_id`, `test_get_png_url_success`, `test_get_png_url_no_chart_id`, etc.
 
 ## Testing Patterns
 

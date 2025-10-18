@@ -1,12 +1,8 @@
-# Chart Operations
+# Working with chart objects
 
-After creating your first chart with the quickstart guide, you'll want to know what operations you can perform on chart objects. This guide tours the key operations available on all chart types.
-
-We'll use the same simple example from the quickstart - a bar chart showing programming language popularity.
+This guide tours the key operations available on all of our object-oriented chart types.
 
 ## Creating a new chart
-
-First, let's create a chart to work with:
 
 ```python
 import datawrapper as dw
@@ -29,7 +25,7 @@ chart_id = chart.create()
 print(f"Created chart: {chart_id}")
 ```
 
-## Getting an Existing Chart
+## Getting an existing chart
 
 You can retrieve an existing chart by its ID using the `get()` classmethod:
 
@@ -42,9 +38,7 @@ print(existing_chart.title)
 print(existing_chart.chart_id)
 ```
 
-This is useful when you want to work with charts you've already created, or when collaborating with others.
-
-## Updating a Chart
+## Updating an existing chart
 
 After creating or retrieving a chart, you can modify its properties and update it:
 
@@ -64,30 +58,23 @@ chart.data = new_data
 chart.update()
 ```
 
-The `update()` method sends all current chart properties to Datawrapper, so any changes you've made will be reflected.
-
-## Publishing a Chart
+## Publishing a chart
 
 Once your chart is ready, publish it to make it publicly accessible:
 
 ```python
-# Publish the chart
 chart.publish()
-
-# The chart now has a public URL
-print(f"Chart URL: https://datawrapper.dwcdn.net/{chart.chart_id}/")
 ```
 
-You can also control the display mode:
+You can also make it display in a Jupyter notebook by passing `display=True`:
 
 ```python
-# Publish with specific display settings
-chart.publish(display=True)  # Make it visible
+chart.publish(display=True)
 ```
 
-## Exporting a Chart
+## Exporting a chart
 
-Export your chart as an image file (PNG, SVG, or PDF):
+Export your chart as an SVG, PNG, or PDF file:
 
 ```python
 # Export as PNG (default)
@@ -105,9 +92,9 @@ chart.export(
 chart.export(filepath="chart.pdf")
 ```
 
-The export method supports various options for customizing the output format and dimensions.
+The export method supports various other options for customizing the output format and dimensions.
 
-## Duplicating a Chart
+## Duplicating a chart
 
 Create an editable copy of your chart:
 
@@ -123,8 +110,6 @@ print(f"Duplicate: {duplicate_chart.chart_id}")
 duplicate_chart.title = "Copy of Programming Languages"
 duplicate_chart.update()
 ```
-
-Duplicating is useful when you want to create variations of a chart without affecting the original.
 
 ## Forking a Chart
 
@@ -145,7 +130,7 @@ forked_chart.update()
 
 Forking is similar to duplicating, but maintains a connection to the source chart in Datawrapper.
 
-## Deleting a Chart
+## Deleting a chart
 
 Remove a chart from Datawrapper:
 
@@ -159,4 +144,58 @@ if success:
     print(f"Chart ID: {chart.chart_id}")
 ```
 
-**Warning:** Deletion is permanent and cannot be undone. Make sure you really want to delete the chart before calling this method.
+## Getting display URLs
+
+Retrieve the published URLs for your chart:
+
+```python
+# Get all display URLs for the chart
+urls = chart.get_display_urls()
+
+# The response includes various URL formats
+for url_info in urls:
+    print(f"{url_info['type']}: {url_info['url']}")
+```
+
+This returns a list of URL dictionaries with different formats (e.g., responsive iframe, plain URL) that you can use to embed or share your chart.
+
+## Getting iframe code
+
+Get the HTML iframe embed code for your chart:
+
+```python
+# Get standard iframe code
+iframe_code = chart.get_iframe_code()
+print(iframe_code)
+
+# Get responsive iframe code
+responsive_iframe = chart.get_iframe_code(responsive=True)
+print(responsive_iframe)
+```
+
+The iframe code can be directly embedded in HTML pages. The `responsive=True` option generates code that automatically adjusts to container width.
+
+## Getting editor URL
+
+Get the Datawrapper URL to continue editing your chart:
+
+```python
+# Get the editor URL
+editor_url = chart.get_editor_url()
+print(f"Edit chart at: {editor_url}")
+```
+
+## Getting png URL
+
+Get the fallback image URL for use in noscript tags:
+
+```python
+# Get the PNG URL
+png_url = chart.get_png_url()
+print(f"PNG fallback: {png_url}")
+
+# Use in HTML noscript tags
+html = f'<noscript><img src="{png_url}" alt="Chart" /></noscript>'
+```
+
+This provides a static image fallback for environments where JavaScript is disabled. It's also a handy way to get a direct link to the chart image for other uses.

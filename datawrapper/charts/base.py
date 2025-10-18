@@ -928,3 +928,88 @@ class BaseChart(BaseModel):
 
         # Fetch the full chart data using the class's get method
         return self.__class__.get(chart_id=new_chart_id, access_token=access_token)
+
+    def get_display_urls(self, access_token: str | None = None) -> list[dict]:
+        """Get the URLs for the published chart, table or map.
+
+        Args:
+            access_token: Optional Datawrapper API access token.
+                         If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+
+        Returns:
+            A list of dictionaries containing the display URLs for the chart.
+
+        Raises:
+            ValueError: If no chart_id is set or no access token is available.
+            Exception: If the API request fails.
+        """
+        if not self.chart_id:
+            raise ValueError(
+                "No chart_id set. Use create() first or set chart_id manually."
+            )
+
+        # Get the client
+        client = self._get_client(access_token)
+
+        # Call the get_chart_display_urls method from the client
+        return client.get_chart_display_urls(chart_id=self.chart_id)
+
+    def get_iframe_code(
+        self, responsive: bool = False, access_token: str | None = None
+    ) -> str:
+        """Get the iframe embed code for the chart, table, or map.
+
+        Args:
+            responsive: Whether to return responsive iframe code, by default False
+            access_token: Optional Datawrapper API access token.
+                         If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+
+        Returns:
+            The iframe embed code as a string.
+
+        Raises:
+            ValueError: If no chart_id is set or no access token is available.
+            Exception: If the API request fails.
+        """
+        if not self.chart_id:
+            raise ValueError(
+                "No chart_id set. Use create() first or set chart_id manually."
+            )
+
+        # Get the client
+        client = self._get_client(access_token)
+
+        # Call the get_iframe_code method from the client
+        return client.get_iframe_code(chart_id=self.chart_id, responsive=responsive)
+
+    def get_editor_url(self) -> str:
+        """Get the Datawrapper editor URL for this chart.
+
+        Returns:
+            The Datawrapper editor URL as a string.
+
+        Raises:
+            ValueError: If no chart_id is set.
+        """
+        if not self.chart_id:
+            raise ValueError(
+                "No chart_id set. Use create() first or set chart_id manually."
+            )
+
+        return f"https://app.datawrapper.de/thomson-reuters/edit/{self.chart_id}/visualize#refine"
+
+    def get_png_url(self) -> str:
+        """Get the fallback PNG image URL for noscript tags.
+
+        Returns:
+            The PNG image URL in the format https://datawrapper.dwcdn.net/{chart_id}/full.png
+
+        Raises:
+            ValueError: If no chart_id is set.
+        """
+        if not self.chart_id:
+            raise ValueError(
+                "No chart_id set. Use create() first or set chart_id manually."
+            )
+
+        return f"https://datawrapper.dwcdn.net/{self.chart_id}/full.png"
