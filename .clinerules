@@ -910,6 +910,139 @@ python_format = ValueLabels.deserialize(
 - The separate `value-labels-always` field controls hover vs always behavior
 - This utility standardizes value label handling across different chart types while respecting their unique API requirements
 
+### BaseChart Operations Pattern
+
+The `BaseChart` class provides a consistent pattern for chart lifecycle operations that leverage the underlying Datawrapper API client. All chart-specific classes (LineChart, BarChart, etc.) inherit these methods.
+
+**Core Operations:**
+- `create()` - Create a new chart in Datawrapper
+- `update()` - Update an existing chart's configuration
+- `delete()` - Delete a chart from Datawrapper
+- `duplicate()` - Duplicate an existing chart (creates a copy)
+- `fork()` - Create a fork of an existing chart
+- `get()` - Retrieve an existing chart by ID (classmethod)
+
+**Common Pattern:**
+All operations follow a consistent pattern:
+1. Use `_get_client(access_token)` to obtain a Datawrapper client instance
+2. Accept optional `access_token` parameter (falls back to environment variable)
+3. Validate that `chart_id` is set (except for `create()`)
+4. Call the corresponding Datawrapper client method
+5. Handle the response appropriately
+
+**Delete Method:**
+```python
+def delete(self, access_token: str | None = None) -> bool:
+    """Delete this chart from Datawrapper.
+
+    Args:
+        access_token: Optional API access token
+
+    Returns:
+        bool: True if deletion was successful
+
+    Raises:
+        ValueError: If no chart_id is set
+    """
+    if not self.chart_id:
+        raise ValueError("No chart_id set. Use create() first or set chart_id manually.")
+    client = self._get_client(access_token)
+    result = client.delete_chart(chart_id=self.chart_id)
+    if result:
+        self.chart_id = None  # Clear chart_id after successful deletion
+    return result
+```
+
+**Duplicate Method:**
+```python
+def duplicate(self, access_token: str | None = None) -> "BaseChart":
+    """Duplicate the chart and create a new editable copy via the Datawrapper API.
+
+    Args:
+        access_token: Optional API access token
+
+    Returns:
+        BaseChart: A new BaseChart instance representing the duplicated chart.
+
+    Raises:
+        ValueError: If no chart_id is set or API response is invalid
+    """
+    if not self.chart_id:
+        raise ValueError("No chart_id set. Use create() first or set chart_id manually.")
+    client = self._get_client(access_token)
+    response = client.copy_chart(chart_id=self.chart_id)
+    if not isinstance(response, dict):
+        raise ValueError(f"Unexpected response type from API: {type(response)}")
+    new_chart_id = response.get("id")
+    if not new_chart_id or not isinstance(new_chart_id, str):
+        raise ValueError(f"Invalid chart ID received from API: {new_chart_id}")
+    return self.__class__.get(chart_id=new_chart_id, access_token=access_token)
+```
+
+**Fork Method:**
+```python
+def fork(self, access_token: str | None = None) -> "BaseChart":
+    """Create a fork of this chart in Datawrapper.
+
+    Args:
+        access_token: Optional API access token
+
+    Returns:
+        BaseChart: New chart instance with the forked chart's ID
+
+    Raises:
+        ValueError: If no chart_id is set or API response is invalid
+    """
+    if not self.chart_id:
+        raise ValueError("No chart_id set. Use create() first or set chart_id manually.")
+    client = self._get_client(access_token)
+    response = client.fork_chart(chart_id=self.chart_id)
+    if not isinstance(response, dict):
+        raise ValueError(f"Unexpected response type from API: {type(response)}")
+    new_chart_id = response.get("id")
+    if not new_chart_id or not isinstance(new_chart_id, str):
+        raise ValueError(f"Invalid chart ID received from API: {new_chart_id}")
+    return self.__class__.get(chart_id=new_chart_id, access_token=access_token)
+```
+
+**Design Decisions:**
+- `delete()` sets `self.chart_id = None` after successful deletion to prevent accidental reuse
+- `duplicate()` and `fork()` return new BaseChart instances (not just IDs) for better usability and method chaining
+- All methods validate response types and chart IDs to provide clear error messages
+- Methods use `self.__class__.get()` to ensure the correct chart type is returned
+- `duplicate()` method name avoids conflict with Pydantic's BaseModel.copy() method
+
+**Usage Examples:**
+```python
+from datawrapper.charts import LineChart
+
+# Create and delete
+chart = LineChart(title="Temperature Data")
+chart.create()
+chart.delete()  # chart.chart_id is now None
+
+# Duplicate a chart
+original = LineChart.get(chart_id="abc123")
+duplicate = original.duplicate()  # Returns new LineChart instance
+print(duplicate.chart_id)  # Different ID from original
+
+# Fork a chart
+original = LineChart.get(chart_id="abc123")
+fork = original.fork()  # Returns new LineChart instance
+fork.update()  # Can immediately work with the forked chart
+
+# With custom access token
+chart.delete(access_token="custom_token")
+duplicate = chart.duplicate(access_token="custom_token")
+fork = chart.fork(access_token="custom_token")
+```
+
+**Testing:**
+Comprehensive tests for these operations are in `tests/functional/test_base_chart_operations.py`:
+- All tests use fully mocked API calls (no API token required)
+- Tests cover successful operations, error cases, and custom access tokens
+- Test functions: `test_base_chart_delete_success`, `test_base_chart_delete_no_chart_id`, `test_base_chart_duplicate_success`, `test_base_chart_duplicate_invalid_response`, `test_base_chart_fork_success`, etc.
+
 ## Testing Patterns
 
 ### Mocking API Calls
