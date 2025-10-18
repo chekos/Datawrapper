@@ -35,14 +35,16 @@ chart = dw.AreaChart(
     # Format y-axis labels with abbreviated numbers (e.g., "1.2m")
     # Alternatively, you could provide "0.[00]a" if you'd rather not use the NumberFormat enum.
     y_grid_format=dw.NumberFormat.ABBREVIATED_TWO_DECIMALS,
-    # Format value labels show on hover with thousands separator and optional decimals
-    value_labels_format=dw.NumberFormat.THOUSANDS_WITH_OPTIONAL_DECIMALS,
+    # Align the y-axis labels to the right
+    y_grid_label_align="right",
+    # We always want the decimals for the tooltip number, but otherwise the same
+    tooltip_number_format="0.00a",
     # Whether to stack the areas on top of each other
     stack_areas=True,
     # Use smooth curves between data points
     interpolation=dw.LineInterpolation.CURVED,
     # Set fixed plot height in pixels
-    plot_height=388,
+    plot_height_fixed=388,
     # Map each region/country to a specific color
     color_category={
         "Austria-Hungary": "#1d81a2",
