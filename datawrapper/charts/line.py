@@ -11,7 +11,20 @@ from pydantic import (
 
 from .annos import AreaFill, RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .enums import DateFormat, LineDash, LineWidth, NumberFormat
+from .enums import (
+    DateFormat,
+    GridDisplay,
+    GridLabelAlign,
+    GridLabelPosition,
+    LineDash,
+    LineInterpolation,
+    LineWidth,
+    NumberFormat,
+    PlotHeightMode,
+    SymbolDisplay,
+    SymbolShape,
+    SymbolStyle,
+)
 from .serializers import (
     ColorCategory,
     CustomRange,
@@ -47,29 +60,19 @@ class LineSymbol(BaseModel):
         return v
 
     #: The shape of the symbol
-    shape: Literal[
-        "circle",
-        "square",
-        "diamond",
-        "triangleUp",
-        "triangleDown",
-        "cross",
-        "hexagon",
-        "star",
-        "wye",
-    ] = Field(
+    shape: SymbolShape | str = Field(
         default="circle",
         description="The shape of the symbol",
     )
 
     #: The style of the symbol
-    style: Literal["hollow", "fill"] = Field(
+    style: SymbolStyle | str = Field(
         default="fill",
         description="The style of the symbol",
     )
 
     #: Where to show the symbols
-    on: Literal["every", "first", "last", "both"] = Field(
+    on: SymbolDisplay | str = Field(
         default="last",
         description="Where to show the symbols",
     )
@@ -156,17 +159,24 @@ class Line(BaseModel):
     )
 
     #: The interpolation method to use when drawing lines
-    interpolation: Literal[
-        "linear",
-        "step",
-        "step-after",
-        "step-before",
-        "monotone-x",
-        "cardinal",
-    ] = Field(
+    interpolation: LineInterpolation | str = Field(
         default="linear",
         description="The interpolation method to use when drawing lines",
     )
+
+    @field_validator("interpolation")
+    @classmethod
+    def validate_interpolation(
+        cls, v: LineInterpolation | str
+    ) -> LineInterpolation | str:
+        """Validate that interpolation is a valid LineInterpolation value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in LineInterpolation]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid interpolation: {v}. Must be one of {valid_values}"
+                )
+        return v
 
     #: The width of the line (use LineWidth enum or raw API values)
     width: LineWidth | str = Field(
@@ -442,7 +452,7 @@ class LineChart(BaseChart):
     )
 
     #: Whether to show the x grid
-    x_grid: Literal["off", "on", "ticks"] = Field(
+    x_grid: GridDisplay | str = Field(
         default="off",
         alias="x-grid",
         description="Whether to show the x grid. The 'on' setting shows lines.",
@@ -474,21 +484,21 @@ class LineChart(BaseChart):
     )
 
     #: Whether to show the y grid
-    y_grid: Literal["off", "on", "ticks"] = Field(
+    y_grid: GridDisplay | str = Field(
         default="on",
         alias="y-grid",
         description="Whether to show the y grid. The 'on' setting shows lines.",
     )
 
     #: The labeling of the y grid labels
-    y_grid_labels: Literal["auto", "inside", "outside", "off"] = Field(
+    y_grid_labels: GridLabelPosition | str = Field(
         default="auto",
         alias="y-grid-labels",
         description="The labeling of the y grid labels",
     )
 
     #: Which side to put the y-axis labels on
-    y_grid_label_align: Literal["left", "right"] = Field(
+    y_grid_label_align: GridLabelAlign | str = Field(
         default="left",
         alias="y-grid-label-align",
         description="Which side to put the y-axis labels on",
@@ -520,17 +530,24 @@ class LineChart(BaseChart):
     )
 
     #: The interpolation method to use when drawing lines
-    interpolation: Literal[
-        "linear",
-        "step",
-        "step-after",
-        "step-before",
-        "monotone-x",
-        "cardinal",
-    ] = Field(
+    interpolation: LineInterpolation | str = Field(
         default="linear",
         description="The interpolation method to use when drawing lines",
     )
+
+    @field_validator("interpolation")
+    @classmethod
+    def validate_interpolation(
+        cls, v: LineInterpolation | str
+    ) -> LineInterpolation | str:
+        """Validate that interpolation is a valid LineInterpolation value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in LineInterpolation]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid interpolation: {v}. Must be one of {valid_values}"
+                )
+        return v
 
     #: Whether or not to draw a connector line between lines and labels
     connector_lines: bool = Field(
@@ -627,11 +644,11 @@ class LineChart(BaseChart):
     # Appearance
     #
 
-    #: How to set the plot height
-    plot_height_mode: Literal["ratio", "fixed"] = Field(
+    #: How to set the plot height (managed by PlotHeight serializer, not directly serialized)
+    plot_height_mode: PlotHeightMode | str = Field(
         default="fixed",
         alias="plot-height-mode",
-        description="How to set the plot height",
+        description="How to set the plot height (managed by PlotHeight serializer)",
     )
 
     #: The fixed height of the plot
@@ -647,6 +664,16 @@ class LineChart(BaseChart):
         alias="plot-height-ratio",
         description="The ratio of the plot height",
     )
+
+    @field_validator("plot_height_mode")
+    @classmethod
+    def validate_plot_height_mode(cls, v: PlotHeightMode | str) -> PlotHeightMode | str:
+        """Validate that plot_height_mode is a valid PlotHeightMode value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in PlotHeightMode]
+            if v not in valid_values:
+                raise ValueError(f"Invalid value: {v}. Must be one of {valid_values}")
+        return v
 
     #
     # Annotations

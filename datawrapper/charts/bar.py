@@ -1,11 +1,11 @@
 from typing import Any, Literal
 
 import pandas as pd
-from pydantic import BaseModel, ConfigDict, Field, model_serializer
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .enums import DateFormat, NumberFormat
+from .enums import DateFormat, NumberFormat, ReplaceFlagsType, ValueLabelAlignment
 from .serializers import ColorCategory, CustomRange, ModelListSerializer, ReplaceFlags
 
 
@@ -178,7 +178,7 @@ class BarChart(BaseChart):
     )
 
     #: The alignment of the value labels
-    value_label_alignment: Literal["left", "right"] = Field(
+    value_label_alignment: ValueLabelAlignment | str = Field(
         default="left",
         alias="value-label-alignment",
         description="The alignment of the value labels",
@@ -199,7 +199,7 @@ class BarChart(BaseChart):
     )
 
     #: Whether to replace country codes with flag
-    replace_flags: Literal["off", "4x3", "1x1", "circle"] = Field(
+    replace_flags: ReplaceFlagsType | str = Field(
         default="off",
         alias="replace-flags",
         description="Whether to replace country codes with flag",
@@ -397,6 +397,20 @@ class BarChart(BaseChart):
         alias="range-annotations",
         description="A list of range annotations to display on the chart",
     )
+
+    @field_validator("replace_flags")
+    @classmethod
+    def validate_replace_flags(
+        cls, v: ReplaceFlagsType | str
+    ) -> ReplaceFlagsType | str:
+        """Validate that replace_flags is a valid ReplaceFlagsType value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in ReplaceFlagsType]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid replace_flags: {v}. Must be one of {valid_values}"
+                )
+        return v
 
     @model_serializer
     def serialize_model(self) -> dict:

@@ -1,11 +1,20 @@
 from typing import Any, Literal
 
 import pandas as pd
-from pydantic import ConfigDict, Field, model_serializer
+from pydantic import ConfigDict, Field, field_validator, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .enums import DateFormat, NumberFormat
+from .enums import (
+    DateFormat,
+    NumberFormat,
+    PlotHeightMode,
+    RegressionMethod,
+    ScatterAxisPosition,
+    ScatterGridLines,
+    ScatterShape,
+    ScatterSize,
+)
 from .serializers import ModelListSerializer, PlotHeight
 
 
@@ -86,14 +95,14 @@ class ScatterPlot(BaseChart):
     )
 
     #: The position of the x-axis ticks and labels
-    x_position: Literal["bottom", "top", "zero", "off"] = Field(
+    x_position: ScatterAxisPosition | str = Field(
         default="bottom",
         alias="x-position",
         description="The position of the x-axis ticks and labels",
     )
 
     #: How to display x-axis grid lines
-    x_grid_lines: Literal["on", "off", "no-labels", "just-labels"] = Field(
+    x_grid_lines: ScatterGridLines | str = Field(
         default="on",
         alias="x-grid-lines",
         description="How to display x-axis grid lines",
@@ -139,14 +148,14 @@ class ScatterPlot(BaseChart):
     )
 
     #: The position of the y-axis ticks and labels
-    y_position: Literal["bottom", "top", "zero", "off", "left", "right"] = Field(
+    y_position: ScatterAxisPosition | str = Field(
         default="bottom",
         alias="y-position",
         description="The position of the y-axis ticks and labels",
     )
 
     #: How to display y-axis grid lines
-    y_grid_lines: Literal["on", "off", "no-labels", "just-labels"] = Field(
+    y_grid_lines: ScatterGridLines | str = Field(
         default="on",
         alias="y-grid-lines",
         description="How to display y-axis grid lines",
@@ -194,7 +203,7 @@ class ScatterPlot(BaseChart):
     #
 
     #: How the size is set
-    size: Literal["fixed", "dynamic"] = Field(
+    size: ScatterSize | str = Field(
         default="fixed",
         description="How the size is set",
     )
@@ -325,22 +334,13 @@ class ScatterPlot(BaseChart):
     #
 
     #: How to set the shape
-    shape: Literal["fixed", "dynamic"] = Field(
+    shape: ScatterShape | str = Field(
         default="fixed",
         description="How to set the shape",
     )
 
     #: Options for the shape
-    fixed_shape: Literal[
-        "symbolCircle",
-        "symbolCross",
-        "symbolDiamond",
-        "symbolSquare",
-        "symbolStar",
-        "symbolTriangle",
-        "symbolTriangleDown",
-        "symbolWye",
-    ] = Field(
+    fixed_shape: ScatterShape | str = Field(
         default="symbolCircle",
         alias="fixed-shape",
         description="Options for the shape",
@@ -364,14 +364,7 @@ class ScatterPlot(BaseChart):
     )
 
     #: The regression method to use
-    regression_method: Literal[
-        "linear",
-        "quadratic",
-        "cubic",
-        "power",
-        "logarithmic",
-        "exponential",
-    ] = Field(
+    regression_method: RegressionMethod | str = Field(
         default="linear",
         alias="regression-method",
         description="The regression method to use",
@@ -382,7 +375,7 @@ class ScatterPlot(BaseChart):
     #
 
     #: How to set the plot height
-    plot_height_mode: Literal["ratio", "fixed"] = Field(
+    plot_height_mode: PlotHeightMode | str = Field(
         default="fixed",
         alias="plot-height-mode",
         description="How to set the plot height",
@@ -401,6 +394,16 @@ class ScatterPlot(BaseChart):
         alias="plot-height-ratio",
         description="The ratio of the plot height",
     )
+
+    @field_validator("plot_height_mode")
+    @classmethod
+    def validate_plot_height_mode(cls, v: PlotHeightMode | str) -> PlotHeightMode | str:
+        """Validate that plot_height_mode is a valid PlotHeightMode value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in PlotHeightMode]
+            if v not in valid_values:
+                raise ValueError(f"Invalid value: {v}. Must be one of {valid_values}")
+        return v
 
     #
     # Annotations

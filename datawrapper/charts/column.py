@@ -1,11 +1,20 @@
 from typing import Any, Literal
 
 import pandas as pd
-from pydantic import ConfigDict, Field, model_serializer
+from pydantic import ConfigDict, Field, field_validator, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .enums import DateFormat, NumberFormat
+from .enums import (
+    DateFormat,
+    GridDisplay,
+    GridLabelAlign,
+    GridLabelPosition,
+    NumberFormat,
+    PlotHeightMode,
+    ValueLabelDisplay,
+    ValueLabelPlacement,
+)
 from .serializers import (
     ColorCategory,
     CustomRange,
@@ -78,7 +87,7 @@ class ColumnChart(BaseChart):
     )
 
     #: Whether to show the x grid
-    x_grid: Literal["off", "ticks", "lines"] = Field(
+    x_grid: GridDisplay | str = Field(
         default="off",
         alias="x-grid",
         description="Whether to show the x grid",
@@ -117,14 +126,14 @@ class ColumnChart(BaseChart):
     )
 
     #: The labeling of the y grid labels
-    y_grid_labels: Literal["inside", "outside", "off"] = Field(
+    y_grid_labels: GridLabelPosition | str = Field(
         default="outside",
         alias="y-grid-labels",
         description="The labeling of the y grid labels",
     )
 
     #: Which side to put the y-axis labels on
-    y_grid_label_align: Literal["left", "right"] = Field(
+    y_grid_label_align: GridLabelAlign | str = Field(
         default="left",
         alias="y-grid-label-align",
         description="Which side to put the y-axis labels on",
@@ -177,7 +186,7 @@ class ColumnChart(BaseChart):
     )
 
     #: How to set the plot height
-    plot_height_mode: Literal["ratio", "fixed"] = Field(
+    plot_height_mode: PlotHeightMode | str = Field(
         default="fixed",
         alias="plot-height-mode",
         description="How to set the plot height",
@@ -209,7 +218,7 @@ class ColumnChart(BaseChart):
     )
 
     #: Whether or not to show value labels
-    show_value_labels: Literal["hover", "always", "off"] = Field(
+    show_value_labels: ValueLabelDisplay | str = Field(
         default="hover",
         alias="show-value-labels",
         description="Whether or not to show value labels",
@@ -223,7 +232,7 @@ class ColumnChart(BaseChart):
     )
 
     #: Where to place the value labels
-    value_labels_placement: Literal["inside", "outside", "below"] = Field(
+    value_labels_placement: ValueLabelPlacement | str = Field(
         default="outside",
         alias="value-labels-placement",
         description="Where to place the value labels",
@@ -246,6 +255,16 @@ class ColumnChart(BaseChart):
         alias="range-annotations",
         description="A list of range annotations to display on the chart",
     )
+
+    @field_validator("plot_height_mode")
+    @classmethod
+    def validate_plot_height_mode(cls, v: PlotHeightMode | str) -> PlotHeightMode | str:
+        """Validate that plot_height_mode is a valid PlotHeightMode value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in PlotHeightMode]
+            if v not in valid_values:
+                raise ValueError(f"Invalid value: {v}. Must be one of {valid_values}")
+        return v
 
     @model_serializer
     def serialize_model(self) -> dict:

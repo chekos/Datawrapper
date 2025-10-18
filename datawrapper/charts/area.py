@@ -1,11 +1,19 @@
 from typing import Any, Literal
 
 import pandas as pd
-from pydantic import ConfigDict, Field, model_serializer
+from pydantic import ConfigDict, Field, field_validator, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .enums import DateFormat, NumberFormat
+from .enums import (
+    DateFormat,
+    GridDisplay,
+    GridLabelAlign,
+    GridLabelPosition,
+    LineInterpolation,
+    NumberFormat,
+    PlotHeightMode,
+)
 from .serializers import (
     ColorCategory,
     CustomRange,
@@ -77,7 +85,7 @@ class AreaChart(BaseChart):
     )
 
     #: Whether to show the x grid
-    x_grid: Literal["off", "on", "ticks"] = Field(
+    x_grid: GridDisplay | str = Field(
         default="off",
         alias="x-grid",
         description="Whether to show the x grid. The 'on' setting shows lines.",
@@ -109,21 +117,21 @@ class AreaChart(BaseChart):
     )
 
     #: Whether to show the y grid
-    y_grid: Literal["off", "on", "ticks"] = Field(
+    y_grid: GridDisplay | str = Field(
         default="on",
         alias="y-grid",
         description="Whether to show the y grid. The 'on' setting shows lines.",
     )
 
     #: The labeling of the y grid labels
-    y_grid_labels: Literal["auto", "inside", "outside", "off"] = Field(
+    y_grid_labels: GridLabelPosition | str = Field(
         default="auto",
         alias="y-grid-labels",
         description="The labeling of the y grid labels",
     )
 
     #: Which side to put the y-axis labels on
-    y_grid_label_align: Literal["left", "right"] = Field(
+    y_grid_label_align: GridLabelAlign | str = Field(
         default="left",
         alias="y-grid-label-align",
         description="Which side to put the y-axis labels on",
@@ -148,15 +156,7 @@ class AreaChart(BaseChart):
     )
 
     #: The interpolation method to use when drawing lines
-    interpolation: Literal[
-        "linear",
-        "step",
-        "step-after",
-        "step-before",
-        "monotone-x",
-        "cardinal",
-        "natural",
-    ] = Field(
+    interpolation: LineInterpolation | str = Field(
         default="linear",
         description="The interpolation method to use when drawing lines",
     )
@@ -244,7 +244,7 @@ class AreaChart(BaseChart):
     #
 
     #: How to set the plot height
-    plot_height_mode: Literal["ratio", "fixed"] = Field(
+    plot_height_mode: PlotHeightMode | str = Field(
         default="fixed",
         alias="plot-height-mode",
         description="How to set the plot height",
@@ -281,6 +281,30 @@ class AreaChart(BaseChart):
         alias="range-annotations",
         description="A list of range annotations to display on the chart",
     )
+
+    @field_validator("interpolation")
+    @classmethod
+    def validate_interpolation(
+        cls, v: LineInterpolation | str
+    ) -> LineInterpolation | str:
+        """Validate that interpolation is a valid LineInterpolation value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in LineInterpolation]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid interpolation: {v}. Must be one of {valid_values}"
+                )
+        return v
+
+    @field_validator("plot_height_mode")
+    @classmethod
+    def validate_plot_height_mode(cls, v: PlotHeightMode | str) -> PlotHeightMode | str:
+        """Validate that plot_height_mode is a valid PlotHeightMode value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in PlotHeightMode]
+            if v not in valid_values:
+                raise ValueError(f"Invalid value: {v}. Must be one of {valid_values}")
+        return v
 
     @model_serializer
     def serialize_model(self) -> dict:
