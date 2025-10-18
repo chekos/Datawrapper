@@ -35,7 +35,7 @@ Let's create a simple bar chart showing programming language popularity:
 
 ```python
 import pandas as pd
-from datawrapper import BarChart, NumberFormat
+import datawrapper as dw
 
 # Set up your data
 data = pd.DataFrame(
@@ -46,11 +46,11 @@ data = pd.DataFrame(
 )
 
 # Create a bar chart
-chart = BarChart(
+chart = dw.BarChart(
     title="Most Popular Programming Languages 2024",
     intro="Based on Stack Overflow Developer Survey",
     data=data,
-    value_label_format=NumberFormat.ONE_DECIMAL,
+    value_label_format=dw.NumberFormat.ONE_DECIMAL,
     source_name="Stack Overflow",
     source_url="https://insights.stackoverflow.com/survey/2024",
     byline="Datawrapper Quickstart Guide",
@@ -100,11 +100,11 @@ chart.export(output="png", filepath="chart.png", scale=2)
 ## Creating multiple charts
 
 ```python
-from datawrapper import BarChart, LineChart
+import datawrapper as dw
 
 
 for category in ["Sales", "Revenue", "Profit"]:
-    chart = BarChart(
+    chart = dw.BarChart(
         title=f"{category} by Region", data=get_data_for_category(category)
     )
     chart_id = chart.create()

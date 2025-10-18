@@ -9,7 +9,7 @@ This guide covers advanced chart operations including management, data updates, 
 Retrieve information about a specific chart:
 
 ```python
-chart_info = dw.get_chart(chart_id="abc123")
+chart_info = client.get_chart(chart_id="abc123")
 print(f"Title: {chart_info['title']}")
 print(f"Type: {chart_info['type']}")
 print(f"Status: {chart_info['publicVersion']}")
@@ -20,7 +20,7 @@ print(f"Status: {chart_info['publicVersion']}")
 Create a copy of an existing chart:
 
 ```python
-new_chart = dw.copy_chart(chart_id="abc123")
+new_chart = client.copy_chart(chart_id="abc123")
 print(f"New chart ID: {new_chart['id']}")
 ```
 
@@ -29,7 +29,7 @@ print(f"New chart ID: {new_chart['id']}")
 Delete a chart permanently:
 
 ```python
-dw.delete_chart(chart_id="abc123")
+client.delete_chart(chart_id="abc123")
 ```
 
 ### Fork a Chart
@@ -37,7 +37,7 @@ dw.delete_chart(chart_id="abc123")
 Fork a chart (create a copy with a reference to the original):
 
 ```python
-forked_chart = dw.fork_chart(chart_id="abc123")
+forked_chart = client.fork_chart(chart_id="abc123")
 print(f"Forked chart ID: {forked_chart['id']}")
 ```
 
@@ -54,27 +54,47 @@ import pandas as pd
 new_data = pd.read_csv("updated_data.csv")
 
 # Update the chart
-dw.add_data(chart_id="abc123", data=new_data)
+client.add_data(chart_id="abc123", data=new_data)
 
 # Republish to see changes
-dw.publish_chart(chart_id="abc123")
+client.publish_chart(chart_id="abc123")
 ```
 
 ### Update Data from URL
 
 Update chart data from a URL:
-
 ```python
-dw.add_data(
+client.add_data(
     chart_id="abc123",
     data="https://example.com/data.csv"
 )
-dw.publish_chart(chart_id="abc123")
+client.publish_chart(chart_id="abc123")
+```
+
+## Metadata Customization
+
+```python
+client.add_data(
+    chart_id="abc123",
+    data="https://example.com/data.csv"
+)
+client.publish_chart(chart_id="abc123")
 ```
 
 ## Metadata Customization
 
 ### Update Chart Metadata
+
+```python
+client.update_metadata(
+    chart_id="abc123",
+    metadata={
+        "title": "Updated Chart Title",
+        "description": "New description text"
+    }
+)
+client.publish_chart(chart_id="abc123")
+```
 
 Customize chart appearance and behavior through metadata:
 
@@ -90,8 +110,8 @@ metadata = {
     }
 }
 
-dw.update_metadata(chart_id="abc123", metadata=metadata)
-dw.publish_chart(chart_id="abc123")
+client.update_metadata(chart_id="abc123", metadata=metadata)
+client.publish_chart(chart_id="abc123")
 ```
 
 ### Update Chart Description
@@ -99,7 +119,7 @@ dw.publish_chart(chart_id="abc123")
 Add source information and byline:
 
 ```python
-dw.update_description(
+client.update_description(
     chart_id="abc123",
     source_name="U.S. Census Bureau",
     source_url="https://www.census.gov",
@@ -107,7 +127,7 @@ dw.update_description(
     intro="This chart shows population trends over the past decade.",
     notes="Data updated quarterly."
 )
-dw.publish_chart(chart_id="abc123")
+client.publish_chart(chart_id="abc123")
 ```
 
 ### Update Chart Title
@@ -115,9 +135,10 @@ dw.publish_chart(chart_id="abc123")
 Change the chart title:
 
 ```python
-dw.update_chart(
+client.update_chart(
     chart_id="abc123",
     title="Updated Chart Title",
     intro="New introduction text"
 )
-dw.publish_chart(chart_id="abc123")
+client.publish_chart(chart_id="abc123")
+```

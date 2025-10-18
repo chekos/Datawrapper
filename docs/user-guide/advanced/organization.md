@@ -9,7 +9,7 @@ This guide covers managing organizational structures in Datawrapper, including f
 Get all folders in your account:
 
 ```python
-folders = dw.get_folders()
+folders = client.get_folders()
 for folder in folders:
     print(f"{folder['id']}: {folder['name']}")
 ```
@@ -19,7 +19,7 @@ for folder in folders:
 Create a new folder:
 
 ```python
-folder = dw.create_folder(name="Q4 2024 Reports")
+folder = client.create_folder(name="Q4 2024 Reports")
 folder_id = folder['id']
 ```
 
@@ -28,7 +28,7 @@ folder_id = folder['id']
 Move a chart to a specific folder:
 
 ```python
-dw.move_chart(chart_id="abc123", folder_id=folder_id)
+client.move_chart(chart_id="abc123", folder_id=folder_id)
 ```
 
 ## Themes
@@ -38,7 +38,7 @@ dw.move_chart(chart_id="abc123", folder_id=folder_id)
 Get all themes available to your account:
 
 ```python
-themes = dw.get_themes()
+themes = client.get_themes()
 for theme in themes:
     print(f"{theme['id']}: {theme['title']}")
 ```
@@ -48,9 +48,9 @@ for theme in themes:
 Apply a theme when creating or updating a chart:
 
 ```python
-from datawrapper.charts import BarChart
+import datawrapper as dw
 
-chart = BarChart(
+chart = dw.BarChart(
     title="Themed Chart",
     data=df,
     theme="my-custom-theme"
@@ -65,7 +65,7 @@ chart_id = chart.create()
 If you're part of a team, retrieve team information:
 
 ```python
-teams = dw.get_teams()
+teams = client.get_teams()
 for team in teams:
     print(f"{team['id']}: {team['name']}")
 ```
@@ -75,4 +75,5 @@ for team in teams:
 Get settings for a specific team:
 
 ```python
-team_settings = dw.get_team_settings(team_id="team123")
+team_settings = client.get_team_settings(team_id="team123")
+```

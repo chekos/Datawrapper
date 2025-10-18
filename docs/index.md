@@ -40,8 +40,19 @@ user-guide/advanced/exporting.md
 ```{toctree}
 ---
 maxdepth: 1
-caption: Reference
+caption: API Reference
 ---
-user-guide/api.md
+user-guide/api/main-client.rst
+user-guide/api/chart-classes.rst
+user-guide/api/models.rst
+user-guide/api/enums.rst
+user-guide/api/exceptions.rst
+```
+
+```{toctree}
+---
+maxdepth: 1
+caption: Contributing
+---
 user-guide/contributing.md
 ```
