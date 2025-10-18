@@ -13,7 +13,7 @@ ArrowHead
 .. code-block:: python
 
    from datawrapper.charts import ArrowHead
-   connector = ConnectorLine(arrow_head=ArrowHead.ARROW)
+   connector = ConnectorLine(arrow_head=ArrowHead.TRIANGLE)
 
 .. enum-table:: datawrapper.charts.enums.ArrowHead
 
