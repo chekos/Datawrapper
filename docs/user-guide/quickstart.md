@@ -1,4 +1,4 @@
-# Quick Start Guide
+# Quick start guide
 
 This guide will help you create your first Datawrapper chart using the object-oriented Python API. You'll learn the basics of chart creation, configuration, and publishing.
 
