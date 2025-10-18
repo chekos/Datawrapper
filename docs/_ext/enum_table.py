@@ -89,6 +89,9 @@ class EnumTableDirective(SphinxDirective):
             value = member.value
             if value is None:
                 value_str = "``None``"
+            elif isinstance(value, bool):
+                # Handle boolean values (must check before int since bool is subclass of int)
+                value_str = f"``{value}``"
             elif isinstance(value, str):
                 # Escape special characters and show as string
                 escaped_value = value.replace("|", "\\|").replace("*", "\\*")
