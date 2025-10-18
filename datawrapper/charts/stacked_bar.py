@@ -2,7 +2,7 @@
 
 from typing import Any, Literal
 
-from pydantic import ConfigDict, Field, model_serializer
+from pydantic import ConfigDict, Field, field_validator, model_serializer
 
 from .base import BaseChart
 from .enums import DateFormat, NumberFormat, ReplaceFlagsType, ValueLabelMode
@@ -161,6 +161,20 @@ class StackedBarChart(BaseChart):
         alias="groups-column",
         description="The column to use for grouping",
     )
+
+    @field_validator("replace_flags")
+    @classmethod
+    def validate_replace_flags(
+        cls, v: ReplaceFlagsType | str
+    ) -> ReplaceFlagsType | str:
+        """Validate that replace_flags is a valid ReplaceFlagsType value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in ReplaceFlagsType]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid replace_flags: {v}. Must be one of {valid_values}"
+                )
+        return v
 
     @model_serializer
     def serialize_model(self) -> dict:

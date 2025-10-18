@@ -344,6 +344,20 @@ class AreaFill(BaseModel):
         default="linear", description="The interpolation method to use"
     )
 
+    @field_validator("interpolation")
+    @classmethod
+    def validate_interpolation(
+        cls, v: LineInterpolation | str
+    ) -> LineInterpolation | str:
+        """Validate that interpolation is a valid LineInterpolation value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in LineInterpolation]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid interpolation: {v}. Must be one of {valid_values}"
+                )
+        return v
+
     def serialize_model(self) -> dict:
         """Serialize the model to a dictionary for the Datawrapper API.
 

@@ -29,3 +29,5 @@ class LineInterpolation(str, Enum):
     STEP_BEFORE = "stepBefore"
     CARDINAL = "cardinal"
     MONOTONE = "monotone"
+    MONOTONE_X = "monotone-x"
+    NATURAL = "natural"

@@ -334,7 +334,7 @@ class ScatterPlot(BaseChart):
     #
 
     #: How to set the shape
-    shape: ScatterSize | str = Field(
+    shape: ScatterShape | str = Field(
         default="fixed",
         description="How to set the shape",
     )

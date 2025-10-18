@@ -164,6 +164,20 @@ class Line(BaseModel):
         description="The interpolation method to use when drawing lines",
     )
 
+    @field_validator("interpolation")
+    @classmethod
+    def validate_interpolation(
+        cls, v: LineInterpolation | str
+    ) -> LineInterpolation | str:
+        """Validate that interpolation is a valid LineInterpolation value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in LineInterpolation]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid interpolation: {v}. Must be one of {valid_values}"
+                )
+        return v
+
     #: The width of the line (use LineWidth enum or raw API values)
     width: LineWidth | str = Field(
         default="style1",
@@ -520,6 +534,20 @@ class LineChart(BaseChart):
         default="linear",
         description="The interpolation method to use when drawing lines",
     )
+
+    @field_validator("interpolation")
+    @classmethod
+    def validate_interpolation(
+        cls, v: LineInterpolation | str
+    ) -> LineInterpolation | str:
+        """Validate that interpolation is a valid LineInterpolation value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in LineInterpolation]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid interpolation: {v}. Must be one of {valid_values}"
+                )
+        return v
 
     #: Whether or not to draw a connector line between lines and labels
     connector_lines: bool = Field(

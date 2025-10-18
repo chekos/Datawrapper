@@ -1,7 +1,7 @@
 from typing import Any, Literal
 
 import pandas as pd
-from pydantic import BaseModel, ConfigDict, Field, model_serializer
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
@@ -397,6 +397,20 @@ class BarChart(BaseChart):
         alias="range-annotations",
         description="A list of range annotations to display on the chart",
     )
+
+    @field_validator("replace_flags")
+    @classmethod
+    def validate_replace_flags(
+        cls, v: ReplaceFlagsType | str
+    ) -> ReplaceFlagsType | str:
+        """Validate that replace_flags is a valid ReplaceFlagsType value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in ReplaceFlagsType]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid replace_flags: {v}. Must be one of {valid_values}"
+                )
+        return v
 
     @model_serializer
     def serialize_model(self) -> dict:

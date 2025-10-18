@@ -282,6 +282,20 @@ class AreaChart(BaseChart):
         description="A list of range annotations to display on the chart",
     )
 
+    @field_validator("interpolation")
+    @classmethod
+    def validate_interpolation(
+        cls, v: LineInterpolation | str
+    ) -> LineInterpolation | str:
+        """Validate that interpolation is a valid LineInterpolation value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in LineInterpolation]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid interpolation: {v}. Must be one of {valid_values}"
+                )
+        return v
+
     @field_validator("plot_height_mode")
     @classmethod
     def validate_plot_height_mode(cls, v: PlotHeightMode | str) -> PlotHeightMode | str:
