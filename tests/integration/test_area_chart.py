@@ -197,7 +197,7 @@ class TestAreaChartGet:
             # Verify area customization
             assert chart.stack_areas is True
             assert chart.area_opacity == 1
-            assert chart.interpolation == "monotone"
+            assert chart.interpolation == "natural"
             assert chart.sort_areas == "keep"
 
             # Verify color mapping (should have many regions)
