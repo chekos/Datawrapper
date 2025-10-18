@@ -7,7 +7,7 @@ This guide covers exporting Datawrapper charts in various formats including PNG,
 Export a chart as a PNG image:
 
 ```python
-dw.export_chart(
+client.export_chart(
     chart_id="abc123",
     output="png",
     filepath="chart.png",
@@ -20,7 +20,7 @@ dw.export_chart(
 Export a chart as a PDF:
 
 ```python
-dw.export_chart(
+client.export_chart(
     chart_id="abc123",
     output="pdf",
     filepath="chart.pdf"
@@ -32,7 +32,7 @@ dw.export_chart(
 Export a chart as an SVG:
 
 ```python
-dw.export_chart(
+client.export_chart(
     chart_id="abc123",
     output="svg",
     filepath="chart.svg"
@@ -44,10 +44,11 @@ dw.export_chart(
 Specify custom dimensions for the export:
 
 ```python
-dw.export_chart(
+client.export_chart(
     chart_id="abc123",
     output="png",
     filepath="chart.png",
     width=1200,
     height=800
 )
+```
