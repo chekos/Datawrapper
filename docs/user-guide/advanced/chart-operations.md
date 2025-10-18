@@ -1,0 +1,123 @@
+# Chart Operations
+
+This guide covers advanced chart operations including management, data updates, and metadata customization.
+
+## Chart Management
+
+### Get Chart Information
+
+Retrieve information about a specific chart:
+
+```python
+chart_info = dw.get_chart(chart_id="abc123")
+print(f"Title: {chart_info['title']}")
+print(f"Type: {chart_info['type']}")
+print(f"Status: {chart_info['publicVersion']}")
+```
+
+### Copy a Chart
+
+Create a copy of an existing chart:
+
+```python
+new_chart = dw.copy_chart(chart_id="abc123")
+print(f"New chart ID: {new_chart['id']}")
+```
+
+### Delete a Chart
+
+Delete a chart permanently:
+
+```python
+dw.delete_chart(chart_id="abc123")
+```
+
+### Fork a Chart
+
+Fork a chart (create a copy with a reference to the original):
+
+```python
+forked_chart = dw.fork_chart(chart_id="abc123")
+print(f"Forked chart ID: {forked_chart['id']}")
+```
+
+## Data Updates
+
+### Update Chart Data
+
+Update the data for an existing chart:
+
+```python
+import pandas as pd
+
+# Load new data
+new_data = pd.read_csv("updated_data.csv")
+
+# Update the chart
+dw.add_data(chart_id="abc123", data=new_data)
+
+# Republish to see changes
+dw.publish_chart(chart_id="abc123")
+```
+
+### Update Data from URL
+
+Update chart data from a URL:
+
+```python
+dw.add_data(
+    chart_id="abc123",
+    data="https://example.com/data.csv"
+)
+dw.publish_chart(chart_id="abc123")
+```
+
+## Metadata Customization
+
+### Update Chart Metadata
+
+Customize chart appearance and behavior through metadata:
+
+```python
+metadata = {
+    "visualize": {
+        "thick": True,
+        "custom-colors": {
+            "Category A": "#FF6B6B",
+            "Category B": "#4ECDC4",
+            "Category C": "#45B7D1"
+        }
+    }
+}
+
+dw.update_metadata(chart_id="abc123", metadata=metadata)
+dw.publish_chart(chart_id="abc123")
+```
+
+### Update Chart Description
+
+Add source information and byline:
+
+```python
+dw.update_description(
+    chart_id="abc123",
+    source_name="U.S. Census Bureau",
+    source_url="https://www.census.gov",
+    byline="Data Analysis Team",
+    intro="This chart shows population trends over the past decade.",
+    notes="Data updated quarterly."
+)
+dw.publish_chart(chart_id="abc123")
+```
+
+### Update Chart Title
+
+Change the chart title:
+
+```python
+dw.update_chart(
+    chart_id="abc123",
+    title="Updated Chart Title",
+    intro="New introduction text"
+)
+dw.publish_chart(chart_id="abc123")
