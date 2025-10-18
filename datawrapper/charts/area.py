@@ -21,6 +21,9 @@ class AreaChart(BaseChart):
     model_config = ConfigDict(
         populate_by_name=True,
         strict=True,
+        validate_assignment=True,
+        validate_default=True,
+        use_enum_values=True,
         json_schema_extra={
             "examples": [
                 {
