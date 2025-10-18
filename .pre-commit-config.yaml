@@ -40,3 +40,4 @@ repos:
         additional_dependencies:
           - pydantic-settings
           - types-requests
+          - types-docutils

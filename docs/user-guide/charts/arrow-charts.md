@@ -1,6 +1,6 @@
 # Arrow Charts
 
-## Basic Example
+## Example
 
 ```python
 import pandas as pd
@@ -39,10 +39,7 @@ chart = ArrowChart(
 chart.create()
 ```
 
-## API Reference
+## Reference
 
 ```{eval-rst}
-.. autoclass:: datawrapper.charts.ArrowChart
-   :members:
-   :inherited-members:
-   :exclude-members: model_config, model_fields, model_computed_fields
+.. parameter-table:: datawrapper.charts.ArrowChart

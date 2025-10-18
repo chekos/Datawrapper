@@ -1,6 +1,6 @@
 # Area Charts
 
-## Basic Example
+## Example
 
 ```python
 import pandas as pd
@@ -35,12 +35,8 @@ chart = AreaChart(
 chart.create()
 ```
 
-## API Reference
+## Reference
 
 ```{eval-rst}
-.. currentmodule:: datawrapper.charts
-
-.. autoclass:: AreaChart
-    :members:
-    :inherited-members:
+.. parameter-table:: datawrapper.charts.AreaChart
 ```

@@ -1,6 +1,6 @@
 # Stacked Bar Charts
 
-## Basic Example
+## Example
 
 ```python
 import pandas as pd
@@ -34,12 +34,8 @@ chart = StackedBarChart(
 chart.create()
 ```
 
-## API Reference
+## Reference
 
 ```{eval-rst}
-.. currentmodule:: datawrapper.charts
-
-.. autoclass:: StackedBarChart
-    :members:
-    :inherited-members:
+.. parameter-table:: datawrapper.charts.StackedBarChart
 ```
