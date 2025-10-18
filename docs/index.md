@@ -28,9 +28,20 @@ user-guide/charts/stacked-bar-charts.md
 ```{toctree}
 ---
 maxdepth: 1
+caption: Advanced usage
+---
+user-guide/advanced/authentication-and-account.md
+user-guide/advanced/organization.md
+user-guide/advanced/chart-operations.md
+user-guide/advanced/exporting.md
+```
+
+
+```{toctree}
+---
+maxdepth: 1
 caption: Reference
 ---
 user-guide/api.md
-user-guide/advanced-api.md
 user-guide/contributing.md
 ```
