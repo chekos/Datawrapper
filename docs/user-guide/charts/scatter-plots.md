@@ -1,6 +1,6 @@
 # Scatter Plots
 
-## Basic Example
+## Example
 
 ```python
 import pandas as pd
@@ -27,12 +27,8 @@ chart = ScatterPlot(
 chart.create()
 ```
 
-## API Reference
+## Reference
 
 ```{eval-rst}
-.. currentmodule:: datawrapper.charts
-
-.. autoclass:: ScatterPlot
-    :members:
-    :inherited-members:
+.. parameter-table:: datawrapper.charts.ScatterPlot
 ```

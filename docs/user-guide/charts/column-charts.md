@@ -1,6 +1,6 @@
 # Column Charts
 
-## Basic Example
+## Example
 
 ```python
 import pandas as pd
@@ -53,12 +53,8 @@ chart = ColumnChart(
 chart.create()
 ```
 
-## API Reference
+## Reference
 
 ```{eval-rst}
-.. currentmodule:: datawrapper.charts
-
-.. autoclass:: ColumnChart
-    :members:
-    :inherited-members:
+.. parameter-table:: datawrapper.charts.ColumnChart
 ```

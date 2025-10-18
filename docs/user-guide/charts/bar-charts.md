@@ -1,6 +1,6 @@
 # Bar Charts
 
-## Basic Example
+## Example
 
 ```python
 import pandas as pd
@@ -36,12 +36,8 @@ chart = BarChart(
 chart.create()
 ```
 
-## API Reference
+## Reference
 
 ```{eval-rst}
-.. currentmodule:: datawrapper.charts
-
-.. autoclass:: BarChart
-    :members:
-    :inherited-members:
+.. parameter-table:: datawrapper.charts.BarChart
 ```

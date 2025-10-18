@@ -1,6 +1,6 @@
 # Multiple Column Charts
 
-## Basic Example
+## Example
 
 ```python
 import pandas as pd
@@ -30,11 +30,8 @@ chart = MultipleColumnChart(
 chart.create()
 ```
 
-## API Reference
+## Reference
 
 ```{eval-rst}
-.. autoclass:: datawrapper.charts.MultipleColumnChart
-   :members:
-   :inherited-members:
-   :exclude-members: model_config, model_fields, model_computed_fields
+.. parameter-table:: datawrapper.charts.MultipleColumnChart
 ```

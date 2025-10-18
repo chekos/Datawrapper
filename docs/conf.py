@@ -4,6 +4,7 @@ import sys
 import datawrapper
 
 sys.path.insert(0, os.path.abspath(".."))
+sys.path.insert(0, os.path.abspath("_ext"))
 
 extensions = [
     "sphinx.ext.autosectionlabel",
@@ -13,6 +14,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.autosummary",
     "myst_parser",
+    "parameter_table",
 ]
 
 templates_path = ["_templates"]
