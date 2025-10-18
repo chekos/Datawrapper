@@ -8,6 +8,7 @@ maxdepth: 2
 caption: Getting started
 ---
 user-guide/quickstart.md
+user-guide/chart-operations.md
 ```
 
 ```{toctree}

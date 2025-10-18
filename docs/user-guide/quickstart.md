@@ -79,24 +79,6 @@ chart.update()
 chart.publish()
 ```
 
-## Exporting a chart
-
-Download your chart as an image:
-
-```python
-# Export as PNG (default)
-chart.export(output="png", filepath="chart.png")
-
-# Export as SVG
-chart.export(output="svg", filepath="chart.svg")
-
-# Export as PDF
-chart.export(output="pdf", filepath="chart.pdf")
-
-# High resolution PNG
-chart.export(output="png", filepath="chart.png", scale=2)
-```
-
 ## Creating multiple charts
 
 ```python
