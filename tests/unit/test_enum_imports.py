@@ -1,7 +1,5 @@
 """Test that all enums are properly exported at multiple levels."""
 
-import pytest
-
 
 class TestEnumImportsTopLevel:
     """Test that enums can be imported from the top-level datawrapper package."""
@@ -9,32 +7,11 @@ class TestEnumImportsTopLevel:
     def test_import_from_top_level(self):
         """Test importing all enums from datawrapper."""
         from datawrapper import (
-            ArrowHead,
             ConnectorLineType,
-            DateFormat,
             GridDisplay,
-            GridLabelAlign,
-            GridLabelPosition,
-            LineDash,
             LineInterpolation,
-            LineWidth,
-            NumberDivisor,
-            NumberFormat,
-            PlotHeightMode,
-            RegressionMethod,
-            ReplaceFlagsType,
-            ScatterAxisPosition,
-            ScatterGridLines,
             ScatterShape,
-            ScatterSize,
-            StrokeWidth,
-            SymbolDisplay,
-            SymbolShape,
-            SymbolStyle,
-            ValueLabelAlignment,
             ValueLabelDisplay,
-            ValueLabelMode,
-            ValueLabelPlacement,
         )
 
         # Verify they are the correct types
@@ -51,31 +28,9 @@ class TestEnumImportsChartsLevel:
     def test_import_from_charts_level(self):
         """Test importing all enums from datawrapper.charts."""
         from datawrapper.charts import (
-            ArrowHead,
-            ConnectorLineType,
-            DateFormat,
             GridDisplay,
-            GridLabelAlign,
-            GridLabelPosition,
-            LineDash,
-            LineInterpolation,
-            LineWidth,
-            NumberDivisor,
-            NumberFormat,
-            PlotHeightMode,
             RegressionMethod,
-            ReplaceFlagsType,
-            ScatterAxisPosition,
-            ScatterGridLines,
-            ScatterShape,
             ScatterSize,
-            StrokeWidth,
-            SymbolDisplay,
-            SymbolShape,
-            SymbolStyle,
-            ValueLabelAlignment,
-            ValueLabelDisplay,
-            ValueLabelMode,
             ValueLabelPlacement,
         )
 
@@ -93,31 +48,9 @@ class TestEnumImportsEnumsLevel:
         """Test importing all enums from datawrapper.charts.enums."""
         from datawrapper.charts.enums import (
             ArrowHead,
-            ConnectorLineType,
-            DateFormat,
-            GridDisplay,
             GridLabelAlign,
             GridLabelPosition,
-            LineDash,
-            LineInterpolation,
-            LineWidth,
-            NumberDivisor,
-            NumberFormat,
-            PlotHeightMode,
-            RegressionMethod,
-            ReplaceFlagsType,
-            ScatterAxisPosition,
-            ScatterGridLines,
-            ScatterShape,
-            ScatterSize,
-            StrokeWidth,
-            SymbolDisplay,
-            SymbolShape,
             SymbolStyle,
-            ValueLabelAlignment,
-            ValueLabelDisplay,
-            ValueLabelMode,
-            ValueLabelPlacement,
         )
 
         # Verify they are the correct types

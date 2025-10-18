@@ -1,7 +1,7 @@
 from typing import Any, Literal
 
 import pandas as pd
-from pydantic import ConfigDict, Field, model_serializer
+from pydantic import ConfigDict, Field, field_validator, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
@@ -11,6 +11,7 @@ from .enums import (
     GridLabelAlign,
     GridLabelPosition,
     NumberFormat,
+    PlotHeightMode,
     ValueLabelDisplay,
     ValueLabelPlacement,
 )
@@ -251,7 +252,7 @@ class MultipleColumnChart(BaseChart):
     )
 
     #: How to set the plot height
-    plot_height_mode: Literal["ratio", "fixed"] = Field(
+    plot_height_mode: PlotHeightMode | str = Field(
         default="fixed",
         alias="plot-height-mode",
         description="How to set the plot height",
@@ -270,6 +271,16 @@ class MultipleColumnChart(BaseChart):
         alias="plot-height-ratio",
         description="The ratio of the plot height",
     )
+
+    @field_validator("plot_height_mode")
+    @classmethod
+    def validate_plot_height_mode(cls, v: PlotHeightMode | str) -> PlotHeightMode | str:
+        """Validate that plot_height_mode is a valid PlotHeightMode value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in PlotHeightMode]
+            if v not in valid_values:
+                raise ValueError(f"Invalid value: {v}. Must be one of {valid_values}")
+        return v
 
     #
     # Tooltips

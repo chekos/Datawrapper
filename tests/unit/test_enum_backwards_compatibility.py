@@ -1,15 +1,11 @@
 """Test backwards compatibility and functionality of all enum types."""
 
-import pytest
-from pydantic import ValidationError
-
 from datawrapper.charts import (
     AreaChart,
     ArrowChart,
     BarChart,
     ColumnChart,
     LineChart,
-    MultipleColumnChart,
     ScatterPlot,
     StackedBarChart,
 )
@@ -38,7 +34,7 @@ from datawrapper.charts.enums import (
     ValueLabelMode,
     ValueLabelPlacement,
 )
-from datawrapper.charts.line import Line, LineSymbol, LineValueLabel
+from datawrapper.charts.line import Line, LineSymbol
 
 
 class TestGridDisplayEnum:
@@ -63,7 +59,6 @@ class TestGridDisplayEnum:
         )
         assert chart.x_grid == "on"
         assert chart.y_grid == "off"
-
 
 
 class TestGridLabelEnums:
@@ -490,7 +485,9 @@ class TestEnumSerialization:
         )
         serialized = chart.serialize_model()
         assert serialized["metadata"]["visualize"]["valueLabels"]["show"] == "hover"
-        assert serialized["metadata"]["visualize"]["valueLabels"]["placement"] == "inside"
+        assert (
+            serialized["metadata"]["visualize"]["valueLabels"]["placement"] == "inside"
+        )
 
     def test_line_chart_serialization(self):
         """Test LineChart serialization with enums."""
