@@ -23,6 +23,10 @@ class BaseChart(BaseModel):
 
     model_config = ConfigDict(
         populate_by_name=True,
+        arbitrary_types_allowed=True,
+        validate_assignment=True,
+        validate_default=True,
+        use_enum_values=True,
         json_schema_extra={
             "examples": [
                 # Example 1: A simple chart without much configuration
@@ -72,7 +76,6 @@ class BaseChart(BaseModel):
                 },
             ]
         },
-        arbitrary_types_allowed=True,  # To allow pandas DataFrame
     )
 
     #: The type of datawrapper chart to create
