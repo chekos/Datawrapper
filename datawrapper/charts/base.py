@@ -369,7 +369,7 @@ class BaseChart(BaseModel):
     @classmethod
     def warn_on_unrecognized_fields(cls, data: dict[str, Any]) -> dict[str, Any]:
         """Warn users about unrecognized fields that don't match model fields or aliases.
-        
+
         This validator checks incoming data against the model's defined fields and their
         aliases, issuing warnings for any keys that don't match. This helps catch typos
         and misunderstandings about the API without breaking initialization.

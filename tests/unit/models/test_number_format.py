@@ -1,7 +1,5 @@
 """Tests for NumberFormat enum."""
 
-import pytest
-
 from datawrapper.charts.enums import NumberFormat
 
 
@@ -19,42 +17,42 @@ class TestNumberFormat:
         assert NumberFormat.THREE_DECIMALS.value == "0.000"
         assert NumberFormat.UP_TO_ONE_DECIMAL.value == "0.[0]"
         assert NumberFormat.UP_TO_TWO_DECIMALS.value == "0.[00]"
-        
+
         # Percentage formats
         assert NumberFormat.PERCENT_INTEGER.value == "0%"
         assert NumberFormat.PERCENT_ONE_DECIMAL.value == "0.0%"
         assert NumberFormat.PERCENT_TWO_DECIMALS.value == "0.00%"
         assert NumberFormat.PERCENT_UP_TO_ONE_DECIMAL.value == "0.[0]%"
         assert NumberFormat.PERCENT_UP_TO_TWO_DECIMALS.value == "0.[00]%"
-        
+
         # Thousands separator and special formats
         assert NumberFormat.THOUSANDS_SEPARATOR.value == "0,0"
         assert NumberFormat.ORDINAL.value == "0o"
-        
+
         # Abbreviated formats
         assert NumberFormat.ABBREVIATED.value == "0a"
         assert NumberFormat.ABBREVIATED_ONE_DECIMAL.value == "0.[0]a"
         assert NumberFormat.ABBREVIATED_TWO_DECIMALS.value == "0.[00]a"
         assert NumberFormat.ABBREVIATED_THREE_DECIMALS.value == "0.[000] a"
-        
+
         # Sign display formats
         assert NumberFormat.PLUS_SIGN.value == "+0"
         assert NumberFormat.PLUS_SIGN_PERCENT.value == "+0%"
-        
+
         # Currency formats
         assert NumberFormat.CURRENCY_ABBREVIATED_WITH_PLUS.value == "+$0.[00]a"
         assert NumberFormat.CURRENCY_ABBREVIATED.value == "$0.[00]a"
         assert NumberFormat.CURRENCY_OPTIONAL_DECIMALS.value == "$0.[00]"
-        
+
         # Special formatting
         assert NumberFormat.ZERO_PADDED.value == "0000"
         assert NumberFormat.PARENTHESES_FOR_NEGATIVES.value == "(0,0.00)"
         assert NumberFormat.LEADING_DECIMAL.value == ".000"
-        
+
         # Scientific notation
         assert NumberFormat.SCIENTIFIC_NOTATION.value == "0,0e+0"
         assert NumberFormat.SCIENTIFIC_NOTATION_DECIMALS.value == "0.[00]e+0"
-        
+
         # Absolute value
         assert NumberFormat.ABSOLUTE_VALUE.value == "|0.0|"
 
@@ -79,6 +77,7 @@ class TestNumberFormat:
 
     def test_enum_in_type_union(self):
         """Test that enum works in a union type with str."""
+
         # This simulates how it's used in chart models
         def accept_format(fmt: NumberFormat | str) -> str:
             if isinstance(fmt, NumberFormat):
