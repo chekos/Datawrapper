@@ -5,7 +5,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .enums import DateFormat, NumberFormat
+from .enums import DateFormat, NumberFormat, ReplaceFlagsType, ValueLabelAlignment
 from .serializers import ColorCategory, CustomRange, ModelListSerializer, ReplaceFlags
 
 
@@ -178,7 +178,7 @@ class BarChart(BaseChart):
     )
 
     #: The alignment of the value labels
-    value_label_alignment: Literal["left", "right"] = Field(
+    value_label_alignment: ValueLabelAlignment | str = Field(
         default="left",
         alias="value-label-alignment",
         description="The alignment of the value labels",
@@ -199,7 +199,7 @@ class BarChart(BaseChart):
     )
 
     #: Whether to replace country codes with flag
-    replace_flags: Literal["off", "4x3", "1x1", "circle"] = Field(
+    replace_flags: ReplaceFlagsType | str = Field(
         default="off",
         alias="replace-flags",
         description="Whether to replace country codes with flag",

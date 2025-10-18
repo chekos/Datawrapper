@@ -2,6 +2,8 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from .enums import ArrowHead, ConnectorLineType, LineInterpolation, StrokeWidth
+
 
 class ConnectorLine(BaseModel):
     """A base class for the Datawrapper API's 'connector-line' attribute.
@@ -33,9 +35,21 @@ class ConnectorLine(BaseModel):
         return v
 
     #: The type of connector line
-    type: Literal["straight", "curveRight", "curveLeft"] = Field(
+    type: ConnectorLineType | str = Field(
         default="straight", description="The type of connector line"
     )
+
+    @field_validator("type")
+    @classmethod
+    def validate_type(cls, v: ConnectorLineType | str) -> ConnectorLineType | str:
+        """Validate that type is a valid ConnectorLineType value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in ConnectorLineType]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid connector line type: {v}. Must be one of {valid_values}"
+                )
+        return v
 
     #: Whether or not to show a circle at the end of the connector line
     circle: bool = Field(
@@ -44,12 +58,24 @@ class ConnectorLine(BaseModel):
     )
 
     #: The stroke width of the connector line
-    stroke: Literal[1, 2, 3] = Field(
+    stroke: StrokeWidth | int = Field(
         default=1, description="The stroke width of the connector line"
     )
 
+    @field_validator("stroke")
+    @classmethod
+    def validate_stroke(cls, v: StrokeWidth | int) -> StrokeWidth | int:
+        """Validate that stroke is a valid StrokeWidth value."""
+        if isinstance(v, int):
+            valid_values = [e.value for e in StrokeWidth]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid stroke width: {v}. Must be one of {valid_values}"
+                )
+        return v
+
     #: The arrow head of the connector line
-    arrow_head: Literal["lines", "triangle", False] = Field(
+    arrow_head: ArrowHead | str | bool = Field(
         default="lines",
         alias="arrowHead",
         description="The arrow head of the connector line",
@@ -314,16 +340,9 @@ class AreaFill(BaseModel):
     )
 
     #: The interpolation method to use when drawing lines
-    interpolation: Literal[
-        "linear",
-        "step",
-        "step-after",
-        "stepAfter",
-        "step-before",
-        "stepBefore",
-        "cardinal",
-        "monotone",
-    ] = Field(default="linear", description="The interpolation method to use")
+    interpolation: LineInterpolation | str = Field(
+        default="linear", description="The interpolation method to use"
+    )
 
     def serialize_model(self) -> dict:
         """Serialize the model to a dictionary for the Datawrapper API.
@@ -437,11 +456,23 @@ class RangeAnnotation(BaseModel):
     )
 
     #: The stroke width of the annotation, if the display style is a line
-    stroke_width: Literal[1, 2, 3] = Field(
+    stroke_width: StrokeWidth | int = Field(
         default=2,
         alias="strokeWidth",
         description="The stroke width of the annotation, if the display style is a line",
     )
+
+    @field_validator("stroke_width")
+    @classmethod
+    def validate_stroke_width(cls, v: StrokeWidth | int) -> StrokeWidth | int:
+        """Validate that stroke_width is a valid StrokeWidth value."""
+        if isinstance(v, int):
+            valid_values = [e.value for e in StrokeWidth]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid stroke width: {v}. Must be one of {valid_values}"
+                )
+        return v
 
     def serialize_model(self) -> dict:
         """Serialize the model to a dictionary for the Datawrapper API.

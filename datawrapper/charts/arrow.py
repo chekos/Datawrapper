@@ -4,7 +4,7 @@ import pandas as pd
 from pydantic import ConfigDict, Field, model_serializer
 
 from .base import BaseChart
-from .enums import DateFormat, NumberFormat
+from .enums import DateFormat, NumberFormat, ReplaceFlagsType
 from .serializers import ColorCategory, CustomRange, ReplaceFlags
 
 
@@ -70,11 +70,11 @@ class ArrowChart(BaseChart):
         description="Show the y-axis grid lines",
     )
 
-    #: Whether to replace country codes with flags
-    replace_flags: Literal["off", "4x3", "1x1", "circle"] = Field(
+    #: Whether to replace country codes with flags (use ReplaceFlagsType enum or raw string)
+    replace_flags: ReplaceFlagsType | str = Field(
         default="off",
         alias="replace-flags",
-        description="Whether to replace country codes with flags",
+        description="Whether to replace country codes with flags. Use ReplaceFlagsType enum for type safety or provide raw strings.",
     )
 
     #

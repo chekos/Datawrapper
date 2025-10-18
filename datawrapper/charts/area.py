@@ -5,7 +5,14 @@ from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .enums import DateFormat, NumberFormat
+from .enums import (
+    DateFormat,
+    GridDisplay,
+    GridLabelAlign,
+    GridLabelPosition,
+    LineInterpolation,
+    NumberFormat,
+)
 from .serializers import (
     ColorCategory,
     CustomRange,
@@ -77,7 +84,7 @@ class AreaChart(BaseChart):
     )
 
     #: Whether to show the x grid
-    x_grid: Literal["off", "on", "ticks"] = Field(
+    x_grid: GridDisplay | str = Field(
         default="off",
         alias="x-grid",
         description="Whether to show the x grid. The 'on' setting shows lines.",
@@ -109,21 +116,21 @@ class AreaChart(BaseChart):
     )
 
     #: Whether to show the y grid
-    y_grid: Literal["off", "on", "ticks"] = Field(
+    y_grid: GridDisplay | str = Field(
         default="on",
         alias="y-grid",
         description="Whether to show the y grid. The 'on' setting shows lines.",
     )
 
     #: The labeling of the y grid labels
-    y_grid_labels: Literal["auto", "inside", "outside", "off"] = Field(
+    y_grid_labels: GridLabelPosition | str = Field(
         default="auto",
         alias="y-grid-labels",
         description="The labeling of the y grid labels",
     )
 
     #: Which side to put the y-axis labels on
-    y_grid_label_align: Literal["left", "right"] = Field(
+    y_grid_label_align: GridLabelAlign | str = Field(
         default="left",
         alias="y-grid-label-align",
         description="Which side to put the y-axis labels on",
@@ -148,15 +155,7 @@ class AreaChart(BaseChart):
     )
 
     #: The interpolation method to use when drawing lines
-    interpolation: Literal[
-        "linear",
-        "step",
-        "step-after",
-        "step-before",
-        "monotone-x",
-        "cardinal",
-        "natural",
-    ] = Field(
+    interpolation: LineInterpolation | str = Field(
         default="linear",
         description="The interpolation method to use when drawing lines",
     )

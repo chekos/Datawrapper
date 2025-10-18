@@ -5,7 +5,15 @@ from pydantic import ConfigDict, Field, model_serializer
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
-from .enums import DateFormat, NumberFormat
+from .enums import (
+    DateFormat,
+    GridDisplay,
+    GridLabelAlign,
+    GridLabelPosition,
+    NumberFormat,
+    ValueLabelDisplay,
+    ValueLabelPlacement,
+)
 from .serializers import (
     ColorCategory,
     CustomRange,
@@ -78,7 +86,7 @@ class ColumnChart(BaseChart):
     )
 
     #: Whether to show the x grid
-    x_grid: Literal["off", "ticks", "lines"] = Field(
+    x_grid: GridDisplay | str = Field(
         default="off",
         alias="x-grid",
         description="Whether to show the x grid",
@@ -117,14 +125,14 @@ class ColumnChart(BaseChart):
     )
 
     #: The labeling of the y grid labels
-    y_grid_labels: Literal["inside", "outside", "off"] = Field(
+    y_grid_labels: GridLabelPosition | str = Field(
         default="outside",
         alias="y-grid-labels",
         description="The labeling of the y grid labels",
     )
 
     #: Which side to put the y-axis labels on
-    y_grid_label_align: Literal["left", "right"] = Field(
+    y_grid_label_align: GridLabelAlign | str = Field(
         default="left",
         alias="y-grid-label-align",
         description="Which side to put the y-axis labels on",
@@ -209,7 +217,7 @@ class ColumnChart(BaseChart):
     )
 
     #: Whether or not to show value labels
-    show_value_labels: Literal["hover", "always", "off"] = Field(
+    show_value_labels: ValueLabelDisplay | str = Field(
         default="hover",
         alias="show-value-labels",
         description="Whether or not to show value labels",
@@ -223,7 +231,7 @@ class ColumnChart(BaseChart):
     )
 
     #: Where to place the value labels
-    value_labels_placement: Literal["inside", "outside", "below"] = Field(
+    value_labels_placement: ValueLabelPlacement | str = Field(
         default="outside",
         alias="value-labels-placement",
         description="Where to place the value labels",
