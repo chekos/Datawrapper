@@ -5,22 +5,6 @@ Extra models
 
 Model classes provide structured configuration for chart elements and features.
 
-Line Configuration
-------------------
-.. currentmodule:: datawrapper.charts.line
-
-.. autoclass:: Line
-   :members:
-   :show-inheritance:
-
-.. autoclass:: LineSymbol
-   :members:
-   :show-inheritance:
-
-.. autoclass:: LineValueLabel
-   :members:
-   :show-inheritance:
-
 Annotations
 -----------
 .. currentmodule:: datawrapper.charts.annos
@@ -46,5 +30,21 @@ Column Format
    :show-inheritance:
 
 .. autoclass:: ColumnFormatList
+   :members:
+   :show-inheritance:
+
+Line Configuration
+------------------
+.. currentmodule:: datawrapper.charts.line
+
+.. autoclass:: Line
+   :members:
+   :show-inheritance:
+
+.. autoclass:: LineSymbol
+   :members:
+   :show-inheritance:
+
+.. autoclass:: LineValueLabel
    :members:
    :show-inheritance:

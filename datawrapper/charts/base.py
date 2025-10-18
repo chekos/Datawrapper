@@ -827,3 +827,104 @@ class BaseChart(BaseModel):
             filepath=filepath,
             display=display,
         )
+
+    def delete(self, access_token: str | None = None) -> bool:
+        """Delete the chart via the Datawrapper API.
+
+        Args:
+            access_token: Optional Datawrapper API access token.
+                         If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+
+        Returns:
+            True if the chart was deleted successfully.
+
+        Raises:
+            ValueError: If no chart_id is set or no access token is available.
+            Exception: If the API request fails.
+        """
+        if not self.chart_id:
+            raise ValueError(
+                "No chart_id set. Use create() first or set chart_id manually."
+            )
+
+        # Get the client
+        client = self._get_client(access_token)
+
+        # Call the delete_chart method from the client
+        result = client.delete_chart(chart_id=self.chart_id)
+
+        # Clear the chart_id after successful deletion
+        if result:
+            self.chart_id = None
+
+        return result
+
+    def duplicate(self, access_token: str | None = None) -> "BaseChart":
+        """Duplicate the chart and create a new editable copy via the Datawrapper API.
+
+        Args:
+            access_token: Optional Datawrapper API access token.
+                         If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+
+        Returns:
+            A new BaseChart instance representing the duplicated chart.
+
+        Raises:
+            ValueError: If no chart_id is set or no access token is available.
+            Exception: If the API request fails.
+        """
+        if not self.chart_id:
+            raise ValueError(
+                "No chart_id set. Use create() first or set chart_id manually."
+            )
+
+        # Get the client
+        client = self._get_client(access_token)
+
+        # Call the copy_chart method from the client
+        response = client.copy_chart(chart_id=self.chart_id)
+
+        # Extract the new chart ID
+        if not isinstance(response, dict):
+            raise ValueError(f"Unexpected response type from API: {type(response)}")
+        new_chart_id = response.get("id")
+        if not new_chart_id or not isinstance(new_chart_id, str):
+            raise ValueError(f"Invalid chart ID received from API: {new_chart_id}")
+
+        # Fetch the full chart data using the class's get method
+        return self.__class__.get(chart_id=new_chart_id, access_token=access_token)
+
+    def fork(self, access_token: str | None = None) -> "BaseChart":
+        """Fork the chart and create an editable copy via the Datawrapper API.
+
+        Args:
+            access_token: Optional Datawrapper API access token.
+                         If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+
+        Returns:
+            A new BaseChart instance representing the forked chart.
+
+        Raises:
+            ValueError: If no chart_id is set or no access token is available.
+            Exception: If the API request fails.
+        """
+        if not self.chart_id:
+            raise ValueError(
+                "No chart_id set. Use create() first or set chart_id manually."
+            )
+
+        # Get the client
+        client = self._get_client(access_token)
+
+        # Call the fork_chart method from the client
+        response = client.fork_chart(chart_id=self.chart_id)
+
+        # Extract the new chart ID
+        if not isinstance(response, dict):
+            raise ValueError(f"Unexpected response type from API: {type(response)}")
+        new_chart_id = response.get("id")
+        if not new_chart_id or not isinstance(new_chart_id, str):
+            raise ValueError(f"Invalid chart ID received from API: {new_chart_id}")
+
+        # Fetch the full chart data using the class's get method
+        return self.__class__.get(chart_id=new_chart_id, access_token=access_token)
