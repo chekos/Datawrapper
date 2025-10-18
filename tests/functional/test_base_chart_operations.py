@@ -1,6 +1,6 @@
 """Functional tests for BaseChart delete, duplicate, and fork methods with mocked API calls."""
 
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import pytest
 
@@ -10,22 +10,22 @@ from datawrapper.charts import ColumnChart
 
 def test_base_chart_delete_success():
     """Test the delete method with mocked API."""
-    with (
-        patch.object(Datawrapper, "post") as mock_post,
-        patch.object(Datawrapper, "delete") as mock_delete,
-    ):
-        # Mock create_chart response
-        mock_chart_info = {
-            "id": "test123",
-            "title": "Test Chart",
-            "type": "d3-bars",
-            "metadata": {"visualize": {}},
-        }
-        mock_post.return_value = mock_chart_info
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
 
-        # Mock delete_chart response
-        mock_delete.return_value = True
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "test123",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
 
+    # Mock delete_chart response
+    mock_client.delete_chart.return_value = True
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
         # Create a chart
         chart = ColumnChart(title="Test Chart")
         chart.create()
@@ -37,7 +37,7 @@ def test_base_chart_delete_success():
         result = chart.delete()
 
         # Verify the delete was called
-        mock_delete.assert_called_once_with(chart_id="test123")
+        mock_client.delete_chart.assert_called_once_with(chart_id="test123")
 
         # Verify the result
         assert result is True
@@ -57,22 +57,22 @@ def test_base_chart_delete_no_chart_id():
 
 def test_base_chart_delete_with_access_token():
     """Test the delete method with explicit access token."""
-    with (
-        patch.object(Datawrapper, "post") as mock_post,
-        patch.object(Datawrapper, "delete") as mock_delete,
-    ):
-        # Mock create_chart response
-        mock_chart_info = {
-            "id": "test456",
-            "title": "Test Chart",
-            "type": "d3-bars",
-            "metadata": {"visualize": {}},
-        }
-        mock_post.return_value = mock_chart_info
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
 
-        # Mock delete_chart response
-        mock_delete.return_value = True
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "test456",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
 
+    # Mock delete_chart response
+    mock_client.delete_chart.return_value = True
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
         # Create a chart
         chart = ColumnChart(title="Test Chart")
         chart.create(access_token="custom_token")
@@ -87,41 +87,40 @@ def test_base_chart_delete_with_access_token():
 
 def test_base_chart_duplicate_success():
     """Test the duplicate method with mocked API."""
-    with (
-        patch.object(Datawrapper, "post") as mock_post,
-        patch.object(Datawrapper, "get") as mock_get,
-    ):
-        # Mock create_chart response
-        mock_chart_info = {
-            "id": "original123",
-            "title": "Original Chart",
-            "type": "d3-bars",
-            "metadata": {"visualize": {}},
-        }
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
 
-        # Mock duplicate_chart response (via copy_chart API)
-        mock_copy_info = {
-            "id": "copy456",
-            "title": "Original Chart (Duplicate)",
-            "type": "d3-bars",
-        }
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "original123",
+        "title": "Original Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
 
-        # Mock get_chart response for the duplicated chart
-        mock_copied_chart_full = {
-            "id": "copy456",
-            "title": "Original Chart (Duplicate)",
-            "type": "d3-bars",
-            "metadata": {
-                "visualize": {},
-                "describe": {},
-                "data": {},
-            },
-        }
+    # Mock copy_chart response
+    mock_copy_info = {
+        "id": "copy456",
+        "title": "Original Chart (Duplicate)",
+        "type": "d3-bars",
+    }
+    mock_client.copy_chart.return_value = mock_copy_info
 
-        # Set up side effects for multiple calls
-        mock_post.side_effect = [mock_chart_info, mock_copy_info]
-        mock_get.return_value = mock_copied_chart_full
+    # Mock get_chart response for the duplicated chart
+    mock_copied_chart_full = {
+        "id": "copy456",
+        "title": "Original Chart (Duplicate)",
+        "type": "d3-bars",
+        "metadata": {
+            "visualize": {},
+            "describe": {},
+            "data": {},
+        },
+    }
+    mock_client.get_chart.return_value = mock_copied_chart_full
 
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
         # Create original chart
         original_chart = ColumnChart(title="Original Chart")
         original_chart.create()
@@ -132,11 +131,11 @@ def test_base_chart_duplicate_success():
         # Duplicate the chart
         copied_chart = original_chart.duplicate()
 
-        # Verify duplicate was called (via copy_chart API)
-        assert mock_post.call_count == 2
+        # Verify copy_chart was called
+        mock_client.copy_chart.assert_called_once_with(chart_id="original123")
 
         # Verify get_chart was called to fetch full data
-        mock_get.assert_called_once_with(url="/v3/charts/copy456")
+        mock_client.get_chart.assert_called_once_with(chart_id="copy456")
 
         # Verify the duplicated chart is a new instance
         assert isinstance(copied_chart, ColumnChart)
@@ -158,20 +157,22 @@ def test_base_chart_duplicate_no_chart_id():
 
 def test_base_chart_duplicate_invalid_response():
     """Test the duplicate method handles invalid API response."""
-    with (
-        patch.object(Datawrapper, "post") as mock_post,
-    ):
-        # Mock create_chart response
-        mock_chart_info = {
-            "id": "test789",
-            "title": "Test Chart",
-            "type": "d3-bars",
-            "metadata": {"visualize": {}},
-        }
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
 
-        # Mock invalid duplicate response (not a dict)
-        mock_post.side_effect = [mock_chart_info, "invalid_response"]
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "test789",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
 
+    # Mock invalid copy_chart response (not a dict)
+    mock_client.copy_chart.return_value = "invalid_response"
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
         # Create chart
         chart = ColumnChart(title="Test Chart")
         chart.create()
@@ -183,25 +184,26 @@ def test_base_chart_duplicate_invalid_response():
 
 def test_base_chart_duplicate_missing_id():
     """Test the duplicate method handles response with missing ID."""
-    with (
-        patch.object(Datawrapper, "post") as mock_post,
-    ):
-        # Mock create_chart response
-        mock_chart_info = {
-            "id": "test999",
-            "title": "Test Chart",
-            "type": "d3-bars",
-            "metadata": {"visualize": {}},
-        }
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
 
-        # Mock duplicate response without ID
-        mock_copy_info = {
-            "title": "Test Chart (Duplicate)",
-            "type": "d3-bars",
-        }
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "test999",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
 
-        mock_post.side_effect = [mock_chart_info, mock_copy_info]
+    # Mock copy_chart response without ID
+    mock_copy_info = {
+        "title": "Test Chart (Duplicate)",
+        "type": "d3-bars",
+    }
+    mock_client.copy_chart.return_value = mock_copy_info
 
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
         # Create chart
         chart = ColumnChart(title="Test Chart")
         chart.create()
@@ -213,43 +215,42 @@ def test_base_chart_duplicate_missing_id():
 
 def test_base_chart_fork_success():
     """Test the fork method with mocked API."""
-    with (
-        patch.object(Datawrapper, "post") as mock_post,
-        patch.object(Datawrapper, "get") as mock_get,
-    ):
-        # Mock create_chart response
-        mock_chart_info = {
-            "id": "original789",
-            "title": "Original Chart",
-            "type": "d3-bars",
-            "metadata": {"visualize": {}},
-        }
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
 
-        # Mock fork_chart response
-        mock_fork_info = {
-            "id": "fork123",
-            "title": "Original Chart (Fork)",
-            "type": "d3-bars",
-            "forkedFrom": "original789",
-        }
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "original789",
+        "title": "Original Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
 
-        # Mock get_chart response for the forked chart
-        mock_forked_chart_full = {
-            "id": "fork123",
-            "title": "Original Chart (Fork)",
-            "type": "d3-bars",
-            "forkedFrom": "original789",
-            "metadata": {
-                "visualize": {},
-                "describe": {},
-                "data": {},
-            },
-        }
+    # Mock fork_chart response
+    mock_fork_info = {
+        "id": "fork123",
+        "title": "Original Chart (Fork)",
+        "type": "d3-bars",
+        "forkedFrom": "original789",
+    }
+    mock_client.fork_chart.return_value = mock_fork_info
 
-        # Set up side effects for multiple calls
-        mock_post.side_effect = [mock_chart_info, mock_fork_info]
-        mock_get.return_value = mock_forked_chart_full
+    # Mock get_chart response for the forked chart
+    mock_forked_chart_full = {
+        "id": "fork123",
+        "title": "Original Chart (Fork)",
+        "type": "d3-bars",
+        "forkedFrom": "original789",
+        "metadata": {
+            "visualize": {},
+            "describe": {},
+            "data": {},
+        },
+    }
+    mock_client.get_chart.return_value = mock_forked_chart_full
 
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
         # Create original chart
         original_chart = ColumnChart(title="Original Chart")
         original_chart.create()
@@ -261,10 +262,10 @@ def test_base_chart_fork_success():
         forked_chart = original_chart.fork()
 
         # Verify fork_chart was called
-        assert mock_post.call_count == 2
+        mock_client.fork_chart.assert_called_once_with(chart_id="original789")
 
         # Verify get_chart was called to fetch full data
-        mock_get.assert_called_once_with(url="/v3/charts/fork123")
+        mock_client.get_chart.assert_called_once_with(chart_id="fork123")
 
         # Verify the forked chart is a new instance
         assert isinstance(forked_chart, ColumnChart)
@@ -286,20 +287,22 @@ def test_base_chart_fork_no_chart_id():
 
 def test_base_chart_fork_invalid_response():
     """Test the fork method handles invalid API response."""
-    with (
-        patch.object(Datawrapper, "post") as mock_post,
-    ):
-        # Mock create_chart response
-        mock_chart_info = {
-            "id": "test111",
-            "title": "Test Chart",
-            "type": "d3-bars",
-            "metadata": {"visualize": {}},
-        }
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
 
-        # Mock invalid fork_chart response (not a dict)
-        mock_post.side_effect = [mock_chart_info, ["invalid", "response"]]
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "test111",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
 
+    # Mock invalid fork_chart response (not a dict)
+    mock_client.fork_chart.return_value = ["invalid", "response"]
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
         # Create chart
         chart = ColumnChart(title="Test Chart")
         chart.create()
@@ -311,25 +314,26 @@ def test_base_chart_fork_invalid_response():
 
 def test_base_chart_fork_missing_id():
     """Test the fork method handles response with missing ID."""
-    with (
-        patch.object(Datawrapper, "post") as mock_post,
-    ):
-        # Mock create_chart response
-        mock_chart_info = {
-            "id": "test222",
-            "title": "Test Chart",
-            "type": "d3-bars",
-            "metadata": {"visualize": {}},
-        }
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
 
-        # Mock fork_chart response without ID
-        mock_fork_info = {
-            "title": "Test Chart (Fork)",
-            "type": "d3-bars",
-        }
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "test222",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
 
-        mock_post.side_effect = [mock_chart_info, mock_fork_info]
+    # Mock fork_chart response without ID
+    mock_fork_info = {
+        "title": "Test Chart (Fork)",
+        "type": "d3-bars",
+    }
+    mock_client.fork_chart.return_value = mock_fork_info
 
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
         # Create chart
         chart = ColumnChart(title="Test Chart")
         chart.create()
@@ -341,40 +345,40 @@ def test_base_chart_fork_missing_id():
 
 def test_base_chart_fork_with_access_token():
     """Test the fork method with explicit access token."""
-    with (
-        patch.object(Datawrapper, "post") as mock_post,
-        patch.object(Datawrapper, "get") as mock_get,
-    ):
-        # Mock create_chart response
-        mock_chart_info = {
-            "id": "original333",
-            "title": "Original Chart",
-            "type": "d3-bars",
-            "metadata": {"visualize": {}},
-        }
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
 
-        # Mock fork_chart response
-        mock_fork_info = {
-            "id": "fork444",
-            "title": "Original Chart (Fork)",
-            "type": "d3-bars",
-        }
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "original333",
+        "title": "Original Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
 
-        # Mock get_chart response
-        mock_forked_chart_full = {
-            "id": "fork444",
-            "title": "Original Chart (Fork)",
-            "type": "d3-bars",
-            "metadata": {
-                "visualize": {},
-                "describe": {},
-                "data": {},
-            },
-        }
+    # Mock fork_chart response
+    mock_fork_info = {
+        "id": "fork444",
+        "title": "Original Chart (Fork)",
+        "type": "d3-bars",
+    }
+    mock_client.fork_chart.return_value = mock_fork_info
 
-        mock_post.side_effect = [mock_chart_info, mock_fork_info]
-        mock_get.return_value = mock_forked_chart_full
+    # Mock get_chart response
+    mock_forked_chart_full = {
+        "id": "fork444",
+        "title": "Original Chart (Fork)",
+        "type": "d3-bars",
+        "metadata": {
+            "visualize": {},
+            "describe": {},
+            "data": {},
+        },
+    }
+    mock_client.get_chart.return_value = mock_forked_chart_full
 
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
         # Create chart with custom token
         chart = ColumnChart(title="Original Chart")
         chart.create(access_token="custom_token")
@@ -389,40 +393,40 @@ def test_base_chart_fork_with_access_token():
 
 def test_base_chart_duplicate_with_access_token():
     """Test the duplicate method with explicit access token."""
-    with (
-        patch.object(Datawrapper, "post") as mock_post,
-        patch.object(Datawrapper, "get") as mock_get,
-    ):
-        # Mock create_chart response
-        mock_chart_info = {
-            "id": "original555",
-            "title": "Original Chart",
-            "type": "d3-bars",
-            "metadata": {"visualize": {}},
-        }
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
 
-        # Mock duplicate response
-        mock_copy_info = {
-            "id": "copy666",
-            "title": "Original Chart (Duplicate)",
-            "type": "d3-bars",
-        }
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "original555",
+        "title": "Original Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
 
-        # Mock get_chart response for duplicated chart
-        mock_copied_chart_full = {
-            "id": "copy666",
-            "title": "Original Chart (Duplicate)",
-            "type": "d3-bars",
-            "metadata": {
-                "visualize": {},
-                "describe": {},
-                "data": {},
-            },
-        }
+    # Mock copy_chart response
+    mock_copy_info = {
+        "id": "copy666",
+        "title": "Original Chart (Duplicate)",
+        "type": "d3-bars",
+    }
+    mock_client.copy_chart.return_value = mock_copy_info
 
-        mock_post.side_effect = [mock_chart_info, mock_copy_info]
-        mock_get.return_value = mock_copied_chart_full
+    # Mock get_chart response for duplicated chart
+    mock_copied_chart_full = {
+        "id": "copy666",
+        "title": "Original Chart (Duplicate)",
+        "type": "d3-bars",
+        "metadata": {
+            "visualize": {},
+            "describe": {},
+            "data": {},
+        },
+    }
+    mock_client.get_chart.return_value = mock_copied_chart_full
 
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
         # Create chart with custom token
         chart = ColumnChart(title="Original Chart")
         chart.create(access_token="custom_token")
