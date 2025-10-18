@@ -81,7 +81,7 @@ client.add_data(
 client.publish_chart(chart_id="abc123")
 ```
 
-## Metadata Customization
+## Chart Customization
 
 ### Update Chart Metadata
 
