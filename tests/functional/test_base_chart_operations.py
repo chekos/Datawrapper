@@ -428,6 +428,276 @@ def test_base_chart_duplicate_with_access_token():
         assert copied_chart.chart_id == "copy666"
 
 
+def test_base_chart_get_display_urls_success():
+    """Test the get_display_urls method with mocked API."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "test123",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    # Mock get_chart_display_urls response
+    mock_display_urls = [
+        {"url": "https://datawrapper.dwcdn.net/test123/1/", "type": "default"},
+        {"url": "https://datawrapper.dwcdn.net/test123/plain.html", "type": "plain"},
+    ]
+    mock_client.get_chart_display_urls.return_value = mock_display_urls
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create a chart
+        chart = ColumnChart(title="Test Chart")
+        chart.create()
+
+        # Get display URLs
+        result = chart.get_display_urls()
+
+        # Verify the method was called
+        mock_client.get_chart_display_urls.assert_called_once_with(chart_id="test123")
+
+        # Verify the result
+        assert result == mock_display_urls
+        assert len(result) == 2
+        assert result[0]["url"] == "https://datawrapper.dwcdn.net/test123/1/"
+
+
+def test_base_chart_get_display_urls_no_chart_id():
+    """Test the get_display_urls method raises error when no chart_id is set."""
+    chart = ColumnChart(title="Test Chart")
+
+    # Attempt to get display URLs without chart_id should raise ValueError
+    with pytest.raises(ValueError, match="No chart_id set"):
+        chart.get_display_urls()
+
+
+def test_base_chart_get_display_urls_with_access_token():
+    """Test the get_display_urls method with explicit access token."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "test456",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    # Mock get_chart_display_urls response
+    mock_display_urls = [
+        {"url": "https://datawrapper.dwcdn.net/test456/1/", "type": "default"}
+    ]
+    mock_client.get_chart_display_urls.return_value = mock_display_urls
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create a chart
+        chart = ColumnChart(title="Test Chart")
+        chart.create(access_token="custom_token")
+
+        # Get display URLs with custom token
+        result = chart.get_display_urls(access_token="custom_token")
+
+        # Verify the result
+        assert result == mock_display_urls
+
+
+def test_base_chart_get_iframe_code_success():
+    """Test the get_iframe_code method with mocked API."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "test789",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    # Mock get_iframe_code response
+    mock_iframe_code = '<iframe src="https://datawrapper.dwcdn.net/test789/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="400"></iframe>'
+    mock_client.get_iframe_code.return_value = mock_iframe_code
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create a chart
+        chart = ColumnChart(title="Test Chart")
+        chart.create()
+
+        # Get iframe code
+        result = chart.get_iframe_code()
+
+        # Verify the method was called
+        mock_client.get_iframe_code.assert_called_once_with(
+            chart_id="test789", responsive=False
+        )
+
+        # Verify the result
+        assert result == mock_iframe_code
+        assert "test789" in result
+        assert "<iframe" in result
+
+
+def test_base_chart_get_iframe_code_responsive():
+    """Test the get_iframe_code method with responsive=True."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "test999",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    # Mock get_iframe_code response for responsive
+    mock_iframe_code = '<iframe src="https://datawrapper.dwcdn.net/test999/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="400"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();</script>'
+    mock_client.get_iframe_code.return_value = mock_iframe_code
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create a chart
+        chart = ColumnChart(title="Test Chart")
+        chart.create()
+
+        # Get responsive iframe code
+        result = chart.get_iframe_code(responsive=True)
+
+        # Verify the method was called with responsive=True
+        mock_client.get_iframe_code.assert_called_once_with(
+            chart_id="test999", responsive=True
+        )
+
+        # Verify the result
+        assert result == mock_iframe_code
+        assert "test999" in result
+        assert "<script" in result
+
+
+def test_base_chart_get_iframe_code_no_chart_id():
+    """Test the get_iframe_code method raises error when no chart_id is set."""
+    chart = ColumnChart(title="Test Chart")
+
+    # Attempt to get iframe code without chart_id should raise ValueError
+    with pytest.raises(ValueError, match="No chart_id set"):
+        chart.get_iframe_code()
+
+
+def test_base_chart_get_iframe_code_with_access_token():
+    """Test the get_iframe_code method with explicit access token."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "test111",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    # Mock get_iframe_code response
+    mock_iframe_code = '<iframe src="https://datawrapper.dwcdn.net/test111/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="400"></iframe>'
+    mock_client.get_iframe_code.return_value = mock_iframe_code
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create a chart
+        chart = ColumnChart(title="Test Chart")
+        chart.create(access_token="custom_token")
+
+        # Get iframe code with custom token
+        result = chart.get_iframe_code(access_token="custom_token")
+
+        # Verify the result
+        assert result == mock_iframe_code
+
+
+def test_base_chart_get_editor_url_success():
+    """Test the get_editor_url method."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "aBcDe",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create a chart
+        chart = ColumnChart(title="Test Chart")
+        chart.create()
+
+        # Get editor URL
+        result = chart.get_editor_url()
+
+        # Verify the result
+        expected_url = (
+            "https://app.datawrapper.de/thomson-reuters/edit/aBcDe/visualize#refine"
+        )
+        assert result == expected_url
+        assert "aBcDe" in result
+        assert "visualize#refine" in result
+
+
+def test_base_chart_get_editor_url_no_chart_id():
+    """Test the get_editor_url method raises error when no chart_id is set."""
+    chart = ColumnChart(title="Test Chart")
+
+    # Attempt to get editor URL without chart_id should raise ValueError
+    with pytest.raises(ValueError, match="No chart_id set"):
+        chart.get_editor_url()
+
+
+def test_base_chart_get_png_url_success():
+    """Test the get_png_url method."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "XyZ123",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create a chart
+        chart = ColumnChart(title="Test Chart")
+        chart.create()
+
+        # Get PNG URL
+        result = chart.get_png_url()
+
+        # Verify the result
+        expected_url = "https://datawrapper.dwcdn.net/XyZ123/full.png"
+        assert result == expected_url
+        assert "XyZ123" in result
+        assert "full.png" in result
+
+
+def test_base_chart_get_png_url_no_chart_id():
+    """Test the get_png_url method raises error when no chart_id is set."""
+    chart = ColumnChart(title="Test Chart")
+
+    # Attempt to get PNG URL without chart_id should raise ValueError
+    with pytest.raises(ValueError, match="No chart_id set"):
+        chart.get_png_url()
+
+
 if __name__ == "__main__":
     # Run the tests directly
     test_base_chart_delete_success()
@@ -465,3 +735,36 @@ if __name__ == "__main__":
 
     test_base_chart_duplicate_with_access_token()
     print("✅ test_base_chart_duplicate_with_access_token passed")
+
+    test_base_chart_get_display_urls_success()
+    print("✅ test_base_chart_get_display_urls_success passed")
+
+    test_base_chart_get_display_urls_no_chart_id()
+    print("✅ test_base_chart_get_display_urls_no_chart_id passed")
+
+    test_base_chart_get_display_urls_with_access_token()
+    print("✅ test_base_chart_get_display_urls_with_access_token passed")
+
+    test_base_chart_get_iframe_code_success()
+    print("✅ test_base_chart_get_iframe_code_success passed")
+
+    test_base_chart_get_iframe_code_responsive()
+    print("✅ test_base_chart_get_iframe_code_responsive passed")
+
+    test_base_chart_get_iframe_code_no_chart_id()
+    print("✅ test_base_chart_get_iframe_code_no_chart_id passed")
+
+    test_base_chart_get_iframe_code_with_access_token()
+    print("✅ test_base_chart_get_iframe_code_with_access_token passed")
+
+    test_base_chart_get_editor_url_success()
+    print("✅ test_base_chart_get_editor_url_success passed")
+
+    test_base_chart_get_editor_url_no_chart_id()
+    print("✅ test_base_chart_get_editor_url_no_chart_id passed")
+
+    test_base_chart_get_png_url_success()
+    print("✅ test_base_chart_get_png_url_success passed")
+
+    test_base_chart_get_png_url_no_chart_id()
+    print("✅ test_base_chart_get_png_url_no_chart_id passed")
