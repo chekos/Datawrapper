@@ -71,12 +71,11 @@ chart.publish()
 
 ```python
 # Get the chart from the API
-chart = dw.get(chart_id)
+chart = dw.get_chart(chart_id)
 
 # Make a change
 chart.title = "Most Popular Programming Languages in 2024!!!"
 chart.update()
-chart.publish()
 ```
 
 ## Creating multiple charts
