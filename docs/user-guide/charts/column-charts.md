@@ -1,4 +1,4 @@
-# Column Charts
+# ColumnChart
 
 ## Example
 

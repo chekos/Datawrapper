@@ -1,4 +1,4 @@
-# Scatter Plots
+# ScatterPlot
 
 ## Example
 

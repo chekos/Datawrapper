@@ -1,4 +1,4 @@
-# Stacked Bar Charts
+# StackedBarChart
 
 ## Example
 

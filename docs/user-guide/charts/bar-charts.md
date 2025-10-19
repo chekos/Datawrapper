@@ -1,4 +1,4 @@
-# Bar Charts
+# BarChart
 
 ## Example
 

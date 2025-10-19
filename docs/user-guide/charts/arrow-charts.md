@@ -1,4 +1,4 @@
-# Arrow Charts
+# ArrowChart
 
 ## Example
 
