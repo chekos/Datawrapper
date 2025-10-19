@@ -134,7 +134,9 @@ class TextAnnotation(BaseModel):
     )
 
     #: Whether or not to show a text outline
-    bg: bool = Field(default=True, description="Whether or not to show a text outline")
+    outline: bool = Field(
+        default=True, alias="bg", description="Whether or not to show a text outline"
+    )
 
     #: The x offset of the annotation relative to its position
     dx: int = Field(
@@ -222,7 +224,7 @@ class TextAnnotation(BaseModel):
         Note: The 'id' field is not included in the output as it's used as the dict key.
         """
         model = {
-            "bg": self.bg,
+            "bg": self.outline,
             "dx": self.dx,
             "dy": self.dy,
             "bold": self.bold,
