@@ -63,7 +63,8 @@ def get_chart(chart_id: str, access_token: str | None = None) -> BaseChart:
     }
 
     # Fetch chart metadata to determine type
-    access_token = access_token or os.getenv("DATAWRAPPER_ACCESS_TOKEN")
+    # Handle empty strings from environment variable by converting to None
+    access_token = access_token or os.getenv("DATAWRAPPER_ACCESS_TOKEN") or None
     dw = Datawrapper(access_token=access_token)
     metadata = dw.get_chart(chart_id)
     chart_type = metadata.get("type")
