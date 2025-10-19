@@ -1,50 +1,74 @@
-# Line Charts
+# LineChart
 
 ## Example
 
+This example demonstrates how to create a line chart showing global land temperature in July from 1753-2015, with confidence intervals displayed as a shaded area.
+
 ```python
 import pandas as pd
-from datawrapper import LineChart, DateFormat, NumberFormat, LineWidth
+import datawrapper as dw
 
-chart = LineChart(
-    title="Global Average Temperature Anomaly",
-    intro="Temperature change relative to 1951-1980 average",
-    data=pd.DataFrame(
-        {
-            "Year": [
-                "1980",
-                "1985",
-                "1990",
-                "1995",
-                "2000",
-                "2005",
-                "2010",
-                "2015",
-                "2020",
-                "2023",
-            ],
-            "Temperature": [0.26, 0.12, 0.45, 0.45, 0.42, 0.68, 0.72, 0.90, 1.02, 1.17],
-        }
-    ),
-    x_grid_format=DateFormat.YEAR_FULL,
-    y_grid_format=NumberFormat.ONE_DECIMAL,
-    value_labels_format=NumberFormat.ONE_DECIMAL,
-    base_color="#7f8c8d",
+# Load temperature data from GitHub
+url = "https://raw.githubusercontent.com/palewire/datawrapper-api-classes/main/tests/samples/line/land-temps.csv"
+df = pd.read_csv(url)
+
+chart = dw.LineChart(
+    # Chart title
+    title="Global land temperature in July, 1753-2015",
+    # Data source attribution
+    source_name="Berkeley Earth",
+    source_url="http://berkeleyearth.org/data/",
+    # Introductory text
+    intro="Average land temperature in July, in degrees Celsius",
+    # Chart byline
+    byline="John Burn-Murdoch",
+    # Data from pandas DataFrame
+    data=df,
+    # Hide X-axis grid lines
+    x_grid_display="off",
+    # Show Y-axis grid lines
+    y_grid_display="on",
+    # Format Y-axis grid labels with one decimal place
+    y_grid_format=dw.NumberFormat.ONE_DECIMAL,
+    # Use monotone interpolation for smooth curves
+    interpolation=dw.LineInterpolation.MONOTONE,
+    # Configure the main temperature line
     lines=[
-        dict(
-            column="Temperature",
-            width=LineWidth.THICK,
-            symbols=dict(size=8, on="last"),
-            value_labels=dict(last=True),
+        dw.Line(
+            # Column to plot
+            column="LandAverageTemperature",
+            # Line color
+            color="#c71e1d",
+            # Line width
+            width=dw.LineWidth.MEDIUM,
+            # Show symbol on last data point
+            symbols=dw.LineSymbol(
+                display=dw.SymbolDisplay.LAST,
+                size=5
+            ),
+            # Show value label on last data point
+            value_labels=dw.LineValueLabel(
+                last=True
+            )
         )
+    ],
+    # Add shaded confidence interval area
+    area_fills=[
+        {
+            "from": "lower",
+            "to": "upper",
+            "color": "#cccccc",
+            "opacity": 0.5
+        }
     ],
 )
 
 chart.create()
 ```
 
+<div style="min-height:433px" id="datawrapper-vis-BsBaq"><script type="text/javascript" defer src="https://datawrapper.dwcdn.net/BsBaq/embed.js" charset="utf-8" data-target="#datawrapper-vis-BsBaq"></script><noscript><img src="https://datawrapper.dwcdn.net/BsBaq/full.png" alt="" /></noscript></div>
+
 ## Reference
 
 ```{eval-rst}
 .. parameter-table:: datawrapper.charts.LineChart
-```

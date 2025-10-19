@@ -1,60 +1,49 @@
-# Column Charts
+# ColumnChart
 
 ## Example
 
+This example demonstrates how to create a column chart showing U.S. unemployment rates from 2016-2020, highlighting the dramatic spike during the COVID-19 pandemic.
+
 ```python
 import pandas as pd
-from datawrapper import ColumnChart, NumberFormat, DateFormat
+import datawrapper as dw
 
-chart = ColumnChart(
-    title="Monthly Sales Performance",
-    intro="Revenue by month in 2024",
-    data=pd.DataFrame(
-        {
-            "Month": [
-                "2025-01",
-                "2025-02",
-                "2025-03",
-                "2025-04",
-                "2025-05",
-                "2025-06",
-                "2025-07",
-                "2025-08",
-                "2025-09",
-                "2025-10",
-                "2025-11",
-                "2025-12",
-            ],
-            "Revenue": [
-                -15000,
-                25000,
-                48000,
-                61000,
-                58000,
-                67000,
-                72000,
-                69000,
-                74000,
-                78000,
-                82000,
-                91000,
-            ],
-        }
-    ),
-    y_grid_format=NumberFormat.ABBREVIATED,
-    value_labels_format=NumberFormat.ABBREVIATED,
-    x_grid_format=DateFormat.MONTH_ABBREVIATED,
+# Load unemployment data from GitHub
+url = "https://raw.githubusercontent.com/palewire/datawrapper-api-classes/main/tests/samples/column/unemployment.csv"
+df = pd.read_csv(url)
+
+chart = dw.ColumnChart(
+    # Chart title with HTML line break
+    title="U.S. unemployment rate",
+    # Data source attribution
+    source_name="U.S. Bureau of Labor Statistics",
+    source_url="https://www.bls.gov/",
+    # Introductory text
+    intro="Seasonally adjusted unemployment rate, January 2016 - September 2020",
+    # Chart byline
+    byline="Sergio Hernandez",
+    # Data from pandas DataFrame
+    data=df,
+    # Format Y-axis grid labels with one decimal place
+    y_grid_format=dw.NumberFormat.ONE_DECIMAL,
+    # Always show value labels
     show_value_labels="always",
+    # Place value labels outside the columns
     value_labels_placement="outside",
-    column_color="#3498db",
-    negative_color="#e74c3c",
+    # Format value labels with one decimal place
+    value_labels_format=dw.NumberFormat.ONE_DECIMAL,
+    # Set fixed plot height in pixels
+    plot_height=228,
+    # Highlight specific column in red
+    column_color={"2020/04": "#c71e1d"},
 )
 
 chart.create()
 ```
 
+<div style="min-height:433px" id="datawrapper-vis-1rJm1"><script type="text/javascript" defer src="https://datawrapper.dwcdn.net/1rJm1/embed.js" charset="utf-8" data-target="#datawrapper-vis-1rJm1"></script><noscript><img src="https://datawrapper.dwcdn.net/1rJm1/full.png" alt="" /></noscript></div>
+
 ## Reference
 
 ```{eval-rst}
 .. parameter-table:: datawrapper.charts.ColumnChart
-```
