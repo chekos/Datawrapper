@@ -49,6 +49,13 @@ class ArrowChart(BaseChart):
     # Customize arrows
     #
 
+    #: The base color for the arrows
+    base_color: str | int = Field(
+        default=0,
+        alias="base-color",
+        description="The base color for the arrows",
+    )
+
     #: A mapping of layer names to colors
     color_category: dict[str, str] = Field(
         default_factory=dict,
@@ -152,6 +159,20 @@ class ArrowChart(BaseChart):
         description="The column that arrows should end at",
     )
 
+    #: The axes to color by
+    axis_colors: str = Field(
+        default="",
+        alias="axis-colors",
+        description="The axes to color by",
+    )
+
+    #: The axes to label by
+    axis_labels: str = Field(
+        default="",
+        alias="axis-labels",
+        description="The axes to label by",
+    )
+
     #
     # Features
     #
@@ -203,6 +224,7 @@ class ArrowChart(BaseChart):
                 "y-grid": self.y_grid,
                 "reverse-order": self.reverse_order,
                 "thick-arrows": self.thick_arrows,
+                "base-color": self.base_color,
                 "color-category": ColorCategory.serialize(self.color_category),
                 "range-value-labels": self.range_value_labels,
                 "sort-range": {
@@ -224,6 +246,10 @@ class ArrowChart(BaseChart):
             "start": self.axis_start,
             "end": self.axis_end,
         }
+        if self.axis_colors:
+            model["metadata"]["axes"]["colors"] = self.axis_colors
+        if self.axis_labels:
+            model["metadata"]["axes"]["labels"] = self.axis_labels
 
         # Return the serialized data
         return model
@@ -253,6 +279,10 @@ class ArrowChart(BaseChart):
             init_data["reverse_order"] = visualize["reverse-order"]
         if "thick-arrows" in visualize:
             init_data["thick_arrows"] = visualize["thick-arrows"]
+
+        # Base color
+        if "base-color" in visualize:
+            init_data["base_color"] = visualize["base-color"]
 
         # Parse color-category using utility
         color_data = ColorCategory.deserialize(visualize.get("color-category"))
@@ -291,6 +321,10 @@ class ArrowChart(BaseChart):
             init_data["axis_start"] = axes["start"]
         if "end" in axes:
             init_data["axis_end"] = axes["end"]
+        if "colors" in axes:
+            init_data["axis_colors"] = axes["colors"]
+        if "labels" in axes:
+            init_data["axis_labels"] = axes["labels"]
 
         # Features
         if "color-by-column" in visualize:
