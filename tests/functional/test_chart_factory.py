@@ -17,7 +17,7 @@ from datawrapper.charts import (
 )
 
 
-def test_get_chart_line_chart():
+def test_get_chart_line_chart(clean_env):
     """Test get_chart returns LineChart for d3-lines type."""
     # Create a mock Datawrapper client
     mock_client = MagicMock(spec=Datawrapper)
