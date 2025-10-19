@@ -71,7 +71,7 @@ chart.publish()
 
 ```python
 # Get the chart from the API
-chart = chart.get(chart_id)
+chart = dw.get(chart_id)
 
 # Make a change
 chart.title = "Most Popular Programming Languages in 2024!!!"
@@ -82,9 +82,6 @@ chart.publish()
 ## Creating multiple charts
 
 ```python
-import datawrapper as dw
-
-
 for category in ["Sales", "Revenue", "Profit"]:
     chart = dw.BarChart(
         title=f"{category} by Region", data=get_data_for_category(category)

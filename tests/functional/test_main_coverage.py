@@ -535,6 +535,7 @@ class TestPublishChart:
             dw = Datawrapper()
             result = dw.publish_chart("chart123", display=False)
 
+            assert result["id"] == "chart123"
             assert result["publicUrl"] == "https://datawrapper.dwcdn.net/abc123/"
             mock_post.assert_called_once()
 
@@ -551,6 +552,7 @@ class TestPublishChart:
             # Note: blocks parameter may not exist in current API, testing the call pattern
             result = dw.publish_chart("chart123", display=False)
 
+            assert result["id"] == "chart123"
             assert result["publicUrl"] == "https://datawrapper.dwcdn.net/abc123/"
             mock_post.assert_called_once()
 
