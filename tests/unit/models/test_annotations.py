@@ -80,7 +80,7 @@ class TestTextAnnotation:
         assert annotation.text == "Test"
         assert annotation.x == 10
         assert annotation.y == 20
-        assert annotation.bg is True
+        assert annotation.outline is True
         assert annotation.dx == 0
         assert annotation.dy == 0
         assert annotation.bold is False
@@ -102,7 +102,7 @@ class TestTextAnnotation:
             text="Full Test",
             x=50,
             y=75,
-            bg=False,
+            outline=False,
             dx=5,
             dy=-5,
             bold=True,
@@ -121,7 +121,7 @@ class TestTextAnnotation:
         assert annotation.text == "Full Test"
         assert annotation.x == 50
         assert annotation.y == 75
-        assert annotation.bg is False
+        assert annotation.outline is False
         assert annotation.dx == 5
         assert annotation.dy == -5
         assert annotation.bold is True

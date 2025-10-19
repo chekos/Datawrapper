@@ -1,11 +1,8 @@
 # AreaChart
 
-## Example
-
 This example, drawn from [Datawrapper's official documentation](https://www.datawrapper.de/charts/area), demonstrates how to create a stacked area chart. The chart includes text and range annotations to highlight significant events. It also customizes the color scheme for different regions and formats the axes and value labels for better readability.
 
-<iframe title="Migration to the US by world region, 1820-2009" aria-label="Interactive area chart" id="datawrapper-chart-HFvPh" src="https://datawrapper.dwcdn.net/HFvPh/10/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="502" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
-</script>
+<iframe title="Migration to the US by world region, 1820-2009" aria-label="Area Chart" id="datawrapper-chart-sBGlG" src="https://datawrapper.dwcdn.net/sBGlG/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none; margin-bottom: 20px" height="400" data-external="1"></iframe><script type="text/javascript">window.addEventListener("message",function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}});</script>
 
 ```python
 import pandas as pd
@@ -29,6 +26,8 @@ chart = dw.AreaChart(
     byline="Mirko Lorenz",
     # The DataFrame containing the source data
     data=df,
+    # Transpose the data with a transformation
+    transformations=dict(transpose=True),
     # Format x-axis labels as full years (e.g., "2020").
     # Alternatively, you could provide "YYYY" if you'd rather not use the DateFormat enum.
     x_grid_format=dw.DateFormat.YEAR_FULL,
@@ -81,6 +80,7 @@ chart = dw.AreaChart(
             color="#fefefe",
             bold=True,
             size=20,
+            outline=False,
         ),
         dw.TextAnnotation(
             text="A S I A ",
@@ -90,6 +90,7 @@ chart = dw.AreaChart(
             color="#121212",
             bold=True,
             size=14,
+            outline=False,
         ),
         dw.TextAnnotation(
             text="A M E -\nR I C A",
@@ -99,6 +100,7 @@ chart = dw.AreaChart(
             color="#222222",
             bold=True,
             size=10,
+            outline=False,
         ),
         dw.TextAnnotation(
             text="Germany",
@@ -108,6 +110,7 @@ chart = dw.AreaChart(
             color="#d2d2d2",
             italic=True,
             size=11,
+            outline=False,
         ),
         dw.TextAnnotation(
             text="World <br/>War I",
@@ -118,6 +121,7 @@ chart = dw.AreaChart(
             color="#575757",
             italic=True,
             size=11,
+            outline=False,
         ),
         dw.TextAnnotation(
             text="World <br/>War II",
@@ -128,6 +132,7 @@ chart = dw.AreaChart(
             color="#575757",
             italic=True,
             size=11,
+            outline=False,
         ),
     ],
     range_annotations=[
