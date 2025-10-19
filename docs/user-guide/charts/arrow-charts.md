@@ -1,56 +1,59 @@
 # ArrowChart
 
-## Example
+This example, drawn from <a href="https://www.datawrapper.de/charts/arrow-plot">the Datawrapper documentation</a>, demonstrates how to create an arrow chart with customized sorting and highlighted elements.
 
-This example demonstrates how to create an arrow chart showing income inequality (Gini index) before and after taxes across different countries. The chart highlights how tax policies affect income distribution.
+<iframe title="Many European countries bring income inequality down with taxes. The US and Mexico: Not so much." aria-label="Arrow Plot" id="datawrapper-chart-W0zuU" src="https://datawrapper.dwcdn.net/W0zuU/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none; margin-bottom: 20px;" height="416" data-external="1"></iframe><script type="text/javascript">window.addEventListener("message",function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}});</script>
 
 ```python
 import pandas as pd
 import datawrapper as dw
 
 # Load data from GitHub
-url = "https://raw.githubusercontent.com/palewire/datawrapper-api-classes/main/tests/samples/arrow/inequality.csv"
-df = pd.read_csv(url)
+url = "https://raw.githubusercontent.com/chekos/datawrapper/main/tests/samples/arrow/inequality.csv"
+df = pd.read_csv(url, sep="\t")
 
 # Create arrow chart
 chart = dw.ArrowChart(
     # Chart title
     title="Many European countries bring income inequality down with taxes. The US and Mexico: Not so much.",
+    # The description line with a bit of HTML
+    intro="Income inequality (gini index) in selected OECD countries in 2014, before and after taxes. A gini index of 0 means that every household earns exactly the same income, while an index of 1 means that one household in the country makes all the income. <b>The lower the Gini index, the more equal the income is distributed in a country.</b>",
     # Data source attribution
     source_name="OECD",
+    # The byline
+    byline="Lisa Charlotte Rost, Datawrapper",
     # Pass the DataFrame
     data=df,
     # Start column (Gini before taxes)
     axis_start="Gini before taxes",
     # End column (Gini after taxes)
     axis_end="Gini after taxes",
-    # Custom Y-axis range
-    custom_range_y=[0.15, 0.6],
-    # Y-axis grid format (thousands separator with optional decimals)
-    y_grid_format=dw.NumberFormat.THOUSANDS_WITH_OPTIONAL_DECIMALS,
-    # Value label format (one decimal place)
-    value_label_format=dw.NumberFormat.ONE_DECIMAL,
+    # Custom X-axis range
+    range_extent="custom",
+    custom_range=[0.15, 0.6],
+    # Value label format (three decimal places)
+    value_label_format=dw.NumberFormat.THREE_DECIMALS,
     # Sort by the start column
-    sort_by="Gini before taxes",
+    sort_by="end",
     # Enable sorting
     sort_ranges=True,
-    # Label position (right side)
-    labeling="right",
     # Show arrow key/legend
-    show_arrow_key=True,
+    arrow_key=True,
+    # Set the default arrow color
+    base_color="rgb(196, 148, 67)",
     # Highlight specific countries in red
+    axis_colors="Country",
+    axis_labels="Country",
+    color_by_column=True,
     color_category={
-        "Mexico": "#c71e1d",
-        "United States": "#c71e1d"
+        "<b>Mexico</b>": "#c71e1d",
+        "<b>United States</b>": "#c71e1d"
     }
 )
 
 # Create the chart in Datawrapper
 chart.create()
 ```
-
-<iframe title="Many European countries bring income inequality down with taxes. The US and Mexico: Not so much." aria-label="Arrow Plot" id="datawrapper-chart-cjX4C" src="https://datawrapper.dwcdn.net/cjX4C/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="656" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
-</script>
 
 ## Reference
 
