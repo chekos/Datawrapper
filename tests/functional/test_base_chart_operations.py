@@ -698,6 +698,157 @@ def test_base_chart_get_png_url_no_chart_id():
         chart.get_png_url()
 
 
+def test_base_chart_publish_success():
+    """Test the publish method with mocked API."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "test123",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    # Mock publish_chart response (returns dict with publicUrl)
+    mock_publish_response = {
+        "id": "test123",
+        "publicUrl": "https://datawrapper.dwcdn.net/test123/",
+        "publicId": "test123",
+    }
+    mock_client.publish_chart.return_value = mock_publish_response
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create a chart
+        chart = ColumnChart(title="Test Chart")
+        chart.create()
+
+        # Verify chart_id is set
+        assert chart.chart_id == "test123"
+
+        # Publish the chart
+        result = chart.publish()
+
+        # Verify the publish was called
+        mock_client.publish_chart.assert_called_once_with(chart_id="test123")
+
+        # Verify the result is a boolean True
+        assert result is True
+        assert isinstance(result, bool)
+
+
+def test_base_chart_publish_no_chart_id():
+    """Test the publish method raises error when no chart_id is set."""
+    chart = ColumnChart(title="Test Chart")
+
+    # Attempt to publish without chart_id should raise ValueError
+    with pytest.raises(ValueError, match="No chart_id set"):
+        chart.publish()
+
+
+def test_base_chart_publish_with_access_token():
+    """Test the publish method with explicit access token."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "test456",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    # Mock publish_chart response
+    mock_publish_response = {
+        "id": "test456",
+        "publicUrl": "https://datawrapper.dwcdn.net/test456/",
+        "publicId": "test456",
+    }
+    mock_client.publish_chart.return_value = mock_publish_response
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create a chart
+        chart = ColumnChart(title="Test Chart")
+        chart.create(access_token="custom_token")
+
+        # Publish with custom token
+        result = chart.publish(access_token="custom_token")
+
+        # Verify the result is a boolean True
+        assert result is True
+        assert isinstance(result, bool)
+
+
+def test_base_chart_publish_failure():
+    """Test the publish method returns False when API returns empty/falsy response."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "test789",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    # Mock publish_chart response with empty dict (failure case)
+    mock_client.publish_chart.return_value = {}
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create a chart
+        chart = ColumnChart(title="Test Chart")
+        chart.create()
+
+        # Publish the chart
+        result = chart.publish()
+
+        # Verify the publish was called
+        mock_client.publish_chart.assert_called_once_with(chart_id="test789")
+
+        # Verify the result is a boolean False
+        assert result is False
+        assert isinstance(result, bool)
+
+
+def test_base_chart_publish_none_response():
+    """Test the publish method returns False when API returns None."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "test999",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    # Mock publish_chart response with None (failure case)
+    mock_client.publish_chart.return_value = None
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create a chart
+        chart = ColumnChart(title="Test Chart")
+        chart.create()
+
+        # Publish the chart
+        result = chart.publish()
+
+        # Verify the publish was called
+        mock_client.publish_chart.assert_called_once_with(chart_id="test999")
+
+        # Verify the result is a boolean False
+        assert result is False
+        assert isinstance(result, bool)
+
+
 if __name__ == "__main__":
     # Run the tests directly
     test_base_chart_delete_success()
@@ -768,3 +919,18 @@ if __name__ == "__main__":
 
     test_base_chart_get_png_url_no_chart_id()
     print("✅ test_base_chart_get_png_url_no_chart_id passed")
+
+    test_base_chart_publish_success()
+    print("✅ test_base_chart_publish_success passed")
+
+    test_base_chart_publish_no_chart_id()
+    print("✅ test_base_chart_publish_no_chart_id passed")
+
+    test_base_chart_publish_with_access_token()
+    print("✅ test_base_chart_publish_with_access_token passed")
+
+    test_base_chart_publish_failure()
+    print("✅ test_base_chart_publish_failure passed")
+
+    test_base_chart_publish_none_response()
+    print("✅ test_base_chart_publish_none_response passed")

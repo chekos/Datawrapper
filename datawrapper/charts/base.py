@@ -706,19 +706,16 @@ class BaseChart(BaseModel):
 
     def publish(
         self,
-        display: bool = False,
         access_token: str | None = None,
-    ) -> dict | Any:
+    ) -> bool:
         """Publish the chart via the Datawrapper API.
 
         Args:
-            display: Whether to display the published chart as output in notebook cell, by default False
             access_token: Optional Datawrapper API access token.
                          If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
 
         Returns:
-            Either a dictionary containing the published chart's information or an IFrame
-            object displaying the chart.
+            True if the chart was published successfully, False otherwise.
 
         Raises:
             ValueError: If no chart_id is set or no access token is available.
@@ -733,7 +730,10 @@ class BaseChart(BaseModel):
         client = self._get_client(access_token)
 
         # Call the publish_chart method from the client
-        return client.publish_chart(chart_id=self.chart_id, display=display)
+        result = client.publish_chart(chart_id=self.chart_id)
+
+        # Return a boolean indicating success
+        return True if result else False
 
     def export(
         self,
