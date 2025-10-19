@@ -80,6 +80,7 @@ def get_chart(chart_id: str, access_token: str | None = None) -> BaseChart:
             f"Supported types: {', '.join(chart_type_map.keys())}"
         )
 
-    # Use the chart class's get method to retrieve and deserialize
-    chart_class_typed = cast(type[BaseChart], chart_class)
+    # Cast to satisfy type checkers while avoiding circular imports
+    # Use string literal to avoid NameError at runtime
+    chart_class_typed = cast("type[BaseChart]", chart_class)
     return chart_class_typed.get(chart_id=chart_id, access_token=access_token)
