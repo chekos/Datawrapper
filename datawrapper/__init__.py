@@ -11,6 +11,7 @@ try:
 except PackageNotFoundError:  # pragma: no cover
     __version__ = "unknown"
 
+from datawrapper.chart_factory import get_chart
 from datawrapper.charts import (
     Annotate,
     AreaChart,
@@ -73,6 +74,7 @@ from .__main__ import Datawrapper
 
 __all__ = [
     "Datawrapper",
+    "get_chart",
     "BaseChart",
     "Annotate",
     "ColumnFormat",
