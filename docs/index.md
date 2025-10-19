@@ -4,7 +4,7 @@ A lightweight Python wrapper for the Datawrapper API
 
 ```{toctree}
 ---
-maxdepth: 2
+maxdepth: 1
 caption: Getting started
 ---
 user-guide/quickstart.md
