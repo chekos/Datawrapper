@@ -10,7 +10,7 @@ This guide will help you create your first Datawrapper chart using the object-or
 
 ## Installation
 
-Install the datawrapper package using uv (recommended) or pip:
+Install the datawrapper package using `uv` or `pip` or another Python package manager:
 
 ```bash
 # Using uv (recommended)
