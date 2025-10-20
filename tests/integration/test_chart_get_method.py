@@ -587,7 +587,8 @@ class TestChartGetIntegration:
 
         # Create the chart
         with patch.object(original_chart, "_get_client", return_value=mock_client):
-            chart_id = original_chart.create(access_token="test-token")
+            original_chart.create(access_token="test-token")
+            chart_id = original_chart.chart_id
 
         # Now fetch it back
         serialized = original_chart.serialize_model()

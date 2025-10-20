@@ -77,9 +77,8 @@ class TestBaseChartAPIIntegration:
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
         with patch.object(chart, "_get_client", return_value=mock_client):
-            chart_id = chart.create(access_token="test-token")
+            chart = chart.create(access_token="test-token")
 
-            assert chart_id == "test-chart-id"
             assert chart.chart_id == "test-chart-id"
 
             # Verify create_chart was called with correct parameters
@@ -128,9 +127,9 @@ class TestBaseChartAPIIntegration:
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
         with patch.object(chart, "_get_client", return_value=mock_client):
-            chart_id = chart.update(access_token="test-token")
+            chart = chart.update(access_token="test-token")
 
-            assert chart_id == "existing-chart-id"
+            assert chart.chart_id == "existing-chart-id"
 
             # Verify update_chart was called with correct parameters
             mock_client.update_chart.assert_called_once()
@@ -182,9 +181,9 @@ class TestBaseChartAPIIntegration:
         mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
 
         with patch.object(chart, "_get_client", return_value=mock_client):
-            chart_id = chart.create(access_token="test-token")
+            chart = chart.create(access_token="test-token")
 
-            assert chart_id == "test-chart-id"
+            assert chart.chart_id == "test-chart-id"
 
             # Verify create_chart was called for chart creation
             mock_client.create_chart.assert_called_once()
@@ -219,16 +218,15 @@ class TestBaseChartAPIIntegration:
 
         with patch.object(chart, "_get_client", return_value=mock_client):
             # Create the chart
-            chart_id = chart.create(access_token="test-token")
-            assert chart_id == "workflow-chart-id"
+            chart = chart.create(access_token="test-token")
             assert chart.chart_id == "workflow-chart-id"
 
             # Update the chart
             chart.title = "Updated Title"
             chart.data = pd.DataFrame({"x": [5, 6], "y": [7, 8]})
 
-            updated_id = chart.update(access_token="test-token")
-            assert updated_id == "workflow-chart-id"
+            updated = chart.update(access_token="test-token")
+            assert updated.chart_id == "workflow-chart-id"
 
             # Verify both create and update were called
             assert mock_client.create_chart.call_count == 1  # Chart creation

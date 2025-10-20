@@ -32,6 +32,7 @@ def test_get_chart_line_chart():
     mock_client.get_chart.return_value = mock_metadata
 
     with (
+        patch.dict("os.environ", {}, clear=True),  # Clear environment variables
         patch("datawrapper.Datawrapper", return_value=mock_client),
         patch.object(LineChart, "get") as mock_line_get,
     ):
