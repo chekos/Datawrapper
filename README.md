@@ -9,7 +9,6 @@ A lightweight Python wrapper for the Datawrapper API
 * Get, update and delete folders, users and teams.
 * Retrieve lists of recently edited and updated charts
 * Access metadata about your account
-* Get a list of all available themes
 
 ## Installation
 
