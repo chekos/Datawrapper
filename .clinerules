@@ -1149,6 +1149,104 @@ Comprehensive tests for these operations are in `tests/functional/test_base_char
 - Tests cover successful operations, error cases, and custom access tokens
 - Test functions: `test_base_chart_delete_success`, `test_base_chart_delete_no_chart_id`, `test_base_chart_duplicate_success`, `test_base_chart_duplicate_invalid_response`, `test_base_chart_fork_success`, `test_get_display_urls_success`, `test_get_display_urls_no_chart_id`, `test_get_display_urls_custom_token`, `test_get_iframe_code_success`, `test_get_iframe_code_responsive`, `test_get_iframe_code_no_chart_id`, `test_get_iframe_code_custom_token`, `test_get_editor_url_success`, `test_get_editor_url_no_chart_id`, `test_get_png_url_success`, `test_get_png_url_no_chart_id`, etc.
 
+### Method Chaining Pattern (v2.0.0+)
+
+**BREAKING CHANGE**: Starting in version 2.0.0, the `create()`, `update()`, and `publish()` methods in BaseChart return `self` instead of their previous return types, enabling method chaining (fluent interface pattern).
+
+**Return Type Changes:**
+- `create()`: Changed from `str` (chart_id) to `"BaseChart"` (self)
+- `update()`: Changed from `str` (chart_id) to `"BaseChart"` (self)
+- `publish()`: Changed from `bool` to `"BaseChart"` (self), now raises exception on failure instead of returning False
+
+**Key Features:**
+- All three methods now return the chart instance (`self`) for method chaining
+- Methods can be chained together: `chart.create().update().publish()`
+- The `chart_id` is still set internally and accessible via `chart.chart_id`
+- `publish()` now raises an exception on failure instead of returning False
+
+**Migration Guide:**
+
+*Before (v1.x):*
+```python
+from datawrapper.charts import LineChart
+
+chart = LineChart(title="Temperature Data")
+chart_id = chart.create()  # Returns chart_id string
+print(f"Created chart: {chart_id}")
+
+chart.title = "Updated Temperature Data"
+chart_id = chart.update()  # Returns chart_id string
+
+success = chart.publish()  # Returns bool
+if success:
+    print("Published successfully")
+```
+
+*After (v2.0.0+):*
+```python
+from datawrapper.charts import LineChart
+
+# Method chaining approach
+chart = LineChart(title="Temperature Data").create().publish()
+print(f"Created chart: {chart.chart_id}")
+
+# Or step-by-step with chaining
+chart = LineChart(title="Temperature Data")
+chart.create().update().publish()
+
+# publish() now raises exception on failure
+try:
+    chart.publish()
+except Exception as e:
+    print(f"Publish failed: {e}")
+```
+
+**Benefits:**
+- More concise code with method chaining
+- Better developer experience with fluent interface
+- Consistent with modern Python API design patterns
+- Enables complex workflows in fewer lines of code
+
+**Example Workflows:**
+
+```python
+from datawrapper.charts import LineChart, Line
+
+# Create, configure, and publish in one chain
+chart = (
+    LineChart(title="Sales Trends")
+    .create()
+    .publish()
+)
+
+# Create, update multiple times, then publish
+chart = LineChart(title="Initial Title")
+chart.create()
+chart.title = "Updated Title"
+chart.update()
+chart.description = "Added description"
+chart.update().publish()
+
+# Duplicate and immediately publish
+original = LineChart.get(chart_id="abc123")
+duplicate = original.duplicate().publish()
+
+# Fork and update in one chain
+fork = original.fork()
+fork.title = "Forked Chart"
+fork.update().publish()
+```
+
+**Testing:**
+Comprehensive tests for method chaining are in `tests/functional/test_base_chart_operations.py`:
+- Tests verify that methods return the chart instance (self) for chaining
+- Tests verify identity checks (`result is chart`)
+- Tests cover full chaining workflows: `create().update().publish()`
+- All tests use fully mocked API calls (no API token required)
+
+**Documentation:**
+See `docs/user-guide/chart-operations.md` for complete migration guide and examples.
+
 ## Testing Patterns
 
 ### Mocking API Calls

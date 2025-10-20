@@ -615,7 +615,7 @@ class BaseChart(BaseModel):
 
     def create(
         self, access_token: str | None = None, folder_id: int | None = None
-    ) -> str:
+    ) -> "BaseChart":
         """Create a new chart via the Datawrapper API.
 
         Args:
@@ -624,7 +624,7 @@ class BaseChart(BaseModel):
             folder_id: Optional folder ID to create the chart in.
 
         Returns:
-            The chart ID of the created chart.
+            Self, to enable method chaining. The chart ID is stored in self.chart_id.
 
         Raises:
             ValueError: If no access token is available or API returns invalid response.
@@ -655,11 +655,11 @@ class BaseChart(BaseModel):
         if not chart_id or not isinstance(chart_id, str):
             raise ValueError(f"Invalid chart ID received from API: {chart_id}")
 
-        # Store and return the chart ID
+        # Store the chart ID and return self for chaining
         self.chart_id = chart_id
-        return self.chart_id
+        return self
 
-    def update(self, access_token: str | None = None) -> str:
+    def update(self, access_token: str | None = None) -> "BaseChart":
         """Update an existing chart via the Datawrapper API.
 
         Args:
@@ -667,7 +667,7 @@ class BaseChart(BaseModel):
                          If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
 
         Returns:
-            The chart ID of the updated chart.
+            Self, to enable method chaining.
 
         Raises:
             ValueError: If no chart_id is set or no access token is available.
@@ -695,13 +695,13 @@ class BaseChart(BaseModel):
             metadata=metadata["metadata"],
         )
 
-        # Return the chart ID
-        return self.chart_id
+        # Return self for chaining
+        return self
 
     def publish(
         self,
         access_token: str | None = None,
-    ) -> bool:
+    ) -> "BaseChart":
         """Publish the chart via the Datawrapper API.
 
         Args:
@@ -709,11 +709,11 @@ class BaseChart(BaseModel):
                          If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
 
         Returns:
-            True if the chart was published successfully, False otherwise.
+            Self, to enable method chaining.
 
         Raises:
             ValueError: If no chart_id is set or no access token is available.
-            Exception: If the API request fails.
+            Exception: If the API request fails or publishing fails.
         """
         if not self.chart_id:
             raise ValueError(
@@ -726,8 +726,12 @@ class BaseChart(BaseModel):
         # Call the publish_chart method from the client
         result = client.publish_chart(chart_id=self.chart_id)
 
-        # Return a boolean indicating success
-        return True if result else False
+        # Raise an exception if publishing failed
+        if not result:
+            raise Exception(f"Failed to publish chart {self.chart_id}")
+
+        # Return self for chaining
+        return self
 
     def export(
         self,

@@ -699,7 +699,7 @@ def test_base_chart_get_png_url_no_chart_id():
 
 
 def test_base_chart_publish_success():
-    """Test the publish method with mocked API."""
+    """Test the publish method with method chaining."""
     # Create a mock Datawrapper client
     mock_client = MagicMock(spec=Datawrapper)
 
@@ -734,9 +734,9 @@ def test_base_chart_publish_success():
         # Verify the publish was called
         mock_client.publish_chart.assert_called_once_with(chart_id="test123")
 
-        # Verify the result is a boolean True
-        assert result is True
-        assert isinstance(result, bool)
+        # Verify the result is the chart instance (for method chaining)
+        assert isinstance(result, ColumnChart)
+        assert result is chart
 
 
 def test_base_chart_publish_no_chart_id():
@@ -778,13 +778,13 @@ def test_base_chart_publish_with_access_token():
         # Publish with custom token
         result = chart.publish(access_token="custom_token")
 
-        # Verify the result is a boolean True
-        assert result is True
-        assert isinstance(result, bool)
+        # Verify the result is the chart instance (for method chaining)
+        assert isinstance(result, ColumnChart)
+        assert result is chart
 
 
 def test_base_chart_publish_failure():
-    """Test the publish method returns False when API returns empty/falsy response."""
+    """Test the publish method raises exception when API returns empty/falsy response."""
     # Create a mock Datawrapper client
     mock_client = MagicMock(spec=Datawrapper)
 
@@ -805,19 +805,16 @@ def test_base_chart_publish_failure():
         chart = ColumnChart(title="Test Chart")
         chart.create()
 
-        # Publish the chart
-        result = chart.publish()
+        # Publish the chart should raise exception
+        with pytest.raises(Exception, match="Failed to publish chart test789"):
+            chart.publish()
 
         # Verify the publish was called
         mock_client.publish_chart.assert_called_once_with(chart_id="test789")
 
-        # Verify the result is a boolean False
-        assert result is False
-        assert isinstance(result, bool)
-
 
 def test_base_chart_publish_none_response():
-    """Test the publish method returns False when API returns None."""
+    """Test the publish method raises exception when API returns None."""
     # Create a mock Datawrapper client
     mock_client = MagicMock(spec=Datawrapper)
 
@@ -838,15 +835,191 @@ def test_base_chart_publish_none_response():
         chart = ColumnChart(title="Test Chart")
         chart.create()
 
-        # Publish the chart
-        result = chart.publish()
+        # Publish the chart should raise exception
+        with pytest.raises(Exception, match="Failed to publish chart test999"):
+            chart.publish()
 
         # Verify the publish was called
         mock_client.publish_chart.assert_called_once_with(chart_id="test999")
 
-        # Verify the result is a boolean False
-        assert result is False
-        assert isinstance(result, bool)
+
+def test_base_chart_create_method_chaining():
+    """Test that create() returns the chart instance for method chaining."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "chain123",
+        "title": "Chained Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create a chart and verify it returns self
+        chart = ColumnChart(title="Chained Chart")
+        result = chart.create()
+
+        # Verify the result is the chart instance (for method chaining)
+        assert isinstance(result, ColumnChart)
+        assert result is chart
+        assert result.chart_id == "chain123"
+
+        # Verify create_chart was called
+        mock_client.create_chart.assert_called_once()
+
+
+def test_base_chart_update_method_chaining():
+    """Test that update() returns the chart instance for method chaining."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "update123",
+        "title": "Original Title",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    # Mock update_chart response
+    mock_update_response = {
+        "id": "update123",
+        "title": "Updated Title",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.update_chart.return_value = mock_update_response
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create a chart
+        chart = ColumnChart(title="Original Title")
+        chart.create()
+
+        # Update the chart and verify it returns self
+        chart.title = "Updated Title"
+        result = chart.update()
+
+        # Verify the result is the chart instance (for method chaining)
+        assert isinstance(result, ColumnChart)
+        assert result is chart
+        assert result.chart_id == "update123"
+
+        # Verify update_chart was called
+        mock_client.update_chart.assert_called_once()
+
+
+def test_base_chart_full_method_chaining():
+    """Test full method chaining workflow: create().update().publish()."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "fullchain123",
+        "title": "Initial Title",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    # Mock update_chart response
+    mock_update_response = {
+        "id": "fullchain123",
+        "title": "Updated Title",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.update_chart.return_value = mock_update_response
+
+    # Mock publish_chart response
+    mock_publish_response = {
+        "id": "fullchain123",
+        "publicUrl": "https://datawrapper.dwcdn.net/fullchain123/",
+        "publicId": "fullchain123",
+    }
+    mock_client.publish_chart.return_value = mock_publish_response
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create a chart and chain methods
+        chart = ColumnChart(title="Initial Title")
+
+        # Test full method chaining
+        result = chart.create().update().publish()
+
+        # Verify the result is the chart instance
+        assert isinstance(result, ColumnChart)
+        assert result is chart
+        assert result.chart_id == "fullchain123"
+
+        # Verify all methods were called
+        mock_client.create_chart.assert_called_once()
+        mock_client.update_chart.assert_called_once()
+        mock_client.publish_chart.assert_called_once()
+
+
+def test_base_chart_create_with_access_token_chaining():
+    """Test create() method chaining with explicit access token."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "token123",
+        "title": "Token Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create a chart with custom token
+        chart = ColumnChart(title="Token Chart")
+        result = chart.create(access_token="custom_token")
+
+        # Verify the result is the chart instance
+        assert isinstance(result, ColumnChart)
+        assert result is chart
+        assert result.chart_id == "token123"
+
+
+def test_base_chart_update_with_access_token_chaining():
+    """Test update() method chaining with explicit access token."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "token456",
+        "title": "Original",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    # Mock update_chart response
+    mock_update_response = {
+        "id": "token456",
+        "title": "Updated",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.update_chart.return_value = mock_update_response
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create and update with custom token
+        chart = ColumnChart(title="Original")
+        chart.create(access_token="custom_token")
+
+        chart.title = "Updated"
+        result = chart.update(access_token="custom_token")
+
+        # Verify the result is the chart instance
+        assert isinstance(result, ColumnChart)
+        assert result is chart
 
 
 if __name__ == "__main__":
