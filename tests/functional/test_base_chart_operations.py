@@ -643,9 +643,7 @@ def test_base_chart_get_editor_url_success():
         result = chart.get_editor_url()
 
         # Verify the result
-        expected_url = (
-            "https://app.datawrapper.de/thomson-reuters/edit/aBcDe/visualize#refine"
-        )
+        expected_url = "https://app.datawrapper.de/edit/aBcDe/visualize#refine"
         assert result == expected_url
         assert "aBcDe" in result
         assert "visualize#refine" in result
@@ -696,6 +694,65 @@ def test_base_chart_get_png_url_no_chart_id():
     # Attempt to get PNG URL without chart_id should raise ValueError
     with pytest.raises(ValueError, match="No chart_id set"):
         chart.get_png_url()
+
+
+def test_base_chart_get_public_url_success():
+    """Test the get_public_url method."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    # Mock create_chart response
+    mock_chart_info = {
+        "id": "aO8Gv",
+        "title": "Test Chart",
+        "type": "d3-bars",
+        "metadata": {"visualize": {}},
+    }
+    mock_client.create_chart.return_value = mock_chart_info
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Create a chart
+        chart = ColumnChart(title="Test Chart")
+        chart.create()
+
+        # Get public URL
+        result = chart.get_public_url()
+
+        # Verify the result
+        expected_url = "https://datawrapper.dwcdn.net/aO8Gv/"
+        assert result == expected_url
+        assert "aO8Gv" in result
+        assert result.startswith("https://datawrapper.dwcdn.net/")
+        assert result.endswith("/")
+
+
+def test_base_chart_get_public_url_no_chart_id():
+    """Test the get_public_url method raises error when no chart_id is set."""
+    chart = ColumnChart(title="Test Chart")
+
+    # Attempt to get public URL without chart_id should raise ValueError
+    with pytest.raises(ValueError, match="No chart_id set"):
+        chart.get_public_url()
+
+
+def test_base_chart_get_public_url_different_chart_ids():
+    """Test the get_public_url method with different chart IDs."""
+    # Create a mock Datawrapper client
+    mock_client = MagicMock(spec=Datawrapper)
+
+    with patch.object(ColumnChart, "_get_client", return_value=mock_client):
+        # Test with various chart ID formats
+        test_ids = ["abc123", "XyZ789", "test-id", "12345"]
+
+        for chart_id in test_ids:
+            chart = ColumnChart(title="Test Chart")
+            chart.chart_id = chart_id
+
+            result = chart.get_public_url()
+            expected_url = f"https://datawrapper.dwcdn.net/{chart_id}/"
+
+            assert result == expected_url
+            assert chart_id in result
 
 
 def test_base_chart_publish_success():
