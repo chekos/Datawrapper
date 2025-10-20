@@ -23,18 +23,18 @@ Create beautiful charts with type-safe, object-oriented Python:
 
 ```python
 import pandas as pd
-from datawrapper import BarChart, NumberFormat
+import datawrapper as dw
 
-# Create a bar chart with type-safe configuration
-chart = BarChart(
+# Create a bar chart
+chart = dw.BarChart(
     title="Top Programming Languages 2024",
     data=pd.DataFrame({"Language": ["Python", "JavaScript", "Java"], "Users": [45.3, 38.2, 30.5]}),
-    axis_label_format=NumberFormat.ONE_DECIMAL,  # Type-safe enum
-    value_label_format=NumberFormat.ABBREVIATED,  # IDE autocomplete support
+    axis_label_format=NumberFormat.ONE_DECIMAL,
+    value_label_format=NumberFormat.ABBREVIATED,
 )
 
 # Create and publish (uses DATAWRAPPER_ACCESS_TOKEN environment variable)
-chart_id = chart.create()
+chart.create()
 chart.publish()
 ```
 See the [full documentation](https://datawrapper.readthedocs.io/) for comprehensive guides on all chart types.
