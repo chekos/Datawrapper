@@ -29,11 +29,11 @@ chart = dw.LineChart(
             )
         ]
     ),
-    y_grid_format="0",
     # Set the range
-    # Format Y-axis grid labels with no decimal places
     custom_range_y=[8, 21],
-    # And now the tooltip...
+    # Format Y-axis grid labels with no decimal places
+    y_grid_format="0",
+    # And now the tooltip with a bit more...
     tooltip_number_format="00.00",
     tooltip_x_format="YYYY",
     # Configure the main temperature line's color
