@@ -13,20 +13,19 @@ url = "https://raw.githubusercontent.com/chekos/datawrapper/main/tests/samples/c
 df = pd.read_csv(url)
 
 chart = dw.ColumnChart(
-    # Chart title with HTML line break
+    # Chart headline
     title="U.S. unemployment rate",
+    # Introductory text
+    intro="January 2016-September 2020",
     # Data source attribution
     source_name="U.S. Bureau of Labor Statistics",
     source_url="https://www.bls.gov/",
-    # Introductory text
-    intro="January 2016-September 2020",
     # Data from pandas DataFrame
     data=df,
-    # Format Y-axis grid labels with one decimal place and a percentage sign
+    # Format labels with one decimal place and a percentage sign
     y_grid_format=dw.NumberFormat.PERCENT_UP_TO_ONE_DECIMAL,
-    # Format value labels with one decimal place
     value_labels_format=dw.NumberFormat.PERCENT_UP_TO_ONE_DECIMAL,
-    # Highlight specific column in red
+    # Highlight specific columns with custom colors
     base_color="#CCCCCC",
     color_category={
         "2020/04": "rgb(21, 96, 122)",
@@ -36,6 +35,7 @@ chart = dw.ColumnChart(
         "2020/08": "rgb(21, 96, 122)",
         "2020/09": "rgb(21, 96, 122)",
     },
+    # Annotations to highlight the COVID-19 period
     range_annotations=[
         dw.RangeAnnotation(
             x0="2020/01/01",
