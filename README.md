@@ -53,7 +53,6 @@ Install pre-commit to run a battery of automatic quick fixes against your work.
 
 ```bash
 uv run pre-commit install
-uv run pre-commit install
 ```
 
 Run tests with
