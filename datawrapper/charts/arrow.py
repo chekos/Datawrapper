@@ -30,8 +30,8 @@ class ArrowChart(BaseChart):
                             "2023": [110, 160, 115, 95],
                         }
                     ),
-                    "axis_start": "2020",
-                    "axis_end": "2023",
+                    "start_column": "2020",
+                    "end_column": "2023",
                     "thick_arrows": True,
                 }
             ]
@@ -146,31 +146,27 @@ class ArrowChart(BaseChart):
     )
 
     #: The column that arrows should start at
-    axis_start: str = Field(
-        default="",
-        alias="axis-start",
+    start_column: str | None = Field(
+        default=None,
         description="The column that arrows should start at",
     )
 
     #: The column that arrows should end at
-    axis_end: str = Field(
-        default="",
-        alias="axis-end",
+    end_column: str | None = Field(
+        default=None,
         description="The column that arrows should end at",
     )
 
-    #: The axes to color by
-    axis_colors: str = Field(
-        default="",
-        alias="axis-colors",
-        description="The axes to color by",
+    #: The column to color by
+    color_column: str | None = Field(
+        default=None,
+        description="The column to color by",
     )
 
-    #: The axes to label by
-    axis_labels: str = Field(
-        default="",
-        alias="axis-labels",
-        description="The axes to label by",
+    #: The column to label by
+    label_column: str | None = Field(
+        default=None,
+        description="The column to label by",
     )
 
     #
@@ -243,13 +239,11 @@ class ArrowChart(BaseChart):
 
         # Add axes section (separate from visualize)
         model["metadata"]["axes"] = {
-            "start": self.axis_start,
-            "end": self.axis_end,
+            "start": self.start_column,
+            "end": self.end_column,
+            "colors": self.color_column,
+            "labels": self.label_column,
         }
-        if self.axis_colors:
-            model["metadata"]["axes"]["colors"] = self.axis_colors
-        if self.axis_labels:
-            model["metadata"]["axes"]["labels"] = self.axis_labels
 
         # Return the serialized data
         return model
@@ -318,13 +312,13 @@ class ArrowChart(BaseChart):
 
         # Parse axes section
         if "start" in axes:
-            init_data["axis_start"] = axes["start"]
+            init_data["start_column"] = axes["start"]
         if "end" in axes:
-            init_data["axis_end"] = axes["end"]
+            init_data["end_column"] = axes["end"]
         if "colors" in axes:
-            init_data["axis_colors"] = axes["colors"]
+            init_data["color_column"] = axes["colors"]
         if "labels" in axes:
-            init_data["axis_labels"] = axes["labels"]
+            init_data["label_column"] = axes["labels"]
 
         # Features
         if "color-by-column" in visualize:

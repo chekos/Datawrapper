@@ -28,14 +28,14 @@ class TestArrowChartCreation:
     """Tests for ArrowChart creation and serialization."""
 
     def test_serialize_with_axis_colors_and_labels(self):
-        """Test serializing with axis_colors and axis_labels."""
+        """Test serializing with color_column and label_column."""
         chart = ArrowChart(
             title="Test",
             data=pd.DataFrame({"Country": ["A", "B"], "Start": [1, 2], "End": [3, 4]}),
-            axis_start="Start",
-            axis_end="End",
-            axis_colors="Country",
-            axis_labels="Country",
+            start_column="Start",
+            end_column="End",
+            color_column="Country",
+            label_column="Country",
         )
 
         serialized = chart.serialize_model()
@@ -54,23 +54,23 @@ class TestArrowChartCreation:
                     "2023": [110, 160, 115, 95],
                 }
             ),
-            axis_start="2020",
-            axis_end="2023",
+            start_column="2020",
+            end_column="2023",
         )
 
         assert chart.chart_type == "d3-arrow-plot"
         assert chart.title == "Test Arrow Chart"
         assert isinstance(chart.data, pd.DataFrame)
-        assert chart.axis_start == "2020"
-        assert chart.axis_end == "2023"
+        assert chart.start_column == "2020"
+        assert chart.end_column == "2023"
 
     def test_serialize_arrow_chart(self):
         """Test serializing an arrow chart."""
         chart = ArrowChart(
             title="Test Chart",
             data=pd.DataFrame({"Region": ["A"], "Start": [10], "End": [20]}),
-            axis_start="Start",
-            axis_end="End",
+            start_column="Start",
+            end_column="End",
             thick_arrows=True,
             y_grid="on",
         )
@@ -89,8 +89,8 @@ class TestArrowChartCreation:
         chart = ArrowChart(
             title="Test",
             data=pd.DataFrame({"x": [1, 2], "y": [10, 20], "z": [15, 25]}),
-            axis_start="y",
-            axis_end="z",
+            start_column="y",
+            end_column="z",
             sort_ranges=True,
             sort_by="difference",
             reverse_order=True,
@@ -109,8 +109,8 @@ class TestArrowChartCreation:
             data=pd.DataFrame(
                 {"Country": ["US", "UK"], "2020": [10, 20], "2023": [15, 25]}
             ),
-            axis_start="2020",
-            axis_end="2023",
+            start_column="2020",
+            end_column="2023",
             replace_flags="4x3",
         )
 
@@ -124,8 +124,8 @@ class TestArrowChartCreation:
         chart = ArrowChart(
             title="Test",
             data=pd.DataFrame({"x": [1], "y": [10], "z": [20]}),
-            axis_start="y",
-            axis_end="z",
+            start_column="y",
+            end_column="z",
             replace_flags="off",
         )
 
@@ -139,8 +139,8 @@ class TestArrowChartCreation:
         chart = ArrowChart(
             title="Test",
             data=pd.DataFrame({"x": [1, 2], "y": [10, 20], "z": [15, 25]}),
-            axis_start="y",
-            axis_end="z",
+            start_column="y",
+            end_column="z",
             color_category={"Series A": "#ff0000", "Series B": "#0000ff"},
         )
 
@@ -156,8 +156,8 @@ class TestArrowChartCreation:
         chart = ArrowChart(
             title="Test",
             data=pd.DataFrame({"x": [1, 2], "y": [10, 20], "z": [15, 25]}),
-            axis_start="y",
-            axis_end="z",
+            start_column="y",
+            end_column="z",
             color_by_column=True,
             group_by_column=True,
             arrow_key=True,
@@ -174,8 +174,8 @@ class TestArrowChartCreation:
         chart = ArrowChart(
             title="Test",
             data=pd.DataFrame({"x": [1, 2], "y": [10, 20], "z": [15, 25]}),
-            axis_start="y",
-            axis_end="z",
+            start_column="y",
+            end_column="z",
             value_label_format="0.0%",
             range_value_labels="both",
         )
@@ -190,8 +190,8 @@ class TestArrowChartCreation:
         chart = ArrowChart(
             title="Test",
             data=pd.DataFrame({"x": [1, 2], "y": [10, 20], "z": [15, 25]}),
-            axis_start="y",
-            axis_end="z",
+            start_column="y",
+            end_column="z",
             custom_range=[0, 100],
             range_extent="custom",
         )
@@ -233,8 +233,8 @@ class TestArrowChartGet:
             )
 
             # Verify axes
-            assert chart.axis_start == "1950"
-            assert chart.axis_end == "2022"
+            assert chart.start_column == "1950"
+            assert chart.end_column == "2022"
 
             # Verify features
             assert chart.thick_arrows is True
@@ -421,8 +421,8 @@ class TestArrowChartIntegration:
                     "2023": [110, 160, 115, 95],
                 }
             ),
-            axis_start="2020",
-            axis_end="2023",
+            start_column="2020",
+            end_column="2023",
             thick_arrows=True,
             sort_ranges=True,
             sort_by="difference",
@@ -466,8 +466,8 @@ class TestArrowChartIntegration:
             # Verify key fields match
             assert fetched_chart.title == original_chart.title
             assert fetched_chart.chart_type == original_chart.chart_type
-            assert fetched_chart.axis_start == original_chart.axis_start
-            assert fetched_chart.axis_end == original_chart.axis_end
+            assert fetched_chart.start_column == original_chart.start_column
+            assert fetched_chart.end_column == original_chart.end_column
             assert fetched_chart.thick_arrows == original_chart.thick_arrows
             assert fetched_chart.sort_ranges == original_chart.sort_ranges
             assert fetched_chart.sort_by == original_chart.sort_by
