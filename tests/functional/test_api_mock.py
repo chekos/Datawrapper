@@ -91,7 +91,8 @@ def test_create_sample_bar_chart_mock():
         print("🚀 Creating chart via mocked Datawrapper API...")
 
         # Create the chart (this should use our mocked client)
-        chart_id = chart.create(access_token="test-token")
+        chart.create(access_token="test-token")
+        chart_id = chart.chart_id
 
         print(f"✅ Chart created successfully with ID: {chart_id}")
 
@@ -154,7 +155,8 @@ def test_create_simple_bar_chart_mock():
         print("🚀 Creating chart via mocked API...")
 
         # Create via API
-        chart_id = chart.create(access_token="test-token")
+        chart.create(access_token="test-token")
+        chart_id = chart.chart_id
 
         print(f"✅ Chart created with ID: {chart_id}")
 
@@ -210,7 +212,8 @@ def test_update_chart_mock():
         print("🔄 Updating chart via mocked API...")
 
         # Update the chart
-        updated_chart_id = chart.update(access_token="test-token")
+        chart.update(access_token="test-token")
+        updated_chart_id = chart.chart_id
 
         print(f"✅ Chart updated successfully with ID: {updated_chart_id}")
 

@@ -123,7 +123,8 @@ def test_create_sample_bar_chart_with_datawrapper():
 
     # Create the chart via Datawrapper API
     print("🚀 Creating chart via Datawrapper API...")
-    chart_id = chart.create()
+    chart.create()
+    chart_id = chart.chart_id
 
     print(f"✅ Chart created successfully with ID: {chart_id}")
 
@@ -199,7 +200,8 @@ def test_create_simple_bar_chart_with_api():
 
     # Create via API
     print("🚀 Creating chart via API...")
-    chart_id = chart.create()
+    chart.create()
+    chart_id = chart.chart_id
 
     print(f"✅ Chart created with ID: {chart_id}")
 
@@ -341,7 +343,8 @@ def test_create_happiness_scores_bar_chart_with_datawrapper():
 
     # Create the chart via Datawrapper API
     print("🚀 Creating chart via Datawrapper API...")
-    chart_id = chart.create()
+    chart.create()
+    chart_id = chart.chart_id
 
     print(f"✅ Chart created successfully with ID: {chart_id}")
 
