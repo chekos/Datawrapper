@@ -24,7 +24,7 @@ Create beautiful charts with type-safe, object-oriented Python:
 import pandas as pd
 import datawrapper as dw
 
-# Create a bar chart
+# Configure a bar chart
 chart = dw.BarChart(
     title="Top Programming Languages 2024",
     data=pd.DataFrame({"Language": ["Python", "JavaScript", "Java"], "Users": [45.3, 38.2, 30.5]}),
