@@ -1,15 +1,15 @@
 # BarChart
 
-## Example
+This example, drawn from <a href="https://academy.datawrapper.de/article/412-examples-of-datawrapper-bar-charts">the Datawrapper documentation</a>, recreates a bar chart showing custom colors and a confidence interval using a bar overlay.
 
-This example recreates a bar chart showing happiness scores across countries, with a range annotation for confidence intervals and color-coded by continent.
+<iframe title="Score of Happiness" aria-label="Bar Chart" id="datawrapper-chart-Fk2y7" src="https://datawrapper.dwcdn.net/Fk2y7/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none; margin-bottom: 20px;" height="400" data-external="1"></iframe><script type="text/javascript">window.addEventListener("message",function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}});</script>
 
 ```python
 import pandas as pd
 import datawrapper as dw
 
 # Load data from GitHub
-url = "https://raw.githubusercontent.com/palewire/datawrapper-api-classes/main/tests/samples/bar/happiness-scores.csv"
+url = "https://raw.githubusercontent.com/chekos/datawrapper/main/tests/samples/bar/happiness-scores.csv"
 df = pd.read_csv(url)
 
 # Create the bar chart
@@ -25,8 +25,6 @@ chart = dw.BarChart(
     byline="Daniela Haake",
     # Data
     data=df,
-    # Grid configuration
-    x_grid="off",
     # Value label format using enum
     value_label_format=dw.NumberFormat.THOUSANDS_WITH_OPTIONAL_DECIMALS,
     # Show value labels
@@ -36,36 +34,44 @@ chart = dw.BarChart(
     # Don't sort bars (keep original order)
     sort_bars=False,
     # Color by continent with custom mapping
+    show_color_key=True,
+    color_column="Continent",
     color_category={
-        "1. Finland": "#f7d503",
-        "2. Denmark": "#f7d503",
+        "Asia": "#ec6951",
+        "Africa": "#8c1946",
+        "Europe": "#ff9f51",
+        "Oceania": "#e7d5c2",
         "3. Norway": "#f7d503",
-        "4. Iceland": "#f7d503",
-        "5. Netherlands": "#f7d503",
-        "6. Switzerland": "#f7d503",
         "7. Sweden": "#f7d503",
-        "8. New Zealand": "#ae5b3e",
         "9. Canada": "#ef7f35",
-        "10. Austria": "#f7d503",
-        "15. United Kingdom": "#f7d503",
-        "17. Germany": "#f7d503",
-        "19. United States": "#ef7f35",
-        "68. Russia": "#c2c101",
         "93. China": "#c2c101",
-        "95. Bhutan": "#c2c101",
+        "1. Finland": "#f7d503",
         "140. India": "#c2c101",
         "147. Haiti": "#ef7f35",
-        "148. Botswana": "#2c7f67",
         "149. Syria": "#c2c101",
-        "150. Malawi": "#2c7f67",
         "151. Yemen": "#c2c101",
+        "2. Denmark": "#f7d503",
+        "4. Iceland": "#f7d503",
+        "68. Russia": "#c2c101",
+        "95. Bhutan": "#c2c101",
+        "10. Austria": "#f7d503",
+        "150. Malawi": "#2c7f67",
         "152. Rwanda": "#2c7f67",
+        "17. Germany": "#f7d503",
+        "148. Botswana": "#2c7f67",
         "153. Tanzania": "#2c7f67",
+        "North America": "#e7d5c2",
+        "5. Netherlands": "#f7d503",
+        "6. Switzerland": "#f7d503",
+        "8. New Zealand": "#ae5b3e",
         "154. Afghanistan": "#c2c101",
-        "155. Central African Republic": "#2c7f67",
-        "156. South Sudan": "#2c7f67"
+        "156. South Sudan": "#2c7f67",
+        "19. United States": "#ef7f35",
+        "15. United Kingdom": "#f7d503",
+        "155. Central African Republic": "#2c7f67"
     },
     # Category labels for the legend
+    label_column="Country",
     category_labels={
         "1. Finland": "Europe",
         "2. Denmark": "Europe",
@@ -95,22 +101,18 @@ chart = dw.BarChart(
         "155. Central African Republic": "Africa",
         "156. South Sudan": "Africa"
     },
-    # Range annotation for confidence interval
-    range_annotations=[
-        dw.RangeAnnotation(
-            # Annotation ID
-            id="1c1c1c1c1c",
-            # Range from low to high whisker
-            from_col="Whisker-low",
-            to_col="Whisker-high",
-            # Gray color with diagonal pattern
-            color="#858585",
+    # Bar overlay for confidence interval
+    overlays=[
+        dw.BarOverlay(
+            from_column="Whisker-low",
+            to_column="Whisker-high",
+            color="#999999",
             opacity=0.7,
             pattern="diagonal-up",
-            # Title for the annotation
-            title="95% Confidence Interval",
-            # Label directly on the chart
-            label_directly=True
+            title="Confidence Interval (95%)",
+            type="range",
+            show_in_color_key=True,
+            label_directly=False
         )
     ]
 )
@@ -118,9 +120,6 @@ chart = dw.BarChart(
 # Create the chart
 chart.create()
 ```
-
-<iframe title="Score of Happiness" aria-label="Bar Chart" id="datawrapper-chart-o7hof" src="https://datawrapper.dwcdn.net/o7hof/2/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="855" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}})}();
-</script>
 
 ## Reference
 

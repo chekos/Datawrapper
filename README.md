@@ -9,7 +9,6 @@ A lightweight Python wrapper for the Datawrapper API
 * Get, update and delete folders, users and teams.
 * Retrieve lists of recently edited and updated charts
 * Access metadata about your account
-* Get a list of all available themes
 
 ## Installation
 
@@ -23,18 +22,18 @@ Create beautiful charts with type-safe, object-oriented Python:
 
 ```python
 import pandas as pd
-from datawrapper import BarChart, NumberFormat
+import datawrapper as dw
 
-# Create a bar chart with type-safe configuration
-chart = BarChart(
+# Configure a bar chart
+chart = dw.BarChart(
     title="Top Programming Languages 2024",
     data=pd.DataFrame({"Language": ["Python", "JavaScript", "Java"], "Users": [45.3, 38.2, 30.5]}),
-    axis_label_format=NumberFormat.ONE_DECIMAL,  # Type-safe enum
-    value_label_format=NumberFormat.ABBREVIATED,  # IDE autocomplete support
+    axis_label_format=NumberFormat.ONE_DECIMAL,
+    value_label_format=NumberFormat.ABBREVIATED,
 )
 
 # Create and publish (uses DATAWRAPPER_ACCESS_TOKEN environment variable)
-chart_id = chart.create()
+chart.create()
 chart.publish()
 ```
 See the [full documentation](https://datawrapper.readthedocs.io/) for comprehensive guides on all chart types.
@@ -52,7 +51,6 @@ uv install --all-extras
 Install pre-commit to run a battery of automatic quick fixes against your work.
 
 ```bash
-uv run pre-commit install
 uv run pre-commit install
 ```
 

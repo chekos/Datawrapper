@@ -27,6 +27,22 @@ def load_sample_csv(filename: str) -> str:
 class TestArrowChartCreation:
     """Tests for ArrowChart creation and serialization."""
 
+    def test_serialize_with_axis_colors_and_labels(self):
+        """Test serializing with axis_colors and axis_labels."""
+        chart = ArrowChart(
+            title="Test",
+            data=pd.DataFrame({"Country": ["A", "B"], "Start": [1, 2], "End": [3, 4]}),
+            axis_start="Start",
+            axis_end="End",
+            axis_colors="Country",
+            axis_labels="Country",
+        )
+
+        serialized = chart.serialize_model()
+
+        assert serialized["metadata"]["axes"]["colors"] == "Country"
+        assert serialized["metadata"]["axes"]["labels"] == "Country"
+
     def test_create_basic_arrow_chart(self):
         """Test creating a basic arrow chart."""
         chart = ArrowChart(
