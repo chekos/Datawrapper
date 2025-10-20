@@ -9,13 +9,7 @@ from IPython.display import IFrame, Image
 from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 
 from datawrapper.__main__ import Datawrapper
-from datawrapper.charts.models import (
-    Annotate,
-    Describe,
-    Publish,
-    Transform,
-    Visualize,
-)
+from datawrapper.charts.models import Annotate, Describe, Publish, Transform, Visualize
 
 
 class BaseChart(BaseModel):

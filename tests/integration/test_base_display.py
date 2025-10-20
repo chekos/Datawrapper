@@ -69,7 +69,9 @@ def test_base_chart_display_with_access_token():
     mock_iframe = IFrame("https://example.com", width=600, height=400)
     mock_client.display_chart.return_value = mock_iframe
 
-    with patch.object(chart, "_get_client", return_value=mock_client) as mock_get_client:
+    with patch.object(
+        chart, "_get_client", return_value=mock_client
+    ) as mock_get_client:
         # Call the display method with an access token
         test_token = "test_access_token"
         result = chart.display(access_token=test_token)
