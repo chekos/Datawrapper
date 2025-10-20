@@ -23,8 +23,7 @@ chart = dw.BarChart(
     value_label_format=dw.NumberFormat.ONE_DECIMAL,
 )
 
-# Create it in Datawrapper
-chart_id = chart.create()
+chart.create()
 ```
 
 ## Getting an existing chart
@@ -58,7 +57,7 @@ new_data = pd.DataFrame(
 )
 chart.data = new_data
 
-# Push the changes to Datawrapper
+# Push the changes to Datawrapper (returns self for method chaining)
 chart.update()
 ```
 
@@ -67,7 +66,11 @@ chart.update()
 Once your chart is ready, publish it to make it publicly accessible:
 
 ```python
+# Publish the chart (returns self for method chaining)
 chart.publish()
+
+# Chain with other operations
+chart.create().publish()
 ```
 
 ## Exporting a chart
@@ -116,8 +119,14 @@ success = chart.delete()
 
 if success:
     print("Chart deleted successfully")
-    # The chart_id is now None
-    print(f"Chart ID: {chart.chart_id}")
+```
+
+## Getting editor URL
+
+Get the Datawrapper URL to continue editing your chart:
+
+```python
+chart.get_editor_url()
 ```
 
 ## Getting iframe code
@@ -134,17 +143,6 @@ responsive_iframe = chart.get_iframe_code(responsive=True)
 print(responsive_iframe)
 ```
 
-The iframe code can be directly embedded in HTML pages. The `responsive=True` option generates code that automatically adjusts to container width.
-
-## Getting editor URL
-
-Get the Datawrapper URL to continue editing your chart:
-
-```python
-# Get the editor URL
-chart.get_editor_url()
-```
-
 ## Getting png URL
 
 Get the fallback image URL for use in noscript tags:
@@ -157,5 +155,3 @@ print(f"PNG fallback: {png_url}")
 # Use in HTML noscript tags
 html = f'<noscript><img src="{png_url}" alt="Chart" /></noscript>'
 ```
-
-This provides a static image fallback for environments where JavaScript is disabled. It's also a handy way to get a direct link to the chart image for other uses.

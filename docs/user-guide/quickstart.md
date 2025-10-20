@@ -57,8 +57,7 @@ chart = dw.BarChart(
 )
 
 # Create the chart on Datawrapper (uses DATAWRAPPER_ACCESS_TOKEN environment variable)
-chart_id = chart.create()
-print(f"Chart created! ID: {chart_id}")
+chart.create()
 
 # You could also provide the token at runtime
 # chart_id = chart.create(access_token="your_token_here")
@@ -85,7 +84,7 @@ for category in ["Sales", "Revenue", "Profit"]:
     chart = dw.BarChart(
         title=f"{category} by Region", data=get_data_for_category(category)
     )
-    chart_id = chart.create()
+    chart.create()
 ```
 
 Happy charting! 📊
