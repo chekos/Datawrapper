@@ -5,17 +5,11 @@ from pathlib import Path
 from typing import Any, Literal
 
 import pandas as pd
-from IPython.display import Image
+from IPython.display import IFrame, Image
 from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 
 from datawrapper.__main__ import Datawrapper
-from datawrapper.charts.models import (
-    Annotate,
-    Describe,
-    Publish,
-    Transform,
-    Visualize,
-)
+from datawrapper.charts.models import Annotate, Describe, Publish, Transform, Visualize
 
 
 class BaseChart(BaseModel):
@@ -981,6 +975,31 @@ class BaseChart(BaseModel):
 
         # Call the get_iframe_code method from the client
         return client.get_iframe_code(chart_id=self.chart_id, responsive=responsive)
+
+    def display(self, access_token: str | None = None) -> IFrame:
+        """Display the chart as an IFrame in a Jupyter notebook.
+
+        Args:
+            access_token: Optional Datawrapper API access token.
+                         If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+
+        Returns:
+            An IPython.display.IFrame object displaying the chart.
+
+        Raises:
+            ValueError: If no chart_id is set or no access token is available.
+            Exception: If the API request fails.
+        """
+        if not self.chart_id:
+            raise ValueError(
+                "No chart_id set. Use create() first or set chart_id manually."
+            )
+
+        # Get the client
+        client = self._get_client(access_token)
+
+        # Call the display_chart method from the client
+        return client.display_chart(chart_id=self.chart_id)
 
     def get_editor_url(self) -> str:
         """Get the Datawrapper editor URL for this chart.
