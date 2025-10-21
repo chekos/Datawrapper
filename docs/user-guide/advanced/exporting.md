@@ -1,6 +1,6 @@
 # Exporting Charts
 
-This guide covers exporting Datawrapper charts in various formats including PNG, PDF, and SVG.
+Export Datawrapper charts in various formats including PNG, PDF, and SVG. In many cases, exporting can be done directly through the chart object methods and these methods should be considered deprecated. However, for advanced use cases or when working directly with the Datawrapper API, the following examples demonstrate how to export charts using the client. Where possible, prefer using the chart object's export methods.
 
 ## Export as PNG
 
