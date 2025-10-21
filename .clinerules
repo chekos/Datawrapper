@@ -19,7 +19,7 @@ This is a Python library for interacting with the Datawrapper API to create and 
 
 ### Migration Examples
 
-**Legacy API (DEPRECATED - DO NOT USE):**
+**Legacy API (DEPRECATED - AVOID IN NEW CODE):**
 ```python
 from datawrapper import Datawrapper
 
