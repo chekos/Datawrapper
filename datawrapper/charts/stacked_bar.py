@@ -176,6 +176,18 @@ class StackedBarChart(BaseChart):
                 )
         return v
 
+    @field_validator("value_label_mode")
+    @classmethod
+    def validate_value_label_mode(cls, v: ValueLabelMode | str) -> ValueLabelMode | str:
+        """Validate that value_label_mode is a valid ValueLabelMode value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in ValueLabelMode]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid value_label_mode: {v}. Must be one of {valid_values}"
+                )
+        return v
+
     @model_serializer
     def serialize_model(self) -> dict:
         """Serialize the model to a dictionary."""
