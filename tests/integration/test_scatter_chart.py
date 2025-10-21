@@ -702,12 +702,6 @@ class TestScatterPlotRoundTrip:
             "title": serialized["title"],
             "metadata": serialized["metadata"],
         }
-        # Parse back
-        chart_metadata = {
-            "type": serialized["type"],
-            "title": serialized["title"],
-            "metadata": serialized["metadata"],
-        }
 
         mock_csv = "X,Y,Size,Label\n1,4,10,A\n2,5,20,B\n3,6,30,C"
 
