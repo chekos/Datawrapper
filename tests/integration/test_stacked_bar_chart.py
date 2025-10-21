@@ -204,7 +204,7 @@ class TestStackedBarChartSerialization:
         assert neg_color["value"] == "#ff0000"
 
     def test_serialize_with_groups(self):
-        """Test that groups_column is serialized to axes."""
+        """Test that groups_column is serialized to axes inside metadata."""
         df = pd.DataFrame({"A": [1], "B": [2]})
         chart = StackedBarChart(
             title="Test",
@@ -213,8 +213,8 @@ class TestStackedBarChartSerialization:
         )
         serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
 
-        assert "axes" in serialized
-        assert serialized["axes"]["groups"] == "Description"
+        assert "axes" in serialized["metadata"]
+        assert serialized["metadata"]["axes"]["groups"] == "Description"
 
     def test_serialize_describe_section(self):
         """Test that describe section is serialized correctly."""

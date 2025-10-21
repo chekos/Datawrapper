@@ -225,9 +225,9 @@ class TestScatterPlotSerialization:
 
         assert serialized["type"] == "d3-scatter-plot"
         assert serialized["title"] == "Test Chart"
-        assert "axes" in serialized
-        assert serialized["axes"]["x"] == "X"
-        assert serialized["axes"]["y"] == "Y"
+        assert "axes" in serialized["metadata"]
+        assert serialized["metadata"]["axes"]["x"] == "X"
+        assert serialized["metadata"]["axes"]["y"] == "Y"
 
     def test_serialize_axes_objects(self):
         """Test that axes are serialized as nested objects."""
@@ -331,7 +331,7 @@ class TestScatterPlotSerialization:
         visualize = serialized["metadata"]["visualize"]
 
         assert visualize["size"] == "dynamic"
-        assert serialized["axes"]["size"] == "Size"
+        assert serialized["metadata"]["axes"]["size"] == "Size"
         assert visualize["fixed-size"] == 10
         assert visualize["max-size"] == 50
         assert visualize["responsive-symbol-size"] is True
@@ -395,7 +395,7 @@ class TestScatterPlotSerialization:
         visualize = serialized["metadata"]["visualize"]
 
         assert visualize["shape"] == "dynamic"
-        assert serialized["axes"]["shape"] == "Shape"
+        assert serialized["metadata"]["axes"]["shape"] == "Shape"
         assert visualize["fixed-shape"] == "symbolSquare"
 
     def test_serialize_regression(self):
@@ -460,7 +460,7 @@ class TestScatterPlotSerialization:
         serialized = chart.model_dump(by_alias=True)
         visualize = serialized["metadata"]["visualize"]
 
-        assert serialized["axes"]["labels"] == "Label"
+        assert serialized["metadata"]["axes"]["labels"] == "Label"
         assert visualize["auto-labels"] is False
         assert visualize["add-labels"] == ["A", "C"]
         assert visualize["highlight-labeled"] is False
@@ -635,7 +635,6 @@ class TestScatterPlotRoundTrip:
         chart_metadata = {
             "type": serialized["type"],
             "title": serialized["title"],
-            "axes": serialized["axes"],
             "metadata": serialized["metadata"],
         }
 
@@ -701,7 +700,12 @@ class TestScatterPlotRoundTrip:
         chart_metadata = {
             "type": serialized["type"],
             "title": serialized["title"],
-            "axes": serialized["axes"],
+            "metadata": serialized["metadata"],
+        }
+        # Parse back
+        chart_metadata = {
+            "type": serialized["type"],
+            "title": serialized["title"],
             "metadata": serialized["metadata"],
         }
 
@@ -754,7 +758,7 @@ class TestScatterPlotCompatibility:
         # Check top-level structure
         assert "metadata" in serialized
         assert "visualize" in serialized["metadata"]
-        assert "axes" in serialized
+        assert "axes" in serialized["metadata"]
 
         # Check axes structure
         visualize = serialized["metadata"]["visualize"]

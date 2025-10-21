@@ -219,7 +219,7 @@ class StackedBarChart(BaseChart):
 
         # Add axes if groups_column is set
         if self.groups_column:
-            model["axes"] = {"groups": self.groups_column}
+            model["metadata"]["axes"] = {"groups": self.groups_column}
 
         # Return the serialized data
         return model
@@ -241,7 +241,7 @@ class StackedBarChart(BaseChart):
         # Extract stacked bar specific sections
         metadata = api_response.get("metadata", {})
         visualize = metadata.get("visualize", {})
-        axes = api_response.get("axes", metadata.get("axes", {}))
+        axes = metadata.get("axes", {})
 
         # Parse stacked bar specific fields
         if "reverse-order" in visualize:

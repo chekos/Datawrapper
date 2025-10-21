@@ -514,7 +514,7 @@ class ScatterPlot(BaseChart):
             axes["labels"] = self.labels_column
 
         # Add axes to metadata
-        model["axes"] = axes
+        model["metadata"]["axes"] = axes
 
         # Add chart specific properties to visualize section
         model["metadata"]["visualize"].update(
@@ -615,8 +615,7 @@ class ScatterPlot(BaseChart):
         # Extract scatter-specific sections
         metadata = api_response.get("metadata", {})
         visualize = metadata.get("visualize", {})
-        # Axes can be at top level or in metadata
-        axes = api_response.get("axes", metadata.get("axes", {}))
+        axes = metadata.get("axes", {})
 
         # Parse axes columns
         init_data["x_column"] = axes.get("x")
