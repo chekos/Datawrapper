@@ -43,6 +43,58 @@ class TestArrowChartCreation:
         assert serialized["metadata"]["axes"]["colors"] == "Country"
         assert serialized["metadata"]["axes"]["labels"] == "Country"
 
+    def test_serialize_conditional_axes_fields(self):
+        """Test that axes fields are only included when non-None (conditional serialization)."""
+        # Test with only start and end columns (minimal axes)
+        chart = ArrowChart(
+            title="Test",
+            data=pd.DataFrame({"x": [1, 2], "y": [10, 20], "z": [15, 25]}),
+            start_column="y",
+            end_column="z",
+        )
+
+        serialized = chart.serialize_model()
+
+        # Should only include start and end
+        assert "axes" in serialized["metadata"]
+        assert serialized["metadata"]["axes"]["start"] == "y"
+        assert serialized["metadata"]["axes"]["end"] == "z"
+        assert "colors" not in serialized["metadata"]["axes"]
+        assert "labels" not in serialized["metadata"]["axes"]
+
+    def test_serialize_no_axes_when_all_none(self):
+        """Test that axes section is omitted when all axes fields are None."""
+        chart = ArrowChart(
+            title="Test",
+            data=pd.DataFrame({"x": [1, 2], "y": [10, 20]}),
+            # No axes columns specified
+        )
+
+        serialized = chart.serialize_model()
+
+        # axes section should not be present at all
+        assert "axes" not in serialized["metadata"]
+
+    def test_serialize_partial_axes_fields(self):
+        """Test serializing with only some axes fields set."""
+        # Test with start, end, and color but no label
+        chart = ArrowChart(
+            title="Test",
+            data=pd.DataFrame({"Country": ["A", "B"], "Start": [1, 2], "End": [3, 4]}),
+            start_column="Start",
+            end_column="End",
+            color_column="Country",
+            # label_column intentionally omitted
+        )
+
+        serialized = chart.serialize_model()
+
+        assert "axes" in serialized["metadata"]
+        assert serialized["metadata"]["axes"]["start"] == "Start"
+        assert serialized["metadata"]["axes"]["end"] == "End"
+        assert serialized["metadata"]["axes"]["colors"] == "Country"
+        assert "labels" not in serialized["metadata"]["axes"]
+
     def test_create_basic_arrow_chart(self):
         """Test creating a basic arrow chart."""
         chart = ArrowChart(

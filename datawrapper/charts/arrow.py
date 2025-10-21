@@ -237,13 +237,20 @@ class ArrowChart(BaseChart):
             }
         )
 
-        # Add axes section (separate from visualize)
-        model["metadata"]["axes"] = {
-            "start": self.start_column,
-            "end": self.end_column,
-            "colors": self.color_column,
-            "labels": self.label_column,
-        }
+        # Add axes section (separate from visualize) - only include non-None fields
+        axes_dict = {}
+        if self.start_column is not None:
+            axes_dict["start"] = self.start_column
+        if self.end_column is not None:
+            axes_dict["end"] = self.end_column
+        if self.color_column is not None:
+            axes_dict["colors"] = self.color_column
+        if self.label_column is not None:
+            axes_dict["labels"] = self.label_column
+
+        # Only add axes section if there are fields to include
+        if axes_dict:
+            model["metadata"]["axes"] = axes_dict
 
         # Return the serialized data
         return model
