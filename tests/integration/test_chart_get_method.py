@@ -485,7 +485,7 @@ class TestBarChartGet:
             assert chart.label_column == "Country"
             assert chart.bar_column == "Value"
             assert chart.color_column == "Category"
-            assert chart.group_by_column == "Region"
+            assert chart.groups_column == "Region"
 
     def test_get_bar_chart_replace_flags_enabled(self):
         """Test get() correctly parses replace-flags when enabled."""

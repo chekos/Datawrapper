@@ -91,10 +91,8 @@ class TestStackedBarChartCreation:
         chart = StackedBarChart(
             title="Grouped Chart",
             data=df,
-            group_by_column=True,
             groups_column="Group",
         )
-        assert chart.group_by_column is True
         assert chart.groups_column == "Group"
 
     def test_create_with_negative_colors(self):
@@ -583,7 +581,7 @@ class TestStackedBarChartCompatibility:
         assert hasattr(chart, "aria_description")
         assert hasattr(chart, "range_value_labels")
         assert hasattr(chart, "color_by_column")
-        assert hasattr(chart, "group_by_column")
+        assert hasattr(chart, "groups_column")
         assert hasattr(chart, "show_color_key")
         assert hasattr(chart, "value_label_mode")
 
@@ -607,7 +605,7 @@ class TestStackedBarChartCompatibility:
         assert chart.aria_description == ""
         assert chart.range_value_labels == ""
         assert chart.color_by_column is False
-        assert chart.group_by_column is False
+        assert chart.groups_column is None
         assert chart.show_color_key is False
         assert chart.value_label_mode == "left"
 

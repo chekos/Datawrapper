@@ -195,13 +195,13 @@ class TestScatterPlotCreation:
             data=df,
             x_column="X",
             y_column="Y",
-            labels_column="Label",
+            label_column="Label",
             auto_labels=False,
             add_labels=["A", "C"],
             highlight_labeled=True,
         )
 
-        assert chart.labels_column == "Label"
+        assert chart.label_column == "Label"
         assert chart.auto_labels is False
         assert chart.add_labels == ["A", "C"]
         assert chart.highlight_labeled is True
@@ -451,7 +451,7 @@ class TestScatterPlotSerialization:
             data=df,
             x_column="X",
             y_column="Y",
-            labels_column="Label",
+            label_column="Label",
             auto_labels=False,
             add_labels=["A", "C"],
             highlight_labeled=False,
@@ -520,7 +520,7 @@ class TestScatterPlotParsing:
             assert chart.x_column == "Group"
             assert chart.y_column == "Period"
             assert chart.shape_column == "time range"
-            assert chart.labels_column == "Symbol"
+            assert chart.label_column == "Symbol"
             assert chart.fixed_size == 20
             assert chart.show_color_key is True
 
@@ -548,7 +548,7 @@ class TestScatterPlotParsing:
             assert chart.y_column == "percent"
             assert chart.size == "dynamic"
             assert chart.size_column == "students"
-            assert chart.labels_column == "city"
+            assert chart.label_column == "city"
             assert chart.add_labels == ["Berlin", "Frankfurt am Main", "München"]
             assert chart.highlight_labeled is True
 
@@ -578,7 +578,7 @@ class TestScatterPlotParsing:
             assert chart.x_column == "gdp"
             assert chart.y_column == "health"
             assert chart.size_column == "population"
-            assert chart.labels_column == "country"
+            assert chart.label_column == "country"
             assert chart.x_log is True
             assert chart.y_log is False
             assert chart.auto_labels is False
@@ -678,7 +678,7 @@ class TestScatterPlotRoundTrip:
             y_column="Y",
             size="dynamic",
             size_column="Size",
-            labels_column="Label",
+            label_column="Label",
             x_log=True,
             y_log=False,
             x_range=[0, 10],
@@ -730,7 +730,7 @@ class TestScatterPlotRoundTrip:
             assert parsed.y_column == original.y_column
             assert parsed.size == original.size
             assert parsed.size_column == original.size_column
-            assert parsed.labels_column == original.labels_column
+            assert parsed.label_column == original.label_column
             assert parsed.x_log == original.x_log
             assert parsed.y_log == original.y_log
             assert parsed.regression == original.regression

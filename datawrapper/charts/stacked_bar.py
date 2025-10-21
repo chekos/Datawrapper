@@ -90,13 +90,6 @@ class StackedBarChart(BaseChart):
         description="Enables the color-by-column feature",
     )
 
-    #: Enables the group-by-column feature, works with "Group" field
-    group_by_column: bool = Field(
-        default=False,
-        alias="group-by-column",
-        description="Enables the group-by-column feature",
-    )
-
     #: Enables the legend
     show_color_key: bool = Field(
         default=False,
@@ -155,7 +148,7 @@ class StackedBarChart(BaseChart):
         description="The negative color to use, if you want one",
     )
 
-    #: The column to use for grouping (when group_by_column is enabled)
+    #: The column to use for grouping
     groups_column: str | None = Field(
         default=None,
         alias="groups-column",
@@ -204,7 +197,7 @@ class StackedBarChart(BaseChart):
                 "value-label-format": self.value_label_format,
                 "date-label-format": self.date_label_format,
                 "color-by-column": self.color_by_column,
-                "group-by-column": self.group_by_column,
+                "group-by-column": self.groups_column is not None,
                 "thick": self.thick_bars,
                 "replace-flags": ReplaceFlags.serialize(self.replace_flags),
                 "value-label-mode": self.value_label_mode,
@@ -261,8 +254,6 @@ class StackedBarChart(BaseChart):
             init_data["date_label_format"] = visualize["date-label-format"]
         if "color-by-column" in visualize:
             init_data["color_by_column"] = visualize["color-by-column"]
-        if "group-by-column" in visualize:
-            init_data["group_by_column"] = visualize["group-by-column"]
         if "thick" in visualize:
             init_data["thick_bars"] = visualize["thick"]
 
@@ -292,9 +283,7 @@ class StackedBarChart(BaseChart):
             )
 
         # Parse groups column from axes
-        if isinstance(axes, dict):
-            init_data["groups_column"] = axes.get("groups")
-        else:
-            init_data["groups_column"] = None
+        if isinstance(axes, dict) and "groups" in axes:
+            init_data["groups_column"] = axes["groups"]
 
         return init_data

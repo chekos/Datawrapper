@@ -15,7 +15,7 @@ def test_bar_chart_axes_in_metadata():
             "label-column": "Country",
             "bar-column": "Value",
             "color-column": "Category",
-            "group-by-column": "Region",
+            "groups-column": "Region",
             "data": pd.DataFrame(
                 {
                     "Country": ["A", "B", "C"],
@@ -119,4 +119,5 @@ def test_bar_chart_empty_axes_values():
     assert axes["colors"] == ""  # color_column is empty, label_column is empty
     assert axes["bars"] == ""
     assert axes["labels"] == ""
-    assert axes["groups"] == ""
+    # groups should not be present when groups_column is None
+    assert "groups" not in axes
