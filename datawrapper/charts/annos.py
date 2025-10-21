@@ -1,6 +1,6 @@
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from .enums import ArrowHead, ConnectorLineType, LineInterpolation, StrokeWidth
 
@@ -359,6 +359,18 @@ class AreaFill(BaseModel):
                     f"Invalid interpolation: {v}. Must be one of {valid_values}"
                 )
         return v
+
+    @model_validator(mode="after")
+    def auto_enable_mixed_colors(self) -> "AreaFill":
+        """Auto-enable use_mixed_colors when color_negative is provided.
+
+        If a user provides a color_negative value (different from the default),
+        automatically enable use_mixed_colors to make the feature work as expected.
+        """
+        # Only auto-enable if color_negative differs from default and use_mixed_colors is False
+        if self.color_negative != "#cc0000" and not self.use_mixed_colors:
+            self.use_mixed_colors = True
+        return self
 
     def serialize_model(self) -> dict:
         """Serialize the model to a dictionary for the Datawrapper API.
