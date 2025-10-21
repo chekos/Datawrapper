@@ -83,13 +83,6 @@ class StackedBarChart(BaseChart):
         description="The field you want to use for the value labels",
     )
 
-    #: Enables the color-by-column feature
-    color_by_column: bool = Field(
-        default=False,
-        alias="color-by-column",
-        description="Enables the color-by-column feature",
-    )
-
     #: Enables the legend
     show_color_key: bool = Field(
         default=False,
@@ -196,7 +189,7 @@ class StackedBarChart(BaseChart):
                 "show-color-key": self.show_color_key,
                 "value-label-format": self.value_label_format,
                 "date-label-format": self.date_label_format,
-                "color-by-column": self.color_by_column,
+                "color-by-column": bool(self.color_category),
                 "group-by-column": self.groups_column is not None,
                 "thick": self.thick_bars,
                 "replace-flags": ReplaceFlags.serialize(self.replace_flags),
@@ -252,8 +245,6 @@ class StackedBarChart(BaseChart):
             init_data["value_label_format"] = visualize["value-label-format"]
         if "date-label-format" in visualize:
             init_data["date_label_format"] = visualize["date-label-format"]
-        if "color-by-column" in visualize:
-            init_data["color_by_column"] = visualize["color-by-column"]
         if "thick" in visualize:
             init_data["thick_bars"] = visualize["thick"]
 

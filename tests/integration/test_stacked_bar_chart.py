@@ -271,7 +271,6 @@ class TestStackedBarChartParsing:
             assert chart.sort_by == "I like them a lot"
             assert chart.base_color == 2
             assert chart.show_color_key is True
-            assert chart.color_by_column is True
             assert chart.value_label_format == "0%"
             assert len(chart.color_category) > 0
             assert "I like them a lot" in chart.color_category
@@ -305,7 +304,6 @@ class TestStackedBarChartParsing:
             assert chart.sort_by == "share of people in capital"
             assert chart.base_color == 0
             assert chart.show_color_key is True
-            assert chart.color_by_column is True
             assert chart.negative_color is None
 
     def test_parse_media_trust_sample(self):
@@ -341,7 +339,6 @@ class TestStackedBarChartParsing:
             assert chart.value_label_mode == "diverging"
             assert chart.block_labels is True
             assert chart.show_color_key is True
-            assert chart.color_by_column is True
 
     def test_parse_sugar_sample(self):
         """Test parsing the sugar.json sample."""
@@ -374,7 +371,6 @@ class TestStackedBarChartParsing:
             assert chart.sort_by == "Sucrose (Fructose+Glucose)"
             assert chart.base_color == 0
             assert chart.show_color_key is True
-            assert chart.color_by_column is True
             assert chart.groups_column == "Description"  # From axes.groups
             assert chart.value_label_format == "0.[0]"
 
@@ -580,7 +576,6 @@ class TestStackedBarChartCompatibility:
         assert hasattr(chart, "source_url")
         assert hasattr(chart, "aria_description")
         assert hasattr(chart, "range_value_labels")
-        assert hasattr(chart, "color_by_column")
         assert hasattr(chart, "groups_column")
         assert hasattr(chart, "show_color_key")
         assert hasattr(chart, "value_label_mode")
@@ -604,7 +599,6 @@ class TestStackedBarChartCompatibility:
         assert chart.source_url == ""
         assert chart.aria_description == ""
         assert chart.range_value_labels == ""
-        assert chart.color_by_column is False
         assert chart.groups_column is None
         assert chart.show_color_key is False
         assert chart.value_label_mode == "left"

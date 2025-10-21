@@ -173,13 +173,6 @@ class ArrowChart(BaseChart):
     # Features
     #
 
-    #: Enables the color-by-column feature
-    color_by_column: bool = Field(
-        default=False,
-        alias="color-by-column",
-        description="Enables the color-by-column feature",
-    )
-
     #: Label on the first arrow that shows column names
     arrow_key: bool = Field(
         default=False,
@@ -230,7 +223,7 @@ class ArrowChart(BaseChart):
                 "custom-range": CustomRange.serialize(self.custom_range),
                 "range-extent": self.range_extent,
                 "value-label-format": self.value_label_format,
-                "color-by-column": self.color_by_column,
+                "color-by-column": bool(self.color_category),
                 "group-by-column": self.group_by_column,
                 "replace-flags": ReplaceFlags.serialize(self.replace_flags),
                 "show-arrow-key": self.arrow_key,
@@ -328,8 +321,6 @@ class ArrowChart(BaseChart):
             init_data["label_column"] = axes["labels"]
 
         # Features
-        if "color-by-column" in visualize:
-            init_data["color_by_column"] = visualize["color-by-column"]
         if "group-by-column" in visualize:
             init_data["group_by_column"] = visualize["group-by-column"]
         if "show-arrow-key" in visualize:
