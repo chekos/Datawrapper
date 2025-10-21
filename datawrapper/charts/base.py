@@ -1019,7 +1019,7 @@ class BaseChart(BaseModel):
                 "No chart_id set. Use create() first or set chart_id manually."
             )
 
-        return f"https://app.datawrapper.de/thomson-reuters/edit/{self.chart_id}/visualize#refine"
+        return f"https://app.datawrapper.de/edit/{self.chart_id}/visualize#refine"
 
     def get_png_url(self) -> str:
         """Get the fallback PNG image URL for noscript tags.
@@ -1036,3 +1036,24 @@ class BaseChart(BaseModel):
             )
 
         return f"https://datawrapper.dwcdn.net/{self.chart_id}/full.png"
+
+    def get_public_url(self) -> str:
+        """Get the public URL for the published chart.
+
+        Returns:
+            The public URL in the format https://datawrapper.dwcdn.net/{chart_id}/
+
+        Raises:
+            ValueError: If no chart_id is set.
+
+        Note:
+            This method returns the URL regardless of whether the chart is actually
+            published. If the chart is not published, the URL will not be accessible.
+            Use publish() to publish the chart before accessing this URL.
+        """
+        if not self.chart_id:
+            raise ValueError(
+                "No chart_id set. Use create() first or set chart_id manually."
+            )
+
+        return f"https://datawrapper.dwcdn.net/{self.chart_id}/"

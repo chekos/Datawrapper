@@ -13,7 +13,11 @@ A lightweight Python wrapper for the Datawrapper API
 ## Installation
 
 ```bash
-uv install datawrapper
+# With `uv` ...
+uv add datawrapper
+
+# or, if you prefer...
+pip install datawrapper
 ```
 
 ## Quick Start

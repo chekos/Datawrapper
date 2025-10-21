@@ -4,13 +4,13 @@ This guide will help you create your first Datawrapper chart using the object-or
 
 ## Prerequisites
 
-- Python 3.9 or higher
+- Python 3.10 or higher
 - An account at [datawrapper.de](https://www.datawrapper.de/)
 - A Datawrapper API token with appropriate permissions
 
 ## Installation
 
-Install the datawrapper package using uv (recommended) or pip:
+Install the datawrapper package using `uv` or `pip` or another Python package manager:
 
 ```bash
 # Using uv (recommended)
