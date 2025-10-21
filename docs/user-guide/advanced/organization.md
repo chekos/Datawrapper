@@ -1,6 +1,6 @@
 # Organization
 
-This guide covers managing organizational structures in Datawrapper, including folders, themes, and team workspaces.
+Managing organizational structures in Datawrapper, including folders, themes, and team workspaces.
 
 ## Folders
 

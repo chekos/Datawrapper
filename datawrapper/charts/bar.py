@@ -342,11 +342,11 @@ class BarChart(BaseChart):
         description="Whether to reverse the sort order",
     )
 
-    #: Whether to group the bars by a second column
-    group_by_column: str = Field(
-        default="",
-        alias="group-by-column",
-        description="Whether to group the bars by a second column",
+    #: The column to use for grouping bars
+    groups_column: str | None = Field(
+        default=None,
+        alias="groups-column",
+        description="The column to use for grouping bars",
     )
 
     #: Whether to show the group labels
@@ -452,7 +452,8 @@ class BarChart(BaseChart):
                 # Sorting and grouping
                 "sort-bars": self.sort_bars,
                 "reverse-order": self.reverse_order,
-                "group-by-column": self.group_by_column != "",
+                "group-by-column": self.groups_column is not None
+                and self.groups_column != "",
                 "show-group-labels": self.show_group_labels,
                 "show-category-labels": self.show_category_labels,
                 # Overlays
@@ -485,12 +486,17 @@ class BarChart(BaseChart):
             model["metadata"]["visualize"]["overlays"].append(overlay_dict)
 
         # Add axes configuration to metadata
-        model["metadata"]["axes"] = {
+        axes_config = {
             "colors": self.color_column or self.label_column,
             "bars": self.bar_column,
             "labels": self.label_column,
-            "groups": self.group_by_column,
         }
+
+        # Only add groups if it's set
+        if self.groups_column:
+            axes_config["groups"] = self.groups_column
+
+        model["metadata"]["axes"] = axes_config
 
         # Return the serialized data
         return model
@@ -585,7 +591,7 @@ class BarChart(BaseChart):
         if "reverse-order" in visualize:
             init_data["reverse_order"] = visualize["reverse-order"]
         if "groups" in axes:
-            init_data["group_by_column"] = axes["groups"]
+            init_data["groups_column"] = axes["groups"]
         if "show-group-labels" in visualize:
             init_data["show_group_labels"] = visualize["show-group-labels"]
         if "show-category-labels" in visualize:

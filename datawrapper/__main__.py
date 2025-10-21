@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import warnings
 from io import StringIO
 from pathlib import Path
 from typing import Any
@@ -648,6 +649,10 @@ class Datawrapper:
     def get_chart(self, chart_id: str) -> dict:
         """Retrieve information of a specific chart, table or map.
 
+        .. deprecated::
+            Use the chart factory function instead to get typed chart instances.
+            This method will be removed in a future version.
+
         Parameters
         ----------
         chart_id : str
@@ -658,6 +663,13 @@ class Datawrapper:
         dict
             A dictionary containing the information of the chart, table, or map.
         """
+        warnings.warn(
+            "get_chart() is deprecated and will be removed in a future version. "
+            "Use the chart factory function instead to get typed chart instances. "
+            "Example: import datawrapper as dw; chart = dw.get_chart(chart_id='abc123')",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return self.get(f"{self._CHARTS_URL}/{chart_id}")
 
     def chart_properties(self, chart_id: str) -> dict:
@@ -685,6 +697,10 @@ class Datawrapper:
         metadata: dict | None = None,
     ) -> dict:
         """Creates a new Datawrapper chart, table or map.
+
+        .. deprecated::
+            Use the object-oriented chart classes instead (e.g., BarChart, LineChart).
+            This method will be removed in a future version.
 
         Parameters
         ----------
@@ -717,6 +733,14 @@ class Datawrapper:
         dict
             A dictionary containing the created chart's information.
         """
+        warnings.warn(
+            "create_chart() is deprecated and will be removed in a future version. "
+            "Use the object-oriented chart classes instead. "
+            "Example: chart = BarChart(title='My Chart', data=df).create()",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         # Set chart properties
         _query: dict[str, Any] = {"title": title, "type": chart_type}
         if theme:
@@ -765,6 +789,10 @@ class Datawrapper:
     ) -> dict:
         """Updates a chart's title, theme, type, language, folder or organization.
 
+        .. deprecated::
+            Use the object-oriented chart classes instead (e.g., BarChart, LineChart).
+            This method will be removed in a future version.
+
         Parameters
         ----------
         chart_id: str
@@ -801,6 +829,14 @@ class Datawrapper:
         InvalidRequestError
             If no updates are submitted.
         """
+        warnings.warn(
+            "update_chart() is deprecated and will be removed in a future version. "
+            "Use the object-oriented chart classes instead. "
+            "Example: chart = BarChart.get(chart_id='abc123'); chart.title = 'New Title'; chart.update()",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         # Load the query with the provided parameters
         _query: dict[str, Any] = {}
         if title:
@@ -942,6 +978,10 @@ class Datawrapper:
     def delete_chart(self, chart_id: str) -> bool:
         """Deletes a chart, table or map.
 
+        .. deprecated::
+            Use the object-oriented chart classes instead (e.g., BarChart, LineChart).
+            This method will be removed in a future version.
+
         Parameters
         ----------
         chart_id : str
@@ -952,6 +992,14 @@ class Datawrapper:
         bool
             True if the chart was deleted successfully.
         """
+        warnings.warn(
+            "delete_chart() is deprecated and will be removed in a future version. "
+            "Use the object-oriented chart classes instead. "
+            "Example: chart = BarChart.get(chart_id='abc123'); chart.delete()",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         return self.delete(f"{self._CHARTS_URL}/{chart_id}")
 
     def display_chart(self, chart_id: str) -> IFrame:
@@ -976,6 +1024,10 @@ class Datawrapper:
     def copy_chart(self, chart_id: str) -> dict:
         """Copy one of your charts, tables, or maps and create a new editable copy.
 
+        .. deprecated::
+            Use the object-oriented chart classes instead (e.g., BarChart, LineChart).
+            This method will be removed in a future version.
+
         Parameters
         ----------
         chart_id : str
@@ -986,6 +1038,14 @@ class Datawrapper:
         dict
             A dictionary containing the information of the chart, table, or map.
         """
+        warnings.warn(
+            "copy_chart() is deprecated and will be removed in a future version. "
+            "Use the object-oriented chart classes instead. "
+            "Example: chart = BarChart.get(chart_id='abc123'); duplicate = chart.duplicate()",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         response = self.post(f"{self._CHARTS_URL}/{chart_id}/copy")
         assert isinstance(response, dict)
         return response
@@ -993,6 +1053,10 @@ class Datawrapper:
     def fork_chart(self, chart_id: str) -> dict:
         """Fork a chart, table, or map and create an editable copy.
 
+        .. deprecated::
+            Use the object-oriented chart classes instead (e.g., BarChart, LineChart).
+            This method will be removed in a future version.
+
         Parameters
         ----------
         chart_id : str
@@ -1003,6 +1067,14 @@ class Datawrapper:
         dict
             A dictionary containing the information of the chart, table, or map.
         """
+        warnings.warn(
+            "fork_chart() is deprecated and will be removed in a future version. "
+            "Use the object-oriented chart classes instead. "
+            "Example: chart = BarChart.get(chart_id='abc123'); fork = chart.fork()",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         response = self.post(f"{self._CHARTS_URL}/{chart_id}/fork")
         assert isinstance(response, dict)
         return response
@@ -1025,6 +1097,10 @@ class Datawrapper:
     def publish_chart(self, chart_id: str, display: bool = False) -> dict | IFrame:
         """Publishes a chart, table or map.
 
+        .. deprecated::
+            Use the object-oriented chart classes instead (e.g., BarChart, LineChart).
+            This method will be removed in a future version.
+
         Parameters
         ----------
         chart_id : str
@@ -1038,6 +1114,14 @@ class Datawrapper:
             Either a dictionary containing the published chart's information or an IFrame
             object displaying the chart.
         """
+        warnings.warn(
+            "publish_chart() is deprecated and will be removed in a future version. "
+            "Use the object-oriented chart classes instead. "
+            "Example: chart = BarChart.get(chart_id='abc123'); chart.publish()",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         obj = self.post(f"{self._CHARTS_URL}/{chart_id}/publish")
         assert isinstance(obj, dict)
         if display:
@@ -1237,6 +1321,10 @@ class Datawrapper:
     def add_data(self, chart_id: str, data: pd.DataFrame | str) -> bool:
         """Add data to a specified chart.
 
+        .. deprecated::
+            Use the object-oriented chart classes instead (e.g., BarChart, LineChart).
+            This method will be removed in a future version.
+
         Parameters
         ----------
         chart_id : str
@@ -1250,6 +1338,14 @@ class Datawrapper:
         bool
             True if the data was added successfully.
         """
+        warnings.warn(
+            "add_data() is deprecated and will be removed in a future version. "
+            "Use the object-oriented chart classes instead. "
+            "Example: chart = BarChart(title='My Chart', data=df).create() or chart.data = df; chart.update()",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         # If data is a pandas dataframe, convert to csv
         if isinstance(data, pd.DataFrame):
             _data = data.to_csv(index=False, encoding="utf-8")

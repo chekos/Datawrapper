@@ -83,20 +83,6 @@ class StackedBarChart(BaseChart):
         description="The field you want to use for the value labels",
     )
 
-    #: Enables the color-by-column feature
-    color_by_column: bool = Field(
-        default=False,
-        alias="color-by-column",
-        description="Enables the color-by-column feature",
-    )
-
-    #: Enables the group-by-column feature, works with "Group" field
-    group_by_column: bool = Field(
-        default=False,
-        alias="group-by-column",
-        description="Enables the group-by-column feature",
-    )
-
     #: Enables the legend
     show_color_key: bool = Field(
         default=False,
@@ -155,7 +141,7 @@ class StackedBarChart(BaseChart):
         description="The negative color to use, if you want one",
     )
 
-    #: The column to use for grouping (when group_by_column is enabled)
+    #: The column to use for grouping
     groups_column: str | None = Field(
         default=None,
         alias="groups-column",
@@ -176,6 +162,18 @@ class StackedBarChart(BaseChart):
                 )
         return v
 
+    @field_validator("value_label_mode")
+    @classmethod
+    def validate_value_label_mode(cls, v: ValueLabelMode | str) -> ValueLabelMode | str:
+        """Validate that value_label_mode is a valid ValueLabelMode value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in ValueLabelMode]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid value_label_mode: {v}. Must be one of {valid_values}"
+                )
+        return v
+
     @model_serializer
     def serialize_model(self) -> dict:
         """Serialize the model to a dictionary."""
@@ -191,8 +189,8 @@ class StackedBarChart(BaseChart):
                 "show-color-key": self.show_color_key,
                 "value-label-format": self.value_label_format,
                 "date-label-format": self.date_label_format,
-                "color-by-column": self.color_by_column,
-                "group-by-column": self.group_by_column,
+                "color-by-column": bool(self.color_category),
+                "group-by-column": self.groups_column is not None,
                 "thick": self.thick_bars,
                 "replace-flags": ReplaceFlags.serialize(self.replace_flags),
                 "value-label-mode": self.value_label_mode,
@@ -207,7 +205,7 @@ class StackedBarChart(BaseChart):
 
         # Add axes if groups_column is set
         if self.groups_column:
-            model["axes"] = {"groups": self.groups_column}
+            model["metadata"]["axes"] = {"groups": self.groups_column}
 
         # Return the serialized data
         return model
@@ -229,7 +227,7 @@ class StackedBarChart(BaseChart):
         # Extract stacked bar specific sections
         metadata = api_response.get("metadata", {})
         visualize = metadata.get("visualize", {})
-        axes = api_response.get("axes", metadata.get("axes", {}))
+        axes = metadata.get("axes", {})
 
         # Parse stacked bar specific fields
         if "reverse-order" in visualize:
@@ -247,10 +245,6 @@ class StackedBarChart(BaseChart):
             init_data["value_label_format"] = visualize["value-label-format"]
         if "date-label-format" in visualize:
             init_data["date_label_format"] = visualize["date-label-format"]
-        if "color-by-column" in visualize:
-            init_data["color_by_column"] = visualize["color-by-column"]
-        if "group-by-column" in visualize:
-            init_data["group_by_column"] = visualize["group-by-column"]
         if "thick" in visualize:
             init_data["thick_bars"] = visualize["thick"]
 
@@ -280,9 +274,7 @@ class StackedBarChart(BaseChart):
             )
 
         # Parse groups column from axes
-        if isinstance(axes, dict):
-            init_data["groups_column"] = axes.get("groups")
-        else:
-            init_data["groups_column"] = None
+        if isinstance(axes, dict) and "groups" in axes:
+            init_data["groups_column"] = axes["groups"]
 
         return init_data

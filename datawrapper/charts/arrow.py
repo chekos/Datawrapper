@@ -169,29 +169,21 @@ class ArrowChart(BaseChart):
         description="The column to label by",
     )
 
+    #: The column to group arrows by
+    groups_column: str | None = Field(
+        default=None,
+        description="The column to group arrows by",
+    )
+
     #
     # Features
     #
-
-    #: Enables the color-by-column feature
-    color_by_column: bool = Field(
-        default=False,
-        alias="color-by-column",
-        description="Enables the color-by-column feature",
-    )
 
     #: Label on the first arrow that shows column names
     arrow_key: bool = Field(
         default=False,
         alias="arrow-key",
         description="Label on the first arrow that shows column names",
-    )
-
-    #: Enables the group-by-column feature, works with "Group" field
-    group_by_column: bool = Field(
-        default=False,
-        alias="group-by-column",
-        description="Enables the group-by-column feature, works with 'Group' field",
     )
 
     @field_validator("replace_flags")
@@ -230,20 +222,29 @@ class ArrowChart(BaseChart):
                 "custom-range": CustomRange.serialize(self.custom_range),
                 "range-extent": self.range_extent,
                 "value-label-format": self.value_label_format,
-                "color-by-column": self.color_by_column,
-                "group-by-column": self.group_by_column,
+                "color-by-column": bool(self.color_category),
+                "group-by-column": self.groups_column is not None,
                 "replace-flags": ReplaceFlags.serialize(self.replace_flags),
                 "show-arrow-key": self.arrow_key,
             }
         )
 
-        # Add axes section (separate from visualize)
-        model["metadata"]["axes"] = {
-            "start": self.start_column,
-            "end": self.end_column,
-            "colors": self.color_column,
-            "labels": self.label_column,
-        }
+        # Add axes section (separate from visualize) - only include non-None fields
+        axes_dict = {}
+        if self.start_column is not None:
+            axes_dict["start"] = self.start_column
+        if self.end_column is not None:
+            axes_dict["end"] = self.end_column
+        if self.color_column is not None:
+            axes_dict["colors"] = self.color_column
+        if self.label_column is not None:
+            axes_dict["labels"] = self.label_column
+        if self.groups_column is not None:
+            axes_dict["groups"] = self.groups_column
+
+        # Only add axes section if there are fields to include
+        if axes_dict:
+            model["metadata"]["axes"] = axes_dict
 
         # Return the serialized data
         return model
@@ -319,12 +320,10 @@ class ArrowChart(BaseChart):
             init_data["color_column"] = axes["colors"]
         if "labels" in axes:
             init_data["label_column"] = axes["labels"]
+        if "groups" in axes:
+            init_data["groups_column"] = axes["groups"]
 
         # Features
-        if "color-by-column" in visualize:
-            init_data["color_by_column"] = visualize["color-by-column"]
-        if "group-by-column" in visualize:
-            init_data["group_by_column"] = visualize["group-by-column"]
         if "show-arrow-key" in visualize:
             init_data["arrow_key"] = visualize["show-arrow-key"]
 

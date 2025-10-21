@@ -435,9 +435,9 @@ class ScatterPlot(BaseChart):
     #
 
     #: The column to use for the labels
-    labels_column: str | None = Field(
+    label_column: str | None = Field(
         default=None,
-        alias="labels-column",
+        alias="label-column",
         description="The column to use for the labels",
     )
 
@@ -510,11 +510,11 @@ class ScatterPlot(BaseChart):
             axes["size"] = self.size_column
         if self.shape_column:
             axes["shape"] = self.shape_column
-        if self.labels_column:
-            axes["labels"] = self.labels_column
+        if self.label_column:
+            axes["labels"] = self.label_column
 
         # Add axes to metadata
-        model["axes"] = axes
+        model["metadata"]["axes"] = axes
 
         # Add chart specific properties to visualize section
         model["metadata"]["visualize"].update(
@@ -615,15 +615,14 @@ class ScatterPlot(BaseChart):
         # Extract scatter-specific sections
         metadata = api_response.get("metadata", {})
         visualize = metadata.get("visualize", {})
-        # Axes can be at top level or in metadata
-        axes = api_response.get("axes", metadata.get("axes", {}))
+        axes = metadata.get("axes", {})
 
         # Parse axes columns
         init_data["x_column"] = axes.get("x")
         init_data["y_column"] = axes.get("y")
         init_data["size_column"] = axes.get("size")
         init_data["shape_column"] = axes.get("shape")
-        init_data["labels_column"] = axes.get("labels")
+        init_data["label_column"] = axes.get("labels")
 
         # Parse x-axis
         x_axis = visualize.get("x-axis", {})
