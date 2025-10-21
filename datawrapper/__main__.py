@@ -649,6 +649,10 @@ class Datawrapper:
     def get_chart(self, chart_id: str) -> dict:
         """Retrieve information of a specific chart, table or map.
 
+        .. deprecated::
+            Use the chart factory function instead to get typed chart instances.
+            This method will be removed in a future version.
+
         Parameters
         ----------
         chart_id : str
@@ -659,6 +663,13 @@ class Datawrapper:
         dict
             A dictionary containing the information of the chart, table, or map.
         """
+        warnings.warn(
+            "get_chart() is deprecated and will be removed in a future version. "
+            "Use the chart factory function instead to get typed chart instances. "
+            "Example: import datawrapper as dw; chart = dw.get_chart(chart_id='abc123')",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return self.get(f"{self._CHARTS_URL}/{chart_id}")
 
     def chart_properties(self, chart_id: str) -> dict:
