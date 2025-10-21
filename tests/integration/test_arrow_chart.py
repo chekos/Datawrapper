@@ -210,14 +210,12 @@ class TestArrowChartCreation:
             data=pd.DataFrame({"x": [1, 2], "y": [10, 20], "z": [15, 25]}),
             start_column="y",
             end_column="z",
-            color_by_column=True,
             group_by_column=True,
             arrow_key=True,
         )
 
         serialized = chart.serialize_model()
 
-        assert serialized["metadata"]["visualize"]["color-by-column"] is True
         assert serialized["metadata"]["visualize"]["group-by-column"] is True
         assert serialized["metadata"]["visualize"]["show-arrow-key"] is True
 
@@ -291,7 +289,6 @@ class TestArrowChartGet:
             # Verify features
             assert chart.thick_arrows is True
             assert chart.arrow_key is True
-            assert chart.color_by_column is True
             assert chart.group_by_column is True
 
             # Verify sorting
