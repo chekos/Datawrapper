@@ -1,6 +1,6 @@
 # Chart Operations
 
-This guide covers advanced chart operations including management, data updates, and metadata customization.
+Chart operations that have been largely deprecated by our object-oriented models. Maintained for backwards compatibility and advanced use cases. Where possible, you should use the chart classes and methods instead.
 
 ## Chart Management
 

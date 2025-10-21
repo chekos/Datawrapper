@@ -1,6 +1,6 @@
 # Authentication and Account Management
 
-This guide covers authentication methods and account management operations for the Datawrapper API.
+Lower-level authentication methods and account management operations for the Datawrapper API. Not necessary to create charts with our object-oriented models, but useful for advanced users.
 
 ## Authentication
 
