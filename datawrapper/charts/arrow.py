@@ -169,6 +169,12 @@ class ArrowChart(BaseChart):
         description="The column to label by",
     )
 
+    #: The column to group arrows by
+    groups_column: str | None = Field(
+        default=None,
+        description="The column to group arrows by",
+    )
+
     #
     # Features
     #
@@ -178,13 +184,6 @@ class ArrowChart(BaseChart):
         default=False,
         alias="arrow-key",
         description="Label on the first arrow that shows column names",
-    )
-
-    #: Enables the group-by-column feature, works with "Group" field
-    group_by_column: bool = Field(
-        default=False,
-        alias="group-by-column",
-        description="Enables the group-by-column feature, works with 'Group' field",
     )
 
     @field_validator("replace_flags")
@@ -224,7 +223,7 @@ class ArrowChart(BaseChart):
                 "range-extent": self.range_extent,
                 "value-label-format": self.value_label_format,
                 "color-by-column": bool(self.color_category),
-                "group-by-column": self.group_by_column,
+                "group-by-column": self.groups_column is not None,
                 "replace-flags": ReplaceFlags.serialize(self.replace_flags),
                 "show-arrow-key": self.arrow_key,
             }
@@ -240,6 +239,8 @@ class ArrowChart(BaseChart):
             axes_dict["colors"] = self.color_column
         if self.label_column is not None:
             axes_dict["labels"] = self.label_column
+        if self.groups_column is not None:
+            axes_dict["groups"] = self.groups_column
 
         # Only add axes section if there are fields to include
         if axes_dict:
@@ -319,10 +320,10 @@ class ArrowChart(BaseChart):
             init_data["color_column"] = axes["colors"]
         if "labels" in axes:
             init_data["label_column"] = axes["labels"]
+        if "groups" in axes:
+            init_data["groups_column"] = axes["groups"]
 
         # Features
-        if "group-by-column" in visualize:
-            init_data["group_by_column"] = visualize["group-by-column"]
         if "show-arrow-key" in visualize:
             init_data["arrow_key"] = visualize["show-arrow-key"]
 

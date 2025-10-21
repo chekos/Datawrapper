@@ -210,7 +210,7 @@ class TestArrowChartCreation:
             data=pd.DataFrame({"x": [1, 2], "y": [10, 20], "z": [15, 25]}),
             start_column="y",
             end_column="z",
-            group_by_column=True,
+            groups_column="x",  # Setting groups_column should enable group-by-column
             arrow_key=True,
         )
 
@@ -289,7 +289,7 @@ class TestArrowChartGet:
             # Verify features
             assert chart.thick_arrows is True
             assert chart.arrow_key is True
-            assert chart.group_by_column is True
+            assert chart.groups_column == "Gender"
 
             # Verify sorting
             assert chart.sort_ranges is False
