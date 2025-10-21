@@ -195,13 +195,13 @@ class TestScatterPlotCreation:
             data=df,
             x_column="X",
             y_column="Y",
-            labels_column="Label",
+            label_column="Label",
             auto_labels=False,
             add_labels=["A", "C"],
             highlight_labeled=True,
         )
 
-        assert chart.labels_column == "Label"
+        assert chart.label_column == "Label"
         assert chart.auto_labels is False
         assert chart.add_labels == ["A", "C"]
         assert chart.highlight_labeled is True
@@ -225,9 +225,9 @@ class TestScatterPlotSerialization:
 
         assert serialized["type"] == "d3-scatter-plot"
         assert serialized["title"] == "Test Chart"
-        assert "axes" in serialized
-        assert serialized["axes"]["x"] == "X"
-        assert serialized["axes"]["y"] == "Y"
+        assert "axes" in serialized["metadata"]
+        assert serialized["metadata"]["axes"]["x"] == "X"
+        assert serialized["metadata"]["axes"]["y"] == "Y"
 
     def test_serialize_axes_objects(self):
         """Test that axes are serialized as nested objects."""
@@ -331,7 +331,7 @@ class TestScatterPlotSerialization:
         visualize = serialized["metadata"]["visualize"]
 
         assert visualize["size"] == "dynamic"
-        assert serialized["axes"]["size"] == "Size"
+        assert serialized["metadata"]["axes"]["size"] == "Size"
         assert visualize["fixed-size"] == 10
         assert visualize["max-size"] == 50
         assert visualize["responsive-symbol-size"] is True
@@ -395,7 +395,7 @@ class TestScatterPlotSerialization:
         visualize = serialized["metadata"]["visualize"]
 
         assert visualize["shape"] == "dynamic"
-        assert serialized["axes"]["shape"] == "Shape"
+        assert serialized["metadata"]["axes"]["shape"] == "Shape"
         assert visualize["fixed-shape"] == "symbolSquare"
 
     def test_serialize_regression(self):
@@ -451,7 +451,7 @@ class TestScatterPlotSerialization:
             data=df,
             x_column="X",
             y_column="Y",
-            labels_column="Label",
+            label_column="Label",
             auto_labels=False,
             add_labels=["A", "C"],
             highlight_labeled=False,
@@ -460,7 +460,7 @@ class TestScatterPlotSerialization:
         serialized = chart.model_dump(by_alias=True)
         visualize = serialized["metadata"]["visualize"]
 
-        assert serialized["axes"]["labels"] == "Label"
+        assert serialized["metadata"]["axes"]["labels"] == "Label"
         assert visualize["auto-labels"] is False
         assert visualize["add-labels"] == ["A", "C"]
         assert visualize["highlight-labeled"] is False
@@ -520,7 +520,7 @@ class TestScatterPlotParsing:
             assert chart.x_column == "Group"
             assert chart.y_column == "Period"
             assert chart.shape_column == "time range"
-            assert chart.labels_column == "Symbol"
+            assert chart.label_column == "Symbol"
             assert chart.fixed_size == 20
             assert chart.show_color_key is True
 
@@ -548,7 +548,7 @@ class TestScatterPlotParsing:
             assert chart.y_column == "percent"
             assert chart.size == "dynamic"
             assert chart.size_column == "students"
-            assert chart.labels_column == "city"
+            assert chart.label_column == "city"
             assert chart.add_labels == ["Berlin", "Frankfurt am Main", "München"]
             assert chart.highlight_labeled is True
 
@@ -578,7 +578,7 @@ class TestScatterPlotParsing:
             assert chart.x_column == "gdp"
             assert chart.y_column == "health"
             assert chart.size_column == "population"
-            assert chart.labels_column == "country"
+            assert chart.label_column == "country"
             assert chart.x_log is True
             assert chart.y_log is False
             assert chart.auto_labels is False
@@ -635,7 +635,6 @@ class TestScatterPlotRoundTrip:
         chart_metadata = {
             "type": serialized["type"],
             "title": serialized["title"],
-            "axes": serialized["axes"],
             "metadata": serialized["metadata"],
         }
 
@@ -679,7 +678,7 @@ class TestScatterPlotRoundTrip:
             y_column="Y",
             size="dynamic",
             size_column="Size",
-            labels_column="Label",
+            label_column="Label",
             x_log=True,
             y_log=False,
             x_range=[0, 10],
@@ -701,7 +700,6 @@ class TestScatterPlotRoundTrip:
         chart_metadata = {
             "type": serialized["type"],
             "title": serialized["title"],
-            "axes": serialized["axes"],
             "metadata": serialized["metadata"],
         }
 
@@ -726,7 +724,7 @@ class TestScatterPlotRoundTrip:
             assert parsed.y_column == original.y_column
             assert parsed.size == original.size
             assert parsed.size_column == original.size_column
-            assert parsed.labels_column == original.labels_column
+            assert parsed.label_column == original.label_column
             assert parsed.x_log == original.x_log
             assert parsed.y_log == original.y_log
             assert parsed.regression == original.regression
@@ -754,7 +752,7 @@ class TestScatterPlotCompatibility:
         # Check top-level structure
         assert "metadata" in serialized
         assert "visualize" in serialized["metadata"]
-        assert "axes" in serialized
+        assert "axes" in serialized["metadata"]
 
         # Check axes structure
         visualize = serialized["metadata"]["visualize"]

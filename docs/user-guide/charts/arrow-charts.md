@@ -25,9 +25,9 @@ chart = dw.ArrowChart(
     # Pass the DataFrame
     data=df,
     # Start column (Gini before taxes)
-    axis_start="Gini before taxes",
+    start_column="Gini before taxes",
     # End column (Gini after taxes)
-    axis_end="Gini after taxes",
+    end_column="Gini after taxes",
     # Custom X-axis range
     range_extent="custom",
     custom_range=[0.15, 0.6],
@@ -42,8 +42,8 @@ chart = dw.ArrowChart(
     # Set the default arrow color
     base_color="rgb(196, 148, 67)",
     # Highlight specific countries in red
-    axis_colors="Country",
-    axis_labels="Country",
+    color_column="Country",
+    label_column="Country",
     color_by_column=True,
     color_category={
         "<b>Mexico</b>": "#c71e1d",

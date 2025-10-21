@@ -91,10 +91,8 @@ class TestStackedBarChartCreation:
         chart = StackedBarChart(
             title="Grouped Chart",
             data=df,
-            group_by_column=True,
             groups_column="Group",
         )
-        assert chart.group_by_column is True
         assert chart.groups_column == "Group"
 
     def test_create_with_negative_colors(self):
@@ -204,7 +202,7 @@ class TestStackedBarChartSerialization:
         assert neg_color["value"] == "#ff0000"
 
     def test_serialize_with_groups(self):
-        """Test that groups_column is serialized to axes."""
+        """Test that groups_column is serialized to axes inside metadata."""
         df = pd.DataFrame({"A": [1], "B": [2]})
         chart = StackedBarChart(
             title="Test",
@@ -213,8 +211,8 @@ class TestStackedBarChartSerialization:
         )
         serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
 
-        assert "axes" in serialized
-        assert serialized["axes"]["groups"] == "Description"
+        assert "axes" in serialized["metadata"]
+        assert serialized["metadata"]["axes"]["groups"] == "Description"
 
     def test_serialize_describe_section(self):
         """Test that describe section is serialized correctly."""
@@ -583,7 +581,7 @@ class TestStackedBarChartCompatibility:
         assert hasattr(chart, "aria_description")
         assert hasattr(chart, "range_value_labels")
         assert hasattr(chart, "color_by_column")
-        assert hasattr(chart, "group_by_column")
+        assert hasattr(chart, "groups_column")
         assert hasattr(chart, "show_color_key")
         assert hasattr(chart, "value_label_mode")
 
@@ -607,7 +605,7 @@ class TestStackedBarChartCompatibility:
         assert chart.aria_description == ""
         assert chart.range_value_labels == ""
         assert chart.color_by_column is False
-        assert chart.group_by_column is False
+        assert chart.groups_column is None
         assert chart.show_color_key is False
         assert chart.value_label_mode == "left"
 
