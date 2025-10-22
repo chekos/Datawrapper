@@ -138,3 +138,19 @@ png_url = chart.get_png_url()
 
 html = f'<noscript><img src="{png_url}" alt="Chart" /></noscript>'
 ```
+
+## Exporting a chart in multiple formats
+
+You can export charts in various formats such as PNG, PDF, and SVG using the chart object's export methods:
+
+```python
+# Get the data in bytes
+png_data = chart.export_png(width=800, height=600)
+pdf_data = chart.export_pdf(mode="cmyk")
+svg_data = chart.export_svg(plain=True)
+
+# Save to disk
+Path("chart.png").write_bytes(png_data)
+Path("chart.pdf").write_bytes(pdf_data)
+Path("chart.svg").write_bytes(svg_data)
+```
