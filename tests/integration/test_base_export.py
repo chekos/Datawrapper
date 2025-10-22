@@ -455,7 +455,7 @@ class TestExportParameterValidation:
             chart.chart_id = "abc123"
 
             # Test with different unit values
-            for unit in ["px", "mm", "in"]:
+            for unit in ["px", "mm", "inch"]:
                 result = chart.export_pdf(unit=unit)
                 assert result == b"PDF_DATA"
 
