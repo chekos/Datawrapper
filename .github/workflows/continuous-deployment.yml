@@ -118,7 +118,7 @@ jobs:
 
       - id: save
         name: Save artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: release-candidate
           path: ./dist
