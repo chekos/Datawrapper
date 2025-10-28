@@ -255,12 +255,11 @@ class TextAnnotation(BaseModel):
         return model
 
     @classmethod
-    def deserialize_model(cls, api_data: dict[str, dict] | list | None) -> list[dict]:
+    def deserialize_model(cls, api_data: dict[str, dict] | None) -> list[dict]:
         """Deserialize annotations from API response format.
 
         Args:
-            api_data: Dictionary mapping UUID keys to annotation data,
-                      or a list, or None
+            api_data: Dictionary mapping UUID keys to annotation data, or None
 
         Returns:
             List of annotation dicts with 'id' field preserved
@@ -268,27 +267,22 @@ class TextAnnotation(BaseModel):
         if not api_data:
             return []
 
-        # Handle dict format (UUID keys -> annotation data)
-        if isinstance(api_data, dict):
-            result = []
-            for anno_id, anno_data in api_data.items():
-                # Create a copy to avoid modifying the original
-                anno_dict = {**anno_data, "id": anno_id}
+        result = []
+        for anno_id, anno_data in api_data.items():
+            # Create a copy to avoid modifying the original
+            anno_dict = {**anno_data, "id": anno_id}
 
-                # Handle connector line deserialization (enabled by presence pattern)
-                if "connectorLine" in anno_dict:
-                    connector = anno_dict["connectorLine"]
-                    if isinstance(connector, dict):
-                        # If enabled is False or missing, set to None (disabled)
-                        if not connector.get("enabled", False):
-                            anno_dict["connectorLine"] = None
-                        # Otherwise keep the connector line object (enabled)
+            # Handle connector line deserialization (enabled by presence pattern)
+            if "connectorLine" in anno_dict:
+                connector = anno_dict["connectorLine"]
+                if isinstance(connector, dict):
+                    # If enabled is False or missing, set to None (disabled)
+                    if not connector.get("enabled", False):
+                        anno_dict["connectorLine"] = None
+                    # Otherwise keep the connector line object (enabled)
 
-                result.append(anno_dict)
-            return result
-
-        # Handle list format (already deserialized or legacy)
-        return list(api_data)
+            result.append(anno_dict)
+        return result
 
 
 class AreaFill(BaseModel):
@@ -396,12 +390,11 @@ class AreaFill(BaseModel):
         return result
 
     @classmethod
-    def deserialize_model(cls, api_data: dict[str, dict] | list | None) -> list[dict]:
+    def deserialize_model(cls, api_data: dict[str, dict] | None) -> list[dict]:
         """Deserialize area fills from API response format.
 
         Args:
-            api_data: Dictionary mapping UUID keys to area fill data,
-                      or a list, or None
+            api_data: Dictionary mapping UUID keys to area fill data, or None
 
         Returns:
             List of area fill dicts with 'id' field preserved
@@ -409,14 +402,7 @@ class AreaFill(BaseModel):
         if not api_data:
             return []
 
-        # Handle dict format (UUID keys -> area fill data)
-        if isinstance(api_data, dict):
-            return [
-                {**fill_data, "id": fill_id} for fill_id, fill_data in api_data.items()
-            ]
-
-        # Handle list format (already deserialized or legacy)
-        return list(api_data)
+        return [{**fill_data, "id": fill_id} for fill_id, fill_data in api_data.items()]
 
 
 class RangeAnnotation(BaseModel):
@@ -538,12 +524,11 @@ class RangeAnnotation(BaseModel):
         }
 
     @classmethod
-    def deserialize_model(cls, api_data: dict[str, dict] | list | None) -> list[dict]:
+    def deserialize_model(cls, api_data: dict[str, dict] | None) -> list[dict]:
         """Deserialize annotations from API response format.
 
         Args:
-            api_data: Dictionary mapping UUID keys to annotation data,
-                      or a list, or None
+            api_data: Dictionary mapping UUID keys to annotation data, or None
 
         Returns:
             List of annotation dicts with 'id' field preserved
@@ -551,11 +536,4 @@ class RangeAnnotation(BaseModel):
         if not api_data:
             return []
 
-        # Handle dict format (UUID keys -> annotation data)
-        if isinstance(api_data, dict):
-            return [
-                {**anno_data, "id": anno_id} for anno_id, anno_data in api_data.items()
-            ]
-
-        # Handle list format (already deserialized or legacy)
-        return list(api_data)
+        return [{**anno_data, "id": anno_id} for anno_id, anno_data in api_data.items()]
