@@ -743,6 +743,7 @@ class BaseChart(BaseModel):
         border_width: int = 0,
         border_color: str | None = None,
         access_token: str | None = None,
+        timeout: int = 30,
     ) -> bytes:
         """Export chart as PNG and return the raw bytes.
 
@@ -755,6 +756,7 @@ class BaseChart(BaseModel):
             border_width: Margin around visualization in pixels.
             border_color: Color of the border (e.g., "#FFFFFF"). If not specified, uses chart background color.
             access_token: Optional Datawrapper API access token.
+            timeout: Timeout for the API request in seconds.
 
         Returns:
             Raw PNG image data as bytes.
@@ -796,6 +798,7 @@ class BaseChart(BaseModel):
         response = client.get(
             f"{client._CHARTS_URL}/{self.chart_id}/export/png",
             params=params,
+            timeout=timeout,
         )
 
         # Return raw bytes
@@ -815,6 +818,7 @@ class BaseChart(BaseModel):
         border_width: int = 0,
         border_color: str | None = None,
         access_token: str | None = None,
+        timeout: int = 30,
     ) -> bytes:
         """Export chart as PDF and return the raw bytes.
 
@@ -828,6 +832,7 @@ class BaseChart(BaseModel):
             border_width: Margin around visualization.
             border_color: Color of the border (e.g., "#FFFFFF"). If not specified, uses chart background color.
             access_token: Optional Datawrapper API access token.
+            timeout: Timeout for the API request in seconds.
 
         Returns:
             Raw PDF document data as bytes.
@@ -874,6 +879,7 @@ class BaseChart(BaseModel):
         response = client.get(
             f"{client._CHARTS_URL}/{self.chart_id}/export/png",
             params=params,
+            timeout=timeout,
         )
         if width is not None:
             params["width"] = str(width)
@@ -900,6 +906,7 @@ class BaseChart(BaseModel):
         height: int | None = None,
         plain: bool = False,
         access_token: str | None = None,
+        timeout: int = 30,
     ) -> bytes:
         """Export chart as SVG and return the raw bytes.
 
@@ -908,6 +915,7 @@ class BaseChart(BaseModel):
             height: Height of visualization. If not specified, uses chart height.
             plain: If True, exports only the visualization without header/footer.
             access_token: Optional Datawrapper API access token.
+            timeout: Timeout for the API request in seconds.
 
         Returns:
             Raw SVG document data as bytes.
@@ -942,6 +950,7 @@ class BaseChart(BaseModel):
         response = client.get(
             f"{client._CHARTS_URL}/{self.chart_id}/export/svg",
             params=params,
+            timeout=timeout,
         )
 
         # Return raw bytes
