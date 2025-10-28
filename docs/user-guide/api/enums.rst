@@ -177,6 +177,16 @@ ScatterSize
 
 .. enum-table:: datawrapper.charts.enums.ScatterSize
 
+StrokeType
+----------
+
+.. code-block:: python
+
+   import datawrapper as dw
+   connector = dw.RangeAnnotation(stroke_type=dw.StrokeType.DASHED)
+
+.. enum-table:: datawrapper.charts.enums.StrokeType
+
 StrokeWidth
 -----------
 

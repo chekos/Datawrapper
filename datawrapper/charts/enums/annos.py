@@ -52,6 +52,32 @@ class StrokeWidth(int, Enum):
     THICK = 3
 
 
+class StrokeType(str, Enum):
+    """Stroke type options for line annotations.
+
+    Controls the dash pattern of stroke lines in range annotations.
+
+    Attributes:
+        SOLID: Solid line (no dashes)
+        DASHED: Dashed line pattern
+        DOTTED: Dotted line pattern
+
+    Examples:
+        >>> from datawrapper.charts.annos import RangeAnnotation, StrokeType
+        >>> anno = RangeAnnotation(
+        ...     type="x",
+        ...     x0=0,
+        ...     x1=10,
+        ...     display="line",
+        ...     stroke_type=StrokeType.DASHED,
+        ... )
+    """
+
+    SOLID = "solid"
+    DASHED = "dashed"
+    DOTTED = "dotted"
+
+
 class ArrowHead(str, Enum):
     """Arrow head options for connector lines.
 

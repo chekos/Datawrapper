@@ -1,6 +1,6 @@
 """Enum classes for Datawrapper chart formatting and styling options."""
 
-from .connector_line import ArrowHead, ConnectorLineType, StrokeWidth
+from .annos import ArrowHead, ConnectorLineType, StrokeType, StrokeWidth
 from .date_format import DateFormat
 from .grid_display import GridDisplay
 from .grid_label import GridLabelAlign, GridLabelPosition
@@ -45,6 +45,7 @@ __all__ = [
     "ScatterGridLines",
     "ScatterShape",
     "ScatterSize",
+    "StrokeType",
     "StrokeWidth",
     "SymbolDisplay",
     "SymbolShape",
