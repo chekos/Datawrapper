@@ -277,7 +277,7 @@ class MultipleColumnChart(
 
     #: Whether or not to show value labels
     show_value_labels: ValueLabelDisplay | str = Field(
-        default="hover",
+        default="off",
         alias="show-value-labels",
         description="Whether or not to show value labels",
     )
