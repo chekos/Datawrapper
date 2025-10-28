@@ -51,7 +51,7 @@ from .models import (
     Transform,
     Visualize,
 )
-from .multiple_column import MultipleColumnChart
+from .multiple_column import MultipleColumnChart, MultipleColumnRangeAnnotation
 from .scatter import ScatterPlot
 from .stacked_bar import StackedBarChart
 
@@ -111,6 +111,7 @@ __all__ = (
     "AreaChart",
     "ArrowChart",
     "MultipleColumnChart",
+    "MultipleColumnRangeAnnotation",
     "ScatterPlot",
     "StackedBarChart",
 )

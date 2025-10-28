@@ -30,6 +30,89 @@ from .serializers import (
 )
 
 
+class MultipleColumnRangeAnnotation(RangeAnnotation):
+    """Range annotation with additional fields specific to MultipleColumnChart.
+
+    This subclass extends RangeAnnotation to support multi-panel charts where
+    annotations can be associated with specific plots/panels.
+
+    Attributes:
+        plot: Which plot/panel this annotation applies to (e.g., "Paris", "London")
+        showInAllPlots: Whether to show this annotation in all plots (defaults to True)
+    """
+
+    #: Which plot/panel this annotation applies to
+    plot: str | None = Field(
+        default=None,
+        description="Which plot/panel this annotation applies to",
+    )
+
+    #: Whether to show this annotation in all plots
+    show_in_all_plots: bool = Field(
+        default=True,
+        alias="showInAllPlots",
+        description="Whether to show this annotation in all plots",
+    )
+
+    def serialize_model(self) -> dict:
+        """Serialize the annotation to API format.
+
+        Extends the base RangeAnnotation serialization to include:
+        - plot field inside the position object
+        - showInAllPlots field at the top level
+
+        Returns:
+            Dictionary in Datawrapper API format
+        """
+        result = super().serialize_model()
+
+        # Add plot to position object if specified
+        if self.plot is not None:
+            result["position"]["plot"] = self.plot
+
+        # Always include showInAllPlots at top level
+        result["showInAllPlots"] = self.show_in_all_plots
+
+        return result
+
+    @classmethod
+    def deserialize_model(cls, api_data: dict[str, dict] | None) -> list[dict]:
+        """Parse API response to extract MultipleColumnRangeAnnotation data.
+
+        Handles the API format where:
+        - plot is inside the position object
+        - showInAllPlots is at the top level
+
+        Args:
+            api_data: API response data (dict with UUID keys)
+
+        Returns:
+            List of dictionaries that can initialize MultipleColumnRangeAnnotation instances
+        """
+        if not api_data:
+            return []
+
+        result = []
+        for anno_id, anno_data in api_data.items():
+            # Extract position data
+            position = anno_data.get("position", {})
+            plot = position.get("plot") if isinstance(position, dict) else None
+
+            # Extract showInAllPlots (defaults to True)
+            show_in_all = anno_data.get("showInAllPlots", True)
+
+            # Build annotation dict with id
+            anno_dict = {**anno_data, "id": anno_id}
+
+            # Add MultipleColumnChart-specific fields
+            if plot is not None:
+                anno_dict["plot"] = plot
+            anno_dict["show_in_all_plots"] = show_in_all
+
+            result.append(anno_dict)
+        return result
+
+
 class MultipleColumnChart(
     GridDisplayMixin, GridFormatMixin, CustomRangeMixin, CustomTicksMixin, BaseChart
 ):
@@ -398,7 +481,7 @@ class MultipleColumnChart(
                 self.text_annotations, TextAnnotation
             ),
             "range-annotations": ModelListSerializer.serialize(
-                self.range_annotations, RangeAnnotation
+                self.range_annotations, MultipleColumnRangeAnnotation
             ),
         }
 
@@ -551,8 +634,10 @@ class MultipleColumnChart(
         init_data["text_annotations"] = TextAnnotation.deserialize_model(
             visualize.get("text-annotations")
         )
-        init_data["range_annotations"] = RangeAnnotation.deserialize_model(
-            visualize.get("range-annotations")
+        init_data["range_annotations"] = (
+            MultipleColumnRangeAnnotation.deserialize_model(
+                visualize.get("range-annotations")
+            )
         )
 
         return init_data

@@ -84,3 +84,8 @@ chart.create()
 
 ```{eval-rst}
 .. parameter-table:: datawrapper.charts.MultipleColumnChart
+```
+
+```{eval-rst}
+.. parameter-table:: datawrapper.charts.MultipleColumnRangeAnnotation
+```
