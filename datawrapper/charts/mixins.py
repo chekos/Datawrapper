@@ -2,6 +2,8 @@
 
 from typing import Any
 
+from pydantic import Field
+
 from datawrapper.charts.enums import DateFormat, GridDisplay, NumberFormat
 from datawrapper.charts.serializers import CustomRange, CustomTicks
 
@@ -23,8 +25,14 @@ class GridConfigMixin:
     - API "off" → False during deserialization
     """
 
-    x_grid: GridDisplay | str | bool | None = "off"
-    y_grid: GridDisplay | str | bool | None = "on"
+    x_grid: GridDisplay | str | bool | None = Field(
+        default="off",
+        description="X-axis grid display setting. Controls vertical grid lines.",
+    )
+    y_grid: GridDisplay | str | bool | None = Field(
+        default="on",
+        description="Y-axis grid display setting. Controls horizontal grid lines.",
+    )
 
     def _serialize_grid_config(self) -> dict:
         """Serialize grid configuration to API format.
@@ -86,8 +94,14 @@ class GridFormatMixin:
     Used by: LineChart, AreaChart, ColumnChart, MultipleColumnChart, ScatterPlot
     """
 
-    x_grid_format: DateFormat | NumberFormat | str | None = None
-    y_grid_format: NumberFormat | str | None = None
+    x_grid_format: DateFormat | NumberFormat | str | None = Field(
+        default=None,
+        description="Format string for X-axis grid labels. Supports date and number formats.",
+    )
+    y_grid_format: NumberFormat | str | None = Field(
+        default=None,
+        description="Format string for Y-axis grid labels. Supports number formats.",
+    )
 
     def _serialize_grid_format(self) -> dict:
         """Serialize grid format configuration to API format.
@@ -139,8 +153,14 @@ class CustomRangeMixin:
     values for axes, along with serialization/deserialization methods.
     """
 
-    custom_range_x: list[Any] | tuple[Any, Any] | None = None
-    custom_range_y: list[Any] | tuple[Any, Any] | None = None
+    custom_range_x: list[Any] | tuple[Any, Any] | None = Field(
+        default=None,
+        description="Custom range for X-axis as [min, max]. Overrides automatic range calculation.",
+    )
+    custom_range_y: list[Any] | tuple[Any, Any] | None = Field(
+        default=None,
+        description="Custom range for Y-axis as [min, max]. Overrides automatic range calculation.",
+    )
 
     def _serialize_custom_range(self) -> dict:
         """Serialize custom range configuration to API format.
@@ -188,8 +208,14 @@ class CustomTicksMixin:
     positions on axes, along with serialization/deserialization methods.
     """
 
-    custom_ticks_x: list[Any] | None = None
-    custom_ticks_y: list[Any] | None = None
+    custom_ticks_x: list[Any] | None = Field(
+        default=None,
+        description="Custom tick mark positions for X-axis. List of values where ticks should appear.",
+    )
+    custom_ticks_y: list[Any] | None = Field(
+        default=None,
+        description="Custom tick mark positions for Y-axis. List of values where ticks should appear.",
+    )
 
     def _serialize_custom_ticks(self) -> dict:
         """Serialize custom ticks configuration to API format.
