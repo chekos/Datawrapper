@@ -8,6 +8,7 @@ from .enums import (
     LineInterpolation,
     StrokeType,
     StrokeWidth,
+    TextAlign,
 )
 
 
@@ -88,11 +89,27 @@ class ConnectorLine(BaseModel):
     )
 
     #: The style of the circle at the end of the connector line
-    circle_style: Literal["solid", "dashed"] = Field(
+    circle_style: StrokeType | str = Field(
         default="solid",
         alias="circleStyle",
         description="The style of the circle at the end of the connector line",
     )
+
+    @field_validator("circle_style")
+    @classmethod
+    def validate_circle_style(cls, v: StrokeType | str) -> StrokeType | str:
+        """Validate that circle_style is either solid or dashed (not dotted)."""
+        if isinstance(v, str):
+            if v not in ["solid", "dashed"]:
+                raise ValueError(
+                    f"Invalid circle style: {v}. Must be either 'solid' or 'dashed'"
+                )
+        elif isinstance(v, StrokeType):
+            if v == StrokeType.DOTTED:
+                raise ValueError(
+                    "Invalid circle style: DOTTED is not allowed for circle_style. Must be SOLID or DASHED"
+                )
+        return v
 
     #: The radius of the circle at the end of the connector line
     circle_radius: int = Field(
@@ -164,9 +181,21 @@ class TextAnnotation(BaseModel):
     text: str = Field(min_length=1, description="The text to display")
 
     #: The alignment of the text
-    align: Literal["tl", "tc", "tr", "ml", "mc", "mr", "bl", "bc", "br"] = Field(
+    align: TextAlign | str = Field(
         default="tl", description="The alignment of the text"
     )
+
+    @field_validator("align")
+    @classmethod
+    def validate_align(cls, v: TextAlign | str) -> TextAlign | str:
+        """Validate that align is a valid TextAlign value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in TextAlign]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid text alignment: {v}. Must be one of {valid_values}"
+                )
+        return v
 
     #: The color of the text
     color: str | bool = Field(
@@ -179,6 +208,16 @@ class TextAnnotation(BaseModel):
         default=33.3,
         description="The width of the text as a percentage of the chart width",
     )
+
+    @field_validator("width")
+    @classmethod
+    def validate_width(cls, v: float) -> float:
+        """Validate that width is between 0.0 and 100.0."""
+        if not 0.0 <= v <= 100.0:
+            raise ValueError(
+                f"Invalid width: {v}. Must be between 0.0 and 100.0 (inclusive)"
+            )
+        return v
 
     #: Whether or not to italicize the text
     italic: bool = Field(
@@ -328,6 +367,16 @@ class AreaFill(BaseModel):
 
     #: The opacity of the fill
     opacity: float = Field(default=0.3, description="The opacity of the fill")
+
+    @field_validator("opacity")
+    @classmethod
+    def validate_opacity(cls, v: float) -> float:
+        """Validate that opacity is between 0.0 and 1.0."""
+        if not 0.0 <= v <= 1.0:
+            raise ValueError(
+                f"Invalid opacity: {v}. Must be between 0.0 and 1.0 (inclusive)"
+            )
+        return v
 
     #: Whether to use different colors when there are negative values
     use_mixed_colors: bool = Field(
