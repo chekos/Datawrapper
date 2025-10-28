@@ -441,6 +441,14 @@ class RangeAnnotation(BaseModel):
         default="x", description="The axis of the annotation"
     )
 
+    @field_validator("type")
+    @classmethod
+    def validate_type(cls, v: str) -> str:
+        """Validate that type is either 'x' or 'y'."""
+        if v not in ["x", "y"]:
+            raise ValueError(f"Invalid type: {v}. Must be either 'x' or 'y'")
+        return v
+
     #: The color of the annotation
     color: str = Field(default="#989898", description="The color of the annotation")
 
@@ -449,8 +457,24 @@ class RangeAnnotation(BaseModel):
         default="range", description="The display style of the annotation"
     )
 
+    @field_validator("display")
+    @classmethod
+    def validate_display(cls, v: str) -> str:
+        """Validate that display is either 'line' or 'range'."""
+        if v not in ["line", "range"]:
+            raise ValueError(f"Invalid display: {v}. Must be either 'line' or 'range'")
+        return v
+
     #: The opacity of the annotation
     opacity: int = Field(default=50, description="The opacity of the annotation")
+
+    @field_validator("opacity")
+    @classmethod
+    def validate_opacity(cls, v: int) -> int:
+        """Validate that opacity is between 0 and 100."""
+        if not 0 <= v <= 100:
+            raise ValueError(f"Invalid opacity: {v}. Must be between 0 and 100")
+        return v
 
     #: The first x position (required for type="x" annotations)
     x0: Any | None = Field(
@@ -555,3 +579,87 @@ class RangeAnnotation(BaseModel):
             return []
 
         return [{**anno_data, "id": anno_id} for anno_id, anno_data in api_data.items()]
+
+
+class XRangeAnnotation(RangeAnnotation):
+    """A horizontal range annotation (shaded area between two x positions).
+
+    Automatically sets type="x" and display="range".
+    Requires both x0 and x1 to be provided.
+    """
+
+    def __init__(self, **data):
+        """Initialize with type="x" and display="range" automatically set."""
+        data.setdefault("type", "x")
+        data.setdefault("display", "range")
+        super().__init__(**data)
+
+    @model_validator(mode="after")
+    def validate_x_positions_required(self) -> "XRangeAnnotation":
+        """Validate that both x0 and x1 are provided."""
+        if self.x0 is None or self.x1 is None:
+            raise ValueError("XRangeAnnotation requires both x0 and x1 to be set")
+        return self
+
+
+class YRangeAnnotation(RangeAnnotation):
+    """A vertical range annotation (shaded area between two y positions).
+
+    Automatically sets type="y" and display="range".
+    Requires both y0 and y1 to be provided.
+    """
+
+    def __init__(self, **data):
+        """Initialize with type="y" and display="range" automatically set."""
+        data.setdefault("type", "y")
+        data.setdefault("display", "range")
+        super().__init__(**data)
+
+    @model_validator(mode="after")
+    def validate_y_positions_required(self) -> "YRangeAnnotation":
+        """Validate that both y0 and y1 are provided."""
+        if self.y0 is None or self.y1 is None:
+            raise ValueError("YRangeAnnotation requires both y0 and y1 to be set")
+        return self
+
+
+class XLineAnnotation(RangeAnnotation):
+    """A vertical line annotation at a specific x position.
+
+    Automatically sets type="x" and display="line".
+    Requires x0 to be provided.
+    """
+
+    def __init__(self, **data):
+        """Initialize with type="x" and display="line" automatically set."""
+        data.setdefault("type", "x")
+        data.setdefault("display", "line")
+        super().__init__(**data)
+
+    @model_validator(mode="after")
+    def validate_x0_required(self) -> "XLineAnnotation":
+        """Validate that x0 is provided."""
+        if self.x0 is None:
+            raise ValueError("XLineAnnotation requires x0 to be set")
+        return self
+
+
+class YLineAnnotation(RangeAnnotation):
+    """A horizontal line annotation at a specific y position.
+
+    Automatically sets type="y" and display="line".
+    Requires y0 to be provided.
+    """
+
+    def __init__(self, **data):
+        """Initialize with type="y" and display="line" automatically set."""
+        data.setdefault("type", "y")
+        data.setdefault("display", "line")
+        super().__init__(**data)
+
+    @model_validator(mode="after")
+    def validate_y0_required(self) -> "YLineAnnotation":
+        """Validate that y0 is provided."""
+        if self.y0 is None:
+            raise ValueError("YLineAnnotation requires y0 to be set")
+        return self

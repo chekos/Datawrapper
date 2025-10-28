@@ -1,4 +1,12 @@
-from .annos import ConnectorLine, RangeAnnotation, TextAnnotation
+from .annos import (
+    ConnectorLine,
+    RangeAnnotation,
+    TextAnnotation,
+    XLineAnnotation,
+    XRangeAnnotation,
+    YLineAnnotation,
+    YRangeAnnotation,
+)
 from .area import AreaChart
 from .arrow import ArrowChart
 from .bar import BarChart, BarOverlay
@@ -60,6 +68,10 @@ __all__ = (
     "ConnectorLine",
     "RangeAnnotation",
     "TextAnnotation",
+    "XLineAnnotation",
+    "XRangeAnnotation",
+    "YLineAnnotation",
+    "YRangeAnnotation",
     "Annotate",
     "ColumnFormat",
     "ColumnFormatList",
