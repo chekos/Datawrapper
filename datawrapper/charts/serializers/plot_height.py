@@ -1,7 +1,9 @@
 from typing import Any
 
+from .base import BaseSerializer
 
-class PlotHeight:
+
+class PlotHeight(BaseSerializer):
     """Utility class for serializing and deserializing plot height configuration.
 
     The Datawrapper API uses three separate fields for plot height:

@@ -1,7 +1,9 @@
 from typing import Any
 
+from .base import BaseSerializer
 
-class ColorCategory:
+
+class ColorCategory(BaseSerializer):
     """Utility class for serializing and deserializing color category structures."""
 
     @staticmethod

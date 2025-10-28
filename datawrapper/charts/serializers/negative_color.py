@@ -1,7 +1,9 @@
 from typing import Any
 
+from .base import BaseSerializer
 
-class NegativeColor:
+
+class NegativeColor(BaseSerializer):
     """Utility class for serializing and deserializing negative color configuration.
 
     The Datawrapper API uses a nested object format for the negativeColor field:

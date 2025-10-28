@@ -46,6 +46,7 @@ caption: API Reference
 user-guide/api/main-client.rst
 user-guide/api/chart-classes.rst
 user-guide/api/models.rst
+user-guide/api/mixins.rst
 user-guide/api/enums.rst
 user-guide/api/exceptions.rst
 ```

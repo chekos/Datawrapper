@@ -15,10 +15,14 @@ from .enums import (
     ValueLabelDisplay,
     ValueLabelPlacement,
 )
+from .mixins import (
+    CustomRangeMixin,
+    CustomTicksMixin,
+    GridDisplayMixin,
+    GridFormatMixin,
+)
 from .serializers import (
     ColorCategory,
-    CustomRange,
-    CustomTicks,
     ModelListSerializer,
     NegativeColor,
     PlotHeight,
@@ -26,7 +30,9 @@ from .serializers import (
 )
 
 
-class MultipleColumnChart(BaseChart):
+class MultipleColumnChart(
+    GridDisplayMixin, GridFormatMixin, CustomRangeMixin, CustomTicksMixin, BaseChart
+):
     """A base class for the Datawrapper API's multiple column chart."""
 
     model_config = ConfigDict(
@@ -131,34 +137,6 @@ class MultipleColumnChart(BaseChart):
     # Horizontal axis
     #
 
-    #: The custom range for the x axis
-    custom_range_x: tuple[Any, Any] | list[Any] = Field(
-        default=("", ""),
-        alias="custom-range-x",
-        description="The custom range for the x axis",
-    )
-
-    #: The custom ticks for the x axis
-    custom_ticks_x: list[Any] = Field(
-        default_factory=list,
-        alias="custom-ticks-x",
-        description="The custom ticks for the x axis",
-    )
-
-    #: The formatting for the x grid labels
-    x_grid_format: str = Field(
-        default="auto",
-        alias="x-grid-format",
-        description="The formatting for the x grid labels",
-    )
-
-    #: Whether to show the x grid
-    x_grid: GridDisplay | str = Field(
-        default="off",
-        alias="x-grid",
-        description="Whether to show the x grid",
-    )
-
     #: The labeling of the x axis
     x_grid_labels: Literal["on", "off"] = Field(
         default="on",
@@ -176,34 +154,6 @@ class MultipleColumnChart(BaseChart):
     #
     # Vertical axis
     #
-
-    #: The custom range for the y axis
-    custom_range_y: tuple[Any, Any] | list[Any] = Field(
-        default=("", ""),
-        alias="custom-range-y",
-        description="The custom range for the y axis",
-    )
-
-    #: The custom ticks for the y axis
-    custom_ticks_y: list[Any] = Field(
-        default_factory=list,
-        alias="custom-ticks-y",
-        description="The custom ticks for the y axis",
-    )
-
-    #: The formatting for the y grid labels (use DateFormat or NumberFormat enum or custom format strings)
-    y_grid_format: DateFormat | NumberFormat | str = Field(
-        default="",
-        alias="y-grid-format",
-        description="The formatting for the y grid labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
-    )
-
-    #: Whether to show the y grid lines
-    y_grid: bool = Field(
-        default=True,
-        alias="y-grid",
-        description="Whether to show the y grid lines",
-    )
 
     #: The labeling of the y grid labels
     y_grid_labels: GridLabelPosition | str = Field(
@@ -385,77 +335,74 @@ class MultipleColumnChart(BaseChart):
         model = super().serialize_model()
 
         # Add chart specific properties to visualize section
-        model["metadata"]["visualize"].update(
-            {
-                # Layout
-                "gridLayout": self.grid_layout,
-                "gridColumnCount": self.grid_column,
-                "gridColumnCountMobile": self.grid_column_mobile,
-                "gridColumnMinWidth": self.grid_column_width,
-                "gridRowHeightFixed": self.grid_row_height,
-                "sort": {
-                    "enabled": self.sort,
-                    "reverse": self.sort_reverse,
-                    "by": self.sort_by,
-                },
-                # Horizontal axis
-                "custom-range-x": CustomRange.serialize(self.custom_range_x),
-                "custom-ticks-x": CustomTicks.serialize(self.custom_ticks_x),
-                "x-grid-format": self.x_grid_format,
-                "x-grid-labels": self.x_grid_labels,
-                "x-grid": self.x_grid_all,
-                "grid-lines-x": {
-                    "type": "" if self.x_grid == "off" else self.x_grid,
-                    "enabled": self.x_grid != "off",
-                },
-                # Vertical axis
-                "custom-range-y": CustomRange.serialize(self.custom_range_y),
-                "custom-ticks-y": CustomTicks.serialize(self.custom_ticks_y),
-                "y-grid-format": self.y_grid_format,
-                "grid-lines": self.y_grid,
-                "yAxisLabels": {
-                    "enabled": self.y_grid_labels != "off",
-                    "alignment": self.y_grid_label_align,
-                    "placement": ""
-                    if self.y_grid_labels == "off"
-                    else self.y_grid_labels,
-                },
-                # Appearance
-                "base-color": self.base_color,
-                "negativeColor": NegativeColor.serialize(self.negative_color),
-                "bar-padding": self.bar_padding,
-                "color-category": ColorCategory.serialize(self.color_category),
-                "color-by-column": bool(self.color_category),
-                **PlotHeight.serialize(
-                    self.plot_height_mode,
-                    self.plot_height_fixed,
-                    self.plot_height_ratio,
-                ),
-                "panels": {panel["column"]: panel for panel in self.panels},
-                # Tooltips
-                "show-tooltips": self.show_tooltips,
-                "syncMultipleTooltips": self.sync_multiple_tooltips,
-                "tooltip-number-format": self.tooltip_number_format,
-                # Labels
-                "show-color-key": self.show_color_key,
-                "label-colors": self.label_colors,
-                "label-margin": self.label_margin,
-                **ValueLabels.serialize(
-                    self.show_value_labels,
-                    self.value_labels_format,
-                    placement=self.value_labels_placement,
-                    chart_type="multiple-column",
-                ),
-                "xGridLabelAllColumns": self.x_grid_label_all,
-                # Annotations
-                "text-annotations": ModelListSerializer.serialize(
-                    self.text_annotations, TextAnnotation
-                ),
-                "range-annotations": ModelListSerializer.serialize(
-                    self.range_annotations, RangeAnnotation
-                ),
-            }
-        )
+        visualize_data = {
+            # Layout
+            "gridLayout": self.grid_layout,
+            "gridColumnCount": self.grid_column,
+            "gridColumnCountMobile": self.grid_column_mobile,
+            "gridColumnMinWidth": self.grid_column_width,
+            "gridRowHeightFixed": self.grid_row_height,
+            "sort": {
+                "enabled": self.sort,
+                "reverse": self.sort_reverse,
+                "by": self.sort_by,
+            },
+            # Horizontal and vertical axis (from mixins)
+            **self._serialize_grid_config(),
+            **self._serialize_grid_format(),
+            **self._serialize_custom_range(),
+            **self._serialize_custom_ticks(),
+            # Horizontal axis (chart-specific)
+            "x-grid-labels": self.x_grid_labels,
+            "x-grid": self.x_grid_all,
+            "grid-lines-x": {
+                "type": "" if self.x_grid == "off" else self.x_grid,
+                "enabled": self.x_grid != "off",
+            },
+            # Vertical axis (chart-specific)
+            "grid-lines": self.y_grid,
+            "yAxisLabels": {
+                "enabled": self.y_grid_labels != "off",
+                "alignment": self.y_grid_label_align,
+                "placement": "" if self.y_grid_labels == "off" else self.y_grid_labels,
+            },
+            # Appearance
+            "base-color": self.base_color,
+            "negativeColor": NegativeColor.serialize(self.negative_color),
+            "bar-padding": self.bar_padding,
+            "color-category": ColorCategory.serialize(self.color_category),
+            "color-by-column": bool(self.color_category),
+            **PlotHeight.serialize(
+                self.plot_height_mode,
+                self.plot_height_fixed,
+                self.plot_height_ratio,
+            ),
+            "panels": {panel["column"]: panel for panel in self.panels},
+            # Tooltips
+            "show-tooltips": self.show_tooltips,
+            "syncMultipleTooltips": self.sync_multiple_tooltips,
+            "tooltip-number-format": self.tooltip_number_format,
+            # Labels
+            "show-color-key": self.show_color_key,
+            "label-colors": self.label_colors,
+            "label-margin": self.label_margin,
+            **ValueLabels.serialize(
+                self.show_value_labels,
+                self.value_labels_format,
+                placement=self.value_labels_placement,
+                chart_type="multiple-column",
+            ),
+            "xGridLabelAllColumns": self.x_grid_label_all,
+            # Annotations
+            "text-annotations": ModelListSerializer.serialize(
+                self.text_annotations, TextAnnotation
+            ),
+            "range-annotations": ModelListSerializer.serialize(
+                self.range_annotations, RangeAnnotation
+            ),
+        }
+
+        model["metadata"]["visualize"].update(visualize_data)
 
         # Return the serialized data
         return model
@@ -501,15 +448,13 @@ class MultipleColumnChart(BaseChart):
             init_data["sort_reverse"] = False
             init_data["sort_by"] = "end"
 
-        # Horizontal axis
-        init_data["custom_range_x"] = CustomRange.deserialize(
-            visualize.get("custom-range-x")
-        )
-        init_data["custom_ticks_x"] = CustomTicks.deserialize(
-            visualize.get("custom-ticks-x", "")
-        )
-        if "x-grid-format" in visualize:
-            init_data["x_grid_format"] = visualize["x-grid-format"]
+        # Horizontal and vertical axis (from mixins)
+        init_data.update(cls._deserialize_grid_config(visualize))
+        init_data.update(cls._deserialize_grid_format(visualize))
+        init_data.update(cls._deserialize_custom_range(visualize))
+        init_data.update(cls._deserialize_custom_ticks(visualize))
+
+        # Horizontal axis (chart-specific)
         if "x-grid-labels" in visualize:
             init_data["x_grid_labels"] = visualize["x-grid-labels"]
         if "x-grid" in visualize:
@@ -525,16 +470,7 @@ class MultipleColumnChart(BaseChart):
         else:
             init_data["x_grid"] = "off"
 
-        # Vertical axis
-        init_data["custom_range_y"] = CustomRange.deserialize(
-            visualize.get("custom-range-y")
-        )
-        init_data["custom_ticks_y"] = CustomTicks.deserialize(
-            visualize.get("custom-ticks-y", "")
-        )
-        if "y-grid-format" in visualize:
-            init_data["y_grid_format"] = visualize["y-grid-format"]
-
+        # Vertical axis (chart-specific)
         # Parse grid-lines (can be bool or string "show")
         if "grid-lines" in visualize:
             grid_lines_val = visualize["grid-lines"]

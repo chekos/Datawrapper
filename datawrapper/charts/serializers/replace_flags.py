@@ -1,7 +1,9 @@
 from typing import Any
 
+from .base import BaseSerializer
 
-class ReplaceFlags:
+
+class ReplaceFlags(BaseSerializer):
     """Utility class for serializing and deserializing replace-flags configuration.
 
     The Datawrapper API uses a nested object format for the replace-flags field:

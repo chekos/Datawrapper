@@ -1,7 +1,9 @@
 from typing import Any
 
+from .base import BaseSerializer
 
-class CustomTicks:
+
+class CustomTicks(BaseSerializer):
     """Utility class for serializing and deserializing custom tick marks."""
 
     @staticmethod

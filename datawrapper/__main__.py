@@ -1156,6 +1156,10 @@ class Datawrapper:
     ) -> Path | Image:
         """Exports a chart, table, or map.
 
+        .. deprecated::
+            Use the object-oriented chart classes instead (e.g., BarChart, LineChart).
+            This method will be removed in a future version.
+
         Parameters
         ----------
         chart_id : str
@@ -1210,6 +1214,14 @@ class Datawrapper:
         Path | Image
             The file path to the exported image or an Image object displaying the image.
         """
+        warnings.warn(
+            "export_chart() is deprecated and will be removed in a future version. "
+            "Use the object-oriented chart classes instead. "
+            "Example: chart = BarChart.get(chart_id='abc123'); png_data = chart.export_png(); Path('chart.png').write_bytes(png_data)",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         _query = {
             "unit": unit,
             "mode": mode,

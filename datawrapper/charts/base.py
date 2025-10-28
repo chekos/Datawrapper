@@ -1,11 +1,10 @@
 import os
 import warnings
 from io import StringIO
-from pathlib import Path
 from typing import Any, Literal
 
 import pandas as pd
-from IPython.display import IFrame, Image
+from IPython.display import IFrame
 from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 
 from datawrapper.__main__ import Datawrapper
@@ -733,98 +732,218 @@ class BaseChart(BaseModel):
         # Return self for chaining
         return self
 
-    def export(
+    def export_png(
         self,
-        unit: str = "px",
-        mode: str = "rgb",
-        width: int = 400,
-        height: int | str | None = None,
+        *,
+        width: int | None = None,
+        height: int | None = None,
         plain: bool = False,
         zoom: int = 2,
-        scale: int = 1,
-        border_width: int = 20,
-        border_color: str | None = None,
         transparent: bool = False,
-        download: bool = False,
-        full_vector: bool = False,
-        ligatures: bool = True,
-        logo: str = "auto",
-        logo_id: str | None = None,
-        dark: bool = False,
-        output: str = "png",
-        filepath: str = "./image.png",
-        display: bool = False,
+        border_width: int = 0,
+        border_color: str | None = None,
         access_token: str | None = None,
-    ) -> Path | Image:
-        """Export the chart to an image file.
+        timeout: int = 30,
+    ) -> bytes:
+        """Export chart as PNG and return the raw bytes.
 
         Args:
-            unit: One of px, mm, inch. Defines the unit in which the borderwidth, height,
-                and width will be measured in, by default "px"
-            mode: One of rgb or cmyk. Which color mode the output should be in,
-                by default "rgb"
-            width: Width of visualization. If not specified, it takes the chart width,
-                by default 400
-            height: Height of visualization. Can be a number or "auto", by default None
-            plain: Defines if only the visualization should be exported (True), or if it should
-                include header and footer as well (False), by default False
-            zoom: Defines the multiplier for the png size, by default 2
-            scale: Defines the multiplier for the pdf size, by default 1
-            border_width: Margin around the visualization, by default 20
-            border_color: Color of the border around the visualization, by default None
-            transparent: Set to True to export your visualization with a transparent background,
-                by default False
-            download: Whether to trigger a download, by default False
-            full_vector: Export as full vector graphic (for supported formats), by default False
-            ligatures: Enable typographic ligatures, by default True
-            logo: Logo display setting. One of "auto", "on", or "off", by default "auto"
-            logo_id: Custom logo ID to use, by default None
-            dark: Export in dark mode, by default False
-            output: One of png, pdf, or svg, by default "png"
-            filepath: Name/filepath to save output in, by default "./image.png"
-            display: Whether to display the exported image as output in the notebook cell,
-                by default False
+            width: Width of visualization in pixels. If not specified, uses chart width.
+            height: Height of visualization in pixels. If not specified, uses chart height.
+            plain: If True, exports only the visualization without header/footer.
+            zoom: Scale multiplier for PNG resolution (e.g., 2 = 2x resolution).
+            transparent: If True, exports with transparent background.
+            border_width: Margin around visualization in pixels.
+            border_color: Color of the border (e.g., "#FFFFFF"). If not specified, uses chart background color.
             access_token: Optional Datawrapper API access token.
-                If not provided, will use DATAWRAPPER_ACCESS_TOKEN environment variable.
+            timeout: Timeout for the API request in seconds.
 
         Returns:
-            The file path to the exported image or an Image object displaying the image.
+            Raw PNG image data as bytes.
 
         Raises:
-            ValueError: If no chart_id is set or no access token is available.
+            ValueError: If no chart_id is set.
             Exception: If the API request fails.
+
+        Example:
+            >>> chart = LineChart.get(chart_id="abc123")
+            >>> png_data = chart.export_png(zoom=3, transparent=True)
+            >>> Path("chart.png").write_bytes(png_data)
         """
         if not self.chart_id:
             raise ValueError(
                 "No chart_id set. Use create() first or set chart_id manually."
             )
 
-        # Get the client
         client = self._get_client(access_token)
 
-        # Call the export_chart method from the client
-        return client.export_chart(
-            chart_id=self.chart_id,
-            unit=unit,
-            mode=mode,
-            width=width,
-            height=height,
-            plain=plain,
-            zoom=zoom,
-            scale=scale,
-            border_width=border_width,
-            border_color=border_color,
-            transparent=transparent,
-            download=download,
-            full_vector=full_vector,
-            ligatures=ligatures,
-            logo=logo,
-            logo_id=logo_id,
-            dark=dark,
-            output=output,
-            filepath=filepath,
-            display=display,
+        # Build query parameters with PNG-specific defaults
+        params = {
+            "unit": "px",
+            "mode": "rgb",
+            "plain": str(plain).lower(),
+            "zoom": str(zoom),
+            "transparent": str(transparent).lower(),
+            "borderWidth": str(border_width),
+        }
+
+        if width is not None:
+            params["width"] = str(width)
+        if height is not None:
+            params["height"] = str(height)
+        if border_color is not None:
+            params["borderColor"] = border_color
+
+        # Make the API request
+        response = client.get(
+            f"{client._CHARTS_URL}/{self.chart_id}/export/png",
+            params=params,
+            timeout=timeout,
         )
+
+        # Return raw bytes
+        if isinstance(response, bytes):
+            return response
+        raise ValueError(f"Unexpected response type from API: {type(response)}")
+
+    def export_pdf(
+        self,
+        *,
+        width: int | None = None,
+        height: int | None = None,
+        plain: bool = False,
+        unit: Literal["px", "mm", "inch"] = "px",
+        mode: Literal["rgb", "cmyk"] = "rgb",
+        scale: int = 1,
+        border_width: int = 0,
+        border_color: str | None = None,
+        access_token: str | None = None,
+        timeout: int = 30,
+    ) -> bytes:
+        """Export chart as PDF and return the raw bytes.
+
+        Args:
+            width: Width of visualization. If not specified, uses chart width.
+            height: Height of visualization. If not specified, uses chart height.
+            plain: If True, exports only the visualization without header/footer.
+            unit: Unit for measurements: "px", "mm", or "inch".
+            mode: Color mode: "rgb" or "cmyk".
+            scale: Scale multiplier for PDF resolution.
+            border_width: Margin around visualization.
+            border_color: Color of the border (e.g., "#FFFFFF"). If not specified, uses chart background color.
+            access_token: Optional Datawrapper API access token.
+            timeout: Timeout for the API request in seconds.
+
+        Returns:
+            Raw PDF document data as bytes.
+
+        Raises:
+            ValueError: If no chart_id is set or invalid parameters provided.
+            Exception: If the API request fails.
+
+        Example:
+            >>> chart = BarChart.get(chart_id="abc123")
+            >>> pdf_data = chart.export_pdf(unit="mm", mode="cmyk")
+            >>> Path("chart.pdf").write_bytes(pdf_data)
+        """
+        if not self.chart_id:
+            raise ValueError(
+                "No chart_id set. Use create() first or set chart_id manually."
+            )
+
+        # Validate parameters
+        if unit not in ("px", "mm", "inch"):
+            raise ValueError(f"Invalid unit: {unit}. Must be 'px', 'mm', or 'inch'.")
+        if mode not in ("rgb", "cmyk"):
+            raise ValueError(f"Invalid mode: {mode}. Must be 'rgb' or 'cmyk'.")
+
+        client = self._get_client(access_token)
+
+        # Build query parameters
+        params = {
+            "unit": unit,
+            "mode": mode,
+            "plain": str(plain).lower(),
+            "scale": str(scale),
+            "borderWidth": str(border_width),
+        }
+
+        if width is not None:
+            params["width"] = str(width)
+        if height is not None:
+            params["height"] = str(height)
+        if border_color is not None:
+            params["borderColor"] = border_color
+
+        # Make the API request
+        response = client.get(
+            f"{client._CHARTS_URL}/{self.chart_id}/export/pdf",
+            params=params,
+        )
+
+        # Return raw bytes
+        if isinstance(response, bytes):
+            return response
+        raise ValueError(f"Unexpected response type from API: {type(response)}")
+
+    def export_svg(
+        self,
+        *,
+        width: int | None = None,
+        height: int | None = None,
+        plain: bool = False,
+        access_token: str | None = None,
+        timeout: int = 30,
+    ) -> bytes:
+        """Export chart as SVG and return the raw bytes.
+
+        Args:
+            width: Width of visualization. If not specified, uses chart width.
+            height: Height of visualization. If not specified, uses chart height.
+            plain: If True, exports only the visualization without header/footer.
+            access_token: Optional Datawrapper API access token.
+            timeout: Timeout for the API request in seconds.
+
+        Returns:
+            Raw SVG document data as bytes.
+
+        Raises:
+            ValueError: If no chart_id is set.
+            Exception: If the API request fails.
+
+        Example:
+            >>> chart = ColumnChart.get(chart_id="abc123")
+            >>> svg_data = chart.export_svg(plain=True)
+            >>> Path("chart.svg").write_bytes(svg_data)
+        """
+        if not self.chart_id:
+            raise ValueError(
+                "No chart_id set. Use create() first or set chart_id manually."
+            )
+
+        client = self._get_client(access_token)
+
+        # Build query parameters
+        params = {
+            "plain": str(plain).lower(),
+        }
+
+        if width is not None:
+            params["width"] = str(width)
+        if height is not None:
+            params["height"] = str(height)
+
+        # Make the API request
+        response = client.get(
+            f"{client._CHARTS_URL}/{self.chart_id}/export/svg",
+            params=params,
+            timeout=timeout,
+        )
+
+        # Return raw bytes
+        if isinstance(response, bytes):
+            return response
+        raise ValueError(f"Unexpected response type from API: {type(response)}")
 
     def delete(self, access_token: str | None = None) -> bool:
         """Delete the chart via the Datawrapper API.
