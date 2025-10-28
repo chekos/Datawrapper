@@ -63,6 +63,12 @@ from datawrapper.charts.enums import (
     ValueLabelMode,
     ValueLabelPlacement,
 )
+from datawrapper.charts.mixins import (
+    CustomRangeMixin,
+    CustomTicksMixin,
+    GridConfigMixin,
+    GridFormatMixin,
+)
 from datawrapper.exceptions import (
     FailedRequestError,
     InvalidRequestError,
@@ -123,6 +129,10 @@ __all__ = [
     "ValueLabelMode",
     "ValueLabelPlacement",
     "get_country_flag",
+    "CustomRangeMixin",
+    "CustomTicksMixin",
+    "GridFormatMixin",
+    "GridConfigMixin",
     "FailedRequestError",
     "InvalidRequestError",
     "RateLimitError",

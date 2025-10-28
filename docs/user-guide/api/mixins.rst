@@ -21,12 +21,12 @@ Controls the visibility of grid lines on chart axes.
 
 .. code-block:: python
 
-   from datawrapper.charts import LineChart, GridDisplay
+   import datawrapper as dw
 
-   chart = LineChart(
+   chart = dw.LineChart(
        title="Temperature Trends",
-       x_grid=GridDisplay.OFF,
-       y_grid=GridDisplay.ON
+       x_grid=dw.GridDisplay.OFF,
+       y_grid=dw.GridDisplay.ON
    )
 
 GridFormatMixin
@@ -42,12 +42,12 @@ Controls the formatting of grid labels on chart axes.
 
 .. code-block:: python
 
-   from datawrapper.charts import LineChart, NumberFormat, DateFormat
+   import datawrapper as dw
 
-   chart = LineChart(
+   chart = dw.LineChart(
        title="Sales Over Time",
-       x_grid_format=DateFormat.MONTH_ABBREVIATED_WITH_YEAR,
-       y_grid_format=NumberFormat.THOUSANDS_SEPARATOR
+       x_grid_format=dw.DateFormat.MONTH_ABBREVIATED_WITH_YEAR,
+       y_grid_format=dw.NumberFormat.THOUSANDS_SEPARATOR
    )
 
 Axis Customization
@@ -66,9 +66,9 @@ Sets custom minimum and maximum values for chart axes.
 
 .. code-block:: python
 
-   from datawrapper.charts import ColumnChart
+   import datawrapper as dw
 
-   chart = ColumnChart(
+   chart = dw.ColumnChart(
        title="Revenue by Quarter",
        custom_range_y=[0, 1000000]  # Set Y-axis from 0 to 1M
    )
@@ -86,9 +86,9 @@ Sets custom tick mark positions on chart axes.
 
 .. code-block:: python
 
-   from datawrapper.charts import LineChart
+   import datawrapper as dw
 
-   chart = LineChart(
+   chart = dw.LineChart(
        title="Monthly Data",
        custom_ticks_x=["Jan", "Apr", "Jul", "Oct"],
        custom_ticks_y=[0, 25, 50, 75, 100]
