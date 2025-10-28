@@ -13,7 +13,6 @@ from .annos import AreaFill, RangeAnnotation, TextAnnotation
 from .base import BaseChart
 from .enums import (
     DateFormat,
-    GridDisplay,
     GridLabelAlign,
     GridLabelPosition,
     LineDash,
@@ -25,10 +24,14 @@ from .enums import (
     SymbolShape,
     SymbolStyle,
 )
+from .mixins import (
+    CustomRangeMixin,
+    CustomTicksMixin,
+    GridConfigMixin,
+    GridFormatMixin,
+)
 from .serializers import (
     ColorCategory,
-    CustomRange,
-    CustomTicks,
     ModelListSerializer,
     PlotHeight,
 )
@@ -391,7 +394,9 @@ class Line(BaseModel):
         return init_dict
 
 
-class LineChart(BaseChart):
+class LineChart(
+    GridConfigMixin, GridFormatMixin, CustomRangeMixin, CustomTicksMixin, BaseChart
+):
     """A base class for the Datawrapper API's line chart."""
 
     model_config = ConfigDict(
@@ -429,66 +434,12 @@ class LineChart(BaseChart):
     #
     # Horizontal axis (X-axis)
     #
-
-    #: The custom range for the x axis
-    custom_range_x: list[Any] | tuple[Any, Any] = Field(
-        default_factory=lambda: ["", ""],
-        alias="custom-range-x",
-        description="The custom range for the x axis",
-    )
-
-    #: The custom ticks for the x axis
-    custom_ticks_x: list[Any] = Field(
-        default_factory=list,
-        alias="custom-ticks-x",
-        description="The custom ticks for the x axis",
-    )
-
-    #: The formatting for the x grid labels (use DateFormat or NumberFormat enum or custom format strings)
-    x_grid_format: DateFormat | NumberFormat | str = Field(
-        default="auto",
-        alias="x-grid-format",
-        description="The formatting for the x grid labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
-    )
-
-    #: Whether to show the x grid
-    x_grid: GridDisplay | str = Field(
-        default="off",
-        alias="x-grid",
-        description="Whether to show the x grid. The 'on' setting shows lines.",
-    )
+    # Note: x_grid, x_grid_format, custom_range_x, custom_ticks_x inherited from mixins
 
     #
     # Vertical axis (Y-axis)
     #
-
-    #: The custom range for the y axis
-    custom_range_y: list[Any] | tuple[Any, Any] = Field(
-        default_factory=lambda: ["", ""],
-        alias="custom-range-y",
-        description="The custom range for the y axis",
-    )
-
-    #: The custom ticks for the y axis
-    custom_ticks_y: list[Any] = Field(
-        default_factory=list,
-        alias="custom-ticks-y",
-        description="The custom ticks for the y axis",
-    )
-
-    #: The formatting for the y grid labels (use DateFormat or NumberFormat enum or custom format strings)
-    y_grid_format: DateFormat | NumberFormat | str = Field(
-        default="",
-        alias="y-grid-format",
-        description="The formatting for the y grid labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
-    )
-
-    #: Whether to show the y grid
-    y_grid: GridDisplay | str = Field(
-        default="on",
-        alias="y-grid",
-        description="Whether to show the y grid. The 'on' setting shows lines.",
-    )
+    # Note: y_grid, y_grid_format, custom_range_y, custom_ticks_y inherited from mixins
 
     #: The labeling of the y grid labels
     y_grid_labels: GridLabelPosition | str = Field(
@@ -700,56 +651,52 @@ class LineChart(BaseChart):
         model = super().serialize_model()
 
         # Add chart specific properties
-        model["metadata"]["visualize"].update(
-            {
-                # Horizontal axis
-                "custom-range-x": CustomRange.serialize(self.custom_range_x),
-                "custom-ticks-x": CustomTicks.serialize(self.custom_ticks_x),
-                "x-grid-format": self.x_grid_format,
-                "x-grid": self.x_grid,
-                # Vertical axis
-                "custom-range-y": CustomRange.serialize(self.custom_range_y),
-                "custom-ticks-y": CustomTicks.serialize(self.custom_ticks_y),
-                "y-grid-format": self.y_grid_format,
-                "y-grid": self.y_grid,
-                "y-grid-labels": self.y_grid_labels,
-                "y-grid-label-align": self.y_grid_label_align,
-                "scale-y": self.scale_y,
-                "y-grid-subdivide": self.y_grid_subdivide,
-                # Customize lines
-                "base-color": self.base_color,
-                "interpolation": self.interpolation,
-                "connector-lines": self.connector_lines,
-                "color-category": ColorCategory.serialize(self.color_category),
-                # Labels
-                "stack-color-legend": self.stack_color_legend,
-                "label-colors": self.label_colors,
-                "label-margin": self.label_margin,
-                "value-labels-format": self.value_labels_format,
-                "value-label-colors": self.value_label_colors,
-                # Tooltips
-                "show-tooltips": self.show_tooltips,
-                "tooltip-x-format": self.tooltip_x_format,
-                "tooltip-number-format": self.tooltip_number_format,
-                # Appearance
-                **PlotHeight.serialize(
-                    self.plot_height_mode,
-                    self.plot_height_fixed,
-                    self.plot_height_ratio,
-                ),
-                # Initialize empty structures
-                "lines": {},
-                "text-annotations": ModelListSerializer.serialize(
-                    self.text_annotations, TextAnnotation
-                ),
-                "range-annotations": ModelListSerializer.serialize(
-                    self.range_annotations, RangeAnnotation
-                ),
-                "custom-area-fills": ModelListSerializer.serialize(
-                    self.area_fills, AreaFill
-                ),
-            }
-        )
+        visualize_data = {
+            # Horizontal axis (from mixins)
+            **self._serialize_grid_config(),
+            **self._serialize_grid_format(),
+            **self._serialize_custom_range(),
+            **self._serialize_custom_ticks(),
+            # Vertical axis (chart-specific)
+            "y-grid-labels": self.y_grid_labels,
+            "y-grid-label-align": self.y_grid_label_align,
+            "scale-y": self.scale_y,
+            "y-grid-subdivide": self.y_grid_subdivide,
+            # Customize lines
+            "base-color": self.base_color,
+            "interpolation": self.interpolation,
+            "connector-lines": self.connector_lines,
+            "color-category": ColorCategory.serialize(self.color_category),
+            # Labels
+            "stack-color-legend": self.stack_color_legend,
+            "label-colors": self.label_colors,
+            "label-margin": self.label_margin,
+            "value-labels-format": self.value_labels_format,
+            "value-label-colors": self.value_label_colors,
+            # Tooltips
+            "show-tooltips": self.show_tooltips,
+            "tooltip-x-format": self.tooltip_x_format,
+            "tooltip-number-format": self.tooltip_number_format,
+            # Appearance
+            **PlotHeight.serialize(
+                self.plot_height_mode,
+                self.plot_height_fixed,
+                self.plot_height_ratio,
+            ),
+            # Initialize empty structures
+            "lines": {},
+            "text-annotations": ModelListSerializer.serialize(
+                self.text_annotations, TextAnnotation
+            ),
+            "range-annotations": ModelListSerializer.serialize(
+                self.range_annotations, RangeAnnotation
+            ),
+            "custom-area-fills": ModelListSerializer.serialize(
+                self.area_fills, AreaFill
+            ),
+        }
+
+        model["metadata"]["visualize"].update(visualize_data)
 
         # Add line configurations
         for line_obj in self.lines:
@@ -784,30 +731,13 @@ class LineChart(BaseChart):
         metadata = api_response.get("metadata", {})
         visualize = metadata.get("visualize", {})
 
-        # Horizontal axis (X-axis)
-        init_data["custom_range_x"] = CustomRange.deserialize(
-            visualize.get("custom-range-x")
-        )
-        init_data["custom_ticks_x"] = CustomTicks.deserialize(
-            visualize.get("custom-ticks-x", "")
-        )
-        if "x-grid-format" in visualize:
-            init_data["x_grid_format"] = visualize["x-grid-format"]
-        if "x-grid" in visualize:
-            init_data["x_grid"] = visualize["x-grid"]
+        # Horizontal and vertical axis (from mixins)
+        init_data.update(cls._deserialize_grid_config(visualize))
+        init_data.update(cls._deserialize_grid_format(visualize))
+        init_data.update(cls._deserialize_custom_range(visualize))
+        init_data.update(cls._deserialize_custom_ticks(visualize))
 
-        # Vertical axis (Y-axis)
-        init_data["custom_range_y"] = CustomRange.deserialize(
-            visualize.get("custom-range-y")
-        )
-        init_data["custom_ticks_y"] = CustomTicks.deserialize(
-            visualize.get("custom-ticks-y", "")
-        )
-
-        if "y-grid-format" in visualize:
-            init_data["y_grid_format"] = visualize["y-grid-format"]
-        if "y-grid" in visualize:
-            init_data["y_grid"] = visualize["y-grid"]
+        # Vertical axis (chart-specific)
         if "y-grid-labels" in visualize:
             init_data["y_grid_labels"] = visualize["y-grid-labels"]
         if "y-grid-label-align" in visualize:

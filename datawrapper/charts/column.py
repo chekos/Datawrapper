@@ -7,7 +7,6 @@ from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
 from .enums import (
     DateFormat,
-    GridDisplay,
     GridLabelAlign,
     GridLabelPosition,
     NumberFormat,
@@ -15,10 +14,14 @@ from .enums import (
     ValueLabelDisplay,
     ValueLabelPlacement,
 )
+from .mixins import (
+    CustomRangeMixin,
+    CustomTicksMixin,
+    GridConfigMixin,
+    GridFormatMixin,
+)
 from .serializers import (
     ColorCategory,
-    CustomRange,
-    CustomTicks,
     ModelListSerializer,
     NegativeColor,
     PlotHeight,
@@ -26,7 +29,9 @@ from .serializers import (
 )
 
 
-class ColumnChart(BaseChart):
+class ColumnChart(
+    GridConfigMixin, GridFormatMixin, CustomRangeMixin, CustomTicksMixin, BaseChart
+):
     """A base class for the Datawrapper API's column chart."""
 
     model_config = ConfigDict(
@@ -62,68 +67,8 @@ class ColumnChart(BaseChart):
     )
 
     #
-    # Horizontal axis (X-axis)
+    # Vertical axis (Y-axis) - chart-specific fields
     #
-
-    #: The custom range for the x axis
-    custom_range_x: list[Any] | tuple[Any, Any] = Field(
-        default_factory=lambda: ["", ""],
-        alias="custom-range-x",
-        description="The custom range for the x axis",
-    )
-
-    #: The custom ticks for the x axis
-    custom_ticks_x: list[Any] = Field(
-        default_factory=list,
-        alias="custom-ticks-x",
-        description="The custom ticks for the x axis",
-    )
-
-    #: The formatting for the x grid labels (use DateFormat or NumberFormat enum or custom format strings)
-    x_grid_format: DateFormat | NumberFormat | str = Field(
-        default="auto",
-        alias="x-grid-format",
-        description="The formatting for the x grid labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
-    )
-
-    #: Whether to show the x grid
-    x_grid: GridDisplay | str = Field(
-        default="off",
-        alias="x-grid",
-        description="Whether to show the x grid",
-    )
-
-    #
-    # Vertical axis (Y-axis)
-    #
-
-    #: The custom range for the y axis
-    custom_range_y: list[Any] | tuple[Any, Any] = Field(
-        default_factory=lambda: ["", ""],
-        alias="custom-range-y",
-        description="The custom range for the y axis",
-    )
-
-    #: The custom ticks for the y axis
-    custom_ticks_y: list[Any] = Field(
-        default_factory=list,
-        alias="custom-ticks-y",
-        description="The custom ticks for the y axis",
-    )
-
-    #: The formatting for the y grid labels (use DateFormat or NumberFormat enum or custom format strings)
-    y_grid_format: DateFormat | NumberFormat | str = Field(
-        default="",
-        alias="y-grid-format",
-        description="The formatting for the y grid labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
-    )
-
-    #: Whether to show the y grid lines
-    y_grid: bool = Field(
-        default=True,
-        alias="y-grid",
-        description="Whether to show the y grid lines",
-    )
 
     #: The labeling of the y grid labels
     y_grid_labels: GridLabelPosition | str = Field(
@@ -266,6 +211,114 @@ class ColumnChart(BaseChart):
                 raise ValueError(f"Invalid value: {v}. Must be one of {valid_values}")
         return v
 
+    @classmethod
+    def _deserialize_grid_config(cls, visualize: dict) -> dict:
+        """Override to handle ColumnChart-specific grid fields.
+
+        ColumnChart uses different API fields than other charts:
+        - x_grid: Parsed from 'grid-lines-x' dict (not 'x-grid' string)
+        - y_grid: Parsed from 'grid-lines' boolean (not 'y-grid' string)
+        """
+        result = {}
+
+        # Parse grid-lines-x (dict with type/enabled)
+        if "grid-lines-x" in visualize:
+            grid_lines_x = visualize["grid-lines-x"]
+            if isinstance(grid_lines_x, dict):
+                enabled = grid_lines_x.get("enabled", False)
+                grid_type = grid_lines_x.get("type", "")
+                result["x_grid"] = grid_type if enabled else "off"
+
+        # Parse grid-lines (boolean)
+        if "grid-lines" in visualize:
+            result["y_grid"] = visualize["grid-lines"]
+
+        return result
+
+    def _serialize_grid_config(self) -> dict:
+        """Override to add ColumnChart-specific grid-lines field.
+
+        ColumnChart uses both the standard y-grid field (from mixin) and an
+        additional grid-lines boolean field that mirrors the y-grid on/off state.
+        """
+        # Get the standard grid config from the mixin
+        result = super()._serialize_grid_config()
+
+        # Add the ColumnChart-specific grid-lines boolean field
+        # This mirrors the y_grid on/off state
+        if self.y_grid is not None:
+            from .enums import GridDisplay
+
+            # Convert to boolean: "on" or True -> True, "off" or False -> False
+            if isinstance(self.y_grid, GridDisplay):
+                result["grid-lines"] = self.y_grid == GridDisplay.ON
+            elif isinstance(self.y_grid, bool):
+                result["grid-lines"] = self.y_grid
+            elif isinstance(self.y_grid, str):
+                result["grid-lines"] = self.y_grid.lower() == "on"
+
+        return result
+
+    def _serialize_custom_range(self) -> dict:
+        """Override to handle ColumnChart-specific field naming.
+
+        ColumnChart uses 'custom-range' (not 'custom-range-y') for Y-axis custom range.
+        """
+        # Get the standard custom range config from the mixin
+        result = super()._serialize_custom_range()
+
+        # Rename custom-range-y to custom-range for ColumnChart
+        if "custom-range-y" in result:
+            result["custom-range"] = result.pop("custom-range-y")
+
+        return result
+
+    @classmethod
+    def _deserialize_custom_range(cls, visualize: dict) -> dict:
+        """Override to handle ColumnChart-specific field naming.
+
+        ColumnChart uses 'custom-range' (not 'custom-range-y') for Y-axis custom range.
+        """
+        # Create a modified visualize dict with renamed field
+        modified_visualize = visualize.copy()
+        if "custom-range" in modified_visualize:
+            modified_visualize["custom-range-y"] = modified_visualize.pop(
+                "custom-range"
+            )
+
+        # Call the parent deserializer with the modified dict
+        return super()._deserialize_custom_range(modified_visualize)
+
+    def _serialize_custom_ticks(self) -> dict:
+        """Override to handle ColumnChart-specific field naming.
+
+        ColumnChart uses 'custom-ticks' (not 'custom-ticks-y') for Y-axis custom ticks.
+        """
+        # Get the standard custom ticks config from the mixin
+        result = super()._serialize_custom_ticks()
+
+        # Rename custom-ticks-y to custom-ticks for ColumnChart
+        if "custom-ticks-y" in result:
+            result["custom-ticks"] = result.pop("custom-ticks-y")
+
+        return result
+
+    @classmethod
+    def _deserialize_custom_ticks(cls, visualize: dict) -> dict:
+        """Override to handle ColumnChart-specific field naming.
+
+        ColumnChart uses 'custom-ticks' (not 'custom-ticks-y') for Y-axis custom ticks.
+        """
+        # Create a modified visualize dict with renamed field
+        modified_visualize = visualize.copy()
+        if "custom-ticks" in modified_visualize:
+            modified_visualize["custom-ticks-y"] = modified_visualize.pop(
+                "custom-ticks"
+            )
+
+        # Call the parent deserializer with the modified dict
+        return super()._deserialize_custom_ticks(modified_visualize)
+
     @model_serializer
     def serialize_model(self) -> dict:
         """Serialize the model to a dictionary."""
@@ -273,60 +326,51 @@ class ColumnChart(BaseChart):
         model = super().serialize_model()
 
         # Add chart specific properties
-        model["metadata"]["visualize"].update(
-            {
-                # Horizontal axis
-                "custom-range-x": CustomRange.serialize(self.custom_range_x),
-                "custom-ticks-x": CustomTicks.serialize(self.custom_ticks_x),
-                "x-grid-format": self.x_grid_format,
-                "grid-lines-x": {
-                    "type": "" if self.x_grid == "off" else self.x_grid,
-                    "enabled": self.x_grid != "off",
-                },
-                # Vertical axis
-                "custom-range": CustomRange.serialize(self.custom_range_y),
-                "custom-ticks": CustomTicks.serialize(self.custom_ticks_y),
-                "y-grid-format": self.y_grid_format,
-                "grid-lines": self.y_grid,
-                "yAxisLabels": {
-                    "enabled": self.y_grid_labels != "off",
-                    "alignment": self.y_grid_label_align,
-                    "placement": ""
-                    if self.y_grid_labels == "off"
-                    else self.y_grid_labels,
-                },
-                # Appearance
-                "base-color": self.base_color,
-                "negativeColor": NegativeColor.serialize(self.negative_color),
-                "bar-padding": self.bar_padding,
-                "color-category": ColorCategory.serialize(
-                    self.color_category,
-                    self.category_labels,
-                    self.category_order,
-                ),
-                "color-by-column": bool(self.color_category),
-                **PlotHeight.serialize(
-                    self.plot_height_mode,
-                    self.plot_height_fixed,
-                    self.plot_height_ratio,
-                ),
-                # Labels
-                "show-color-key": self.show_color_key,
-                **ValueLabels.serialize(
-                    show=self.show_value_labels,
-                    format_str=self.value_labels_format,
-                    placement=self.value_labels_placement,
-                    chart_type="column",
-                ),
-                # Annotations
-                "text-annotations": ModelListSerializer.serialize(
-                    self.text_annotations, TextAnnotation
-                ),
-                "range-annotations": ModelListSerializer.serialize(
-                    self.range_annotations, RangeAnnotation
-                ),
-            }
-        )
+        visualize_data = {
+            # Horizontal and vertical axis (from mixins)
+            **self._serialize_grid_config(),
+            **self._serialize_grid_format(),
+            **self._serialize_custom_range(),
+            **self._serialize_custom_ticks(),
+            # Vertical axis (chart-specific)
+            "yAxisLabels": {
+                "enabled": self.y_grid_labels != "off",
+                "alignment": self.y_grid_label_align,
+                "placement": "" if self.y_grid_labels == "off" else self.y_grid_labels,
+            },
+            # Appearance
+            "base-color": self.base_color,
+            "negativeColor": NegativeColor.serialize(self.negative_color),
+            "bar-padding": self.bar_padding,
+            "color-category": ColorCategory.serialize(
+                self.color_category,
+                self.category_labels,
+                self.category_order,
+            ),
+            "color-by-column": bool(self.color_category),
+            **PlotHeight.serialize(
+                self.plot_height_mode,
+                self.plot_height_fixed,
+                self.plot_height_ratio,
+            ),
+            # Labels
+            "show-color-key": self.show_color_key,
+            **ValueLabels.serialize(
+                show=self.show_value_labels,
+                format_str=self.value_labels_format,
+                placement=self.value_labels_placement,
+                chart_type="column",
+            ),
+            # Annotations
+            "text-annotations": ModelListSerializer.serialize(
+                self.text_annotations, TextAnnotation
+            ),
+            "range-annotations": ModelListSerializer.serialize(
+                self.range_annotations, RangeAnnotation
+            ),
+        }
+
+        model["metadata"]["visualize"].update(visualize_data)
 
         # Return the serialized data
         return model
@@ -349,37 +393,13 @@ class ColumnChart(BaseChart):
         metadata = api_response.get("metadata", {})
         visualize = metadata.get("visualize", {})
 
-        # Horizontal axis (X-axis)
-        init_data["custom_range_x"] = CustomRange.deserialize(
-            visualize.get("custom-range-x")
-        )
-        init_data["custom_ticks_x"] = CustomTicks.deserialize(
-            visualize.get("custom-ticks-x", "")
-        )
-        if "x-grid-format" in visualize:
-            init_data["x_grid_format"] = visualize["x-grid-format"]
+        # Horizontal and vertical axis (from mixins)
+        init_data.update(cls._deserialize_grid_config(visualize))
+        init_data.update(cls._deserialize_grid_format(visualize))
+        init_data.update(cls._deserialize_custom_range(visualize))
+        init_data.update(cls._deserialize_custom_ticks(visualize))
 
-        # Parse grid-lines-x
-        if "grid-lines-x" in visualize:
-            grid_lines_x = visualize["grid-lines-x"]
-            if isinstance(grid_lines_x, dict):
-                enabled = grid_lines_x.get("enabled", False)
-                grid_type = grid_lines_x.get("type", "")
-                init_data["x_grid"] = grid_type if enabled else "off"
-
-        # Vertical axis (Y-axis)
-        init_data["custom_range_y"] = CustomRange.deserialize(
-            visualize.get("custom-range")
-        )
-        init_data["custom_ticks_y"] = CustomTicks.deserialize(
-            visualize.get("custom-ticks", "")
-        )
-        if "y-grid-format" in visualize:
-            init_data["y_grid_format"] = visualize["y-grid-format"]
-        if "grid-lines" in visualize:
-            init_data["y_grid"] = visualize["grid-lines"]
-
-        # Parse yAxisLabels
+        # Vertical axis (chart-specific) - Parse yAxisLabels
         if "yAxisLabels" in visualize:
             y_axis_labels = visualize["yAxisLabels"]
             if isinstance(y_axis_labels, dict):

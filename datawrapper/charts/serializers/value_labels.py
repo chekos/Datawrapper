@@ -1,7 +1,9 @@
 from typing import Any
 
+from .base import BaseSerializer
 
-class ValueLabels:
+
+class ValueLabels(BaseSerializer):
     """Utility class for serializing and deserializing value label configuration.
 
     Different chart types use different API formats for value labels:

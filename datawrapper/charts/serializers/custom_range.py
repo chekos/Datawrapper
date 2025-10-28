@@ -1,7 +1,9 @@
 from typing import Any
 
+from .base import BaseSerializer
 
-class CustomRange:
+
+class CustomRange(BaseSerializer):
     """Utility class for serializing and deserializing custom axis ranges."""
 
     @staticmethod
