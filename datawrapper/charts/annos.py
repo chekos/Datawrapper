@@ -2,7 +2,13 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from .enums import ArrowHead, ConnectorLineType, LineInterpolation, StrokeWidth
+from .enums import (
+    ArrowHead,
+    ConnectorLineType,
+    LineInterpolation,
+    StrokeType,
+    StrokeWidth,
+)
 
 
 class ConnectorLine(BaseModel):
@@ -471,11 +477,23 @@ class RangeAnnotation(BaseModel):
     )
 
     #: The stroke type of the annotation, if the display style is a line
-    stroke_type: Literal["solid", "dashed", "dotted"] = Field(
+    stroke_type: StrokeType | str = Field(
         default="solid",
         alias="strokeType",
         description=" The stroke type of the annotation, if the display style is a line",
     )
+
+    @field_validator("stroke_type")
+    @classmethod
+    def validate_stroke_type(cls, v: StrokeType | str) -> StrokeType | str:
+        """Validate that stroke_type is a valid StrokeType value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in StrokeType]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid stroke type: {v}. Must be one of {valid_values}"
+                )
+        return v
 
     #: The stroke width of the annotation, if the display style is a line
     stroke_width: StrokeWidth | int = Field(
