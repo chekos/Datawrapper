@@ -877,19 +877,6 @@ class BaseChart(BaseModel):
 
         # Make the API request
         response = client.get(
-            f"{client._CHARTS_URL}/{self.chart_id}/export/png",
-            params=params,
-            timeout=timeout,
-        )
-        if width is not None:
-            params["width"] = str(width)
-        if height is not None:
-            params["height"] = str(height)
-        if border_color is not None:
-            params["borderColor"] = border_color
-
-        # Make the API request
-        response = client.get(
             f"{client._CHARTS_URL}/{self.chart_id}/export/pdf",
             params=params,
         )
