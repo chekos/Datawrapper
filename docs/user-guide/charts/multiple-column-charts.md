@@ -1,6 +1,6 @@
 # MultipleColumnChart
 
-This example, drawn from [Datawrapper's official documentation](https://www.datawrapper.de/charts/multiple-columns), demonstrates how to create small multiple column charts showing population growth in major cities from 1950 to 2035. The chart features custom panel titles with country information, highlighted data for 2025, a range annotation to mark the projection period and a 4-column grid layout.
+This example, drawn from [Datawrapper's official documentation](https://academy.datawrapper.de/article/405-examples-of-datawrapper-multiple-column-charts), demonstrates how to create small multiple column charts showing population growth in major cities from 1950 to 2035.
 
 <iframe title="Population of the world's largest cities, 1950 to 2035" aria-label="Multiple Columns" id="datawrapper-chart-8kNfG" src="https://datawrapper.dwcdn.net/8kNfG/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="460" data-external="1"></iframe><script type="text/javascript">window.addEventListener("message",function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}});</script>
 
@@ -52,17 +52,7 @@ chart = dw.MultipleColumnChart(
         {"column": "New York-Newark", "title": "New York/Newark, <span style=\"color:gray; font-weight: normal;\">U.S.</span>"},
     ],
     # Add text annotation to label the projection period
-    text_annotations=[
-        {
-            "text": "2025",
-            "x": "2023/01/01",
-            "y": 30000000,
-            "align": "tc",
-            "color": "#b73229",
-            "size": 14,
-            "bold": True,
-        },
-    ],
+    text_annotations=[],
     # Add range annotation to highlight projection period
     range_annotations=[
         {
@@ -74,6 +64,15 @@ chart = dw.MultipleColumnChart(
             "color": "#888",
             "opacity": 18,
         },
+        {
+            "type": "y",
+            "y0": 11765087.7143,
+            "display": "line",
+            "color": "#888",
+            "opacity": 76,
+            "stroke_width": dw.StrokeWidth.MEDIUM,
+            "stroke_type": "dotted",
+        }
     ],
 )
 
