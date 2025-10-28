@@ -8,12 +8,12 @@ The mixins module provides reusable functionality that can be shared across mult
 Grid Configuration
 ------------------
 
-GridConfigMixin
+GridDisplayMixin
 ~~~~~~~~~~~~~~~
 
 Controls the visibility of grid lines on chart axes.
 
-.. autoclass:: GridConfigMixin
+.. autoclass:: GridDisplayMixin
    :members:
    :show-inheritance:
 

@@ -66,7 +66,7 @@ from datawrapper.charts.enums import (
 from datawrapper.charts.mixins import (
     CustomRangeMixin,
     CustomTicksMixin,
-    GridConfigMixin,
+    GridDisplayMixin,
     GridFormatMixin,
 )
 from datawrapper.exceptions import (
@@ -132,7 +132,7 @@ __all__ = [
     "CustomRangeMixin",
     "CustomTicksMixin",
     "GridFormatMixin",
-    "GridConfigMixin",
+    "GridDisplayMixin",
     "FailedRequestError",
     "InvalidRequestError",
     "RateLimitError",

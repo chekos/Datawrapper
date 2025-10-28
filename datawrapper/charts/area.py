@@ -16,7 +16,7 @@ from .enums import (
 from .mixins import (
     CustomRangeMixin,
     CustomTicksMixin,
-    GridConfigMixin,
+    GridDisplayMixin,
     GridFormatMixin,
 )
 from .serializers import (
@@ -27,7 +27,7 @@ from .serializers import (
 
 
 class AreaChart(
-    GridConfigMixin, GridFormatMixin, CustomRangeMixin, CustomTicksMixin, BaseChart
+    GridDisplayMixin, GridFormatMixin, CustomRangeMixin, CustomTicksMixin, BaseChart
 ):
     """A base class for the Datawrapper API's area chart."""
 

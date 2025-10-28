@@ -4,11 +4,11 @@ from typing import Any
 
 from pydantic import Field
 
-from datawrapper.charts.enums import DateFormat, GridDisplay, NumberFormat
-from datawrapper.charts.serializers import CustomRange, CustomTicks
+from .enums import DateFormat, GridDisplay, NumberFormat
+from .serializers import CustomRange, CustomTicks
 
 
-class GridConfigMixin:
+class GridDisplayMixin:
     """Mixin for charts that support grid display configuration.
 
     Provides x_grid and y_grid fields for controlling grid line visibility,

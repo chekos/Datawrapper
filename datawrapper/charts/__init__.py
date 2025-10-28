@@ -33,7 +33,12 @@ from .enums import (
     ValueLabelPlacement,
 )
 from .line import AreaFill, Line, LineChart, LineSymbol, LineValueLabel
-from .mixins import CustomRangeMixin, CustomTicksMixin, GridConfigMixin, GridFormatMixin
+from .mixins import (
+    CustomRangeMixin,
+    CustomTicksMixin,
+    GridDisplayMixin,
+    GridFormatMixin,
+)
 from .models import (
     Annotate,
     ColumnFormat,
@@ -60,7 +65,7 @@ __all__ = (
     "CustomRangeMixin",
     "CustomTicksMixin",
     "GridFormatMixin",
-    "GridConfigMixin",
+    "GridDisplayMixin",
     "ArrowHead",
     "ConnectorLineType",
     "DateFormat",
