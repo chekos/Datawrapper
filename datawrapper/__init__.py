@@ -35,6 +35,10 @@ from datawrapper.charts import (
     StackedBarChart,
     TextAnnotation,
     Transform,
+    XLineAnnotation,
+    XRangeAnnotation,
+    YLineAnnotation,
+    YRangeAnnotation,
 )
 from datawrapper.charts.enums import (
     ArrowHead,
@@ -104,6 +108,10 @@ __all__ = [
     "StackedBarChart",
     "TextAnnotation",
     "RangeAnnotation",
+    "XRangeAnnotation",
+    "YRangeAnnotation",
+    "XLineAnnotation",
+    "YLineAnnotation",
     "ConnectorLine",
     "ArrowHead",
     "ConnectorLineType",

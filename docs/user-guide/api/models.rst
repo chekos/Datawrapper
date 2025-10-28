@@ -17,6 +17,26 @@ Annotations
    :members:
    :show-inheritance:
 
+.. autoclass:: XRangeAnnotation
+   :members:
+   :show-inheritance:
+
+.. autoclass:: YRangeAnnotation
+   :members:
+   :show-inheritance:
+
+.. autoclass:: XLineAnnotation
+   :members:
+   :show-inheritance:
+
+.. autoclass:: YLineAnnotation
+   :members:
+   :show-inheritance:
+
+.. autoclass:: AreaFill
+   :members:
+   :show-inheritance:
+
 .. autoclass:: ConnectorLine
    :members:
    :show-inheritance:
