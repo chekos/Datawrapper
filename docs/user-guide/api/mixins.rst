@@ -15,6 +15,7 @@ Controls the visibility of grid lines on chart axes.
 
 .. autoclass:: GridDisplayMixin
    :members:
+   :inherited-members:
    :show-inheritance:
 
 **Example:**
@@ -36,6 +37,7 @@ Controls the formatting of grid labels on chart axes.
 
 .. autoclass:: GridFormatMixin
    :members:
+   :inherited-members:
    :show-inheritance:
 
 **Example:**
@@ -60,6 +62,7 @@ Sets custom minimum and maximum values for chart axes.
 
 .. autoclass:: CustomRangeMixin
    :members:
+   :inherited-members:
    :show-inheritance:
 
 **Example:**
@@ -80,6 +83,7 @@ Sets custom tick mark positions on chart axes.
 
 .. autoclass:: CustomTicksMixin
    :members:
+   :inherited-members:
    :show-inheritance:
 
 **Example:**
