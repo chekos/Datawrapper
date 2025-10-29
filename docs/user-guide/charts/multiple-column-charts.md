@@ -55,24 +55,21 @@ chart = dw.MultipleColumnChart(
     text_annotations=[],
     # Add range annotation to highlight projection period
     range_annotations=[
-        {
+        dw.MultipleColumnXRangeAnnotation(**{
             "x0": "2018/01/01",
             "x1": "2037/07/02",
             "y0": 0,
             "y1": 50000000,
-            "display": "range",
             "color": "#888",
             "opacity": 18,
-        },
-        {
-            "type": "y",
+        }),
+        dw.MultipleColumnYLineAnnotation(**{
             "y0": 11765087.7143,
-            "display": "line",
             "color": "#888",
             "opacity": 76,
             "stroke_width": dw.StrokeWidth.MEDIUM,
-            "stroke_type": "dotted",
-        }
+            "stroke_type": dw.StrokeType.DOTTED,
+        })
     ],
 )
 
