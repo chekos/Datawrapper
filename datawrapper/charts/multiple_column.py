@@ -80,7 +80,7 @@ class MultipleColumnTextAnnotation(TextAnnotation):
         """Parse API response to extract MultipleColumnTextAnnotation data.
 
         Handles the API format where:
-        - plot is inside the position object
+        - x, y, and plot are inside the position object
         - showInAllPlots is at the top level
 
         Args:
@@ -96,6 +96,8 @@ class MultipleColumnTextAnnotation(TextAnnotation):
         for anno_id, anno_data in api_data.items():
             # Extract position data
             position = anno_data.get("position", {})
+            x = position.get("x") if isinstance(position, dict) else None
+            y = position.get("y") if isinstance(position, dict) else None
             plot = position.get("plot") if isinstance(position, dict) else None
 
             # Extract showInAllPlots (defaults to False for text annotations)
@@ -103,6 +105,12 @@ class MultipleColumnTextAnnotation(TextAnnotation):
 
             # Build annotation dict with id
             anno_dict = {**anno_data, "id": anno_id}
+
+            # Add position fields
+            if x is not None:
+                anno_dict["x"] = x
+            if y is not None:
+                anno_dict["y"] = y
 
             # Add MultipleColumnChart-specific fields
             if plot is not None:

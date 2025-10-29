@@ -331,9 +331,9 @@ class TestMultipleColumnChartIntegration:
         serialized = chart.serialize_model()
         text_annos = serialized["metadata"]["visualize"]["text-annotations"]
 
-        # Should have one annotation with a UUID key
+        # Should have one annotation in list format (matching LineChart pattern)
         assert len(text_annos) == 1
-        anno_data = list(text_annos.values())[0]
+        anno_data = text_annos[0]
 
         # Verify multi-panel fields are present
         assert anno_data["position"]["plot"] == "Delhi"

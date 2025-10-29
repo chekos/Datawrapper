@@ -12,14 +12,14 @@ class ModelListSerializer:
         """Serialize a list of model objects to API format.
 
         This utility handles converting a list of model objects (or dicts) into
-        the list of dictionaries format expected by the Datawrapper API.
+        the list format for serialization.
 
         Args:
             items: List of model objects or dicts
             model_class: The model class (e.g., TextAnnotation, RangeAnnotation, AreaFill)
 
         Returns:
-            List of serialized dictionaries
+            List of serialized model dictionaries
 
         Example:
             >>> from datawrapper.charts.annos import TextAnnotation
@@ -30,7 +30,7 @@ class ModelListSerializer:
             >>> ModelListSerializer.serialize(annotations, TextAnnotation)
             [{'x': 0, 'y': 0, 'text': 'Label 1', ...}, {'x': 1, 'y': 1, 'text': 'Label 2', ...}]
         """
-        result: list[Any] = []
+        result: list[dict[str, Any]] = []
         for item in items:
             # Convert to model object if needed
             if isinstance(item, dict):
