@@ -2,7 +2,7 @@
 
 This example, drawn from [Datawrapper's official documentation](https://academy.datawrapper.de/article/405-examples-of-datawrapper-multiple-column-charts), demonstrates how to create small multiple column charts showing population growth in major cities from 1950 to 2035.
 
-<iframe title="Population of the world's largest cities, 1950 to 2035" aria-label="Multiple Columns" id="datawrapper-chart-8kNfG" src="https://datawrapper.dwcdn.net/8kNfG/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="460" data-external="1"></iframe><script type="text/javascript">window.addEventListener("message",function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}});</script>
+<iframe title="Population of the world's largest cities, 1950 to 2035" aria-label="Multiple Columns" id="datawrapper-chart-qjyDH" src="https://datawrapper.dwcdn.net/qjyDH/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="460" data-external="1"></iframe><script type="text/javascript">window.addEventListener("message",function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}});</script>
 
 ```python
 import pandas as pd
@@ -36,6 +36,8 @@ chart = dw.MultipleColumnChart(
     color_category={
         "2025": "#c71e1d"
     },
+    # Turn off the y grid lines
+    y_grid=False,
     # Format y-axis with abbreviated numbers
     y_grid_format=dw.NumberFormat.ABBREVIATED_ONE_DECIMAL,
     y_grid_labels="inside",
@@ -70,6 +72,7 @@ chart = dw.MultipleColumnChart(
                 type=dw.ConnectorLineType.STRAIGHT,
                 stroke=dw.StrokeWidth.THIN,
                 inherit_color=True,
+                arrow_head=False,
             ),
             show_mobile=True,
             show_desktop=True,
@@ -107,6 +110,7 @@ chart = dw.MultipleColumnChart(
                 type=dw.ConnectorLineType.STRAIGHT,
                 stroke=dw.StrokeWidth.THIN,
                 inherit_color=False,
+                arrow_head=False,
             ),
             show_mobile=True,
             show_desktop=True,
