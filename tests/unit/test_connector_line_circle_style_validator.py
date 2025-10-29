@@ -43,6 +43,7 @@ def test_circle_style_invalid_enum_dotted():
         ConnectorLine(circleStyle=StrokeType.DOTTED)
 
     error = exc_info.value.errors()[0]
+    # When f-string formats an enum, it shows the full representation (e.g., StrokeType.DOTTED)
     assert "Invalid circle style: StrokeType.DOTTED" in str(
         error.get("ctx", {}).get("error", "")
     )

@@ -107,7 +107,7 @@ class ConnectorLine(BaseModel):
         elif isinstance(v, StrokeType):
             if v == StrokeType.DOTTED:
                 raise ValueError(
-                    "Invalid circle style: DOTTED is not allowed for circle_style. Must be SOLID or DASHED"
+                    f"Invalid circle style: {v}. Must be either 'solid' or 'dashed'"
                 )
         return v
 
