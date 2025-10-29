@@ -98,14 +98,19 @@ class ConnectorLine(BaseModel):
     @field_validator("circle_style")
     @classmethod
     def validate_circle_style(cls, v: StrokeType | str) -> StrokeType | str:
-        """Validate that circle_style is either solid or dashed (not dotted)."""
-        if isinstance(v, str):
-            if v not in ["solid", "dashed"]:
+        """Validate that circle_style is either solid or dashed (not dotted).
+
+        Handles both string and enum inputs. DOTTED is not allowed.
+        """
+        # Handle enum inputs
+        if isinstance(v, StrokeType):
+            if v not in [StrokeType.SOLID, StrokeType.DASHED]:
                 raise ValueError(
-                    f"Invalid circle style: {v}. Must be either 'solid' or 'dashed'"
+                    f"Invalid circle style: {v.value}. Must be either 'solid' or 'dashed'"
                 )
-        elif isinstance(v, StrokeType):
-            if v == StrokeType.DOTTED:
+        # Handle string inputs
+        elif isinstance(v, str):
+            if v not in ["solid", "dashed"]:
                 raise ValueError(
                     f"Invalid circle style: {v}. Must be either 'solid' or 'dashed'"
                 )

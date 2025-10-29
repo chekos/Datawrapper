@@ -38,15 +38,17 @@ def test_circle_style_valid_string_dashed():
 
 
 def test_circle_style_invalid_enum_dotted():
-    """Test that StrokeType.DOTTED enum value raises ValidationError."""
+    """Test that StrokeType.DOTTED enum value raises ValidationError.
+
+    Note: Pydantic converts enum values to strings before validation,
+    so the error message will show 'dotted' not 'StrokeType.DOTTED'.
+    """
     with pytest.raises(ValidationError) as exc_info:
         ConnectorLine(circleStyle=StrokeType.DOTTED)
 
     error = exc_info.value.errors()[0]
-    # When f-string formats an enum, it shows the full representation (e.g., StrokeType.DOTTED)
-    assert "Invalid circle style: StrokeType.DOTTED" in str(
-        error.get("ctx", {}).get("error", "")
-    )
+    # Pydantic converts the enum to its string value before validation
+    assert "Invalid circle style: dotted" in str(error.get("ctx", {}).get("error", ""))
     assert "Must be either 'solid' or 'dashed'" in str(
         error.get("ctx", {}).get("error", "")
     )
