@@ -115,7 +115,12 @@ These warnings will be visible to both human developers and AI agents, signaling
   - `__main__.py` - Main Datawrapper API client
   - `charts/` - Chart-specific implementations
     - `base.py` - BaseChart class with common functionality
-    - `models.py` - Pydantic models for API metadata structures
+    - `models/` - Pydantic models for API metadata structures
+      - `mixins.py` - Reusable mixins for shared chart functionality
+      - `api_sections.py` - Models for API metadata sections
+      - `text_annotations.py` - Text annotation models
+      - `range_annotations.py` - Range annotation models
+      - `transforms.py` - Data transformation models
     - `enums/` - Enum classes for type-safe configuration (organized by category)
       - `number_divisor.py` - NumberDivisor enum
       - `number_format.py` - NumberFormat enum
@@ -128,11 +133,19 @@ These warnings will be visible to both human developers and AI agents, signaling
       - `value_label.py` - ValueLabelDisplay, ValueLabelPlacement, ValueLabelAlignment, ValueLabelMode enums
       - `replace_flags.py` - ReplaceFlagsType enum
       - `interpolation.py` - LineInterpolation enum
-      - `connector_line.py` - ConnectorLineType, StrokeWidth, ArrowHead enums
+      - `annos.py` - ConnectorLineType, StrokeWidth, ArrowHead enums
       - `symbol_shape.py` - SymbolShape, SymbolStyle, SymbolDisplay enums
       - `scatter_shape.py` - ScatterShape, ScatterSize, ScatterAxisPosition, ScatterGridLines, RegressionMethod enums
-    - `serializers.py` - Utility classes for serialization/deserialization (ColorCategory, CustomRange, CustomTicks, ModelListSerializer, ValueLabels)
-    - `annos.py` - Annotation models (TextAnnotation, RangeAnnotation)
+    - `serializers/` - Utility classes for serialization/deserialization
+      - `base.py` - Base serializer class
+      - `color_category.py` - ColorCategory serializer
+      - `custom_range.py` - CustomRange serializer
+      - `custom_ticks.py` - CustomTicks serializer
+      - `model_list.py` - ModelListSerializer for lists of Pydantic models
+      - `negative_color.py` - NegativeColor serializer
+      - `plot_height.py` - PlotHeight serializer
+      - `replace_flags.py` - ReplaceFlags serializer
+      - `value_labels.py` - ValueLabels serializer
     - Individual chart type files: `area.py`, `bar.py`, `column.py`, `line.py`, `multiple_column.py`, `scatter.py`, `stacked_bar.py`, `arrow.py`
 - `tests/` - Test suite
   - `unit/` - Unit tests
@@ -145,6 +158,166 @@ These warnings will be visible to both human developers and AI agents, signaling
     - Some tests may still require API tokens for end-to-end testing
 
 ## Key Patterns
+
+### AnnotationsMixin Pattern
+
+The `AnnotationsMixin` class in `datawrapper/charts/models/mixins.py` provides a reusable pattern for handling text and range annotations across all chart types.
+
+**Location:** `datawrapper/charts/models/mixins.py`
+
+**Purpose:**
+- Provides shared `text_annotations` and `range_annotations` fields for all chart classes
+- Implements consistent serialization/deserialization logic for annotations
+- Supports custom annotation subclasses (e.g., MultipleColumnTextAnnotation)
+- Eliminates code duplication across chart types
+
+**Key Features:**
+
+1. **Shared Fields:**
+   ```python
+   class AnnotationsMixin(BaseModel):
+       text_annotations: list[TextAnnotation | dict[Any, Any]] = Field(
+           default_factory=list,
+           alias="text-annotations",
+           description="A list of text annotations to display on the chart",
+       )
+       range_annotations: list[RangeAnnotation | dict[Any, Any]] = Field(
+           default_factory=list,
+           alias="range-annotations",
+           description="A list of range annotations to display on the chart",
+       )
+   ```
+
+2. **Serialization Method:**
+   ```python
+   def _serialize_annotations(
+       self,
+       text_annotation_class: type[TextAnnotation] = TextAnnotation,
+       range_annotation_class: type[RangeAnnotation] = RangeAnnotation,
+   ) -> dict:
+       """Serialize annotations to API format using ModelListSerializer.
+
+       This method uses ModelListSerializer.serialize() which:
+       - Validates dict items using model_class.model_validate()
+       - Calls serialize_model() on each object
+       - Does NOT generate IDs (Datawrapper handles this server-side)
+       """
+       result = {}
+       if self.text_annotations:
+           result["text-annotations"] = ModelListSerializer.serialize(
+               self.text_annotations, text_annotation_class
+           )
+       if self.range_annotations:
+           result["range-annotations"] = ModelListSerializer.serialize(
+               self.range_annotations, range_annotation_class
+           )
+       return result
+   ```
+
+3. **Deserialization Method:**
+   ```python
+   @classmethod
+   def _deserialize_annotations(
+       cls,
+       visualize: dict,
+       text_annotation_class: type[TextAnnotation] = TextAnnotation,
+       range_annotation_class: type[RangeAnnotation] = RangeAnnotation,
+   ) -> dict:
+       """Deserialize annotations from API format."""
+       result = {}
+       if "text-annotations" in visualize:
+           result["text_annotations"] = [
+               text_annotation_class.deserialize_model(anno)
+               for anno in visualize["text-annotations"]
+           ]
+       if "range-annotations" in visualize:
+           result["range_annotations"] = [
+               range_annotation_class.deserialize_model(anno)
+               for anno in visualize["range-annotations"]
+           ]
+       return result
+   ```
+
+**Usage in Chart Classes:**
+
+All chart classes inherit from AnnotationsMixin and use its methods:
+
+```python
+from datawrapper.charts.models.mixins import AnnotationsMixin
+
+class AreaChart(BaseChart, AnnotationsMixin):
+    # Chart-specific fields...
+
+    def serialize_model(self) -> dict:
+        # Serialize chart-specific fields...
+        visualize.update(self._serialize_annotations())
+        return result
+
+    @classmethod
+    def deserialize_model(cls, api_response: dict) -> "AreaChart":
+        # Deserialize chart-specific fields...
+        init_data.update(cls._deserialize_annotations(visualize))
+        return cls(**init_data)
+```
+
+**Custom Annotation Subclasses:**
+
+Some chart types (like MultipleColumnChart) use custom annotation subclasses with additional fields:
+
+```python
+class MultipleColumnChart(BaseChart, AnnotationsMixin):
+    # Override field types for Pydantic validation
+    text_annotations: list[MultipleColumnTextAnnotation | dict[Any, Any]] = Field(
+        default_factory=list,
+        alias="text-annotations",
+        description="A list of text annotations to display on the chart",
+    )
+    range_annotations: list[MultipleColumnRangeAnnotation | dict[Any, Any]] = Field(
+        default_factory=list,
+        alias="range-annotations",
+        description="A list of range annotations to display on the chart",
+    )
+
+    def serialize_model(self) -> dict:
+        # Pass custom classes to serialization
+        visualize.update(
+            self._serialize_annotations(
+                text_annotation_class=MultipleColumnTextAnnotation,
+                range_annotation_class=MultipleColumnRangeAnnotation,
+            )
+        )
+        return result
+
+    @classmethod
+    def deserialize_model(cls, api_response: dict) -> "MultipleColumnChart":
+        # Pass custom classes to deserialization
+        init_data.update(
+            cls._deserialize_annotations(
+                visualize,
+                text_annotation_class=MultipleColumnTextAnnotation,
+                range_annotation_class=MultipleColumnRangeAnnotation,
+            )
+        )
+        return cls(**init_data)
+```
+
+**Important Notes:**
+
+1. **No ID Generation:** The mixin uses `ModelListSerializer.serialize()` which does NOT generate IDs for annotations. Datawrapper handles ID generation server-side.
+
+2. **Field Overrides:** Chart classes that use custom annotation subclasses must override the field type hints to ensure Pydantic validates dict annotations correctly.
+
+3. **ModelListSerializer:** The serialization relies on `ModelListSerializer.serialize()` from `datawrapper/charts/serializers/model_list.py`, which:
+   - Validates dict items using `model_class.model_validate(item)`
+   - Calls `serialize_model()` on each object
+   - Returns a list of serialized objects (not a dict with UUID keys)
+
+**Benefits:**
+- Eliminates code duplication across 6+ chart classes
+- Consistent annotation handling across all chart types
+- Easy to extend with custom annotation subclasses
+- Leverages existing ModelListSerializer utility
+- Server-side ID generation (no client-side UUID management)
 
 ### Serialization/Deserialization
 
@@ -188,1213 +361,4 @@ This utility is used by AreaChart, ColumnChart, LineChart, and MultipleColumnCha
 
 ### Custom Range Utility
 
-The `CustomRange` class in `models.py` provides utilities for handling custom axis ranges:
-
-- `CustomRange.serialize(range_values: list[Any] | tuple[Any, Any]) -> list[Any]`: Converts a list or tuple of range values to a list for the API
-  - Accepts both lists and tuples (e.g., `[0, 100]` or `(0, 100)`)
-  - Preserves the original data types of the values
-- `CustomRange.deserialize(range_list: list[Any] | None) -> list[Any] | None`: Parses a list from the API back to a list of range values
-  - Automatically converts numeric strings to numbers (int or float)
-  - Preserves non-numeric strings as-is (e.g., date strings like "2020-01-01")
-  - Returns None if input is None or empty list
-  - Handles lists with 1, 2, or more values (though typically ranges have 2 values: min and max)
-
-This utility is used by AreaChart, BarChart, ColumnChart, LineChart, MultipleColumnChart, and ArrowChart to handle the `custom-range-x` and `custom-range-y` fields in the visualize metadata.
-
-### Number Divisor
-
-The `NumberDivisor` enum in `enums.py` provides a developer-friendly way to specify number formatting divisors:
-
-**Enum Values:**
-- `NumberDivisor.NO_CHANGE` = "0" - No change to the number
-- `NumberDivisor.AUTO_DETECT` = "auto" - Automatically detect appropriate divisor
-- `NumberDivisor.DIVIDE_BY_THOUSAND` = "3" - Divide by 1,000
-- `NumberDivisor.DIVIDE_BY_MILLION` = "6" - Divide by 1,000,000
-- `NumberDivisor.DIVIDE_BY_BILLION` = "9" - Divide by 1,000,000,000
-- `NumberDivisor.MULTIPLY_BY_HUNDRED` = "-2" - Multiply by 100 (for percentages)
-- `NumberDivisor.MULTIPLY_BY_THOUSAND` = "-3" - Multiply by 1,000
-- `NumberDivisor.MULTIPLY_BY_MILLION` = "-6" - Multiply by 1,000,000
-- `NumberDivisor.MULTIPLY_BY_BILLION` = "-9" - Multiply by 1,000,000,000
-- `NumberDivisor.MULTIPLY_BY_TRILLION` = "-12" - Multiply by 1,000,000,000,000
-
-**Usage in ColumnFormat:**
-The `ColumnFormat` model has a `number_divisor` field that accepts:
-- Enum values: `NumberDivisor.DIVIDE_BY_MILLION`
-- Raw integers: `6`, `-2`, `0`
-- Raw strings: `"6"`, `"auto"`, `"0"`
-
-The field has validation to ensure only valid values are accepted. Invalid values raise a `ValidationError`.
-
-**Serialization:**
-- When serializing to API format via `ColumnFormatList.serialize_to_dict()`, the default value (0 or "0") is excluded from the output
-- Enum values are serialized as their string values (e.g., `NumberDivisor.DIVIDE_BY_MILLION` becomes `"6"`)
-- The API field name is `"number-divisor"` (with hyphen)
-
-**Example:**
-```python
-from datawrapper.charts import ColumnFormat, NumberDivisor
-
-# Using enum (recommended for clarity)
-col_format = ColumnFormat(
-    column="revenue",
-    number_divisor=NumberDivisor.DIVIDE_BY_MILLION,
-    number_prepend="$",
-    number_append="M"
-)
-
-# Using raw int (also valid)
-col_format = ColumnFormat(column="revenue", number_divisor=6)
-
-# Using raw string (also valid)
-col_format = ColumnFormat(column="revenue", number_divisor="auto")
-```
-
-### Number Format
-
-The `NumberFormat` enum in `enums.py` provides a developer-friendly way to specify number formatting patterns across all chart types:
-
-**Enum Values (31 total):**
-
-*Basic Formats:*
-- `NumberFormat.AUTO` = "auto" - Automatic formatting
-- `NumberFormat.INTEGER` = "0" - Integer (no decimals)
-- `NumberFormat.ONE_DECIMAL` = "0.0" - One decimal place
-- `NumberFormat.TWO_DECIMALS` = "0.00" - Two decimal places
-- `NumberFormat.THREE_DECIMALS` = "0.000" - Three decimal places
-- `NumberFormat.UP_TO_ONE_DECIMAL` = "0.[0]" - Up to one decimal (if non-zero)
-- `NumberFormat.UP_TO_TWO_DECIMALS` = "0.[00]" - Up to two decimals (if non-zero)
-- `NumberFormat.THOUSANDS_WITH_OPTIONAL_DECIMALS` = "0,0.[00]" - Thousands separator with optional decimals
-- `NumberFormat.THOUSANDS_SEPARATOR` = "0,0" - Thousands separator
-
-*Percentage Formats:*
-- `NumberFormat.PERCENT_INTEGER` = "0%" - Integer percentage
-- `NumberFormat.PERCENT_ONE_DECIMAL` = "0.0%" - Percentage with one decimal
-- `NumberFormat.PERCENT_TWO_DECIMALS` = "0.00%" - Percentage with two decimals
-- `NumberFormat.PERCENT_UP_TO_ONE_DECIMAL` = "0.[0]%" - Percentage with up to one decimal
-- `NumberFormat.PERCENT_UP_TO_TWO_DECIMALS` = "0.[00]%" - Percentage with up to two decimals
-
-*Abbreviated Formats:*
-- `NumberFormat.ABBREVIATED` = "0a" - Abbreviated (123k, 1.2m)
-- `NumberFormat.ABBREVIATED_ONE_DECIMAL` = "0.[0]a" - Abbreviated with one decimal
-- `NumberFormat.ABBREVIATED_TWO_DECIMALS` = "0.[00]a" - Abbreviated with two decimals
-- `NumberFormat.ABBREVIATED_THREE_DECIMALS` = "0.[000]a" - Abbreviated with three decimals
-- `NumberFormat.ORDINAL` = "0o" - Ordinal numbers (1st, 2nd, 3rd)
-
-*Advanced Formats:*
-- `NumberFormat.PLUS_SIGN` = "+0" - Show plus sign for positive numbers
-- `NumberFormat.PLUS_SIGN_PERCENT` = "+0%" - Plus sign with percentage
-- `NumberFormat.CURRENCY_ABBREVIATED_WITH_PLUS` = "+$0.[00]a" - Currency with plus sign and abbreviation
-- `NumberFormat.CURRENCY_ABBREVIATED` = "$0.[00]a" - Currency with abbreviation
-- `NumberFormat.CURRENCY_OPTIONAL_DECIMALS` = "$0.[00]" - Currency with optional decimals
-- `NumberFormat.ZERO_PADDED` = "0000" - Zero-padded numbers
-- `NumberFormat.PARENTHESES_FOR_NEGATIVES` = "(0,0.00)" - Negative numbers in parentheses
-- `NumberFormat.LEADING_DECIMAL` = ".000" - Leading decimal point
-- `NumberFormat.SCIENTIFIC_NOTATION` = "0,0e+0" - Scientific notation
-- `NumberFormat.SCIENTIFIC_NOTATION_DECIMALS` = "0.[00]e+0" - Scientific notation with decimals
-- `NumberFormat.ABSOLUTE_VALUE` = "|0.0|" - Absolute value (no minus sign)
-
-**Usage in Chart Classes:**
-All chart classes accept `NumberFormat | str` for format fields, providing both type safety and backwards compatibility:
-
-- **AreaChart**: `y_grid_format`, `value_labels_format`
-- **ArrowChart**: `value_labels_format`
-- **BarChart**: `axis_label_format`, `value_label_format`
-- **ColumnChart**: `y_grid_format`, `value_labels_format`
-- **LineChart**: `y_grid_format`, `value_labels_format`
-- **MultipleColumnChart**: `y_grid_format`, `value_labels_format`
-- **ScatterPlot**: `x_grid_format`, `y_grid_format`
-- **StackedBarChart**: `value_labels_format`
-
-**Backwards Compatibility:**
-- Users can still use raw format strings: `"0,0"`, `"$0.[00]a"`, etc.
-- Enum values automatically convert to their string equivalents
-- Type hints support both: `NumberFormat | str`
-
-**Example:**
-```python
-from datawrapper.charts import BarChart, NumberFormat
-
-# Using enum (recommended - readable and type-safe)
-chart = BarChart(
-    title="Sales Report",
-    axis_label_format=NumberFormat.THOUSANDS_SEPARATOR,  # "10,000"
-    value_label_format=NumberFormat.ABBREVIATED_ONE_DECIMAL  # "123.4k"
-)
-
-# Using raw strings (still supported for backwards compatibility)
-chart = BarChart(
-    title="Sales Report",
-    axis_label_format="0,0",
-    value_label_format="0.[0]a"
-)
-
-# Custom format strings also work
-chart = BarChart(
-    title="Temperature",
-    value_label_format="0.0°C"  # Custom format with unit
-)
-```
-
-**Benefits:**
-- Semantic, readable names instead of cryptic format strings
-- IDE autocomplete support for discovering available formats
-- Type safety with validation
-- Comprehensive docstring with examples and format descriptions
-- Maintains full backwards compatibility with raw strings
-
-### Date Format
-
-The `DateFormat` enum in `enums.py` provides a developer-friendly way to specify date formatting patterns across chart types that display dates:
-
-**Enum Values (50 total):**
-
-*Basic/Auto:*
-- `DateFormat.AUTO` = "auto" - Automatic date formatting
-
-*Year Formats:*
-- `DateFormat.YEAR_FULL` = "YYYY" - Full year (2024)
-- `DateFormat.YEAR_TWO_DIGIT` = "YY" - Two-digit year (24)
-- `DateFormat.YEAR_ABBREVIATED` = "'YY" - Abbreviated year with apostrophe ('24)
-- `DateFormat.YEAR_ABBREVIATED_FIRST` = "YYYY~~'YY" - Full year first, then abbreviated (2024, '25, '26)
-
-*Quarter Formats:*
-- `DateFormat.QUARTER` = "Q" - Quarter number (1, 2, 3, 4)
-- `DateFormat.YEAR_QUARTER` = "YYYY [Q]Q" - Year with quarter (2024 Q1)
-- `DateFormat.YEAR_QUARTER_MULTILINE` = "YYYY|[Q]Q" - Year and quarter on separate lines
-
-*Month Formats:*
-- `DateFormat.MONTH_FULL` = "MMMM" - Full month name (January)
-- `DateFormat.MONTH_ABBREVIATED` = "MMM" - Abbreviated month (Jan)
-- `DateFormat.MONTH_NUMBER_PADDED` = "MM" - Month number with leading zero (01, 02, 12)
-- `DateFormat.MONTH_NUMBER` = "M" - Month number (1, 2, 12)
-- `DateFormat.MONTH_ABBREVIATED_WITH_YEAR` = "MMM 'YY" - Month with abbreviated year (Jan '24)
-- `DateFormat.YEAR_MONTH_MULTILINE` = "YYYY|MMM" - Year and month on separate lines
-
-*Week Formats:*
-- `DateFormat.WEEK_OF_YEAR_PADDED` = "ww" - Week of year with leading zero (01, 02, 52)
-- `DateFormat.WEEK_OF_YEAR` = "w" - Week of year (1, 2, 52)
-- `DateFormat.WEEK_OF_YEAR_ORDINAL` = "wo" - Week of year ordinal (1st, 2nd, 52nd)
-
-*Day of Month Formats:*
-- `DateFormat.DAY_PADDED` = "DD" - Day with leading zero (01, 02, 31)
-- `DateFormat.DAY` = "D" - Day (1, 2, 31)
-- `DateFormat.DAY_ORDINAL` = "Do" - Day ordinal (1st, 2nd, 31st)
-- `DateFormat.MONTH_DAY_MULTILINE` = "MMM|DD" - Month and day on separate lines
-- `DateFormat.MONTH_DAY_YEAR_FULL` = "MMMM D, YYYY" - Full date (January 30, 2024)
-
-*Day of Week Formats:*
-- `DateFormat.DAY_OF_WEEK_FULL` = "dddd" - Full day name (Monday, Tuesday)
-- `DateFormat.DAY_OF_WEEK_SHORT` = "ddd" - Short day name (Mon, Tue)
-- `DateFormat.DAY_OF_WEEK_MIN` = "dd" - Abbreviated day name (Mo, Tu)
-- `DateFormat.DAY_OF_WEEK_NUMBER` = "d" - Day of week number (0=Sunday, 6=Saturday)
-
-*Sport Season Formats:*
-- `DateFormat.SPORT_SEASON_FULL` = "BB" - Full sport season (2015-2016)
-- `DateFormat.SPORT_SEASON_ABBREVIATED` = "B" - Abbreviated sport season ('15-'16)
-
-*Time Formats:*
-- `DateFormat.HOUR_24_PADDED` = "HH" - Hour 0-23 with leading zero (00, 01, 23)
-- `DateFormat.HOUR_24` = "H" - Hour 0-23 (0, 1, 23)
-- `DateFormat.HOUR_12_PADDED` = "hh" - Hour 1-12 with leading zero (01, 02, 12)
-- `DateFormat.HOUR_12` = "h" - Hour 1-12 (1, 2, 12)
-- `DateFormat.HOUR_24_ALT_PADDED` = "kk" - Hour 1-24 with leading zero (01, 02, 24)
-- `DateFormat.HOUR_24_ALT` = "k" - Hour 1-24 (1, 2, 24)
-- `DateFormat.MINUTE_PADDED` = "mm" - Minute with leading zero (00, 01, 59)
-- `DateFormat.MINUTE` = "m" - Minute (0, 1, 59)
-- `DateFormat.SECOND_PADDED` = "ss" - Second with leading zero (00, 01, 59)
-- `DateFormat.SECOND` = "s" - Second (0, 1, 59)
-- `DateFormat.MILLISECOND` = "SSS" - Millisecond (000, 001, 999)
-- `DateFormat.AM_PM_UPPER` = "A" - AM/PM uppercase (AM, PM)
-- `DateFormat.AM_PM_LOWER` = "a" - am/pm lowercase (am, pm)
-
-*Timezone Formats:*
-- `DateFormat.TIMEZONE_OFFSET` = "Z" - Timezone offset with colon (-07:00, +05:30)
-- `DateFormat.TIMEZONE_OFFSET_NO_COLON` = "ZZ" - Timezone offset without colon (-0700, +0530)
-
-*Unix Timestamp Formats:*
-- `DateFormat.UNIX_TIMESTAMP_SECONDS` = "X" - Unix timestamp in seconds (1234567890)
-- `DateFormat.UNIX_TIMESTAMP_MILLISECONDS` = "x" - Unix timestamp in milliseconds (1234567890123)
-
-*Locale-Dependent Formats:*
-- `DateFormat.LOCALE_DATE_SHORT` = "L" - Short date based on locale (1/30/2024 in en-US)
-- `DateFormat.LOCALE_DATE_LONG` = "LL" - Long date based on locale (January 30, 2024 in en-US)
-- `DateFormat.LOCALE_DATETIME_SHORT` = "LLL" - Short datetime based on locale
-- `DateFormat.LOCALE_DATETIME_LONG` = "LLLL" - Long datetime based on locale
-- `DateFormat.LOCALE_TIME` = "LT" - Time based on locale
-
-**Usage in Chart Classes:**
-Chart classes that display dates accept `DateFormat | str` for date format fields:
-
-- **AreaChart**: `x_grid_format`, `tooltip_x_format`
-- **ColumnChart**: `x_grid_format`
-- **LineChart**: `x_grid_format`, `tooltip_x_format`
-- **MultipleColumnChart**: `x_grid_format`
-- **ScatterPlot**: `x_grid_format`, `y_grid_format` (when using date columns)
-
-**Backwards Compatibility:**
-- Users can still use raw format strings: `"YYYY-MM-DD"`, `"MMM DD"`, etc.
-- Enum values automatically convert to their string equivalents
-- Type hints support both: `DateFormat | str`
-
-**Example:**
-```python
-from datawrapper.charts import LineChart, DateFormat, NumberFormat
-
-# Using enum (recommended - readable and type-safe)
-chart = LineChart(
-    title="Temperature Over Time",
-    x_grid_format=DateFormat.MONTH_ABBREVIATED_WITH_YEAR,  # "Jan '24"
-    y_grid_format=NumberFormat.ONE_DECIMAL  # "23.5"
-)
-
-# Using raw strings (still supported for backwards compatibility)
-chart = LineChart(
-    title="Temperature Over Time",
-    x_grid_format="MMM 'YY",
-    y_grid_format="0.0"
-)
-
-# Custom format strings also work
-chart = LineChart(
-    title="Custom Date Format",
-    x_grid_format="DD.MM.YYYY"  # Custom format
-)
-```
-
-**Benefits:**
-- Semantic, readable names instead of cryptic format strings
-- IDE autocomplete support for discovering available formats
-- Type safety with validation
-- Comprehensive docstring with examples and format descriptions
-- Maintains full backwards compatibility with raw strings
-- Works seamlessly with NumberFormat enum
-
-### Enabled by Presence Pattern
-
-Several classes follow an "enabled by presence" pattern where providing the object automatically implies it should be enabled. This pattern is used by:
-- `LineSymbol` and `LineValueLabel` in `line.py`
-- `ConnectorLine` in `annos.py`
-
-**API Format vs Python Format:**
-- **API Format**: Nested object with `{"enabled": bool, ...other fields}`
-- **Python Format**: Optional object (None = disabled, object = enabled with `enabled=True` automatically set)
-
-**Key Features:**
-- `enabled` field defaults to `True` in all classes
-- Validators prevent explicitly setting `enabled=False` (raises `ValueError` with helpful message)
-- To disable: omit the field entirely (set to `None`)
-- To enable: provide the object with desired configuration
-
-**Serialization:**
-- When object is provided: Serializes full object with `enabled=True`
-- When object is `None`: Serializes `{"enabled": False}`
-
-**Deserialization:**
-- When API has `enabled=True`: Returns object instance
-- When API has `enabled=False`: Returns `None`
-
-**Usage Examples:**
-
-```python
-# LineSymbol and LineValueLabel in Line Model
-from datawrapper.charts.line import Line, LineSymbol, LineValueLabel
-
-line = Line(
-    column="temperature",
-    symbols=LineSymbol(shape="circle", size=5),
-    value_labels=LineValueLabel(last=True, first=True)
-)
-
-# ConnectorLine in TextAnnotation
-from datawrapper.charts.annos import TextAnnotation, ConnectorLine
-
-anno = TextAnnotation(
-    text="Important point",
-    x=10,
-    y=20,
-    connector_line=ConnectorLine(type="curveRight", stroke=2)
-)
-
-# Disabled (just omit the fields)
-line = Line(column="temperature")
-anno = TextAnnotation(text="No connector", x=10, y=20)
-```
-
-**Benefits:**
-- More intuitive API - presence implies enablement
-- Prevents invalid states (can't have object with enabled=False)
-- Consistent pattern across the library
-- Cleaner code - no redundant enabled=True everywhere
-
-### Enum Pattern and Backwards Compatibility
-
-The library uses a comprehensive enum pattern across all chart types to provide type-safe, developer-friendly configuration options while maintaining full backwards compatibility with raw string/int values.
-
-**Enum Organization:**
-All enums are organized in the `datawrapper/charts/enums/` directory by category:
-- Formatting: `number_divisor.py`, `number_format.py`, `date_format.py`
-- Line styling: `line_width.py`, `line_dash.py`, `interpolation.py`
-- Grid configuration: `grid_display.py`, `grid_label.py`
-- Value labels: `value_label.py`
-- Symbols and shapes: `symbol_shape.py`, `scatter_shape.py`
-- Annotations: `connector_line.py`
-- Plot configuration: `plot_height.py`, `replace_flags.py`
-
-**Enum Implementation Pattern:**
-All enums follow a consistent pattern:
-1. Inherit from both `str` and `Enum` (or `int` and `Enum` for integer values)
-2. Use descriptive, semantic names (e.g., `GridDisplay.ON` instead of `"on"`)
-3. Include comprehensive docstrings with examples
-4. Support backwards compatibility via Union types (e.g., `GridDisplay | str`)
-
-**Field Validator Pattern:**
-When using enums in Pydantic models, add field validators to ensure proper validation:
-```python
-from pydantic import field_validator
-
-@field_validator("field_name")
-@classmethod
-def validate_field_name(cls, v: EnumType | str) -> EnumType | str:
-    """Validate that field_name is a valid EnumType value."""
-    if isinstance(v, str):
-        valid_values = [e.value for e in EnumType]
-        if v not in valid_values:
-            raise ValueError(
-                f"Invalid value: {v}. Must be one of {valid_values}"
-            )
-    return v
-```
-
-**Import Patterns:**
-All enums are available at three levels:
-```python
-# From top-level package
-from datawrapper import GridDisplay, LineWidth, NumberFormat
-
-# From charts subpackage
-from datawrapper.charts import GridDisplay, LineWidth, NumberFormat
-
-# From enums subpackage
-from datawrapper.charts.enums import GridDisplay, LineWidth, NumberFormat
-```
-
-**Complete Enum Reference:**
-
-#### Grid Configuration Enums
-
-**GridDisplay** (`grid_display.py`):
-- `GridDisplay.ON` = "on" - Show grid lines
-- `GridDisplay.OFF` = "off" - Hide grid lines
-- `GridDisplay.AUTO` = "auto" - Automatically determine grid display
-
-**GridLabelPosition** (`grid_label.py`):
-- `GridLabelPosition.INSIDE` = "inside" - Labels inside plot area
-- `GridLabelPosition.OUTSIDE` = "outside" - Labels outside plot area
-
-**GridLabelAlign** (`grid_label.py`):
-- `GridLabelAlign.LEFT` = "left" - Left-aligned labels
-- `GridLabelAlign.CENTER` = "center" - Center-aligned labels
-- `GridLabelAlign.RIGHT` = "right" - Right-aligned labels
-
-#### Value Label Enums
-
-**ValueLabelDisplay** (`value_label.py`):
-- `ValueLabelDisplay.HOVER` = "hover" - Show on hover
-- `ValueLabelDisplay.ALWAYS` = "always" - Always show
-- `ValueLabelDisplay.OFF` = "off" - Never show
-
-**ValueLabelPlacement** (`value_label.py`):
-- `ValueLabelPlacement.INSIDE` = "inside" - Inside bars/columns
-- `ValueLabelPlacement.OUTSIDE` = "outside" - Outside bars/columns
-
-**ValueLabelAlignment** (`value_label.py`):
-- `ValueLabelAlignment.LEFT` = "left" - Left-aligned
-- `ValueLabelAlignment.CENTER` = "center" - Center-aligned
-- `ValueLabelAlignment.RIGHT` = "right" - Right-aligned
-
-**ValueLabelMode** (`value_label.py`):
-- `ValueLabelMode.HOVER` = "hover" - Show on hover
-- `ValueLabelMode.ALWAYS` = "always" - Always show
-
-#### Line and Interpolation Enums
-
-**LineWidth** (`line_width.py`):
-- `LineWidth.THIN` = "1" - Thin line (1px)
-- `LineWidth.MEDIUM` = "2" - Medium line (2px)
-- `LineWidth.THICK` = "3" - Thick line (3px)
-- `LineWidth.EXTRA_THICK` = "4" - Extra thick line (4px)
-
-**LineDash** (`line_dash.py`):
-- `LineDash.SOLID` = None - Solid line (no dashes)
-- `LineDash.DASHED` = "4,2" - Dashed line pattern
-- `LineDash.DOTTED` = "1,2" - Dotted line pattern
-- `LineDash.DASH_DOT` = "8,2,1,2" - Dash-dot pattern
-- `LineDash.LONG_DASH` = "8,4" - Long dash pattern
-
-**LineInterpolation** (`interpolation.py`):
-- `LineInterpolation.LINEAR` = "linear" - Linear interpolation
-- `LineInterpolation.MONOTONE` = "monotone-x" - Monotone cubic interpolation
-- `LineInterpolation.STEP` = "step" - Step function
-- `LineInterpolation.STEP_AFTER` = "step-after" - Step after
-- `LineInterpolation.STEP_BEFORE` = "step-before" - Step before
-- `LineInterpolation.CARDINAL` = "cardinal" - Cardinal spline
-- `LineInterpolation.BASIS` = "basis" - B-spline
-
-#### Symbol and Shape Enums
-
-**SymbolShape** (`symbol_shape.py`):
-- `SymbolShape.CIRCLE` = "circle"
-- `SymbolShape.SQUARE` = "square"
-- `SymbolShape.DIAMOND` = "diamond"
-- `SymbolShape.TRIANGLE` = "triangle"
-- `SymbolShape.CROSS` = "cross"
-
-**SymbolStyle** (`symbol_shape.py`):
-- `SymbolStyle.NORMAL` = "normal" - Filled symbols
-- `SymbolStyle.OUTLINED` = "outlined" - Outlined symbols
-
-**SymbolDisplay** (`symbol_shape.py`):
-- `SymbolDisplay.ALL` = "all" - Show all symbols
-- `SymbolDisplay.FIRST` = "first" - Show first symbol only
-- `SymbolDisplay.LAST` = "last" - Show last symbol only
-- `SymbolDisplay.FIRST_LAST` = "firstlast" - Show first and last symbols
-
-**ScatterShape** (`scatter_shape.py`):
-- `ScatterShape.CIRCLE` = "circle"
-- `ScatterShape.SQUARE` = "square"
-- `ScatterShape.DIAMOND` = "diamond"
-- `ScatterShape.TRIANGLE` = "triangle"
-- `ScatterShape.CROSS` = "cross"
-
-**ScatterSize** (`scatter_shape.py`):
-- `ScatterSize.SMALL` = "small"
-- `ScatterSize.MEDIUM` = "medium"
-- `ScatterSize.LARGE` = "large"
-
-**ScatterAxisPosition** (`scatter_shape.py`):
-- `ScatterAxisPosition.LEFT` = "left"
-- `ScatterAxisPosition.RIGHT` = "right"
-- `ScatterAxisPosition.TOP` = "top"
-- `ScatterAxisPosition.BOTTOM` = "bottom"
-
-**ScatterGridLines** (`scatter_shape.py`):
-- `ScatterGridLines.ON` = "on"
-- `ScatterGridLines.OFF` = "off"
-- `ScatterGridLines.AUTO` = "auto"
-
-**RegressionMethod** (`scatter_shape.py`):
-- `RegressionMethod.LINEAR` = "linear"
-- `RegressionMethod.POLYNOMIAL` = "polynomial"
-- `RegressionMethod.EXPONENTIAL` = "exponential"
-- `RegressionMethod.LOGARITHMIC` = "logarithmic"
-- `RegressionMethod.POWER` = "power"
-
-#### Annotation Enums
-
-**ConnectorLineType** (`connector_line.py`):
-- `ConnectorLineType.STRAIGHT` = "straight"
-- `ConnectorLineType.CURVE_LEFT` = "curveLeft"
-- `ConnectorLineType.CURVE_RIGHT` = "curveRight"
-
-**StrokeWidth** (`connector_line.py`):
-- `StrokeWidth.THIN` = 1
-- `StrokeWidth.MEDIUM` = 2
-- `StrokeWidth.THICK` = 3
-- `StrokeWidth.EXTRA_THICK` = 4
-- `StrokeWidth.VERY_THICK` = 5
-
-**ArrowHead** (`connector_line.py`):
-- `ArrowHead.LINES` = "lines"
-- `ArrowHead.ARROW` = "arrow"
-- `ArrowHead.DOT` = "dot"
-
-#### Plot Configuration Enums
-
-**PlotHeightMode** (`plot_height.py`):
-- `PlotHeightMode.FIXED` = "fixed" - Fixed pixel height
-- `PlotHeightMode.RATIO` = "ratio" - Aspect ratio
-
-**ReplaceFlagsType** (`replace_flags.py`):
-- `ReplaceFlagsType.OFF` = "off" - No flag replacement
-- `ReplaceFlagsType.FOUR_BY_THREE` = "4x3" - 4:3 aspect ratio flags
-- `ReplaceFlagsType.ONE_BY_ONE` = "1x1" - 1:1 aspect ratio flags
-- `ReplaceFlagsType.CIRCLE` = "circle" - Circular flags
-
-**Usage Examples:**
-
-```python
-from datawrapper.charts import (
-    LineChart, Line, LineSymbol,
-    GridDisplay, LineWidth, LineDash, LineInterpolation,
-    SymbolShape, SymbolStyle, SymbolDisplay,
-    NumberFormat, DateFormat
-)
-
-# Using enums for type-safe configuration
-chart = LineChart(
-    title="Temperature Trends",
-    x_grid_format=DateFormat.MONTH_ABBREVIATED_WITH_YEAR,
-    y_grid_format=NumberFormat.ONE_DECIMAL,
-    x_grid_display=GridDisplay.ON,
-    y_grid_display=GridDisplay.AUTO
-)
-
-# Configure line with enums
-line = Line(
-    column="temperature",
-    width=LineWidth.THICK,
-    dash=LineDash.DASHED,
-    interpolation=LineInterpolation.MONOTONE,
-    symbols=LineSymbol(
-        shape=SymbolShape.CIRCLE,
-        style=SymbolStyle.OUTLINED,
-        display=SymbolDisplay.FIRST_LAST
-    )
-)
-
-# Backwards compatibility - raw strings still work
-line_legacy = Line(
-    column="temperature",
-    width="3",
-    dash="4,2",
-    interpolation="curved"
-)
-```
-
-**Benefits:**
-- Type safety with IDE autocomplete
-- Semantic, readable names
-- Comprehensive validation
-- Full backwards compatibility
-- Consistent pattern across all chart types
-
-### Line Width and Dash Enums (Legacy Section)
-
-The `LineWidth` and `LineDash` enums provide developer-friendly ways to specify line styling in LineChart configurations:
-
-**LineWidth Enum Values:**
-- `LineWidth.THIN` = "1" - Thin line (1px)
-- `LineWidth.MEDIUM` = "2" - Medium line (2px)
-- `LineWidth.THICK` = "3" - Thick line (3px)
-- `LineWidth.EXTRA_THICK` = "4" - Extra thick line (4px)
-
-**LineDash Enum Values:**
-- `LineDash.SOLID` = None - Solid line (no dashes)
-- `LineDash.DASHED` = "4,2" - Dashed line pattern
-- `LineDash.DOTTED` = "1,2" - Dotted line pattern
-- `LineDash.DASH_DOT` = "8,2,1,2" - Dash-dot pattern
-- `LineDash.LONG_DASH` = "8,4" - Long dash pattern
-
-**Usage in Line Model:**
-The `Line` model (used in LineChart) has `width` and `dash` fields that accept:
-- Enum values: `LineWidth.THICK`, `LineDash.DASHED`
-- Raw strings: `"3"`, `"4,2"`, `None`
-
-Both fields have validation to ensure only valid values are accepted. Invalid values raise a `ValidationError`.
-
-**Serialization:**
-- Enum values are serialized as their string values (e.g., `LineWidth.THICK` becomes `"3"`)
-- `LineDash.SOLID` (None) is serialized as `None`
-- The API field names are `"width"` and `"dash"`
-
-**Example:**
-```python
-from datawrapper.charts import Line, LineWidth, LineDash
-
-# Using enums (recommended for clarity)
-line = Line(
-    column="temperature",
-    width=LineWidth.THICK,
-    dash=LineDash.DASHED,
-    color="#FF0000"
-)
-
-# Using raw strings (also valid)
-line = Line(column="temperature", width="3", dash="4,2")
-
-# Solid line (no dashes)
-line = Line(column="temperature", width=LineWidth.MEDIUM, dash=LineDash.SOLID)
-```
-
-### Color Category Utility
-
-The `ColorCategory` class in `serializers.py` provides utilities for handling color category mappings:
-
-- `ColorCategory.serialize(color_map, category_labels=None, category_order=None, exclude_from_key=None) -> dict`: Converts Python color mappings to the API's expected format with a `map` key and optional additional fields
-- `ColorCategory.deserialize(color_category_obj) -> dict`: Parses the API's color category structure back to Python, returning a dictionary with keys:
-  - `color_category`: The color mapping dictionary
-  - `category_labels`: Optional labels for categories
-  - `category_order`: Optional ordering for categories
-  - `exclude_from_color_key`: Optional list of categories to exclude from the legend
-
-This utility is used by AreaChart, BarChart, ColumnChart, LineChart, MultipleColumnChart, StackedBarChart, and ArrowChart to handle the `color-category` field in the visualize metadata.
-
-### Replace Flags Utility
-
-The `ReplaceFlags` class in `serializers.py` provides utilities for handling the replace-flags configuration:
-
-**API Format vs Python Format:**
-- **API Format**: Nested object with `{"enabled": bool, "style": str}` (note: uses "style" not "type")
-- **Python Format**: Simple string ("off", "4x3", "1x1", "circle")
-
-**Methods:**
-- `ReplaceFlags.serialize(flag_type: str) -> dict`: Converts simple string format to API nested object format
-  - `"off"` → `{"enabled": False, "style": ""}`
-  - `"4x3"` → `{"enabled": True, "style": "4x3"}`
-- `ReplaceFlags.deserialize(api_obj: dict | None) -> str`: Converts API nested object format to simple string format
-  - `{"enabled": True, "style": "4x3"}` → `"4x3"`
-  - `{"enabled": False, "style": ""}` → `"off"`
-  - `None` → `"off"`
-
-**Usage:**
-This utility is used by BarChart and StackedBarChart to handle the `replace-flags` field, which controls whether country codes are replaced with flag icons in the visualization.
-
-**Important Note:**
-The API uses the field name "style" (not "type") in the nested object. This is different from the initial implementation and was corrected based on actual API responses.
-
-**Example:**
-```python
-from datawrapper.charts.serializers import ReplaceFlags
-
-# Serialization (Python → API)
-api_format = ReplaceFlags.serialize("4x3")
-# Returns: {"enabled": True, "style": "4x3"}
-
-# Deserialization (API → Python)
-python_format = ReplaceFlags.deserialize({"enabled": True, "style": "4x3"})
-# Returns: "4x3"
-```
-
-### Negative Color Utility
-
-The `NegativeColor` class in `serializers.py` provides utilities for handling negative color configuration:
-
-**API Format vs Python Format:**
-- **API Format**: Nested object with `{"enabled": bool, "value": str}` where value is a color hex code
-- **Python Format**: Simple string (color hex code like "#ff0000") or None
-
-**Methods:**
-- `NegativeColor.serialize(color: str | None) -> dict | None`: Converts simple color string to API nested object format
-  - `"#ff0000"` → `{"enabled": True, "value": "#ff0000"}`
-  - `None` → `None`
-- `NegativeColor.deserialize(api_obj: dict | None) -> str | None`: Converts API nested object format to simple color string
-  - `{"enabled": True, "value": "#ff0000"}` → `"#ff0000"`
-  - `{"enabled": False, "value": ""}` → `None`
-  - `None` → `None`
-
-**Usage:**
-This utility is used by ColumnChart, MultipleColumnChart, and StackedBarChart to handle the `negativeColor` field in the visualize metadata. It consolidates what were previously two separate fields (`negative_color_enabled` and `negative_color_value`) into a single, more intuitive field.
-
-**Example:**
-```python
-from datawrapper.charts.serializers import NegativeColor
-
-# Serialization (Python → API)
-api_format = NegativeColor.serialize("#ff0000")
-# Returns: {"enabled": True, "value": "#ff0000"}
-
-# Deserialization (API → Python)
-python_format = NegativeColor.deserialize({"enabled": True, "value": "#ff0000"})
-# Returns: "#ff0000"
-
-# When disabled
-python_format = NegativeColor.deserialize({"enabled": False, "value": ""})
-# Returns: None
-```
-
-### Plot Height Utility
-
-The `PlotHeight` class in `serializers.py` provides utilities for handling chart plot height configuration:
-
-**API Format vs Python Format:**
-- **API Format**: Nested object with `{"mode": str, "fixed": int}` where mode can be "fixed" or "ratio"
-- **Python Format**: Either an integer (for fixed mode) or a float (for ratio mode)
-
-**Methods:**
-- `PlotHeight.serialize(height: int | float) -> dict`: Converts simple numeric format to API nested object format
-  - Integer (e.g., `400`) → `{"mode": "fixed", "fixed": 400}`
-  - Float (e.g., `0.5`) → `{"mode": "ratio", "fixed": 0.5}`
-- `PlotHeight.deserialize(api_obj: dict | None) -> int | float | None`: Converts API nested object format to simple numeric format
-  - `{"mode": "fixed", "fixed": 400}` → `400`
-  - `{"mode": "ratio", "fixed": 0.5}` → `0.5`
-  - `None` → `None`
-
-**Usage:**
-This utility is used by LineChart, AreaChart, ColumnChart, MultipleColumnChart, and ScatterPlot to handle the `plot-height` field in the visualize metadata.
-
-**Example:**
-```python
-from datawrapper.charts.serializers import PlotHeight
-
-# Serialization (Python → API)
-api_format = PlotHeight.serialize(400)  # Fixed height
-# Returns: {"mode": "fixed", "fixed": 400}
-
-api_format = PlotHeight.serialize(0.5)  # Ratio mode
-# Returns: {"mode": "ratio", "fixed": 0.5}
-
-# Deserialization (API → Python)
-python_format = PlotHeight.deserialize({"mode": "fixed", "fixed": 400})
-# Returns: 400
-
-python_format = PlotHeight.deserialize({"mode": "ratio", "fixed": 0.5})
-# Returns: 0.5
-```
-
-### Value Labels Utility
-
-The `ValueLabels` class in `serializers.py` provides utilities for handling value label configuration across different chart types:
-
-**Chart Type Variations:**
-Different chart types use different API formats for value labels:
-- **BarChart**: Flat structure with `show-value-labels` (bool), `value-label-format`, `value-label-alignment`
-- **ColumnChart/MultipleColumnChart**: Nested `valueLabels` object with `show`, `format`, `enabled`, `placement`, plus optional top-level `value-label-format` and `value-labels-always` fields
-- **LineChart/ArrowChart/StackedBarChart**: Simple `value-label-format` or `value-labels-format` field
-
-**Methods:**
-- `ValueLabels.serialize(show, format_str, placement=None, alignment=None, always=None, chart_type="column") -> dict`: Converts Python parameters to API format
-  - For column charts: Creates nested `valueLabels` object with optional top-level fields
-  - For bar charts: Creates flat structure with alignment
-  - For other charts: Creates simple format field
-  - The `always` parameter is derived from `show` if not explicitly provided for column charts
-  - Only includes `value-labels-always` in output when it's `True`
-  - Filters out `None` and empty string values from top-level fields while preserving nested objects
-
-- `ValueLabels.deserialize(api_obj, chart_type="column") -> dict`: Converts API format to Python parameters
-  - Parses the appropriate API structure based on chart type
-  - For column charts: Extracts from nested `valueLabels` object and derives `value_labels_always` from show mode
-  - Returns a dictionary with standardized Python field names
-
-**Usage:**
-This utility is used by BarChart, ColumnChart, and MultipleColumnChart to handle value label configuration in the visualize metadata. It consolidates what were previously multiple separate fields into a cleaner, more consistent interface.
-
-**Example (Column Chart):**
-```python
-from datawrapper.charts.serializers import ValueLabels
-
-# Serialization (Python → API)
-api_format = ValueLabels.serialize(
-    show="always",
-    format_str="0,0",
-    placement="outside",
-    chart_type="column"
-)
-# Returns: {
-#   "valueLabels": {"show": "always", "format": "0,0", "enabled": True, "placement": "outside"},
-#   "value-label-format": "0,0",
-#   "value-labels-always": True
-# }
-
-# When show is "hover", value-labels-always is excluded
-api_format = ValueLabels.serialize(
-    show="hover",
-    format_str="0,0",
-    placement="outside",
-    chart_type="column"
-)
-# Returns: {
-#   "valueLabels": {"show": "hover", "format": "0,0", "enabled": True, "placement": "outside"},
-#   "value-label-format": "0,0"
-# }
-
-# Deserialization (API → Python)
-python_format = ValueLabels.deserialize(
-    {"valueLabels": {"show": "always", "format": "0,0", "enabled": True, "placement": "outside"}},
-    chart_type="column"
-)
-# Returns: {
-#   "show_value_labels": "always",
-#   "value_labels_format": "0,0",
-#   "value_labels_placement": "outside",
-#   "value_labels_always": True
-# }
-```
-
-**Important Notes:**
-- The `always` parameter is automatically derived from `show` if not explicitly provided during serialization for column charts
-- The `value-labels-always` field is only included in the API output when it's `True`
-- The `enabled` field in the nested `valueLabels` object controls on/off (True for hover or always, False for off)
-- The separate `value-labels-always` field controls hover vs always behavior
-- This utility standardizes value label handling across different chart types while respecting their unique API requirements
-
-### BaseChart Operations Pattern
-
-The `BaseChart` class provides a consistent pattern for chart lifecycle operations that leverage the underlying Datawrapper API client. All chart-specific classes (LineChart, BarChart, etc.) inherit these methods.
-
-**Core Operations:**
-- `create()` - Create a new chart in Datawrapper
-- `update()` - Update an existing chart's configuration
-- `delete()` - Delete a chart from Datawrapper
-- `duplicate()` - Duplicate an existing chart (creates a copy)
-- `fork()` - Create a fork of an existing chart
-- `get()` - Retrieve an existing chart by ID (classmethod)
-
-**Common Pattern:**
-All operations follow a consistent pattern:
-1. Use `_get_client(access_token)` to obtain a Datawrapper client instance
-2. Accept optional `access_token` parameter (falls back to environment variable)
-3. Validate that `chart_id` is set (except for `create()`)
-4. Call the corresponding Datawrapper client method
-5. Handle the response appropriately
-
-**Delete Method:**
-```python
-def delete(self, access_token: str | None = None) -> bool:
-    """Delete this chart from Datawrapper.
-
-    Args:
-        access_token: Optional API access token
-
-    Returns:
-        bool: True if deletion was successful
-
-    Raises:
-        ValueError: If no chart_id is set
-    """
-    if not self.chart_id:
-        raise ValueError("No chart_id set. Use create() first or set chart_id manually.")
-    client = self._get_client(access_token)
-    result = client.delete_chart(chart_id=self.chart_id)
-    if result:
-        self.chart_id = None  # Clear chart_id after successful deletion
-    return result
-```
-
-**Duplicate Method:**
-```python
-def duplicate(self, access_token: str | None = None) -> "BaseChart":
-    """Duplicate the chart and create a new editable copy via the Datawrapper API.
-
-    Args:
-        access_token: Optional API access token
-
-    Returns:
-        BaseChart: A new BaseChart instance representing the duplicated chart.
-
-    Raises:
-        ValueError: If no chart_id is set or API response is invalid
-    """
-    if not self.chart_id:
-        raise ValueError("No chart_id set. Use create() first or set chart_id manually.")
-    client = self._get_client(access_token)
-    response = client.copy_chart(chart_id=self.chart_id)
-    if not isinstance(response, dict):
-        raise ValueError(f"Unexpected response type from API: {type(response)}")
-    new_chart_id = response.get("id")
-    if not new_chart_id or not isinstance(new_chart_id, str):
-        raise ValueError(f"Invalid chart ID received from API: {new_chart_id}")
-    return self.__class__.get(chart_id=new_chart_id, access_token=access_token)
-```
-
-**Fork Method:**
-```python
-def fork(self, access_token: str | None = None) -> "BaseChart":
-    """Create a fork of this chart in Datawrapper.
-
-    Args:
-        access_token: Optional API access token
-
-    Returns:
-        BaseChart: New chart instance with the forked chart's ID
-
-    Raises:
-        ValueError: If no chart_id is set or API response is invalid
-    """
-    if not self.chart_id:
-        raise ValueError("No chart_id set. Use create() first or set chart_id manually.")
-    client = self._get_client(access_token)
-    response = client.fork_chart(chart_id=self.chart_id)
-    if not isinstance(response, dict):
-        raise ValueError(f"Unexpected response type from API: {type(response)}")
-    new_chart_id = response.get("id")
-    if not new_chart_id or not isinstance(new_chart_id, str):
-        raise ValueError(f"Invalid chart ID received from API: {new_chart_id}")
-    return self.__class__.get(chart_id=new_chart_id, access_token=access_token)
-```
-
-**Design Decisions:**
-- `delete()` sets `self.chart_id = None` after successful deletion to prevent accidental reuse
-- `duplicate()` and `fork()` return new BaseChart instances (not just IDs) for better usability and method chaining
-- All methods validate response types and chart IDs to provide clear error messages
-- Methods use `self.__class__.get()` to ensure the correct chart type is returned
-- `duplicate()` method name avoids conflict with Pydantic's BaseModel.copy() method
-
-**Usage Examples:**
-```python
-from datawrapper.charts import LineChart
-
-# Create and delete
-chart = LineChart(title="Temperature Data")
-chart.create()
-chart.delete()  # chart.chart_id is now None
-
-# Duplicate a chart
-original = LineChart.get(chart_id="abc123")
-duplicate = original.duplicate()  # Returns new LineChart instance
-print(duplicate.chart_id)  # Different ID from original
-
-# Fork a chart
-original = LineChart.get(chart_id="abc123")
-fork = original.fork()  # Returns new LineChart instance
-fork.update()  # Can immediately work with the forked chart
-
-# With custom access token
-chart.delete(access_token="custom_token")
-duplicate = chart.duplicate(access_token="custom_token")
-fork = chart.fork(access_token="custom_token")
-```
-
-**Get Display URLs Method:**
-```python
-def get_display_urls(self, access_token: str | None = None) -> list[dict]:
-    """Get the URLs for the published chart, table or map.
-
-    Args:
-        access_token: Optional API access token
-
-    Returns:
-        list[dict]: List of display URL dictionaries
-
-    Raises:
-        ValueError: If no chart_id is set
-    """
-    if not self.chart_id:
-        raise ValueError("No chart_id set. Use create() first or set chart_id manually.")
-    client = self._get_client(access_token)
-    return client.get_chart_display_urls(chart_id=self.chart_id)
-```
-
-**Get Iframe Code Method:**
-```python
-def get_iframe_code(self, responsive: bool = False, access_token: str | None = None) -> str:
-    """Get the iframe embed code for the chart, table, or map.
-
-    Args:
-        responsive: Whether to return responsive iframe code
-        access_token: Optional API access token
-
-    Returns:
-        str: The iframe embed code
-
-    Raises:
-        ValueError: If no chart_id is set
-    """
-    if not self.chart_id:
-        raise ValueError("No chart_id set. Use create() first or set chart_id manually.")
-    client = self._get_client(access_token)
-    return client.get_iframe_code(chart_id=self.chart_id, responsive=responsive)
-```
-
-**Get Editor URL Method:**
-```python
-def get_editor_url(self) -> str:
-    """Get the Datawrapper editor URL for this chart.
-
-    Returns:
-        str: The Datawrapper editor URL
-
-    Raises:
-        ValueError: If no chart_id is set
-    """
-    if not self.chart_id:
-        raise ValueError("No chart_id set. Use create() first or set chart_id manually.")
-    return f"https://app.datawrapper.de/thomson-reuters/edit/{self.chart_id}/visualize#refine"
-```
-
-**Get PNG URL Method:**
-```python
-def get_png_url(self) -> str:
-    """Get the fallback PNG image URL for noscript tags.
-
-    Returns:
-        str: The PNG image URL
-
-    Raises:
-        ValueError: If no chart_id is set
-    """
-    if not self.chart_id:
-        raise ValueError("No chart_id set. Use create() first or set chart_id manually.")
-    return f"https://datawrapper.dwcdn.net/{self.chart_id}/full.png"
-```
-
-**Design Decisions:**
-- `get_display_urls()` and `get_iframe_code()` call the Datawrapper API via the client
-- `get_editor_url()` and `get_png_url()` construct URLs directly without API calls
-- All methods validate that `chart_id` is set before proceeding
-- Methods that need API access accept optional `access_token` parameter
-- URL construction methods don't need access tokens since they don't call the API
-
-**Usage Examples:**
-```python
-from datawrapper.charts import LineChart
-
-# Get display URLs
-chart = LineChart.get(chart_id="abc123")
-urls = chart.get_display_urls()
-print(urls)  # [{"url": "https://...", "type": "..."}, ...]
-
-# Get iframe code
-iframe = chart.get_iframe_code()
-responsive_iframe = chart.get_iframe_code(responsive=True)
-
-# Get editor URL
-editor_url = chart.get_editor_url()
-print(editor_url)  # "https://app.datawrapper.de/thomson-reuters/edit/abc123/visualize#refine"
-
-# Get PNG URL for noscript tags
-png_url = chart.get_png_url()
-print(png_url)  # "https://datawrapper.dwcdn.net/abc123/full.png"
-
-# With custom access token (for API methods)
-urls = chart.get_display_urls(access_token="custom_token")
-iframe = chart.get_iframe_code(responsive=True, access_token="custom_token")
-```
-
-**Testing:**
-Comprehensive tests for these operations are in `tests/functional/test_base_chart_operations.py`:
-- All tests use fully mocked API calls (no API token required)
-- Tests cover successful operations, error cases, and custom access tokens
-- Test functions: `test_base_chart_delete_success`, `test_base_chart_delete_no_chart_id`, `test_base_chart_duplicate_success`, `test_base_chart_duplicate_invalid_response`, `test_base_chart_fork_success`, `test_get_display_urls_success`, `test_get_display_urls_no_chart_id`, `test_get_display_urls_custom_token`, `test_get_iframe_code_success`, `test_get_iframe_code_responsive`, `test_get_iframe_code_no_chart_id`, `test_get_iframe_code_custom_token`, `test_get_editor_url_success`, `test_get_editor_url_no_chart_id`, `test_get_png_url_success`, `test_get_png_url_no_chart_id`, etc.
-
-### Method Chaining Pattern (v2.0.0+)
-
-**BREAKING CHANGE**: Starting in version 2.0.0, the `create()`, `update()`, and `publish()` methods in BaseChart return `self` instead of their previous return types, enabling method chaining (fluent interface pattern).
-
-**Return Type Changes:**
-- `create()`: Changed from `str` (chart_id) to `"BaseChart"` (self)
-- `update()`: Changed from `str` (chart_id) to `"BaseChart"` (self)
-- `publish()`: Changed from `bool` to `"BaseChart"` (self), now raises exception on failure instead of returning False
-
-**Key Features:**
-- All three methods now return the chart instance (`self`) for method chaining
-- Methods can be chained together: `chart.create().update().publish()`
-- The `chart_id` is still set internally and accessible via `chart.chart_id`
-- `publish()` now raises an exception on failure instead of returning False
-
-**Migration Guide:**
-
-*Before (v1.x):*
-```python
-from datawrapper.charts import LineChart
-
-chart = LineChart(title="Temperature Data")
-chart_id = chart.create()  # Returns chart_id string
-print(f"Created chart: {chart_id}")
-
-chart.title = "Updated Temperature Data"
-chart_id = chart.update()  # Returns chart_id string
-
-success = chart.publish()  # Returns bool
-if success:
-    print("Published successfully")
-```
-
-*After (v2.0.0+):*
-```python
-from datawrapper.charts import LineChart
-
-# Method chaining approach
-chart = LineChart(title="Temperature Data").create().publish()
-print(f"Created chart: {chart.chart_id}")
-
-# Or step-by-step with chaining
-chart = LineChart(title="Temperature Data")
-chart.create().update().publish()
-
-# publish() now raises exception on failure
-try:
-    chart.publish()
-except Exception as e:
-    print(f"Publish failed: {e}")
-```
-
-**Benefits:**
-- More concise code with method chaining
-- Better developer experience with fluent interface
-- Consistent with modern Python API design patterns
-- Enables complex workflows in fewer lines of code
-
-**Example Workflows:**
-
-```python
-from datawrapper.charts import LineChart, Line
-
-# Create, configure, and publish in one chain
-chart = (
-    LineChart(title="Sales Trends")
-    .create()
-    .publish()
-)
-
-# Create, update multiple times, then publish
-chart = LineChart(title="Initial Title")
-chart.create()
-chart.title = "Updated Title"
-chart.update()
-chart.description = "Added description"
-chart.update().publish()
-
-# Duplicate and immediately publish
-original = LineChart.get(chart_id="abc123")
-duplicate = original.duplicate().publish()
-
-# Fork and update in one chain
-fork = original.fork()
-fork.title = "Forked Chart"
-fork.update().publish()
-```
-
-**Testing:**
-Comprehensive tests for method chaining are in `tests/functional/test_base_chart_operations.py`:
-- Tests verify that methods return the chart instance (self) for chaining
-- Tests verify identity checks (`result is chart`)
-- Tests cover full chaining workflows: `create().update().publish()`
-- All tests use fully mocked API calls (no API token required)
-
-**Documentation:**
-See `docs/user-guide/chart-operations.md` for complete migration guide and examples.
-
-## Testing Patterns
-
-### Mocking API Calls
-
-The functional tests in `tests/functional/test_datawrapper.py` use Python's `unittest.mock` to mock all API calls, allowing tests to run without requiring an API token or making actual HTTP requests.
-
-**Key Mocking Patterns:**
-
-1. **Mock HTTP Methods**: Use `patch.object(Datawrapper, "method_name")` to mock the underlying HTTP methods (`get`, `post`, `patch`, `put`, `delete`)
-
-2. **Mock External Dependencies**: Mock external libraries like `pandas.read_csv` and `pathlib.Path.open` to avoid actual file I/O or network requests
-
-3. **Setup Return Values**: Configure mocks with appropriate return values that match the expected API response structure
-
-4. **Verify Calls**: Use assertions to verify that the expected API calls were made with the correct parameters
-
-**Example:**
-```python
-from unittest.mock import patch
-from datawrapper import Datawrapper
-
-def test_create_chart():
-    with patch.object(Datawrapper, "post") as mock_post:
-        # Setup mock response
-        mock_post.return_value = {
-            "id": "test123",
-            "title": "Test Chart",
-            "type": "d3-bars"
-        }
-
-        # Call the method
-        dw = Datawrapper()
-        result = dw.create_chart(title="Test Chart", chart_type="d3-bars")
-
-        # Verify
-        assert result["id"] == "test123"
-        mock_post.assert_called_once()
-```
-
-**Benefits:**
-- Tests run faster without network I/O
-- Tests are more reliable (no dependency on external API availability)
-- Tests can run in CI/CD environments without API credentials
-- Easier to test edge cases and error conditions
+The `

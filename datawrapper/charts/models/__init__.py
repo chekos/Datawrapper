@@ -10,6 +10,7 @@ from .api_sections import (
     Visualize,
 )
 from .mixins import (
+    AnnotationsMixin,
     CustomRangeMixin,
     CustomTicksMixin,
     GridDisplayMixin,
@@ -27,6 +28,7 @@ from .transforms import ColumnFormat, ColumnFormatList, Transform
 
 __all__ = [
     "Annotate",
+    "AnnotationsMixin",
     "ColumnFormat",
     "ColumnFormatList",
     "ConnectorLine",

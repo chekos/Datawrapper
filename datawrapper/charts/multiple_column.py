@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 from typing import Any, Literal
 
 import pandas as pd
@@ -21,6 +22,7 @@ from .enums import (
     ValueLabelPlacement,
 )
 from .models import (
+    AnnotationsMixin,
     CustomRangeMixin,
     CustomTicksMixin,
     GridDisplayMixin,
@@ -30,7 +32,6 @@ from .models import (
 )
 from .serializers import (
     ColorCategory,
-    ModelListSerializer,
     NegativeColor,
     PlotHeight,
     ValueLabels,
@@ -292,9 +293,26 @@ class MultipleColumnYLineAnnotation(MultipleColumnRangeAnnotation):
 
 
 class MultipleColumnChart(
-    GridDisplayMixin, GridFormatMixin, CustomRangeMixin, CustomTicksMixin, BaseChart
+    GridDisplayMixin,
+    GridFormatMixin,
+    CustomRangeMixin,
+    CustomTicksMixin,
+    AnnotationsMixin,
+    BaseChart,
 ):
     """A base class for the Datawrapper API's multiple column chart."""
+
+    # Override annotation fields with MultipleColumnChart-specific types
+    text_annotations: Sequence[MultipleColumnTextAnnotation | dict[Any, Any]] = Field(
+        default_factory=list,
+        alias="text-annotations",
+        description="A list of text annotations to display on the chart",
+    )
+    range_annotations: Sequence[MultipleColumnRangeAnnotation | dict[Any, Any]] = Field(
+        default_factory=list,
+        alias="range-annotations",
+        description="A list of range annotations to display on the chart",
+    )
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -571,24 +589,6 @@ class MultipleColumnChart(
         description="Show label for all panels",
     )
 
-    #
-    # Annotations
-    #
-
-    #: A list of text annotations to display on the chart
-    text_annotations: list[dict[Any, Any]] = Field(
-        default_factory=list,
-        alias="text-annotations",
-        description="A list of text annotations to display on the chart",
-    )
-
-    #: A list of range annotations to display on the chart
-    range_annotations: list[dict[Any, Any]] = Field(
-        default_factory=list,
-        alias="range-annotations",
-        description="A list of range annotations to display on the chart",
-    )
-
     @model_serializer
     def serialize_model(self) -> dict:
         """Serialize the model to a dictionary."""
@@ -655,11 +655,9 @@ class MultipleColumnChart(
             ),
             "xGridLabelAllColumns": self.x_grid_label_all,
             # Annotations
-            "text-annotations": ModelListSerializer.serialize(
-                self.text_annotations, MultipleColumnTextAnnotation
-            ),
-            "range-annotations": ModelListSerializer.serialize(
-                self.range_annotations, MultipleColumnRangeAnnotation
+            **self._serialize_annotations(
+                text_annotation_class=MultipleColumnTextAnnotation,
+                range_annotation_class=MultipleColumnRangeAnnotation,
             ),
         }
 
@@ -809,12 +807,11 @@ class MultipleColumnChart(
         )
 
         # Annotations
-        init_data["text_annotations"] = MultipleColumnTextAnnotation.deserialize_model(
-            visualize.get("text-annotations")
-        )
-        init_data["range_annotations"] = (
-            MultipleColumnRangeAnnotation.deserialize_model(
-                visualize.get("range-annotations")
+        init_data.update(
+            cls._deserialize_annotations(
+                visualize,
+                text_annotation_class=MultipleColumnTextAnnotation,
+                range_annotation_class=MultipleColumnRangeAnnotation,
             )
         )
 
