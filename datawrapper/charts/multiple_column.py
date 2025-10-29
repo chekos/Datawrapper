@@ -1,7 +1,13 @@
 from typing import Any, Literal
 
 import pandas as pd
-from pydantic import ConfigDict, Field, field_validator, model_serializer
+from pydantic import (
+    ConfigDict,
+    Field,
+    field_validator,
+    model_serializer,
+    model_validator,
+)
 
 from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
@@ -202,6 +208,86 @@ class MultipleColumnRangeAnnotation(RangeAnnotation):
 
             result.append(anno_dict)
         return result
+
+
+class MultipleColumnXRangeAnnotation(MultipleColumnRangeAnnotation):
+    """A horizontal range annotation for MultipleColumnChart.
+
+    This is a convenience class that automatically sets type="x" and display="range",
+    and validates that both x0 and x1 are provided.
+    """
+
+    def __init__(self, **data):
+        data.setdefault("type", "x")
+        data.setdefault("display", "range")
+        super().__init__(**data)
+
+    @model_validator(mode="after")
+    def validate_x_positions_required(self) -> "MultipleColumnXRangeAnnotation":
+        if self.x0 is None or self.x1 is None:
+            raise ValueError(
+                "MultipleColumnXRangeAnnotation requires both x0 and x1 to be set"
+            )
+        return self
+
+
+class MultipleColumnYRangeAnnotation(MultipleColumnRangeAnnotation):
+    """A vertical range annotation for MultipleColumnChart.
+
+    This is a convenience class that automatically sets type="y" and display="range",
+    and validates that both y0 and y1 are provided.
+    """
+
+    def __init__(self, **data):
+        data.setdefault("type", "y")
+        data.setdefault("display", "range")
+        super().__init__(**data)
+
+    @model_validator(mode="after")
+    def validate_y_positions_required(self) -> "MultipleColumnYRangeAnnotation":
+        if self.y0 is None or self.y1 is None:
+            raise ValueError(
+                "MultipleColumnYRangeAnnotation requires both y0 and y1 to be set"
+            )
+        return self
+
+
+class MultipleColumnXLineAnnotation(MultipleColumnRangeAnnotation):
+    """A vertical line annotation for MultipleColumnChart.
+
+    This is a convenience class that automatically sets type="x" and display="line",
+    and validates that x0 is provided.
+    """
+
+    def __init__(self, **data):
+        data.setdefault("type", "x")
+        data.setdefault("display", "line")
+        super().__init__(**data)
+
+    @model_validator(mode="after")
+    def validate_x_position_required(self) -> "MultipleColumnXLineAnnotation":
+        if self.x0 is None:
+            raise ValueError("MultipleColumnXLineAnnotation requires x0 to be set")
+        return self
+
+
+class MultipleColumnYLineAnnotation(MultipleColumnRangeAnnotation):
+    """A horizontal line annotation for MultipleColumnChart.
+
+    This is a convenience class that automatically sets type="y" and display="line",
+    and validates that y0 is provided.
+    """
+
+    def __init__(self, **data):
+        data.setdefault("type", "y")
+        data.setdefault("display", "line")
+        super().__init__(**data)
+
+    @model_validator(mode="after")
+    def validate_y_position_required(self) -> "MultipleColumnYLineAnnotation":
+        if self.y0 is None:
+            raise ValueError("MultipleColumnYLineAnnotation requires y0 to be set")
+        return self
 
 
 class MultipleColumnChart(
