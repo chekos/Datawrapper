@@ -51,7 +51,7 @@ chart = dw.MultipleColumnChart(
         {"column": "Mumbai (Bombay)", "title": "Mumbai, <span style=\"color:gray; font-weight: normal;\">India</span>"},
         {"column": "New York-Newark", "title": "New York/Newark, <span style=\"color:gray; font-weight: normal;\">U.S.</span>"},
     ],
-    # Add text annotation to label the projection period
+    # Add text annotations to label specific panels
     text_annotations=[],
     # Add range annotation to highlight projection period
     range_annotations=[
@@ -84,6 +84,10 @@ chart.create()
 
 ```{eval-rst}
 .. parameter-table:: datawrapper.charts.MultipleColumnChart
+```
+
+```{eval-rst}
+.. parameter-table:: datawrapper.charts.MultipleColumnTextAnnotation
 ```
 
 ```{eval-rst}
