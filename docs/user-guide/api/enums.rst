@@ -227,6 +227,16 @@ SymbolStyle
 
 .. enum-table:: datawrapper.charts.enums.SymbolStyle
 
+TextAlign
+---------
+
+.. code-block:: python
+
+   import datawrapper as dw
+   chart = dw.TextAnnotation(align=dw.TextAlign.TOP_LEFT)
+
+.. enum-table:: datawrapper.charts.enums.TextAlign
+
 ValueLabelAlignment
 -------------------
 
