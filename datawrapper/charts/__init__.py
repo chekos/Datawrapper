@@ -61,6 +61,7 @@ from .models.text_annotations import ConnectorLine, TextAnnotation
 from .multiple_column import (
     MultipleColumnChart,
     MultipleColumnRangeAnnotation,
+    MultipleColumnTextAnnotation,
     MultipleColumnXLineAnnotation,
     MultipleColumnXRangeAnnotation,
     MultipleColumnYLineAnnotation,
@@ -131,6 +132,7 @@ __all__ = (
     "AreaChart",
     "ArrowChart",
     "MultipleColumnChart",
+    "MultipleColumnTextAnnotation",
     "MultipleColumnRangeAnnotation",
     "MultipleColumnXLineAnnotation",
     "MultipleColumnXRangeAnnotation",
