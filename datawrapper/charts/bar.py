@@ -3,9 +3,9 @@ from typing import Any, Literal
 import pandas as pd
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_serializer
 
-from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
 from .enums import DateFormat, NumberFormat, ReplaceFlagsType, ValueLabelAlignment
+from .models import RangeAnnotation, TextAnnotation
 from .serializers import ColorCategory, CustomRange, ModelListSerializer, ReplaceFlags
 
 

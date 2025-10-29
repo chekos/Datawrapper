@@ -3,7 +3,7 @@
 import pytest
 from pydantic import ValidationError
 
-from datawrapper.charts.annos import (
+from datawrapper.charts import (
     RangeAnnotation,
     XLineAnnotation,
     XRangeAnnotation,

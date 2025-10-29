@@ -3,7 +3,7 @@
 import pytest
 from pydantic import ValidationError
 
-from datawrapper.charts.annos import TextAnnotation
+from datawrapper.charts import TextAnnotation
 
 
 def test_width_valid_default():

@@ -22,7 +22,7 @@ class ModelListSerializer:
             List of serialized model dictionaries
 
         Example:
-            >>> from datawrapper.charts.annos import TextAnnotation
+            >>> from datawrapper.charts import TextAnnotation
             >>> annotations = [
             ...     TextAnnotation(x=0, y=0, text="Label 1"),
             ...     {"x": 1, "y": 1, "text": "Label 2"},

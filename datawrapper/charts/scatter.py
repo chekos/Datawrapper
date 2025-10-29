@@ -3,7 +3,6 @@ from typing import Any, Literal
 import pandas as pd
 from pydantic import ConfigDict, Field, field_validator, model_serializer
 
-from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
 from .enums import (
     DateFormat,
@@ -15,6 +14,7 @@ from .enums import (
     ScatterShape,
     ScatterSize,
 )
+from .models import RangeAnnotation, TextAnnotation
 from .serializers import ModelListSerializer, PlotHeight
 
 

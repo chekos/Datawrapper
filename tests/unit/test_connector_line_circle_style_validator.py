@@ -3,7 +3,7 @@
 import pytest
 from pydantic import ValidationError
 
-from datawrapper.charts.annos import ConnectorLine
+from datawrapper.charts import ConnectorLine
 from datawrapper.charts.enums.annos import StrokeType
 
 

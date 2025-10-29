@@ -1,6 +1,6 @@
 """Tests for the ModelListSerializer utility."""
 
-from datawrapper.charts.annos import RangeAnnotation, TextAnnotation
+from datawrapper.charts import RangeAnnotation, TextAnnotation
 from datawrapper.charts.serializers import ModelListSerializer
 
 

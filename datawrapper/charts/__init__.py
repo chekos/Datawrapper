@@ -1,12 +1,3 @@
-from .annos import (
-    ConnectorLine,
-    RangeAnnotation,
-    TextAnnotation,
-    XLineAnnotation,
-    XRangeAnnotation,
-    YLineAnnotation,
-    YRangeAnnotation,
-)
 from .area import AreaChart
 from .arrow import ArrowChart
 from .bar import BarChart, BarOverlay
@@ -61,6 +52,14 @@ from .models import (
     Transform,
     Visualize,
 )
+from .models.range_annotations import (
+    RangeAnnotation,
+    XLineAnnotation,
+    XRangeAnnotation,
+    YLineAnnotation,
+    YRangeAnnotation,
+)
+from .models.text_annotations import ConnectorLine, TextAnnotation
 from .multiple_column import (
     MultipleColumnChart,
     MultipleColumnRangeAnnotation,

@@ -14,7 +14,7 @@ class ConnectorLineType(str, Enum):
         CURVE_LEFT: Curved line bending to the left
 
     Examples:
-        >>> from datawrapper.charts.annos import (
+        >>> from datawrapper.charts import (
         ...     TextAnnotation,
         ...     ConnectorLine,
         ...     ConnectorLineType,
@@ -43,7 +43,7 @@ class StrokeWidth(int, Enum):
         THICK: 3 pixel width
 
     Examples:
-        >>> from datawrapper.charts.annos import ConnectorLine, StrokeWidth
+        >>> from datawrapper.charts import ConnectorLine, StrokeWidth
         >>> connector = ConnectorLine(type="straight", stroke=StrokeWidth.THICK)
     """
 
@@ -63,7 +63,7 @@ class StrokeType(str, Enum):
         DOTTED: Dotted line pattern
 
     Examples:
-        >>> from datawrapper.charts.annos import RangeAnnotation, StrokeType
+        >>> from datawrapper.charts import RangeAnnotation, StrokeType
         >>> anno = RangeAnnotation(
         ...     type="x",
         ...     x0=0,
@@ -89,7 +89,7 @@ class ArrowHead(str, Enum):
         NONE: No arrow head (False value)
 
     Examples:
-        >>> from datawrapper.charts.annos import ConnectorLine, ArrowHead
+        >>> from datawrapper.charts import ConnectorLine, ArrowHead
         >>> connector = ConnectorLine(type="straight", arrow_head=ArrowHead.TRIANGLE)
     """
 

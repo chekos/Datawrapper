@@ -1,6 +1,6 @@
 """Tests for permissive RangeAnnotation position handling."""
 
-from datawrapper.charts.annos import RangeAnnotation
+from datawrapper.charts import RangeAnnotation
 
 
 class TestRangeAnnotationPermissive:

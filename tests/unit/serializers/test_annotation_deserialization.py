@@ -1,6 +1,6 @@
 """Tests for annotation deserialization methods."""
 
-from datawrapper.charts.annos import RangeAnnotation, TextAnnotation
+from datawrapper.charts import RangeAnnotation, TextAnnotation
 
 
 class TestTextAnnotationDeserialization:
