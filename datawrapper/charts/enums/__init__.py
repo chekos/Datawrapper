@@ -19,6 +19,7 @@ from .scatter_shape import (
     ScatterSize,
 )
 from .symbol_shape import SymbolDisplay, SymbolShape, SymbolStyle
+from .text_align import TextAlign
 from .value_label import (
     ValueLabelAlignment,
     ValueLabelDisplay,
@@ -50,6 +51,7 @@ __all__ = [
     "SymbolDisplay",
     "SymbolShape",
     "SymbolStyle",
+    "TextAlign",
     "ValueLabelAlignment",
     "ValueLabelDisplay",
     "ValueLabelMode",
