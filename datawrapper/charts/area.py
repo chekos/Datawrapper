@@ -12,13 +12,14 @@ from .enums import (
     NumberFormat,
     PlotHeightMode,
 )
-from .mixins import (
+from .models import (
     CustomRangeMixin,
     CustomTicksMixin,
     GridDisplayMixin,
     GridFormatMixin,
+    RangeAnnotation,
+    TextAnnotation,
 )
-from .models import RangeAnnotation, TextAnnotation
 from .serializers import (
     ColorCategory,
     ModelListSerializer,

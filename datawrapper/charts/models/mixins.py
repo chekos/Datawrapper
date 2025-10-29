@@ -4,8 +4,8 @@ from typing import Any
 
 from pydantic import Field
 
-from .enums import DateFormat, GridDisplay, NumberFormat
-from .serializers import CustomRange, CustomTicks
+from ..enums import DateFormat, GridDisplay, NumberFormat
+from ..serializers import CustomRange, CustomTicks
 
 
 class GridDisplayMixin:
