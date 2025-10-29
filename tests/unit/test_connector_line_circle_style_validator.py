@@ -43,10 +43,12 @@ def test_circle_style_invalid_enum_dotted():
         ConnectorLine(circleStyle=StrokeType.DOTTED)
 
     error = exc_info.value.errors()[0]
-    assert "Invalid circle style: DOTTED is not allowed" in str(
+    assert "Invalid circle style: StrokeType.DOTTED" in str(
         error.get("ctx", {}).get("error", "")
     )
-    assert "Must be SOLID or DASHED" in str(error.get("ctx", {}).get("error", ""))
+    assert "Must be either 'solid' or 'dashed'" in str(
+        error.get("ctx", {}).get("error", "")
+    )
 
 
 def test_circle_style_invalid_string_dotted():
