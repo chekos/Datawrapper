@@ -299,20 +299,25 @@ class AnnotationsMixin:
 
         Returns:
             dict: Annotations in API format with keys:
-                - text-annotations: List of text annotation dicts
-                - range-annotations: List of range annotation dicts
+                - text-annotations: List of text annotation dicts (always present, may be empty)
+                - range-annotations: List of range annotation dicts (always present, may be empty)
         """
         result = {}
 
-        if self.text_annotations:
-            result["text-annotations"] = ModelListSerializer.serialize(
-                self.text_annotations, text_annotation_class
-            )
+        # Always include annotation keys, even when empty
+        result["text-annotations"] = (
+            ModelListSerializer.serialize(self.text_annotations, text_annotation_class)
+            if self.text_annotations
+            else []
+        )
 
-        if self.range_annotations:
-            result["range-annotations"] = ModelListSerializer.serialize(
+        result["range-annotations"] = (
+            ModelListSerializer.serialize(
                 self.range_annotations, range_annotation_class
             )
+            if self.range_annotations
+            else []
+        )
 
         return result
 
