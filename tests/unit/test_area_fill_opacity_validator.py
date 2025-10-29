@@ -3,7 +3,7 @@
 import pytest
 from pydantic import ValidationError
 
-from datawrapper.charts.annos import AreaFill
+from datawrapper.charts.line import AreaFill
 
 
 def test_opacity_valid_default():

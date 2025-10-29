@@ -5,11 +5,12 @@ from datawrapper.charts import (
     ArrowChart,
     BarChart,
     ColumnChart,
+    ConnectorLine,
     LineChart,
     ScatterPlot,
     StackedBarChart,
+    TextAnnotation,
 )
-from datawrapper.charts.annos import ConnectorLine, TextAnnotation
 from datawrapper.charts.enums import (
     ArrowHead,
     ConnectorLineType,

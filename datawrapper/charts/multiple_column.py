@@ -9,7 +9,6 @@ from pydantic import (
     model_validator,
 )
 
-from .annos import RangeAnnotation, TextAnnotation
 from .base import BaseChart
 from .enums import (
     DateFormat,
@@ -27,6 +26,7 @@ from .mixins import (
     GridDisplayMixin,
     GridFormatMixin,
 )
+from .models import RangeAnnotation, TextAnnotation
 from .serializers import (
     ColorCategory,
     ModelListSerializer,

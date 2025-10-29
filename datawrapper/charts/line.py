@@ -7,9 +7,9 @@ from pydantic import (
     Field,
     field_validator,
     model_serializer,
+    model_validator,
 )
 
-from .annos import AreaFill, RangeAnnotation, TextAnnotation
 from .base import BaseChart
 from .enums import (
     DateFormat,
@@ -30,11 +30,142 @@ from .mixins import (
     GridDisplayMixin,
     GridFormatMixin,
 )
+from .models import RangeAnnotation, TextAnnotation
 from .serializers import (
     ColorCategory,
     ModelListSerializer,
     PlotHeight,
 )
+
+
+class AreaFill(BaseModel):
+    """A base class for the Datawrapper API's 'custom-area-fills' attribute."""
+
+    model_config = ConfigDict(
+        populate_by_name=True,
+        strict=True,
+        json_schema_extra={
+            "examples": [
+                {
+                    "from_column": "baseline",
+                    "to_column": "new",
+                    "color": "#15607a",
+                    "opacity": 0.3,
+                }
+            ]
+        },
+    )
+
+    #: The unique ID for this area fill (preserved during deserialization, auto-generated during serialization)
+    id: str | None = Field(
+        default=None,
+        description="The unique ID for this area fill (used as dict key, not included in serialized output)",
+    )
+
+    #: The line to fill upwards from
+    from_column: str = Field(alias="from", description="The line to fill upwards from")
+
+    #: The line to fill upwards to
+    to_column: str = Field(alias="to", description="The line to fill upwards to")
+
+    #: The color of the fill (hex string or palette index)
+    color: str | int = Field(
+        default=0, description="The color of the fill (hex string or palette index)"
+    )
+
+    #: The opacity of the fill
+    opacity: float = Field(default=0.3, description="The opacity of the fill")
+
+    @field_validator("opacity")
+    @classmethod
+    def validate_opacity(cls, v: float) -> float:
+        """Validate that opacity is between 0.0 and 1.0."""
+        if not 0.0 <= v <= 1.0:
+            raise ValueError(
+                f"Invalid opacity: {v}. Must be between 0.0 and 1.0 (inclusive)"
+            )
+        return v
+
+    #: Whether to use different colors when there are negative values
+    use_mixed_colors: bool = Field(
+        default=False,
+        alias="useMixedColors",
+        description="Whether to use different colors when there are negative values",
+    )
+
+    #: The color of the fill when it is negative (hex string or palette index, None = disabled)
+    color_negative: str | int | None = Field(
+        default=None,
+        alias="colorNegative",
+        description="The color of the fill when it is negative (hex string or palette index, None = disabled)",
+    )
+
+    #: The interpolation method to use when drawing lines
+    interpolation: LineInterpolation | str = Field(
+        default="linear", description="The interpolation method to use"
+    )
+
+    @field_validator("interpolation")
+    @classmethod
+    def validate_interpolation(
+        cls, v: LineInterpolation | str
+    ) -> LineInterpolation | str:
+        """Validate that interpolation is a valid LineInterpolation value."""
+        if isinstance(v, str):
+            valid_values = [e.value for e in LineInterpolation]
+            if v not in valid_values:
+                raise ValueError(
+                    f"Invalid interpolation: {v}. Must be one of {valid_values}"
+                )
+        return v
+
+    @model_validator(mode="after")
+    def auto_enable_mixed_colors(self) -> "AreaFill":
+        """Auto-enable use_mixed_colors when color_negative is provided.
+
+        If a user provides a color_negative value (not None),
+        automatically enable use_mixed_colors to make the feature work as expected.
+        """
+        # Only auto-enable if color_negative is provided and use_mixed_colors is False
+        if self.color_negative is not None and not self.use_mixed_colors:
+            self.use_mixed_colors = True
+        return self
+
+    def serialize_model(self) -> dict:
+        """Serialize the model to a dictionary for the Datawrapper API.
+
+        Note: The 'id' field is not included in the output as it's used as the dict key.
+        Only includes colorNegative if it's not None.
+        """
+        result = {
+            "from": self.from_column,
+            "to": self.to_column,
+            "color": self.color,
+            "opacity": self.opacity,
+            "useMixedColors": self.use_mixed_colors,
+            "interpolation": self.interpolation,
+        }
+
+        # Only include colorNegative if it's provided (not None)
+        if self.color_negative is not None:
+            result["colorNegative"] = self.color_negative
+
+        return result
+
+    @classmethod
+    def deserialize_model(cls, api_data: dict[str, dict] | None) -> list[dict]:
+        """Deserialize area fills from API response format.
+
+        Args:
+            api_data: Dictionary mapping UUID keys to area fill data, or None
+
+        Returns:
+            List of area fill dicts with 'id' field preserved
+        """
+        if not api_data:
+            return []
+
+        return [{**fill_data, "id": fill_id} for fill_id, fill_data in api_data.items()]
 
 
 class LineSymbol(BaseModel):

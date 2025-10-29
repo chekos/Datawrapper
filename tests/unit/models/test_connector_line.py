@@ -3,7 +3,7 @@
 import pytest
 from pydantic import ValidationError
 
-from datawrapper.charts.annos import ConnectorLine, TextAnnotation
+from datawrapper.charts import ConnectorLine, TextAnnotation
 
 
 class TestConnectorLineEnabledByPresence:
