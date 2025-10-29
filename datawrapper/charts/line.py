@@ -25,12 +25,11 @@ from .enums import (
     SymbolStyle,
 )
 from .models import (
+    AnnotationsMixin,
     CustomRangeMixin,
     CustomTicksMixin,
     GridDisplayMixin,
     GridFormatMixin,
-    RangeAnnotation,
-    TextAnnotation,
 )
 from .serializers import (
     ColorCategory,
@@ -527,7 +526,12 @@ class Line(BaseModel):
 
 
 class LineChart(
-    GridDisplayMixin, GridFormatMixin, CustomRangeMixin, CustomTicksMixin, BaseChart
+    AnnotationsMixin,
+    GridDisplayMixin,
+    GridFormatMixin,
+    CustomRangeMixin,
+    CustomTicksMixin,
+    BaseChart,
 ):
     """A base class for the Datawrapper API's line chart."""
 
@@ -758,24 +762,6 @@ class LineChart(
                 raise ValueError(f"Invalid value: {v}. Must be one of {valid_values}")
         return v
 
-    #
-    # Annotations
-    #
-
-    #: A list of text annotations to display on the chart
-    text_annotations: list[TextAnnotation | dict[Any, Any]] = Field(
-        default_factory=list,
-        alias="text-annotations",
-        description="A list of text annotations to display on the chart",
-    )
-
-    #: A list of range annotations to display on the chart
-    range_annotations: list[RangeAnnotation | dict[Any, Any]] = Field(
-        default_factory=list,
-        alias="range-annotations",
-        description="A list of range annotations to display on the chart",
-    )
-
     @model_serializer
     def serialize_model(self) -> dict:
         """Serialize the model to a dictionary."""
@@ -817,18 +803,13 @@ class LineChart(
             ),
             # Initialize empty structures
             "lines": {},
-            "text-annotations": ModelListSerializer.serialize(
-                self.text_annotations, TextAnnotation
-            ),
-            "range-annotations": ModelListSerializer.serialize(
-                self.range_annotations, RangeAnnotation
-            ),
             "custom-area-fills": ModelListSerializer.serialize(
                 self.area_fills, AreaFill
             ),
         }
 
         model["metadata"]["visualize"].update(visualize_data)
+        model["metadata"]["visualize"].update(self._serialize_annotations())
 
         # Add line configurations
         for line_obj in self.lines:
@@ -933,11 +914,6 @@ class LineChart(
         init_data.update(PlotHeight.deserialize(visualize))
 
         # Annotations
-        init_data["text_annotations"] = TextAnnotation.deserialize_model(
-            visualize.get("text-annotations")
-        )
-        init_data["range_annotations"] = RangeAnnotation.deserialize_model(
-            visualize.get("range-annotations")
-        )
+        init_data.update(cls._deserialize_annotations(visualize))
 
         return init_data

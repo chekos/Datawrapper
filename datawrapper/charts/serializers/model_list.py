@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 from typing import Any
 
 
@@ -6,7 +7,7 @@ class ModelListSerializer:
 
     @staticmethod
     def serialize(
-        items: list[Any],
+        items: Sequence[Any],
         model_class: type[Any],
     ) -> list[dict[str, Any]]:
         """Serialize a list of model objects to API format.

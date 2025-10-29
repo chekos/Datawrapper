@@ -1,11 +1,14 @@
 """Mixin classes for shared chart visualization patterns."""
 
+from collections.abc import Sequence
 from typing import Any
 
 from pydantic import Field
 
 from ..enums import DateFormat, GridDisplay, NumberFormat
-from ..serializers import CustomRange, CustomTicks
+from ..serializers import CustomRange, CustomTicks, ModelListSerializer
+from .range_annotations import RangeAnnotation
+from .text_annotations import TextAnnotation
 
 
 class GridDisplayMixin:
@@ -253,4 +256,100 @@ class CustomTicksMixin:
             result["custom_ticks_y"] = CustomTicks.deserialize(
                 visualize["custom-ticks-y"]
             )
+        return result
+
+
+class AnnotationsMixin:
+    """Mixin for charts that support text and range annotations.
+
+    Provides text_annotations and range_annotations fields for adding annotations
+    to charts, along with serialization/deserialization methods.
+
+    Supports custom annotation classes via optional parameters in helper methods,
+    allowing MultipleColumnChart to use its custom annotation subclasses while
+    other charts use the base classes.
+
+    Used by: LineChart, AreaChart, ColumnChart, MultipleColumnChart, BarChart, ScatterPlot
+    """
+
+    text_annotations: Sequence[TextAnnotation | dict[Any, Any]] = Field(
+        default_factory=list,
+        alias="text-annotations",
+        description="A list of text annotations to display on the chart",
+    )
+    range_annotations: Sequence[RangeAnnotation | dict[Any, Any]] = Field(
+        default_factory=list,
+        alias="range-annotations",
+        description="A list of range annotations to display on the chart",
+    )
+
+    def _serialize_annotations(
+        self,
+        text_annotation_class: type[TextAnnotation] = TextAnnotation,
+        range_annotation_class: type[RangeAnnotation] = RangeAnnotation,
+    ) -> dict:
+        """Serialize annotations to API format.
+
+        Uses ModelListSerializer to serialize annotation lists without generating IDs.
+        Datawrapper handles ID generation server-side.
+
+        Args:
+            text_annotation_class: The class to use for text annotations (default: TextAnnotation)
+            range_annotation_class: The class to use for range annotations (default: RangeAnnotation)
+
+        Returns:
+            dict: Annotations in API format with keys:
+                - text-annotations: List of text annotation dicts (always present, may be empty)
+                - range-annotations: List of range annotation dicts (always present, may be empty)
+        """
+        result = {}
+
+        # Always include annotation keys, even when empty
+        result["text-annotations"] = (
+            ModelListSerializer.serialize(self.text_annotations, text_annotation_class)
+            if self.text_annotations
+            else []
+        )
+
+        result["range-annotations"] = (
+            ModelListSerializer.serialize(
+                self.range_annotations, range_annotation_class
+            )
+            if self.range_annotations
+            else []
+        )
+
+        return result
+
+    @classmethod
+    def _deserialize_annotations(
+        cls,
+        visualize: dict,
+        text_annotation_class: type[TextAnnotation] = TextAnnotation,
+        range_annotation_class: type[RangeAnnotation] = RangeAnnotation,
+    ) -> dict:
+        """Deserialize annotations from API format.
+
+        Args:
+            visualize: The visualize section from API response
+            text_annotation_class: The class to use for text annotations (default: TextAnnotation)
+            range_annotation_class: The class to use for range annotations (default: RangeAnnotation)
+
+        Returns:
+            dict: Annotations in Python format with keys:
+                - text_annotations: List of text annotation dicts with 'id' field
+                - range_annotations: List of range annotation dicts with 'id' field
+        """
+        result = {}
+
+        if "text-annotations" in visualize:
+            result["text_annotations"] = text_annotation_class.deserialize_model(
+                visualize["text-annotations"]
+            )
+
+        if "range-annotations" in visualize:
+            result["range_annotations"] = range_annotation_class.deserialize_model(
+                visualize["range-annotations"]
+            )
+
         return result

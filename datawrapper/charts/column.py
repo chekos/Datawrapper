@@ -14,16 +14,14 @@ from .enums import (
     ValueLabelPlacement,
 )
 from .models import (
+    AnnotationsMixin,
     CustomRangeMixin,
     CustomTicksMixin,
     GridDisplayMixin,
     GridFormatMixin,
-    RangeAnnotation,
-    TextAnnotation,
 )
 from .serializers import (
     ColorCategory,
-    ModelListSerializer,
     NegativeColor,
     PlotHeight,
     ValueLabels,
@@ -31,7 +29,12 @@ from .serializers import (
 
 
 class ColumnChart(
-    GridDisplayMixin, GridFormatMixin, CustomRangeMixin, CustomTicksMixin, BaseChart
+    AnnotationsMixin,
+    GridDisplayMixin,
+    GridFormatMixin,
+    CustomRangeMixin,
+    CustomTicksMixin,
+    BaseChart,
 ):
     """A base class for the Datawrapper API's column chart."""
 
@@ -182,24 +185,6 @@ class ColumnChart(
         default="outside",
         alias="value-labels-placement",
         description="Where to place the value labels",
-    )
-
-    #
-    # Annotations
-    #
-
-    #: A list of text annotations to display on the chart
-    text_annotations: list[TextAnnotation | dict[Any, Any]] = Field(
-        default_factory=list,
-        alias="text-annotations",
-        description="A list of text annotations to display on the chart",
-    )
-
-    #: A list of range annotations to display on the chart
-    range_annotations: list[RangeAnnotation | dict[Any, Any]] = Field(
-        default_factory=list,
-        alias="range-annotations",
-        description="A list of range annotations to display on the chart",
     )
 
     @field_validator("plot_height_mode")
@@ -362,16 +347,10 @@ class ColumnChart(
                 placement=self.value_labels_placement,
                 chart_type="column",
             ),
-            # Annotations
-            "text-annotations": ModelListSerializer.serialize(
-                self.text_annotations, TextAnnotation
-            ),
-            "range-annotations": ModelListSerializer.serialize(
-                self.range_annotations, RangeAnnotation
-            ),
         }
 
         model["metadata"]["visualize"].update(visualize_data)
+        model["metadata"]["visualize"].update(self._serialize_annotations())
 
         # Return the serialized data
         return model
@@ -437,11 +416,6 @@ class ColumnChart(
         init_data.update(ValueLabels.deserialize(visualize, chart_type="column"))
 
         # Annotations
-        init_data["text_annotations"] = TextAnnotation.deserialize_model(
-            visualize.get("text-annotations")
-        )
-        init_data["range_annotations"] = RangeAnnotation.deserialize_model(
-            visualize.get("range-annotations")
-        )
+        init_data.update(cls._deserialize_annotations(visualize))
 
         return init_data

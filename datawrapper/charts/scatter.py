@@ -14,11 +14,11 @@ from .enums import (
     ScatterShape,
     ScatterSize,
 )
-from .models import RangeAnnotation, TextAnnotation
-from .serializers import ModelListSerializer, PlotHeight
+from .models import AnnotationsMixin
+from .serializers import PlotHeight
 
 
-class ScatterPlot(BaseChart):
+class ScatterPlot(AnnotationsMixin, BaseChart):
     """A base class for the Datawrapper API's scatter plot chart."""
 
     model_config = ConfigDict(
@@ -409,20 +409,6 @@ class ScatterPlot(BaseChart):
     # Annotations
     #
 
-    #: A list of text annotations to display on the chart
-    text_annotations: list[dict[Any, Any]] = Field(
-        default_factory=list,
-        alias="text-annotations",
-        description="A list of text annotations to display on the chart",
-    )
-
-    #: A list of range annotations to display on the chart
-    range_annotations: list[dict[Any, Any]] = Field(
-        default_factory=list,
-        alias="range-annotations",
-        description="A list of range annotations to display on the chart",
-    )
-
     #: Add custom lines on the chart
     custom_lines: str = Field(
         default="",
@@ -573,12 +559,7 @@ class ScatterPlot(BaseChart):
                     self.plot_height_ratio,
                 ),
                 # Annotations
-                "text-annotations": ModelListSerializer.serialize(
-                    self.text_annotations, TextAnnotation
-                ),
-                "range-annotations": ModelListSerializer.serialize(
-                    self.range_annotations, RangeAnnotation
-                ),
+                **self._serialize_annotations(),
                 "custom-lines": self.custom_lines,
                 # Labeling
                 "auto-labels": self.auto_labels,
@@ -732,12 +713,7 @@ class ScatterPlot(BaseChart):
         init_data.update(PlotHeight.deserialize(visualize))
 
         # Annotations
-        init_data["text_annotations"] = TextAnnotation.deserialize_model(
-            visualize.get("text-annotations")
-        )
-        init_data["range_annotations"] = RangeAnnotation.deserialize_model(
-            visualize.get("range-annotations")
-        )
+        init_data.update(cls._deserialize_annotations(visualize))
 
         if "custom-lines" in visualize:
             init_data["custom_lines"] = visualize["custom-lines"]

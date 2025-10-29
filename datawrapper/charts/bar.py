@@ -5,8 +5,8 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_serial
 
 from .base import BaseChart
 from .enums import DateFormat, NumberFormat, ReplaceFlagsType, ValueLabelAlignment
-from .models import RangeAnnotation, TextAnnotation
-from .serializers import ColorCategory, CustomRange, ModelListSerializer, ReplaceFlags
+from .models import AnnotationsMixin
+from .serializers import ColorCategory, CustomRange, ReplaceFlags
 
 
 class BarOverlay(BaseModel):
@@ -75,7 +75,7 @@ class BarOverlay(BaseModel):
     )
 
 
-class BarChart(BaseChart):
+class BarChart(AnnotationsMixin, BaseChart):
     """A base class for the Datawrapper API's bar chart."""
 
     model_config = ConfigDict(
@@ -384,20 +384,6 @@ class BarChart(BaseChart):
         description="A list of the highlighted series",
     )
 
-    #: A list of text annotations to display on the chart
-    text_annotations: list[TextAnnotation | dict[Any, Any]] = Field(
-        default_factory=list,
-        alias="text-annotations",
-        description="A list of text annotations to display on the chart",
-    )
-
-    #: A list of range annotations to display on the chart
-    range_annotations: list[RangeAnnotation | dict[Any, Any]] = Field(
-        default_factory=list,
-        alias="range-annotations",
-        description="A list of range annotations to display on the chart",
-    )
-
     @field_validator("replace_flags")
     @classmethod
     def validate_replace_flags(
@@ -460,14 +446,11 @@ class BarChart(BaseChart):
                 "overlays": [],
                 # Annotations
                 "highlighted-series": self.highlighted_series,
-                "text-annotations": ModelListSerializer.serialize(
-                    self.text_annotations, TextAnnotation
-                ),
-                "range-annotations": ModelListSerializer.serialize(
-                    self.range_annotations, RangeAnnotation
-                ),
             }
         )
+
+        # Add annotations
+        model["metadata"]["visualize"].update(self._serialize_annotations())
 
         # Add the overlays, if any
         for overlay_obj in self.overlays:
@@ -608,12 +591,6 @@ class BarChart(BaseChart):
         if "highlighted-series" in visualize:
             init_data["highlighted_series"] = visualize["highlighted-series"]
 
-        # Annotations
-        init_data["text_annotations"] = TextAnnotation.deserialize_model(
-            visualize.get("text-annotations")
-        )
-        init_data["range_annotations"] = RangeAnnotation.deserialize_model(
-            visualize.get("range-annotations")
-        )
+        init_data.update(cls._deserialize_annotations(visualize))
 
         return init_data

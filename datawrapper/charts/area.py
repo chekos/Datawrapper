@@ -13,22 +13,25 @@ from .enums import (
     PlotHeightMode,
 )
 from .models import (
+    AnnotationsMixin,
     CustomRangeMixin,
     CustomTicksMixin,
     GridDisplayMixin,
     GridFormatMixin,
-    RangeAnnotation,
-    TextAnnotation,
 )
 from .serializers import (
     ColorCategory,
-    ModelListSerializer,
     PlotHeight,
 )
 
 
 class AreaChart(
-    GridDisplayMixin, GridFormatMixin, CustomRangeMixin, CustomTicksMixin, BaseChart
+    GridDisplayMixin,
+    GridFormatMixin,
+    CustomRangeMixin,
+    CustomTicksMixin,
+    AnnotationsMixin,
+    BaseChart,
 ):
     """A base class for the Datawrapper API's area chart."""
 
@@ -206,24 +209,6 @@ class AreaChart(
         description="The ratio of the plot height",
     )
 
-    #
-    # Annotations
-    #
-
-    #: A list of text annotations to display on the chart
-    text_annotations: list[TextAnnotation | dict[Any, Any]] = Field(
-        default_factory=list,
-        alias="text-annotations",
-        description="A list of text annotations to display on the chart",
-    )
-
-    #: A list of range annotations to display on the chart
-    range_annotations: list[RangeAnnotation | dict[Any, Any]] = Field(
-        default_factory=list,
-        alias="range-annotations",
-        description="A list of range annotations to display on the chart",
-    )
-
     @field_validator("interpolation")
     @classmethod
     def validate_interpolation(
@@ -287,16 +272,13 @@ class AreaChart(
                 self.plot_height_fixed,
                 self.plot_height_ratio,
             ),
-            # Annotations
-            "text-annotations": ModelListSerializer.serialize(
-                self.text_annotations, TextAnnotation
-            ),
-            "range-annotations": ModelListSerializer.serialize(
-                self.range_annotations, RangeAnnotation
-            ),
         }
 
+        # Add the visualize data to the model
         model["metadata"]["visualize"].update(visualize_data)
+
+        # Add annotations from mixin
+        model["metadata"]["visualize"].update(self._serialize_annotations())
 
         # Return the serialized data
         return model
@@ -373,12 +355,7 @@ class AreaChart(
         # Appearance
         init_data.update(PlotHeight.deserialize(visualize))
 
-        # Annotations
-        init_data["text_annotations"] = TextAnnotation.deserialize_model(
-            visualize.get("text-annotations")
-        )
-        init_data["range_annotations"] = RangeAnnotation.deserialize_model(
-            visualize.get("range-annotations")
-        )
+        # Annotations (from mixin)
+        init_data.update(cls._deserialize_annotations(visualize))
 
         return init_data
