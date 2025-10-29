@@ -74,7 +74,7 @@ from datawrapper.charts.enums import (
     ValueLabelMode,
     ValueLabelPlacement,
 )
-from datawrapper.charts.mixins import (
+from datawrapper.charts.models import (
     CustomRangeMixin,
     CustomTicksMixin,
     GridDisplayMixin,

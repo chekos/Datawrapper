@@ -9,6 +9,12 @@ from .api_sections import (
     Sharing,
     Visualize,
 )
+from .mixins import (
+    CustomRangeMixin,
+    CustomTicksMixin,
+    GridDisplayMixin,
+    GridFormatMixin,
+)
 from .range_annotations import (
     RangeAnnotation,
     XLineAnnotation,
@@ -24,7 +30,11 @@ __all__ = [
     "ColumnFormat",
     "ColumnFormatList",
     "ConnectorLine",
+    "CustomRangeMixin",
+    "CustomTicksMixin",
     "Describe",
+    "GridDisplayMixin",
+    "GridFormatMixin",
     "Logo",
     "Publish",
     "PublishBlocks",

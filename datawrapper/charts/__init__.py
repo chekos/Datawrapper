@@ -34,17 +34,15 @@ from .enums import (
     ValueLabelPlacement,
 )
 from .line import AreaFill, Line, LineChart, LineSymbol, LineValueLabel
-from .mixins import (
-    CustomRangeMixin,
-    CustomTicksMixin,
-    GridDisplayMixin,
-    GridFormatMixin,
-)
 from .models import (
     Annotate,
     ColumnFormat,
     ColumnFormatList,
+    CustomRangeMixin,
+    CustomTicksMixin,
     Describe,
+    GridDisplayMixin,
+    GridFormatMixin,
     Logo,
     Publish,
     PublishBlocks,
