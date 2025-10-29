@@ -142,7 +142,7 @@ class TextAnnotation(BaseModel):
         json_schema_extra={
             "examples": [
                 {
-                    "text": "Hello Wor;d",
+                    "text": "Hello World",
                     "x": 0,
                     "y": 0,
                 }
