@@ -15,7 +15,7 @@ from .enums import (
     ScatterSize,
 )
 from .models import AnnotationsMixin
-from .serializers import PlotHeight
+from .serializers import ColorCategory, PlotHeight
 
 
 class ScatterPlot(AnnotationsMixin, BaseChart):
@@ -196,6 +196,41 @@ class ScatterPlot(AnnotationsMixin, BaseChart):
         default=False,
         alias="show-color-key",
         description="Whether to show the color key",
+    )
+
+    #: The column with the color for the points
+    color_column: str = Field(
+        default="",
+        alias="color-column",
+        description="The column with the color for the points",
+    )
+
+    #: A mapping of layer names to colors
+    color_category: dict[str, str] = Field(
+        default_factory=dict,
+        alias="color-category",
+        description="A mapping of layer names to colors",
+    )
+
+    #: Dictionary mapping category names to their display labels in the color legend
+    category_labels: dict[str, str] = Field(
+        default_factory=dict,
+        alias="category-labels",
+        description="Dictionary mapping category names to their display labels in the color legend",
+    )
+
+    #: List defining the order in which categories appear in the chart and legend
+    category_order: list[str] = Field(
+        default_factory=list,
+        alias="category-order",
+        description="List defining the order in which categories appear in the chart and legend",
+    )
+
+    #: A list of column to exclude from the color key
+    exclude_from_color_key: list[str] = Field(
+        default_factory=list,
+        alias="exclude-from-color-key",
+        description="A list of column to exclude from the color key",
     )
 
     #
@@ -498,6 +533,8 @@ class ScatterPlot(AnnotationsMixin, BaseChart):
             axes["shape"] = self.shape_column
         if self.label_column:
             axes["labels"] = self.label_column
+        if self.color_column:
+            axes["color"] = self.color_column
 
         # Add axes to metadata
         model["metadata"]["axes"] = axes
@@ -529,6 +566,13 @@ class ScatterPlot(AnnotationsMixin, BaseChart):
                 "outlines": self.outlines,
                 "color-outline": self.color_outline,
                 "show-color-key": self.show_color_key,
+                "color-category": ColorCategory.serialize(
+                    self.color_category,
+                    self.category_labels,
+                    self.category_order,
+                    self.exclude_from_color_key,
+                ),
+                "color-by-column": bool(self.color_category),
                 # Size
                 "size": self.size,
                 "fixed-size": self.fixed_size,
@@ -604,6 +648,7 @@ class ScatterPlot(AnnotationsMixin, BaseChart):
         init_data["size_column"] = axes.get("size")
         init_data["shape_column"] = axes.get("shape")
         init_data["label_column"] = axes.get("labels")
+        init_data["color_column"] = axes.get("color")
 
         # Parse x-axis
         x_axis = visualize.get("x-axis", {})
@@ -652,6 +697,9 @@ class ScatterPlot(AnnotationsMixin, BaseChart):
             init_data["color_outline"] = visualize["color-outline"]
         if "show-color-key" in visualize:
             init_data["show_color_key"] = visualize["show-color-key"]
+
+        # Parse color-category using utility
+        init_data.update(ColorCategory.deserialize(visualize.get("color-category")))
 
         # Size
         if "size" in visualize:
