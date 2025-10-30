@@ -174,14 +174,44 @@ chart.create()
 
 ## Reference
 
+### MultipleColumnChart
+
 ```{eval-rst}
 .. parameter-table:: datawrapper.charts.MultipleColumnChart
 ```
+
+### MultipleColumnTextAnnotation
 
 ```{eval-rst}
 .. parameter-table:: datawrapper.charts.MultipleColumnTextAnnotation
 ```
 
+### MultipleColumnRangeAnnotation
+
 ```{eval-rst}
 .. parameter-table:: datawrapper.charts.MultipleColumnRangeAnnotation
+```
+
+### MultipleColumnXRangeAnnotation
+
+```{eval-rst}
+.. parameter-table:: datawrapper.charts.MultipleColumnXRangeAnnotation
+```
+
+### MultipleColumnYRangeAnnotation
+
+```{eval-rst}
+.. parameter-table:: datawrapper.charts.MultipleColumnYRangeAnnotation
+```
+
+### MultipleColumnXLineAnnotation
+
+```{eval-rst}
+.. parameter-table:: datawrapper.charts.MultipleColumnXLineAnnotation
+```
+
+### MultipleColumnYLineAnnotation
+
+```{eval-rst}
+.. parameter-table:: datawrapper.charts.MultipleColumnYLineAnnotation
 ```
