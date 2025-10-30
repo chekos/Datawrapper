@@ -2,7 +2,7 @@
 
 This example, drawn from [Datawrapper's official documentation](https://www.datawrapper.de/charts/stacked-bars), demonstrates how to create a diverging stacked bar chart showing trust levels in media reporting across different topics. The chart displays percentages with a [custom color scheme](https://colorbrewer2.org/#type=diverging&scheme=PRGn&n=5) to differentiate between trust levels, sorted by low trust values. It also includes value formatting.
 
-<iframe title="Trust in Media Reporting" aria-label="Stacked Bars" id="datawrapper-chart-j4JDS" src="https://datawrapper.dwcdn.net/j4JDS/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="339" data-external="1"></iframe><script type="text/javascript">window.addEventListener("message",function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}});</script>
+<iframe title="Trust in Media Reporting" aria-label="Stacked Bars" id="datawrapper-chart-VVR4V" src="https://datawrapper.dwcdn.net/VVR4V/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="339" data-external="1"></iframe><script type="text/javascript">window.addEventListener("message",function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data["datawrapper-height"][t]+"px";r.style.height=d}}});</script>
 
 ```python
 import pandas as pd
@@ -24,7 +24,7 @@ chart = dw.StackedBarChart(
     source_url="http://www.infratest-dimap.de/umfragen-analysen/bundesweit/umfragen/aktuell/wenig-vertrauen-in-medienberichterstattung/",
     # Data from pandas DataFrame
     data=df,
-    # Display values as percentages
+    # Enable percentage stacking
     stack_percentages=True,
     # Format value labels as percentages
     value_label_format="0%",
