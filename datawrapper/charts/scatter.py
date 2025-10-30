@@ -226,11 +226,11 @@ class ScatterPlot(AnnotationsMixin, BaseChart):
         description="List defining the order in which categories appear in the chart and legend",
     )
 
-    #: A list of column to exclude from the color key
+    #: A list of columns to exclude from the color key
     exclude_from_color_key: list[str] = Field(
         default_factory=list,
         alias="exclude-from-color-key",
-        description="A list of column to exclude from the color key",
+        description="A list of columns to exclude from the color key",
     )
 
     #
