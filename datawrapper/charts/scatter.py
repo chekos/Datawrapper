@@ -648,7 +648,8 @@ class ScatterPlot(AnnotationsMixin, BaseChart):
         init_data["size_column"] = axes.get("size")
         init_data["shape_column"] = axes.get("shape")
         init_data["label_column"] = axes.get("labels")
-        init_data["color_column"] = axes.get("color")
+        if "color" in axes:
+            init_data["color_column"] = axes["color"]
 
         # Parse x-axis
         x_axis = visualize.get("x-axis", {})
