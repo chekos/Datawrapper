@@ -127,6 +127,13 @@ class ColumnChart(
         description="List defining the order in which categories appear in the chart and legend",
     )
 
+    #: A list of columns to exclude from the color key
+    exclude_from_color_key: list[str] = Field(
+        default_factory=list,
+        alias="exclude-from-color-key",
+        description="A list of columns to exclude from the color key",
+    )
+
     #: The padding between bars as a percentage of the bar width
     bar_padding: int = Field(
         default=30,
@@ -332,6 +339,7 @@ class ColumnChart(
                 self.color_category,
                 self.category_labels,
                 self.category_order,
+                self.exclude_from_color_key,
             ),
             "color-by-column": bool(self.color_category),
             **PlotHeight.serialize(

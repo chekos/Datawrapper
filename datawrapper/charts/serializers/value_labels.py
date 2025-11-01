@@ -185,9 +185,6 @@ class ValueLabels(BaseSerializer):
                 result["value_labels_format"] = ""
                 result["value_labels_placement"] = "outside"
 
-            # Derive value_labels_always from show mode
-            result["value_labels_always"] = show == "always"
-
         else:
             # Simple format field (line, arrow, stacked-bar)
             if "value-label-format" in api_obj:
