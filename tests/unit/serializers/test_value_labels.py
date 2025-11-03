@@ -119,7 +119,6 @@ class TestValueLabelsDeserialize:
             "show_value_labels": "hover",
             "value_labels_format": "",
             "value_labels_placement": "outside",
-            "value_labels_always": False,
         }
 
     def test_deserialize_always_mode(self):
@@ -137,7 +136,6 @@ class TestValueLabelsDeserialize:
             "show_value_labels": "always",
             "value_labels_format": "0,0",
             "value_labels_placement": "inside",
-            "value_labels_always": True,
         }
 
     def test_deserialize_off_mode(self):
@@ -154,7 +152,6 @@ class TestValueLabelsDeserialize:
             "show_value_labels": "off",
             "value_labels_format": "",
             "value_labels_placement": "outside",
-            "value_labels_always": False,
         }
 
     def test_deserialize_multiple_column_chart(self):
@@ -172,7 +169,6 @@ class TestValueLabelsDeserialize:
             "show_value_labels": "always",
             "value_labels_format": "0.0a",
             "value_labels_placement": "below",
-            "value_labels_always": True,
         }
 
     def test_deserialize_missing_value_labels_object(self):
@@ -183,7 +179,6 @@ class TestValueLabelsDeserialize:
             "show_value_labels": "hover",
             "value_labels_format": "",
             "value_labels_placement": "outside",
-            "value_labels_always": False,
         }
 
     def test_deserialize_with_custom_format(self):
@@ -200,7 +195,6 @@ class TestValueLabelsDeserialize:
             "show_value_labels": "hover",
             "value_labels_format": "$0,0.00",
             "value_labels_placement": "outside",
-            "value_labels_always": False,
         }
 
 
@@ -227,7 +221,6 @@ class TestValueLabelsRoundTrip:
         assert deserialized["show_value_labels"] == original["show"]
         assert deserialized["value_labels_format"] == original["format_str"]
         assert deserialized["value_labels_placement"] == original["placement"]
-        assert deserialized["value_labels_always"] == original["always"]
 
     def test_round_trip_always_mode(self):
         """Test round-trip for always mode."""
@@ -249,7 +242,6 @@ class TestValueLabelsRoundTrip:
         assert deserialized["show_value_labels"] == original["show"]
         assert deserialized["value_labels_format"] == original["format_str"]
         assert deserialized["value_labels_placement"] == original["placement"]
-        assert deserialized["value_labels_always"] == original["always"]
 
     def test_round_trip_off_mode(self):
         """Test round-trip for off mode."""
@@ -271,4 +263,3 @@ class TestValueLabelsRoundTrip:
         assert deserialized["show_value_labels"] == original["show"]
         assert deserialized["value_labels_format"] == original["format_str"]
         assert deserialized["value_labels_placement"] == original["placement"]
-        assert deserialized["value_labels_always"] == original["always"]

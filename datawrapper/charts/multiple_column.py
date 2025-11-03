@@ -300,19 +300,12 @@ class MultipleColumnChart(
     AnnotationsMixin,
     BaseChart,
 ):
-    """A base class for the Datawrapper API's multiple column chart."""
+    """A base class for the Datawrapper API's multiple column chart.
 
-    # Override annotation fields with MultipleColumnChart-specific types
-    text_annotations: Sequence[MultipleColumnTextAnnotation | dict[Any, Any]] = Field(
-        default_factory=list,
-        alias="text-annotations",
-        description="A list of text annotations to display on the chart",
-    )
-    range_annotations: Sequence[MultipleColumnRangeAnnotation | dict[Any, Any]] = Field(
-        default_factory=list,
-        alias="range-annotations",
-        description="A list of range annotations to display on the chart",
-    )
+    Note: This chart uses MultipleColumnTextAnnotation and MultipleColumnRangeAnnotation
+    for annotations, which extend the base annotation classes with plot-specific fields.
+    The parent AnnotationsMixin fields accept these subclasses automatically.
+    """
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -510,6 +503,52 @@ class MultipleColumnChart(
             if v not in valid_values:
                 raise ValueError(f"Invalid value: {v}. Must be one of {valid_values}")
         return v
+
+    @field_validator("text_annotations", mode="before")
+    @classmethod
+    def convert_text_annotations(
+        cls, v: Sequence[MultipleColumnTextAnnotation | dict[Any, Any]]
+    ) -> list[MultipleColumnTextAnnotation]:
+        """Convert dict annotations to MultipleColumnTextAnnotation instances.
+
+        This ensures that when annotations are passed as dicts, they are converted
+        to the proper annotation class so that serialize_model() includes the plot field.
+        """
+        if not v:
+            return []
+
+        result = []
+        for item in v:
+            if isinstance(item, dict):
+                # Convert dict to MultipleColumnTextAnnotation instance
+                result.append(MultipleColumnTextAnnotation(**item))
+            else:
+                # Already an instance, keep as is
+                result.append(item)
+        return result
+
+    @field_validator("range_annotations", mode="before")
+    @classmethod
+    def convert_range_annotations(
+        cls, v: Sequence[MultipleColumnRangeAnnotation | dict[Any, Any]]
+    ) -> list[MultipleColumnRangeAnnotation]:
+        """Convert dict annotations to MultipleColumnRangeAnnotation instances.
+
+        This ensures that when annotations are passed as dicts, they are converted
+        to the proper annotation class so that serialize_model() includes the plot field.
+        """
+        if not v:
+            return []
+
+        result = []
+        for item in v:
+            if isinstance(item, dict):
+                # Convert dict to MultipleColumnRangeAnnotation instance
+                result.append(MultipleColumnRangeAnnotation(**item))
+            else:
+                # Already an instance, keep as is
+                result.append(item)
+        return result
 
     #
     # Tooltips
