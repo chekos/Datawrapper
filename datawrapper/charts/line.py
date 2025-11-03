@@ -315,7 +315,16 @@ class Line(BaseModel):
     #: The width of the line (use LineWidth enum or raw API values)
     width: LineWidth | str = Field(
         default="style1",
-        description="The width of the line. Use LineWidth enum for readability or raw API values (style0, style1, style2, style3, invisible).",
+        description=(
+            "The width of the line. Use LineWidth enum for readability or raw API values "
+            "(style0, style1, style2, style3, invisible).\n\n"
+            "Examples:\n"
+            "  Line(column='sales', width=LineWidth.THICK)  # style2 = 4px\n"
+            "  Line(column='sales', width='style2')  # Also 4px\n"
+            "  Line(column='sales', width=LineWidth.THINNEST)  # style3 = 1px\n\n"
+            "⚠️ Note: style numbers don't increase with thickness! "
+            "style0=2px (thin), style1=3px (medium), style2=4px (thick), style3=1px (thinnest)"
+        ),
     )
 
     #: The dashing of the line (use LineDash enum or raw API values)
