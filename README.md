@@ -32,7 +32,7 @@ import datawrapper as dw
 chart = dw.BarChart(
     title="Top Programming Languages 2024",
     data=pd.DataFrame({"Language": ["Python", "JavaScript", "Java"], "Users": [45.3, 38.2, 30.5]}),
-    axis_label_format=NumberFormat.ONE_DECIMAL
+    axis_label_format=dw.NumberFormat.ONE_DECIMAL
 )
 
 # Create and publish (uses DATAWRAPPER_ACCESS_TOKEN environment variable)
