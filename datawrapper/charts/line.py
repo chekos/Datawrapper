@@ -576,6 +576,13 @@ class LineChart(
         description="The type of datawrapper chart to create",
     )
 
+    #: The column to use for the x-axis
+    x_column: str | None = Field(
+        default=None,
+        alias="x-column",
+        description="The column to use for the x-axis",
+    )
+
     #
     # Horizontal axis (X-axis)
     #
@@ -777,6 +784,10 @@ class LineChart(
         # Call the parent class's serialize_model method
         model = super().serialize_model()
 
+        # Set the axes setting if x_column is provided
+        if self.x_column:
+            model["metadata"]["axes"] = {"x": self.x_column}
+
         # Add chart specific properties
         visualize_data = {
             # Horizontal axis (from mixins)
@@ -852,6 +863,11 @@ class LineChart(
         # Extract line-specific sections
         metadata = api_response.get("metadata", {})
         visualize = metadata.get("visualize", {})
+
+        # Parse axes columns
+        axes = metadata.get("axes", {})
+        if "x" in axes:
+            init_data["x_column"] = axes["x"]
 
         # Horizontal and vertical axis (from mixins)
         init_data.update(cls._deserialize_grid_config(visualize))
