@@ -34,6 +34,7 @@ classifiers = [
     "Intended Audience :: Developers",
     "Operating System :: OS Independent",
     "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
 ]
 
 [project.optional-dependencies]
@@ -75,6 +76,9 @@ Issues = "https://github.com/chekos/datawrapper/issues/"
 
 [tool.setuptools]
 packages = ["datawrapper"]
+
+[tool.setuptools.package-data]
+datawrapper = ["py.typed"]
 
 [tool.setuptools_scm]
 
