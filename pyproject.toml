@@ -76,6 +76,9 @@ Issues = "https://github.com/chekos/datawrapper/issues/"
 [tool.setuptools]
 packages = ["datawrapper"]
 
+[tool.setuptools.package-data]
+datawrapper = ["py.typed"]
+
 [tool.setuptools_scm]
 
 [tool.ruff]
