@@ -1,0 +1,432 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "1yfq8",
+        "language": "en-US",
+        "theme": "thomson-reuters--redesign",
+        "chartHash": "30d2be17dc9aad87fdb3889c5ba644c3",
+        "id": "1yfq8",
+        "type": "d3-scatter-plot",
+        "title": "Which party has a better policy? &nbsp;&nbsp; (Copy)",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {
+              "H0Roh34IGz": {
+                "id": "H0Roh34IGz",
+                "row": 0,
+                "time": 1761856362216,
+                "value": "",
+                "column": 2,
+                "ignored": false,
+                "previous": "party_name",
+                "_index": 0
+              },
+              "Zqs4lryV89": {
+                "id": "Zqs4lryV89",
+                "row": 0,
+                "time": 1761856535499,
+                "value": "",
+                "column": 2,
+                "ignored": false,
+                "previous": "X.1",
+                "_index": 1
+              },
+              "wAdibEsvLY": {
+                "id": "wAdibEsvLY",
+                "row": 0,
+                "time": 1761932219089,
+                "value": "",
+                "column": 2,
+                "ignored": false,
+                "previous": "party",
+                "_index": 2
+              }
+            },
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "",
+            "source-url": "",
+            "intro": "Reuters/Ipsos polled 805 registered voters on October 24-26, 2025",
+            "byline": "",
+            "aria-description": "Chart showing the which party has a better policy",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": ""
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "url": "https://www.datawrapper.de/_/1yfq8",
+              "auto": false
+            },
+            "size": "fixed",
+            "lines": {},
+            "shape": "fixed",
+            "x-pos": "off",
+            "y-pos": "left",
+            "symbol": {
+              "Economy": 1,
+              "Healthcare": 2,
+              "Immigration": 3,
+              "Respect for democracy": 3
+            },
+            "x-axis": {
+              "log": false,
+              "range": [
+                "",
+                ""
+              ],
+              "ticks": [
+                1,
+                2,
+                3,
+                4
+              ]
+            },
+            "x-grid": "off",
+            "y-axis": {
+              "log": false,
+              "range": [
+                25,
+                52
+              ],
+              "ticks": [
+                25,
+                30,
+                35,
+                40,
+                45,
+                50
+              ]
+            },
+            "y-grid": "on",
+            "opacity": 1,
+            "scale-y": "linear",
+            "tooltip": {
+              "body": "On {{ policy_name }}: {{ FORMAT(party, 0) }}%",
+              "title": "{{ party_name }}",
+              "sticky": false,
+              "enabled": true
+            },
+            "labeling": "top",
+            "max-size": 10,
+            "outlines": false,
+            "overlays": {},
+            "x-format": "0.00",
+            "y-format": "0%",
+            "add-labels": [
+              "+12D",
+              "+13R",
+              "+7D",
+              "+8R",
+              "+11R",
+              "+1R",
+              "+20R",
+              "+3D"
+            ],
+            "base-color": 0,
+            "fixed-size": 13.2,
+            "regression": false,
+            "auto-labels": false,
+            "custom-lines": "4,46,4,26 @width:5 @color:#cccc\n3,44,3,33 @width:5 @color:#cccc\n2,40,2,37 @width:5 @color:#cccc\n1,33,1,34 @width:5 @color:#cccc",
+            "fixed-symbol": "symbolCircle",
+            "label-colors": false,
+            "label-format": "auto",
+            "label-margin": 0,
+            "x-grid-lines": "off",
+            "y-grid-lines": "on",
+            "color-outline": "#fff",
+            "interpolation": "linear",
+            "negativeColor": {
+              "value": "#E31A1C",
+              "enabled": false
+            },
+            "show-tooltips": true,
+            "x-grid-format": "auto",
+            "y-grid-format": "auto",
+            "y-grid-labels": "auto",
+            "categoryLabels": {
+              "enabled": true,
+              "position": "color-key"
+            },
+            "chart-type-set": true,
+            "color-category": {
+              "map": {
+                "dem": "#1f8fce",
+                "rep": "#ec2033",
+                "Democratic Party": "#1f8fce",
+                "Republican Party": "#ec2033"
+              },
+              "palette": [],
+              "categoryOrder": [],
+              "categoryLabels": {
+                "dem": "Democrat Party",
+                "rep": "Republican Party"
+              },
+              "excludeFromKey": []
+            },
+            "custom-range-x": [
+              "",
+              ""
+            ],
+            "custom-range-y": [
+              "",
+              ""
+            ],
+            "custom-ticks-x": "",
+            "custom-ticks-y": "",
+            "plotHeightMode": "fixed",
+            "show-color-key": true,
+            "color-by-column": true,
+            "connector-lines": true,
+            "hover-highlight": true,
+            "legend-offset-x": 0,
+            "legend-offset-y": 0,
+            "plotHeightFixed": 300,
+            "plotHeightRatio": 0.5,
+            "show-size-legend": false,
+            "size-legend-type": "stacked",
+            "text-annotations": {
+              "aJXGEJA8Bj": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "aJXGEJA8Bj",
+                "bold": true,
+                "size": 15,
+                "text": "Crime",
+                "align": "mc",
+                "color": "#404040",
+                "width": 15,
+                "italic": false,
+                "position": {
+                  "x": "4",
+                  "y": "48"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 0
+              },
+              "uKKdtBavF5": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "uKKdtBavF5",
+                "bold": true,
+                "size": 15,
+                "text": "Immigration",
+                "align": "mc",
+                "color": "#404040",
+                "width": 15,
+                "italic": false,
+                "position": {
+                  "x": "3",
+                  "y": "48"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 1
+              },
+              "jjt6wIkYut": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "jjt6wIkYut",
+                "bold": true,
+                "size": 15,
+                "text": "Respect for democracy",
+                "align": "mc",
+                "color": "#404040",
+                "width": 15,
+                "italic": false,
+                "position": {
+                  "x": "2",
+                  "y": "48"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 2
+              },
+              "XBokqLOPGM": {
+                "bg": false,
+                "dx": 0,
+                "dy": 0,
+                "id": "XBokqLOPGM",
+                "bold": true,
+                "size": 15,
+                "text": "Cost of living",
+                "align": "mc",
+                "color": "#404040",
+                "width": 10.922535211267606,
+                "italic": false,
+                "position": {
+                  "x": "1",
+                  "y": "48"
+                },
+                "underline": false,
+                "showMobile": true,
+                "showDesktop": true,
+                "connectorLine": {
+                  "type": "straight",
+                  "circle": false,
+                  "stroke": 1,
+                  "enabled": false,
+                  "arrowHead": "lines",
+                  "circleStyle": "solid",
+                  "circleRadius": 15,
+                  "inheritColor": false,
+                  "targetPadding": 4
+                },
+                "mobileFallback": false,
+                "_index": 3
+              }
+            },
+            "y-grid-subdivide": true,
+            "custom-area-fills": {},
+            "highlight-labeled": false,
+            "range-annotations": {},
+            "regression-method": "polynomial-2",
+            "shape-size-version": 1,
+            "stack-color-legend": false,
+            "value-label-colors": true,
+            "y-grid-label-align": "left",
+            "size-legend-position": "above",
+            "responsive-symbol-size": false,
+            "size-legend-title-width": 200,
+            "size-legend-label-format": "auto",
+            "size-legend-title-enabled": true,
+            "size-legend-label-position": "right",
+            "size-legend-title-position": "left",
+            "size-legend-values-setting": "auto"
+          },
+          "axes": {
+            "x": "policy",
+            "color": "party_name",
+            "shape": "party_name",
+            "labels": "diff"
+          },
+          "publish": {
+            "embed-width": 710,
+            "embed-height": 449,
+            "blocks": {
+              "logo": {
+                "id": "reuters",
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": false,
+              "download-image": false
+            },
+            "export-pdf": {},
+            "export-svg": {
+              "width": 710,
+              "height": 439,
+              "include": "plain",
+              "transparent": true,
+              "fullVectorMode": true
+            },
+            "embed-codes": {
+              "embed-method-iframe": "<iframe title=\"Which party has a better policy?\" aria-label=\"Scatter Plot\" id=\"datawrapper-chart-lC3IT\" src=\"https://datawrapper.dwcdn.net/lC3IT/1/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"710\" height=\"439\" data-external=\"1\"></iframe>",
+              "embed-method-responsive": "<iframe title=\"Which party has a better policy?\" aria-label=\"Scatter Plot\" id=\"datawrapper-chart-lC3IT\" src=\"https://datawrapper.dwcdn.net/lC3IT/1/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"439\" data-external=\"1\"></iframe><script type=\"text/javascript\">window.addEventListener(\"message\",function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r,i=0;r=e[i];i++)if(r.contentWindow===a.source){var d=a.data[\"datawrapper-height\"][t]+\"px\";r.style.height=d}}});</script>",
+              "embed-method-web-component": "<div style=\"min-height:439px\" id=\"datawrapper-vis-lC3IT\"><script type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/lC3IT/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-lC3IT\"></script><noscript><img src=\"https://datawrapper.dwcdn.net/lC3IT/full.png\" alt=\"Chart showing the which party has a better policy\" /></noscript></div>"
+            },
+            "chart-height": 347
+          },
+          "annotate": {
+            "notes": "The margin of error is +/- 4 percentage points."
+          },
+          "custom": {
+            "tr-connect": false,
+            "tr-root-slug": "USA-ELECTION",
+            "tr-wild-slug": "POLL-TRACKER-PARTY",
+            "tr-lynx-interactive-only": false
+          }
+        },
+        "utf8": false,
+        "createdAt": "2025-11-11T21:51:22.000Z",
+        "lastModifiedAt": "2025-11-11T21:52:26.000Z",
+        "forkedFrom": "lC3IT",
+        "organizationId": "thomson-reuters",
+        "authorId": 540892,
+        "folderId": 364367,
+        "workspace": "thomson-reuters"
+      },
+      "timestamps": {
+        "metadata": {
+          "publish": {
+            "embed-height": {
+              "__@t$__": "54089234421-1"
+            },
+            "chart-height": {
+              "__@t$__": "54089234421-2"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-2"
+  },
+  "data": "0-0"
+}

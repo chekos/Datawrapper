@@ -108,11 +108,12 @@ class TestRangeAnnotationPermissive:
         result = RangeAnnotation.deserialize_model(api_data)
         assert len(result) == 1
         assert result[0]["id"] == "anno-id-1"
-        assert result[0]["position"]["x0"] == "1939M09"
-        assert result[0]["position"]["x1"] == "1945M09"
+        # Position is flattened to top-level fields for Pydantic model compatibility
+        assert result[0]["x0"] == "1939M09"
+        assert result[0]["x1"] == "1945M09"
         # The duplicates are preserved in deserialization
-        assert result[0]["position"]["y0"] == "1939M09"
-        assert result[0]["position"]["y1"] == "1945M09"
+        assert result[0]["y0"] == "1939M09"
+        assert result[0]["y1"] == "1945M09"
 
     def test_mixed_numeric_and_string_positions(self):
         """Test that both numeric and string positions work."""
