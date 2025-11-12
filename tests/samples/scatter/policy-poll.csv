@@ -1,0 +1,9 @@
+policy,policy_name,party,party_name,diff,detail,detail_value
+1,Cost of living,33.0,Democratic Party,,error,4.0
+1,Cost of living,34.0,Republican Party,+1R,,
+2,Respect for democracy,40.0,Democratic Party,+3D,,
+2,Respect for democracy,37.0,Republican Party,,,
+3,Immigration,33.0,Democratic Party,,date_range,"on October 24-26, 2025"
+3,Immigration,44.0,Republican Party,+11R,,
+4,Crime,26.0,Democratic Party,,respondents,805
+4,Crime,46.0,Republican Party,+20R,,

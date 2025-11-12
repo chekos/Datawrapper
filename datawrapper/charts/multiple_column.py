@@ -84,7 +84,9 @@ class MultipleColumnTextAnnotation(TextAnnotation):
         return result
 
     @classmethod
-    def deserialize_model(cls, api_data: dict[str, dict] | None) -> list[dict]:
+    def deserialize_model(
+        cls, api_data: dict[str, dict[Any, Any]] | list[dict[Any, Any]] | None
+    ) -> list[dict]:
         """Parse API response to extract MultipleColumnTextAnnotation data.
 
         Handles the API format where:
@@ -92,7 +94,7 @@ class MultipleColumnTextAnnotation(TextAnnotation):
         - showInAllPlots is at the top level
 
         Args:
-            api_data: API response data (dict with UUID keys)
+            api_data: API response data (dict with UUID keys or list format)
 
         Returns:
             List of dictionaries that can initialize MultipleColumnTextAnnotation instances
@@ -101,7 +103,15 @@ class MultipleColumnTextAnnotation(TextAnnotation):
             return []
 
         result = []
-        for anno_id, anno_data in api_data.items():
+
+        # Handle dict format (UUID keys from API)
+        if isinstance(api_data, dict):
+            items_to_process = list(api_data.items())
+        else:
+            # Handle list format - generate temporary IDs
+            items_to_process = [(f"temp-{i}", anno) for i, anno in enumerate(api_data)]
+
+        for anno_id, anno_data in items_to_process:
             # Extract position data
             position = anno_data.get("position", {})
             x = position.get("x") if isinstance(position, dict) else None
@@ -175,7 +185,9 @@ class MultipleColumnRangeAnnotation(RangeAnnotation):
         return result
 
     @classmethod
-    def deserialize_model(cls, api_data: dict[str, dict] | None) -> list[dict]:
+    def deserialize_model(
+        cls, api_data: dict[str, dict[Any, Any]] | list[dict[Any, Any]] | None
+    ) -> list[dict]:
         """Parse API response to extract MultipleColumnRangeAnnotation data.
 
         Handles the API format where:
@@ -183,7 +195,7 @@ class MultipleColumnRangeAnnotation(RangeAnnotation):
         - showInAllPlots is at the top level
 
         Args:
-            api_data: API response data (dict with UUID keys)
+            api_data: API response data (dict with UUID keys or list format)
 
         Returns:
             List of dictionaries that can initialize MultipleColumnRangeAnnotation instances
@@ -192,7 +204,15 @@ class MultipleColumnRangeAnnotation(RangeAnnotation):
             return []
 
         result = []
-        for anno_id, anno_data in api_data.items():
+
+        # Handle dict format (UUID keys from API)
+        if isinstance(api_data, dict):
+            items_to_process = list(api_data.items())
+        else:
+            # Handle list format - generate temporary IDs
+            items_to_process = [(f"temp-{i}", anno) for i, anno in enumerate(api_data)]
+
+        for anno_id, anno_data in items_to_process:
             # Extract position data
             position = anno_data.get("position", {})
             plot = position.get("plot") if isinstance(position, dict) else None

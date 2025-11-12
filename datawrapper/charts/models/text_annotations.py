@@ -300,31 +300,70 @@ class TextAnnotation(BaseModel):
         return model
 
     @classmethod
-    def deserialize_model(cls, api_data: dict[str, dict] | None) -> list[dict]:
+    def deserialize_model(
+        cls, api_data: dict[str, dict] | list[dict] | None
+    ) -> list[dict]:
         """Deserialize annotations from API response format.
 
+        Handles both dict format (UUID keys from API) and list format (from serialization).
+
         Args:
-            api_data: Dictionary mapping UUID keys to annotation data, or None
+            api_data: Dictionary mapping UUID keys to annotation data, list of annotation dicts, or None
 
         Returns:
-            List of annotation dicts with 'id' field preserved
+            List of annotation dicts with 'id' field preserved and position flattened to x/y
         """
         if not api_data:
             return []
 
         result = []
-        for anno_id, anno_data in api_data.items():
-            # Create a copy to avoid modifying the original
-            anno_dict = {**anno_data, "id": anno_id}
 
-            # Handle connector line deserialization (enabled by presence pattern)
-            if "connectorLine" in anno_dict:
-                connector = anno_dict["connectorLine"]
-                if isinstance(connector, dict):
-                    # If enabled is False or missing, set to None (disabled)
-                    if not connector.get("enabled", False):
-                        anno_dict["connectorLine"] = None
-                    # Otherwise keep the connector line object (enabled)
+        # Handle dict format (UUID keys from API)
+        if isinstance(api_data, dict):
+            for anno_id, anno_data in api_data.items():
+                # Create a copy to avoid modifying the original
+                anno_dict = {**anno_data, "id": anno_id}
 
-            result.append(anno_dict)
+                # Flatten position object to x/y fields if present
+                if "position" in anno_dict:
+                    position = anno_dict.pop("position")
+                    if isinstance(position, dict):
+                        anno_dict["x"] = position.get("x")
+                        anno_dict["y"] = position.get("y")
+
+                # Handle connector line deserialization (enabled by presence pattern)
+                if "connectorLine" in anno_dict:
+                    connector = anno_dict["connectorLine"]
+                    if isinstance(connector, dict):
+                        # If enabled is False or missing, set to None (disabled)
+                        if not connector.get("enabled", False):
+                            anno_dict["connectorLine"] = None
+                        # Otherwise keep the connector line object (enabled)
+
+                result.append(anno_dict)
+
+        # Handle list format (from serialization or other sources)
+        elif isinstance(api_data, list):
+            for anno_data in api_data:
+                # Create a copy to avoid modifying the original
+                anno_dict = {**anno_data}
+
+                # Flatten position object to x/y fields if present
+                if "position" in anno_dict:
+                    position = anno_dict.pop("position")
+                    if isinstance(position, dict):
+                        anno_dict["x"] = position.get("x")
+                        anno_dict["y"] = position.get("y")
+
+                # Handle connector line deserialization (enabled by presence pattern)
+                if "connectorLine" in anno_dict:
+                    connector = anno_dict["connectorLine"]
+                    if isinstance(connector, dict):
+                        # If enabled is False or missing, set to None (disabled)
+                        if not connector.get("enabled", False):
+                            anno_dict["connectorLine"] = None
+                        # Otherwise keep the connector line object (enabled)
+
+                result.append(anno_dict)
+
         return result
