@@ -3,6 +3,7 @@
 import json
 from pathlib import Path
 from typing import Any
+from unittest.mock import Mock, patch
 
 import pytest
 
@@ -353,6 +354,57 @@ class TestSerialization:
 
         # We should have some axes configuration
         assert len(our_keys) > 0
+
+
+class TestSampleDeserialization:
+    """Test deserialization of sample JSON files."""
+
+    def test_parse_happiness_scores_sample(self):
+        """Test parsing the happiness-scores sample JSON."""
+        # Load sample data
+        sample_path = (
+            Path(__file__).parent.parent / "samples" / "bar" / "happiness-scores.json"
+        )
+        with open(sample_path) as f:
+            chart_metadata = json.load(f)["chart"]["crdt"]["data"]
+
+        csv_path = (
+            Path(__file__).parent.parent / "samples" / "bar" / "happiness-scores.csv"
+        )
+        with open(csv_path) as f:
+            sample_csv = f.read()
+
+        # Mock the Datawrapper client
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
+
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        # Test deserialization
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = BarChart.get("test-id", access_token="test-token")
+
+            # Verify key properties
+            assert chart.chart_type == "d3-bars"
+            assert chart.title == "Score of Happiness<br>"
+            assert chart.sort_bars is False
+            assert chart.reverse_order is False
+            assert chart.show_color_key is True
+            assert chart.show_value_labels is True
+            assert chart.value_label_alignment == "left"
+
+            # Verify axes configuration (stored as individual fields, not as 'axes' dict)
+            assert chart.bar_column == "Happiness score"
+            assert chart.color_column == "Continent"
+
+            # Verify overlays exist
+            assert chart.overlays is not None
+            assert len(chart.overlays) > 0
 
 
 class TestSpecificFeatures:

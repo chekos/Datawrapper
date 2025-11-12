@@ -584,6 +584,33 @@ class TestScatterPlotParsing:
             assert chart.auto_labels is False
             assert chart.show_color_key is False
 
+    def test_parse_policy_poll_sample(self):
+        """Test parsing the policy-poll sample JSON."""
+        chart_metadata = load_sample_json("policy-poll.json")
+        sample_csv = load_sample_csv("policy-poll.csv")
+
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
+
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = ScatterPlot.get("test-id", access_token="test-token")
+
+            assert chart.chart_type == "d3-scatter-plot"
+            assert chart.title == "Which party has a better policy? &nbsp;&nbsp; (Copy)"
+            assert chart.x_column == "policy"
+            # Note: y_column is not set in the JSON (axes.y is missing)
+            assert chart.label_column == "diff"
+            assert chart.shape_column == "party_name"
+            assert chart.fixed_size == 13.2
+            assert chart.show_color_key is True
+
     def test_parse_preserves_all_fields(self):
         """Test that parsing preserves all scatter-specific fields."""
         chart_metadata = load_sample_json("automation.json")

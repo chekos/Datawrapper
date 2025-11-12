@@ -281,11 +281,11 @@ class BarChart(AnnotationsMixin, BaseChart):
         description="The default color for the chart (palette index or hex string)",
     )
 
-    #: The column with the color for the bars
+    #: The name of the column with the color for the bars
     color_column: str = Field(
         default="",
         alias="color-column",
-        description="The column with the color for the bars",
+        description="The name of the column with the color for the bars",
     )
 
     #: A mapping of layer names to colors
@@ -580,12 +580,19 @@ class BarChart(AnnotationsMixin, BaseChart):
         if "show-category-labels" in visualize:
             init_data["show_category_labels"] = visualize["show-category-labels"]
 
-        # Overlays (list of BarOverlay objects)
+        # Overlays (can be dict with UUID keys or list of BarOverlay objects)
         if "overlays" in visualize:
-            overlays_list = visualize["overlays"]
-            init_data["overlays"] = [
-                BarOverlay.model_validate(overlay) for overlay in overlays_list
-            ]
+            overlays_data = visualize["overlays"]
+            # Handle both dict (with UUID keys) and list formats
+            if isinstance(overlays_data, dict):
+                init_data["overlays"] = [
+                    BarOverlay.model_validate(overlay)
+                    for overlay in overlays_data.values()
+                ]
+            elif isinstance(overlays_data, list):
+                init_data["overlays"] = [
+                    BarOverlay.model_validate(overlay) for overlay in overlays_data
+                ]
 
         # Annotations
         if "highlighted-series" in visualize:

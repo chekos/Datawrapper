@@ -410,6 +410,121 @@ class TestLineChartGet:
             assert fill.color_negative == "#0000ff"
             assert fill.interpolation == "step-before"
 
+    def test_get_cigarettes_sample(self):
+        """Test get() with cigarettes.json sample data (multiple lines with text annotations)."""
+        # Load sample data
+        sample_json = load_sample_json("cigarettes.json")
+        chart_metadata = sample_json["chart"]["crdt"]["data"]
+        sample_csv = load_sample_csv("cigarettes.csv")
+
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
+
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = LineChart.get("WsoYO", access_token="test-token")
+
+            # Verify chart type and title
+            assert chart.chart_type == "d3-lines"
+            assert (
+                chart.title
+                == "The rise and fall of cigarette consumption in developed countries"
+            )
+
+            # Verify axes configuration
+            assert chart.x_grid == "ticks"
+            assert chart.y_grid == "on"
+            assert chart.x_grid_format == "YYYY"
+            assert chart.y_grid_format == "0,0.[00]"
+            assert chart.custom_range_y == [0, 11.5]
+
+            # Verify line customization
+            assert chart.interpolation == "linear"
+            assert chart.connector_lines is True
+            assert chart.base_color == "#ffab92"
+
+            # Verify individual line configurations
+            us_line = next(
+                (line for line in chart.lines if line.column == "United States"), None
+            )
+            assert us_line is not None
+            assert us_line.width == "style1"
+            assert us_line.direct_label is False
+
+            # Verify text annotations
+            assert len(chart.text_annotations) == 4
+
+            # Verify tooltips
+            assert chart.tooltip_x_format == "YYYY"
+            assert chart.tooltip_number_format == "0,0.[00]"
+
+    def test_get_land_temps_sample(self):
+        """Test get() with land-temps.json sample data (area fills with invisible lines)."""
+        # Load sample data
+        sample_json = load_sample_json("land-temps.json")
+        chart_metadata = sample_json["chart"]["crdt"]["data"]
+        sample_csv = load_sample_csv("land-temps.csv")
+
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
+
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = LineChart.get("rF2RO", access_token="test-token")
+
+            # Verify chart type and title
+            assert chart.chart_type == "d3-lines"
+            assert chart.title == "Global land temperature in July, 1753-2015"
+
+            # Verify axes configuration
+            assert chart.x_grid == "off"
+            assert chart.y_grid == "on"
+            assert chart.x_grid_format == "YYYY"
+            assert chart.y_grid_format == "0.[0]"
+            assert chart.custom_range_y == [8, ""]
+
+            # Verify line customization
+            assert chart.interpolation == "monotone-x"
+            assert chart.connector_lines is True
+            assert chart.base_color == 2
+
+            # Verify lines configuration - invisible lines for confidence interval
+            lower_line = next(
+                (line for line in chart.lines if line.column == "lower"), None
+            )
+            assert lower_line is not None
+            assert lower_line.width == "invisible"
+            assert lower_line.direct_label is False
+
+            upper_line = next(
+                (line for line in chart.lines if line.column == "upper"), None
+            )
+            assert upper_line is not None
+            assert upper_line.width == "invisible"
+            assert upper_line.direct_label is False
+
+            # Verify area fills - confidence interval shading
+            assert len(chart.area_fills) == 1
+            assert chart.area_fills[0].from_column == "lower"
+            assert chart.area_fills[0].to_column == "upper"
+            assert chart.area_fills[0].color == "#bcbcbc"
+            assert chart.area_fills[0].opacity == 0.49
+
+            # Verify tooltips
+            assert chart.tooltip_number_format == "0,0.[00]"
+
 
 class TestLineChartIntegration:
     """Integration tests for LineChart workflows."""
