@@ -67,13 +67,18 @@ class TestConnectorLineEnabledByPresence:
         assert serialized["connectorLine"]["circle"] is True
 
     def test_text_annotation_serialization_without_connector_line(self):
-        """Test serialization when connector line is disabled (None)."""
+        """Test serialization when connector line is disabled (None).
+
+        Following the 'enabled by presence' pattern:
+        - When connector_line is None, the field is omitted entirely from serialization
+        - The absence of the field indicates it's disabled
+        """
         anno = TextAnnotation(text="Test", x=10, y=20, connector_line=None)
 
         serialized = anno.serialize_model()
 
-        assert "connectorLine" in serialized
-        assert serialized["connectorLine"] == {"enabled": False}
+        # connectorLine should NOT be present when None (enabled by presence pattern)
+        assert "connectorLine" not in serialized
 
     def test_text_annotation_deserialization_with_enabled_connector_line(self):
         """Test deserialization when API has enabled connector line."""

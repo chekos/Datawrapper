@@ -92,6 +92,7 @@ class MultipleColumnTextAnnotation(TextAnnotation):
         Handles the API format where:
         - x, y, and plot are inside the position object
         - showInAllPlots is at the top level
+        - Connector lines with enabled=False are converted to None
 
         Args:
             api_data: API response data (dict with UUID keys or list format)
@@ -102,40 +103,31 @@ class MultipleColumnTextAnnotation(TextAnnotation):
         if not api_data:
             return []
 
+        # First, call parent class to handle base fields including connector line logic
+        base_result = TextAnnotation.deserialize_model(api_data)
+
+        # Now enhance with MultipleColumnChart-specific fields
         result = []
+        for i, anno_dict in enumerate(base_result):
+            # Extract plot from the original API data
+            if isinstance(api_data, dict):
+                # Find the original annotation data by ID (if present)
+                anno_id = anno_dict.get("id")
+                original_data = api_data.get(anno_id, {}) if anno_id else {}
+            else:
+                # For list format, use index to find original data
+                original_data = api_data[i] if i < len(api_data) else {}
 
-        # Handle dict format (UUID keys from API)
-        if isinstance(api_data, dict):
-            items_to_process = list(api_data.items())
-        else:
-            # Handle list format - generate temporary IDs
-            items_to_process = [(f"temp-{i}", anno) for i, anno in enumerate(api_data)]
-
-        for anno_id, anno_data in items_to_process:
-            # Extract position data
-            position = anno_data.get("position", {})
-            x = position.get("x") if isinstance(position, dict) else None
-            y = position.get("y") if isinstance(position, dict) else None
-            plot = position.get("plot") if isinstance(position, dict) else None
+            # Extract plot from position object
+            position = original_data.get("position", {})
+            if isinstance(position, dict) and "plot" in position:
+                anno_dict["plot"] = position["plot"]
 
             # Extract showInAllPlots (defaults to False for text annotations)
-            show_in_all = anno_data.get("showInAllPlots", False)
-
-            # Build annotation dict with id
-            anno_dict = {**anno_data, "id": anno_id}
-
-            # Add position fields
-            if x is not None:
-                anno_dict["x"] = x
-            if y is not None:
-                anno_dict["y"] = y
-
-            # Add MultipleColumnChart-specific fields
-            if plot is not None:
-                anno_dict["plot"] = plot
-            anno_dict["show_in_all_plots"] = show_in_all
+            anno_dict["show_in_all_plots"] = original_data.get("showInAllPlots", False)
 
             result.append(anno_dict)
+
         return result
 
 
@@ -216,12 +208,26 @@ class MultipleColumnRangeAnnotation(RangeAnnotation):
             # Extract position data
             position = anno_data.get("position", {})
             plot = position.get("plot") if isinstance(position, dict) else None
+            x0 = position.get("x0") if isinstance(position, dict) else None
+            x1 = position.get("x1") if isinstance(position, dict) else None
+            y0 = position.get("y0") if isinstance(position, dict) else None
+            y1 = position.get("y1") if isinstance(position, dict) else None
 
             # Extract showInAllPlots (defaults to True)
             show_in_all = anno_data.get("showInAllPlots", True)
 
             # Build annotation dict with id
             anno_dict = {**anno_data, "id": anno_id}
+
+            # Add position fields
+            if x0 is not None:
+                anno_dict["x0"] = x0
+            if x1 is not None:
+                anno_dict["x1"] = x1
+            if y0 is not None:
+                anno_dict["y0"] = y0
+            if y1 is not None:
+                anno_dict["y1"] = y1
 
             # Add MultipleColumnChart-specific fields
             if plot is not None:

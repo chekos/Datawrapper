@@ -150,7 +150,7 @@ class TestTextAnnotation:
 
     @pytest.mark.unit
     def test_text_annotation_serialization(self):
-        """Test TextAnnotation serialization."""
+        """Test TextAnnotation serialization without connector line."""
         annotation = TextAnnotation(
             text="Serialize Test", x=30, y=40, bold=True, color="#00FF00"
         )
@@ -163,7 +163,35 @@ class TestTextAnnotation:
         assert serialized["position"]["y"] == 40
         assert serialized["bold"] is True
         assert serialized["color"] == "#00FF00"
+        # connectorLine should NOT be present when None (enabled by presence pattern)
+        assert "connectorLine" not in serialized
+
+    @pytest.mark.unit
+    def test_text_annotation_serialization_with_connector(self):
+        """Test TextAnnotation serialization with connector line."""
+        connector = ConnectorLine(type="curveLeft", stroke=2)
+        annotation = TextAnnotation(
+            text="Serialize Test",
+            x=30,
+            y=40,
+            bold=True,
+            color="#00FF00",
+            connectorLine=connector,
+        )
+
+        serialized = annotation.serialize_model()
+
+        assert isinstance(serialized, dict)
+        assert serialized["text"] == "Serialize Test"
+        assert serialized["position"]["x"] == 30
+        assert serialized["position"]["y"] == 40
+        assert serialized["bold"] is True
+        assert serialized["color"] == "#00FF00"
+        # connectorLine SHOULD be present when provided
         assert "connectorLine" in serialized
+        assert serialized["connectorLine"]["type"] == "curveLeft"
+        assert serialized["connectorLine"]["stroke"] == 2
+        assert serialized["connectorLine"]["enabled"] is True
 
     @pytest.mark.unit
     def test_text_annotation_connector_line_dict(self):
