@@ -286,7 +286,7 @@ class TextAnnotation(BaseModel):
             "mobileFallback": self.mobile_fallback,
         }
 
-        # Add connector line if configured (None = disabled)
+        # Add connector line if configured (None = disabled, omit field entirely)
         if self.connector_line is not None:
             if isinstance(self.connector_line, dict):
                 model["connectorLine"] = ConnectorLine.model_validate(
@@ -294,8 +294,7 @@ class TextAnnotation(BaseModel):
                 ).model_dump(by_alias=True)
             else:
                 model["connectorLine"] = self.connector_line.model_dump(by_alias=True)
-        else:
-            model["connectorLine"] = {"enabled": False}
+        # If connector_line is None, omit the field entirely (enabled by presence pattern)
 
         return model
 
