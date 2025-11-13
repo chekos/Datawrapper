@@ -1079,12 +1079,12 @@ class Datawrapper:
         assert isinstance(response, dict)
         return response
 
-    def move_chart(self, chart_id: int, folder_id: int) -> dict:
+    def move_chart(self, chart_id: str, folder_id: int) -> dict:
         """Moves a chart, table, or map to a specified folder.
 
         Parameters
         ----------
-        chart_id : int
+        chart_id : str
             ID of chart, table, or map.
         folder_id : int
             ID of folder to move visualization to.
