@@ -6,7 +6,6 @@ from pydantic import (
     ConfigDict,
     Field,
     field_validator,
-    model_serializer,
     model_validator,
 )
 
@@ -654,7 +653,6 @@ class MultipleColumnChart(
         description="Show label for all panels",
     )
 
-    @model_serializer
     def serialize_model(self) -> dict:
         """Serialize the model to a dictionary."""
         # Call the parent class's serialize_model method

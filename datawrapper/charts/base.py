@@ -5,7 +5,7 @@ from typing import Any, Literal
 
 import pandas as pd
 from IPython.display import IFrame
-from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from datawrapper.__main__ import Datawrapper
 from datawrapper.charts.models import Annotate, Describe, Publish, Transform, Visualize
@@ -250,7 +250,6 @@ class BaseChart(BaseModel):
     # Serialization methods for preparing data for API upload
     #
 
-    @model_serializer
     def serialize_model(self) -> dict[str, Any]:
         # Create a dict with the bare minimum provided by the base chart class
         # This will be supplemented by subclasses tailored to individual chart types
