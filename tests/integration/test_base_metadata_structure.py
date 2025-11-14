@@ -20,7 +20,7 @@ def test_metadata_section_order():
     )
 
     # Serialize the chart
-    serialized = chart.model_dump()
+    serialized = chart.serialize_model()
 
     # Check that root-level fields are present
     assert "type" in serialized
@@ -68,7 +68,7 @@ def test_metadata_content_structure():
         }
     )
 
-    serialized = chart.model_dump()
+    serialized = chart.serialize_model()
     metadata = serialized["metadata"]
 
     # Check data section structure

@@ -152,7 +152,7 @@ class TestMultipleColumnChartSerialization:
         data = pd.DataFrame({"Year": [2020, 2021], "Value": [100, 110]})
         chart = MultipleColumnChart(title="Test", data=data)
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
 
         assert serialized["type"] == "multiple-columns"
         assert serialized["title"] == "Test"
@@ -172,7 +172,7 @@ class TestMultipleColumnChartSerialization:
             grid_row_height=150,
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
         viz = serialized["metadata"]["visualize"]
 
         assert viz["gridLayout"] == "minimumWidth"
@@ -192,7 +192,7 @@ class TestMultipleColumnChartSerialization:
             sort_by="range",
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
         sort_obj = serialized["metadata"]["visualize"]["sort"]
 
         assert sort_obj["enabled"] is True
@@ -209,7 +209,7 @@ class TestMultipleColumnChartSerialization:
             custom_ticks_y=[10, 20, 30],
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
         viz = serialized["metadata"]["visualize"]
 
         assert viz["custom-ticks-x"] == "0,50,100"
@@ -221,7 +221,7 @@ class TestMultipleColumnChartSerialization:
 
         # Test with x_grid off
         chart_off = MultipleColumnChart(title="Test", data=data, x_grid="off")
-        serialized_off = chart_off.model_dump(by_alias=True)
+        serialized_off = chart_off.serialize_model()
         grid_lines_x_off = serialized_off["metadata"]["visualize"]["grid-lines-x"]
 
         assert grid_lines_x_off["enabled"] is False
@@ -229,7 +229,7 @@ class TestMultipleColumnChartSerialization:
 
         # Test with x_grid on
         chart_on = MultipleColumnChart(title="Test", data=data, x_grid="ticks")
-        serialized_on = chart_on.model_dump(by_alias=True)
+        serialized_on = chart_on.serialize_model()
         grid_lines_x_on = serialized_on["metadata"]["visualize"]["grid-lines-x"]
 
         assert grid_lines_x_on["enabled"] is True
@@ -246,7 +246,7 @@ class TestMultipleColumnChartSerialization:
             y_grid_labels="inside",
             y_grid_label_align="right",
         )
-        serialized_on = chart_on.model_dump(by_alias=True)
+        serialized_on = chart_on.serialize_model()
         y_labels_on = serialized_on["metadata"]["visualize"]["yAxisLabels"]
 
         assert y_labels_on["enabled"] is True
@@ -255,7 +255,7 @@ class TestMultipleColumnChartSerialization:
 
         # Test with labels off
         chart_off = MultipleColumnChart(title="Test", data=data, y_grid_labels="off")
-        serialized_off = chart_off.model_dump(by_alias=True)
+        serialized_off = chart_off.serialize_model()
         y_labels_off = serialized_off["metadata"]["visualize"]["yAxisLabels"]
 
         assert y_labels_off["enabled"] is False
@@ -269,7 +269,7 @@ class TestMultipleColumnChartSerialization:
         chart_enabled = MultipleColumnChart(
             title="Test", data=data, negative_color="#FF0000"
         )
-        serialized_enabled = chart_enabled.model_dump(by_alias=True)
+        serialized_enabled = chart_enabled.serialize_model()
         neg_color_enabled = serialized_enabled["metadata"]["visualize"]["negativeColor"]
 
         assert neg_color_enabled["enabled"] is True
@@ -279,7 +279,7 @@ class TestMultipleColumnChartSerialization:
         chart_disabled = MultipleColumnChart(
             title="Test", data=data, negative_color=None
         )
-        serialized_disabled = chart_disabled.model_dump(by_alias=True)
+        serialized_disabled = chart_disabled.serialize_model()
         neg_color_disabled = serialized_disabled["metadata"]["visualize"][
             "negativeColor"
         ]
@@ -295,7 +295,7 @@ class TestMultipleColumnChartSerialization:
             color_category={"Series A": "#FF0000", "Series B": "#00FF00"},
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
         viz = serialized["metadata"]["visualize"]
 
         assert viz["color-category"]["map"] == {
@@ -316,7 +316,7 @@ class TestMultipleColumnChartSerialization:
             ],
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
         panels = serialized["metadata"]["visualize"]["panels"]
 
         assert isinstance(panels, dict)
@@ -336,7 +336,7 @@ class TestMultipleColumnChartSerialization:
             value_labels_format="0,0",
             value_labels_placement="inside",
         )
-        serialized_always = chart_always.model_dump(by_alias=True)
+        serialized_always = chart_always.serialize_model()
         val_labels_always = serialized_always["metadata"]["visualize"]["valueLabels"]
 
         assert val_labels_always["show"] == "always"
@@ -356,7 +356,7 @@ class TestMultipleColumnChartSerialization:
             show_value_labels="hover",
             value_labels_format="0.0a",
         )
-        serialized_hover = chart_hover.model_dump(by_alias=True)
+        serialized_hover = chart_hover.serialize_model()
         val_labels_hover = serialized_hover["metadata"]["visualize"]["valueLabels"]
 
         assert val_labels_hover["show"] == "hover"
@@ -373,7 +373,7 @@ class TestMultipleColumnChartSerialization:
         chart_off = MultipleColumnChart(
             title="Test", data=data, show_value_labels="off"
         )
-        serialized_off = chart_off.model_dump(by_alias=True)
+        serialized_off = chart_off.serialize_model()
         val_labels_off = serialized_off["metadata"]["visualize"]["valueLabels"]
 
         assert val_labels_off["show"] == ""
@@ -530,7 +530,7 @@ class TestMultipleColumnChartRoundTrip:
         )
 
         # Serialize
-        serialized = original.model_dump(by_alias=True)
+        serialized = original.serialize_model()
 
         # Parse back (simulating API response)
         chart_metadata = {
@@ -585,7 +585,7 @@ class TestMultipleColumnChartRoundTrip:
         )
 
         # Serialize
-        serialized = original.model_dump(by_alias=True)
+        serialized = original.serialize_model()
 
         # Parse back
         chart_metadata = {
@@ -644,7 +644,7 @@ class TestMultipleColumnChartCompatibility:
             negative_color="#00FF00",
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
         viz = serialized["metadata"]["visualize"]
 
         # Check structure matches expected format
