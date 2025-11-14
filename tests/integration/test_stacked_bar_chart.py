@@ -139,7 +139,7 @@ class TestStackedBarChartSerialization:
             title="Test",
             data=df,
         )
-        serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
+        serialized = chart.serialize_model()
 
         assert serialized["title"] == "Test"
         assert serialized["type"] == "d3-bars-stacked"
@@ -154,7 +154,7 @@ class TestStackedBarChartSerialization:
             data=df,
             color_category={"Series A": "#ff0000", "Series B": "#00ff00"},
         )
-        serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
+        serialized = chart.serialize_model()
 
         color_cat = serialized["metadata"]["visualize"]["color-category"]
         assert color_cat == {"map": {"Series A": "#ff0000", "Series B": "#00ff00"}}
@@ -167,7 +167,7 @@ class TestStackedBarChartSerialization:
             data=df,
             replace_flags="4x3",
         )
-        serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
+        serialized = chart.serialize_model()
 
         flags = serialized["metadata"]["visualize"]["replace-flags"]
         assert flags["enabled"] is True
@@ -181,7 +181,7 @@ class TestStackedBarChartSerialization:
             data=df,
             replace_flags="off",
         )
-        serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
+        serialized = chart.serialize_model()
 
         flags = serialized["metadata"]["visualize"]["replace-flags"]
         assert flags["enabled"] is False
@@ -195,7 +195,7 @@ class TestStackedBarChartSerialization:
             data=df,
             negative_color="#ff0000",
         )
-        serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
+        serialized = chart.serialize_model()
 
         neg_color = serialized["metadata"]["visualize"]["negativeColor"]
         assert neg_color["enabled"] is True
@@ -209,7 +209,7 @@ class TestStackedBarChartSerialization:
             data=df,
             groups_column="Description",
         )
-        serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
+        serialized = chart.serialize_model()
 
         assert "axes" in serialized["metadata"]
         assert serialized["metadata"]["axes"]["groups"] == "Description"
@@ -226,7 +226,7 @@ class TestStackedBarChartSerialization:
             source_url="https://example.com",
             aria_description="Test aria",
         )
-        serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
+        serialized = chart.serialize_model()
 
         describe = serialized["metadata"]["describe"]
         assert describe["intro"] == "Test intro"
@@ -398,7 +398,7 @@ class TestStackedBarChartRoundTrip:
             chart = StackedBarChart.get("test-id", access_token="test-token")
 
         # Serialize back
-        serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
+        serialized = chart.serialize_model()
 
         # Parse again
         chart_metadata2 = {
@@ -445,7 +445,7 @@ class TestStackedBarChartRoundTrip:
         with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
             chart = StackedBarChart.get("test-id", access_token="test-token")
 
-        serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
+        serialized = chart.serialize_model()
 
         chart_metadata2 = {
             "type": serialized["type"],
@@ -487,7 +487,7 @@ class TestStackedBarChartRoundTrip:
         with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
             chart = StackedBarChart.get("test-id", access_token="test-token")
 
-        serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
+        serialized = chart.serialize_model()
 
         chart_metadata2 = {
             "type": serialized["type"],
@@ -529,7 +529,7 @@ class TestStackedBarChartRoundTrip:
         with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
             chart = StackedBarChart.get("test-id", access_token="test-token")
 
-        serialized = chart.model_dump(mode="json", by_alias=True, exclude_none=True)
+        serialized = chart.serialize_model()
 
         chart_metadata2 = {
             "type": serialized["type"],
