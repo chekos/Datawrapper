@@ -221,7 +221,7 @@ class TestScatterPlotSerialization:
             y_column="Y",
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
 
         assert serialized["type"] == "d3-scatter-plot"
         assert serialized["title"] == "Test Chart"
@@ -246,7 +246,7 @@ class TestScatterPlotSerialization:
             y_ticks=[0, 10, 20],
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
         visualize = serialized["metadata"]["visualize"]
 
         assert "x-axis" in visualize
@@ -276,7 +276,7 @@ class TestScatterPlotSerialization:
             y_grid_lines="off",
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
         visualize = serialized["metadata"]["visualize"]
 
         assert visualize["x-format"] == "0a"
@@ -302,7 +302,7 @@ class TestScatterPlotSerialization:
             show_color_key=True,
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
         visualize = serialized["metadata"]["visualize"]
 
         assert visualize["base-color"] == "#ff0000"
@@ -327,7 +327,7 @@ class TestScatterPlotSerialization:
             responsive_symbol_size=True,
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
         visualize = serialized["metadata"]["visualize"]
 
         assert visualize["size"] == "dynamic"
@@ -361,7 +361,7 @@ class TestScatterPlotSerialization:
             size_legend_title_width=150,
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
         visualize = serialized["metadata"]["visualize"]
 
         assert visualize["show-size-legend"] is True
@@ -391,7 +391,7 @@ class TestScatterPlotSerialization:
             fixed_shape="symbolSquare",
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
         visualize = serialized["metadata"]["visualize"]
 
         assert visualize["shape"] == "dynamic"
@@ -411,7 +411,7 @@ class TestScatterPlotSerialization:
             regression_method="exponential",
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
         visualize = serialized["metadata"]["visualize"]
 
         assert visualize["regression"] is True
@@ -432,7 +432,7 @@ class TestScatterPlotSerialization:
             tooltip_sticky=True,
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
         visualize = serialized["metadata"]["visualize"]
 
         assert "tooltip" in visualize
@@ -457,7 +457,7 @@ class TestScatterPlotSerialization:
             highlight_labeled=False,
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
         visualize = serialized["metadata"]["visualize"]
 
         assert serialized["metadata"]["axes"]["labels"] == "Label"
@@ -656,7 +656,7 @@ class TestScatterPlotRoundTrip:
         )
 
         # Serialize
-        serialized = original.model_dump(by_alias=True)
+        serialized = original.serialize_model()
 
         # Parse back (simulating API response)
         chart_metadata = {
@@ -721,7 +721,7 @@ class TestScatterPlotRoundTrip:
         )
 
         # Serialize
-        serialized = original.model_dump(by_alias=True)
+        serialized = original.serialize_model()
 
         # Parse back
         chart_metadata = {
@@ -774,7 +774,7 @@ class TestScatterPlotCompatibility:
             y_column="Y",
         )
 
-        serialized = chart.model_dump(by_alias=True)
+        serialized = chart.serialize_model()
 
         # Check top-level structure
         assert "metadata" in serialized

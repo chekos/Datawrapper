@@ -18,7 +18,7 @@ def test_base_chart_serialization_includes_root_metadata():
     )
 
     # Serialize the chart
-    serialized = chart.model_dump()
+    serialized = chart.serialize_model()
 
     # Verify root-level metadata is present
     assert "type" in serialized
@@ -43,7 +43,7 @@ def test_base_chart_serialization_with_empty_theme():
         }
     )
 
-    serialized = chart.model_dump()
+    serialized = chart.serialize_model()
 
     # Empty theme should be omitted from serialization (our fix for Datawrapper API compatibility)
     assert "theme" not in serialized
@@ -53,7 +53,7 @@ def test_base_chart_serialization_with_default_values():
     """Test that BaseChart serialization works with default values."""
     chart = datawrapper.BaseChart.model_validate({"chart-type": "d3-area"})
 
-    serialized = chart.model_dump()
+    serialized = chart.serialize_model()
 
     # Verify root-level metadata with defaults
     assert serialized["type"] == "d3-area"
@@ -72,7 +72,7 @@ def test_base_chart_serialization_structure():
         }
     )
 
-    serialized = chart.model_dump()
+    serialized = chart.serialize_model()
 
     # Verify all expected root-level sections are present
     expected_root_sections = [
@@ -108,7 +108,7 @@ def test_base_chart_field_name_is_type_not_chart_type():
     """Test that the serialized field is 'type', not 'chart-type' or 'chart_type'."""
     chart = datawrapper.BaseChart.model_validate({"chart-type": "d3-scatter-plot"})
 
-    serialized = chart.model_dump()
+    serialized = chart.serialize_model()
 
     # Should use "type" as the field name in serialized output
     assert "type" in serialized
@@ -132,7 +132,7 @@ def test_base_chart_serialization_with_data():
         }
     )
 
-    serialized = chart.model_dump()
+    serialized = chart.serialize_model()
 
     # Root metadata should still be present
     assert serialized["type"] == "d3-bars"

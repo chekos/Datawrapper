@@ -1,7 +1,7 @@
 from typing import Any, Literal
 
 import pandas as pd
-from pydantic import ConfigDict, Field, field_validator, model_serializer
+from pydantic import ConfigDict, Field, field_validator
 
 from .base import BaseChart
 from .enums import (
@@ -233,7 +233,6 @@ class AreaChart(
                 raise ValueError(f"Invalid value: {v}. Must be one of {valid_values}")
         return v
 
-    @model_serializer
     def serialize_model(self) -> dict:
         """Serialize the model to a dictionary."""
         # Call the parent class's serialize_model method

@@ -2,7 +2,7 @@
 
 from typing import Any, Literal
 
-from pydantic import ConfigDict, Field, field_validator, model_serializer
+from pydantic import ConfigDict, Field, field_validator
 
 from .base import BaseChart
 from .enums import DateFormat, NumberFormat, ReplaceFlagsType, ValueLabelMode
@@ -174,7 +174,6 @@ class StackedBarChart(BaseChart):
                 )
         return v
 
-    @model_serializer
     def serialize_model(self) -> dict:
         """Serialize the model to a dictionary."""
         # Call the parent class's serialize_model method
