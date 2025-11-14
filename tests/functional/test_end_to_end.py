@@ -158,7 +158,7 @@ class TestEndToEndWorkflows:
             bar_column="values",
             base_color="#4682B4",
             background=True,
-            thick=True,
+            thick_bars=True,
         )
 
         # Step 2: Apply advanced customizations
@@ -180,7 +180,7 @@ class TestEndToEndWorkflows:
         # Step 4: Verify customizations are applied
         assert chart.base_color == "#4682B4"
         assert chart.background is True
-        assert chart.thick is True
+        assert chart.thick_bars is True
         assert chart.sort_bars is True
         assert chart.reverse_order is True
         assert chart.custom_range == (0, 100)
@@ -324,7 +324,7 @@ class TestEndToEndWorkflows:
                 bar_column="values",
                 base_color="#FF6B6B",
                 background=True,
-                thick=True,
+                thick_bars=True,
             ),
         }
 

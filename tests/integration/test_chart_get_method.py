@@ -302,7 +302,7 @@ class TestBarChartGet:
             assert chart.reverse_order is True
             assert chart.background is True
             assert chart.rules is True
-            assert chart.thick is False
+            assert chart.thick_bars is False
             assert chart.tick_position == "top"
 
             # Verify custom range

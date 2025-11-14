@@ -315,7 +315,7 @@ class BarChart(AnnotationsMixin, BaseChart):
     )
 
     #: Make the bars thicker
-    thick: bool = Field(
+    thick_bars: bool = Field(
         default=False, alias="thick", description="Make the bars thicker"
     )
 
@@ -432,7 +432,7 @@ class BarChart(AnnotationsMixin, BaseChart):
                 ),
                 "color-by-column": bool(self.color_category),
                 "rules": self.rules,
-                "thick": self.thick,
+                "thick": self.thick_bars,
                 "background": self.background,
                 # Sorting and grouping
                 "sort-bars": self.sort_bars,
@@ -563,7 +563,7 @@ class BarChart(AnnotationsMixin, BaseChart):
         if "rules" in visualize:
             init_data["rules"] = visualize["rules"]
         if "thick" in visualize:
-            init_data["thick"] = visualize["thick"]
+            init_data["thick_bars"] = visualize["thick"]
         if "background" in visualize:
             init_data["background"] = visualize["background"]
 
