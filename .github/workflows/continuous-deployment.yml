@@ -15,7 +15,7 @@ jobs:
     steps:
       - id: checkout
         name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - id: check-ruff
         name: Check with Ruff
@@ -37,7 +37,7 @@ jobs:
     steps:
       - id: checkout
         name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - id: install-uv
         name: Install uv
@@ -67,7 +67,7 @@ jobs:
         python: ['3.10', '3.11', '3.12', '3.13']
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - id: install-uv
         name: Install uv
@@ -97,7 +97,7 @@ jobs:
     needs: [test-python]
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - id: install-uv
         name: Install uv
