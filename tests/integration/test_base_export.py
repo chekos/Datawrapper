@@ -46,7 +46,6 @@ class TestExportPNG:
                 == "https://api.datawrapper.de/v3/charts/abc123/export/png"
             )
             assert call_args[1]["params"]["unit"] == "px"
-            assert call_args[1]["params"]["mode"] == "rgb"
             assert call_args[1]["params"]["plain"] == "false"
 
     def test_export_png_with_all_parameters(self):
@@ -300,7 +299,6 @@ class TestExportSVG:
             assert url == "https://api.datawrapper.de/v3/charts/abc123/export/svg"
             assert params["width"] == "800"
             assert params["height"] == "600"
-            assert params["plain"] == "true"
 
     def test_export_svg_no_chart_id(self):
         """Test SVG export raises error when no chart_id is set."""

@@ -779,7 +779,6 @@ class BaseChart(BaseModel):
         # Build query parameters with PNG-specific defaults
         params = {
             "unit": "px",
-            "mode": "rgb",
             "plain": str(plain).lower(),
             "zoom": str(zoom),
             "transparent": str(transparent).lower(),
@@ -923,9 +922,7 @@ class BaseChart(BaseModel):
         client = self._get_client(access_token)
 
         # Build query parameters
-        params = {
-            "plain": str(plain).lower(),
-        }
+        params: dict[str, str] = {}
 
         if width is not None:
             params["width"] = str(width)
