@@ -184,8 +184,16 @@ class TestExportPDF:
                 unit="mm",
                 mode="cmyk",
                 scale=2,
+                zoom=3,
+                transparent=True,
                 border_width=10,
                 border_color="#FF0000",
+                logo="on",
+                logo_id="my-logo",
+                dark=True,
+                ligatures=False,
+                full_vector=True,
+                download=True,
             )
 
             # Verify
@@ -200,8 +208,16 @@ class TestExportPDF:
             assert params["unit"] == "mm"
             assert params["mode"] == "cmyk"
             assert params["scale"] == "2"
+            assert params["zoom"] == "3"
+            assert params["transparent"] == "true"
             assert params["borderWidth"] == "10"
             assert params["borderColor"] == "#FF0000"
+            assert params["logo"] == "on"
+            assert params["logoId"] == "my-logo"
+            assert params["dark"] == "true"
+            assert params["ligatures"] == "false"
+            assert params["fullVector"] == "true"
+            assert params["download"] == "true"
 
     def test_export_pdf_no_chart_id(self):
         """Test that export_pdf raises ValueError when no chart_id is set."""
@@ -287,7 +303,22 @@ class TestExportSVG:
             # Create chart and export with all parameters
             chart = BarChart(title="Test Chart")
             chart.chart_id = "abc123"
-            result = chart.export_svg(width=800, height=600, plain=True)
+            result = chart.export_svg(
+                width=800,
+                height=600,
+                plain=True,
+                scale=2,
+                zoom=3,
+                transparent=True,
+                border_width=10,
+                border_color="#FF0000",
+                logo="off",
+                logo_id="custom-logo",
+                dark=True,
+                ligatures=False,
+                full_vector=True,
+                download=True,
+            )
 
             # Verify
             assert result == b"<svg>SVG_DATA</svg>"
@@ -299,6 +330,18 @@ class TestExportSVG:
             assert url == "https://api.datawrapper.de/v3/charts/abc123/export/svg"
             assert params["width"] == "800"
             assert params["height"] == "600"
+            assert params["plain"] == "true"
+            assert params["scale"] == "2"
+            assert params["zoom"] == "3"
+            assert params["transparent"] == "true"
+            assert params["borderWidth"] == "10"
+            assert params["borderColor"] == "#FF0000"
+            assert params["logo"] == "off"
+            assert params["logoId"] == "custom-logo"
+            assert params["dark"] == "true"
+            assert params["ligatures"] == "false"
+            assert params["fullVector"] == "true"
+            assert params["download"] == "true"
 
     def test_export_svg_no_chart_id(self):
         """Test SVG export raises error when no chart_id is set."""
