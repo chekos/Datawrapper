@@ -737,10 +737,17 @@ class BaseChart(BaseModel):
         width: int | None = None,
         height: int | None = None,
         plain: bool = False,
+        scale: int = 1,
         zoom: int = 2,
         transparent: bool = False,
         border_width: int = 0,
         border_color: str | None = None,
+        logo: Literal["auto", "on", "off"] = "auto",
+        logo_id: str | None = None,
+        dark: bool = False,
+        ligatures: bool = True,
+        full_vector: bool = False,
+        download: bool = False,
         access_token: str | None = None,
         timeout: int = 30,
     ) -> bytes:
@@ -750,10 +757,17 @@ class BaseChart(BaseModel):
             width: Width of visualization in pixels. If not specified, uses chart width.
             height: Height of visualization in pixels. If not specified, uses chart height.
             plain: If True, exports only the visualization without header/footer.
-            zoom: Scale multiplier for PNG resolution (e.g., 2 = 2x resolution).
+            scale: Size multiplier that changes actual dimensions (e.g., 2 = 2x size).
+            zoom: Resolution multiplier for sharper output at same visual size (e.g., 2 = 2x DPI).
             transparent: If True, exports with transparent background.
             border_width: Margin around visualization in pixels.
             border_color: Color of the border (e.g., "#FFFFFF"). If not specified, uses chart background color.
+            logo: Logo display mode: "auto", "on", or "off".
+            logo_id: Custom logo ID (pattern: ^[a-zA-Z0-9-]+$).
+            dark: If True, exports in dark mode.
+            ligatures: If True (default), enables typography ligatures.
+            full_vector: If True, exports as full vector output.
+            download: If True, includes download headers in response.
             access_token: Optional Datawrapper API access token.
             timeout: Timeout for the API request in seconds.
 
@@ -780,9 +794,15 @@ class BaseChart(BaseModel):
         params = {
             "unit": "px",
             "plain": str(plain).lower(),
+            "scale": str(scale),
             "zoom": str(zoom),
             "transparent": str(transparent).lower(),
             "borderWidth": str(border_width),
+            "logo": logo,
+            "dark": str(dark).lower(),
+            "ligatures": str(ligatures).lower(),
+            "fullVector": str(full_vector).lower(),
+            "download": str(download).lower(),
         }
 
         if width is not None:
@@ -791,6 +811,8 @@ class BaseChart(BaseModel):
             params["height"] = str(height)
         if border_color is not None:
             params["borderColor"] = border_color
+        if logo_id is not None:
+            params["logoId"] = logo_id
 
         # Make the API request
         response = client.get(
@@ -813,8 +835,16 @@ class BaseChart(BaseModel):
         unit: Literal["px", "mm", "inch"] = "px",
         mode: Literal["rgb", "cmyk"] = "rgb",
         scale: int = 1,
+        zoom: int = 2,
+        transparent: bool = False,
         border_width: int = 0,
         border_color: str | None = None,
+        logo: Literal["auto", "on", "off"] = "auto",
+        logo_id: str | None = None,
+        dark: bool = False,
+        ligatures: bool = True,
+        full_vector: bool = False,
+        download: bool = False,
         access_token: str | None = None,
         timeout: int = 30,
     ) -> bytes:
@@ -826,9 +856,17 @@ class BaseChart(BaseModel):
             plain: If True, exports only the visualization without header/footer.
             unit: Unit for measurements: "px", "mm", or "inch".
             mode: Color mode: "rgb" or "cmyk".
-            scale: Scale multiplier for PDF resolution.
+            scale: Size multiplier that changes actual dimensions (e.g., 2 = 2x size).
+            zoom: Resolution multiplier for sharper output at same visual size (e.g., 2 = 2x DPI).
+            transparent: If True, exports with transparent background.
             border_width: Margin around visualization.
             border_color: Color of the border (e.g., "#FFFFFF"). If not specified, uses chart background color.
+            logo: Logo display mode: "auto", "on", or "off".
+            logo_id: Custom logo ID (pattern: ^[a-zA-Z0-9-]+$).
+            dark: If True, exports in dark mode.
+            ligatures: If True (default), enables typography ligatures.
+            full_vector: If True, exports as full vector output.
+            download: If True, includes download headers in response.
             access_token: Optional Datawrapper API access token.
             timeout: Timeout for the API request in seconds.
 
@@ -863,7 +901,14 @@ class BaseChart(BaseModel):
             "mode": mode,
             "plain": str(plain).lower(),
             "scale": str(scale),
+            "zoom": str(zoom),
+            "transparent": str(transparent).lower(),
             "borderWidth": str(border_width),
+            "logo": logo,
+            "dark": str(dark).lower(),
+            "ligatures": str(ligatures).lower(),
+            "fullVector": str(full_vector).lower(),
+            "download": str(download).lower(),
         }
 
         if width is not None:
@@ -872,11 +917,14 @@ class BaseChart(BaseModel):
             params["height"] = str(height)
         if border_color is not None:
             params["borderColor"] = border_color
+        if logo_id is not None:
+            params["logoId"] = logo_id
 
         # Make the API request
         response = client.get(
             f"{client._CHARTS_URL}/{self.chart_id}/export/pdf",
             params=params,
+            timeout=timeout,
         )
 
         # Return raw bytes
@@ -890,6 +938,17 @@ class BaseChart(BaseModel):
         width: int | None = None,
         height: int | None = None,
         plain: bool = False,
+        scale: int = 1,
+        zoom: int = 2,
+        transparent: bool = False,
+        border_width: int = 0,
+        border_color: str | None = None,
+        logo: Literal["auto", "on", "off"] = "auto",
+        logo_id: str | None = None,
+        dark: bool = False,
+        ligatures: bool = True,
+        full_vector: bool = False,
+        download: bool = False,
         access_token: str | None = None,
         timeout: int = 30,
     ) -> bytes:
@@ -899,6 +958,17 @@ class BaseChart(BaseModel):
             width: Width of visualization. If not specified, uses chart width.
             height: Height of visualization. If not specified, uses chart height.
             plain: If True, exports only the visualization without header/footer.
+            scale: Size multiplier that changes actual dimensions (e.g., 2 = 2x size).
+            zoom: Resolution multiplier for sharper output at same visual size (e.g., 2 = 2x DPI).
+            transparent: If True, exports with transparent background.
+            border_width: Margin around visualization in pixels.
+            border_color: Color of the border (e.g., "#FFFFFF"). If not specified, uses chart background color.
+            logo: Logo display mode: "auto", "on", or "off".
+            logo_id: Custom logo ID (pattern: ^[a-zA-Z0-9-]+$).
+            dark: If True, exports in dark mode.
+            ligatures: If True (default), enables typography ligatures.
+            full_vector: If True, exports as full vector output.
+            download: If True, includes download headers in response.
             access_token: Optional Datawrapper API access token.
             timeout: Timeout for the API request in seconds.
 
@@ -922,12 +992,28 @@ class BaseChart(BaseModel):
         client = self._get_client(access_token)
 
         # Build query parameters
-        params: dict[str, str] = {}
+        params = {
+            "unit": "px",
+            "plain": str(plain).lower(),
+            "scale": str(scale),
+            "zoom": str(zoom),
+            "transparent": str(transparent).lower(),
+            "borderWidth": str(border_width),
+            "logo": logo,
+            "dark": str(dark).lower(),
+            "ligatures": str(ligatures).lower(),
+            "fullVector": str(full_vector).lower(),
+            "download": str(download).lower(),
+        }
 
         if width is not None:
             params["width"] = str(width)
         if height is not None:
             params["height"] = str(height)
+        if border_color is not None:
+            params["borderColor"] = border_color
+        if logo_id is not None:
+            params["logoId"] = logo_id
 
         # Make the API request
         response = client.get(
