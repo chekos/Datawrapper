@@ -194,6 +194,17 @@ class ColumnChart(
         description="Where to place the value labels",
     )
 
+    #
+    # Annotations
+    #
+
+    #: A list of the highlighted series
+    highlighted_series: list[str] = Field(
+        default_factory=list,
+        alias="highlighted-series",
+        description="A list of the highlighted series",
+    )
+
     @field_validator("plot_height_mode")
     @classmethod
     def validate_plot_height_mode(cls, v: PlotHeightMode | str) -> PlotHeightMode | str:
@@ -354,6 +365,8 @@ class ColumnChart(
                 placement=self.value_labels_placement,
                 chart_type="column",
             ),
+            # Annotations
+            "highlighted-series": self.highlighted_series,
         }
 
         model["metadata"]["visualize"].update(visualize_data)
@@ -424,5 +437,7 @@ class ColumnChart(
 
         # Annotations
         init_data.update(cls._deserialize_annotations(visualize))
+        if "highlighted-series" in visualize:
+            init_data["highlighted_series"] = visualize["highlighted-series"]
 
         return init_data
