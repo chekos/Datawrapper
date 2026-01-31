@@ -13,7 +13,7 @@ from datawrapper.charts import ScatterPlot
 def load_sample_json(filename: str) -> dict:
     """Load a sample JSON file from tests/samples/scatter/."""
     path = Path(__file__).parent.parent / "samples" / "scatter" / filename
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         data = json.load(f)
         return data["chart"]["crdt"]["data"]
 
@@ -22,7 +22,7 @@ def load_sample_csv(filename: str) -> str:
     """Load a sample CSV file from tests/samples/scatter/."""
     path = Path(__file__).parent.parent / "samples" / "scatter" / filename
     # Read the file and convert tabs to commas if needed
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         content = f.read()
         # Check if this is a tab-delimited file
         if "\t" in content.split("\n")[0]:
