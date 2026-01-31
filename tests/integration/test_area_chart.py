@@ -13,14 +13,14 @@ from datawrapper import AreaChart
 def load_sample_json(filename: str) -> dict:
     """Load a sample JSON file from tests/samples/area directory."""
     samples_dir = Path(__file__).parent.parent / "samples" / "area"
-    with open(samples_dir / filename) as f:
+    with open(samples_dir / filename, encoding="utf-8") as f:
         return json.load(f)
 
 
 def load_sample_csv(filename: str) -> str:
     """Load a sample CSV file from tests/samples/area directory."""
     samples_dir = Path(__file__).parent.parent / "samples" / "area"
-    with open(samples_dir / filename) as f:
+    with open(samples_dir / filename, encoding="utf-8") as f:
         return f.read()
 
 
