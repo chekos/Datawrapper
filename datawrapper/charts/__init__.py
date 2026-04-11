@@ -15,6 +15,7 @@ from .enums import (
     LineWidth,
     NumberDivisor,
     NumberFormat,
+    PaginationType,
     PlotHeightMode,
     RegressionMethod,
     ReplaceFlagsType,
@@ -69,6 +70,7 @@ from .multiple_column import (
 )
 from .scatter import ScatterPlot
 from .stacked_bar import StackedBarChart
+from .table import Table
 
 __all__ = (
     "ConnectorLine",
@@ -96,6 +98,7 @@ __all__ = (
     "LineWidth",
     "NumberDivisor",
     "NumberFormat",
+    "PaginationType",
     "PlotHeightMode",
     "RegressionMethod",
     "ReplaceFlagsType",
@@ -140,4 +143,5 @@ __all__ = (
     "MultipleColumnYRangeAnnotation",
     "ScatterPlot",
     "StackedBarChart",
+    "Table",
 )
