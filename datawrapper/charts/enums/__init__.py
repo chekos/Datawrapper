@@ -1,6 +1,9 @@
 """Enum classes for Datawrapper chart formatting and styling options."""
 
 from .annos import ArrowHead, ConnectorLineType, StrokeType, StrokeWidth
+from .basemap_projection import BasemapProjection
+from .color_mode import ColorMode
+from .color_scale import ColorScale
 from .date_format import DateFormat
 from .grid_display import GridDisplay
 from .grid_label import GridLabelAlign, GridLabelPosition
@@ -29,6 +32,9 @@ from .value_label import (
 
 __all__ = [
     "ArrowHead",
+    "BasemapProjection",
+    "ColorMode",
+    "ColorScale",
     "ConnectorLineType",
     "DateFormat",
     "GridDisplay",

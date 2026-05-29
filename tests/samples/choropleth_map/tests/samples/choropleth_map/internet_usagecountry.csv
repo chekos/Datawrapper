@@ -1,0 +1,207 @@
+code	internet usage	country
+ABW	88.66	Aruba
+AFG	8.26	Afghanistan
+AGO	12.40	Angola
+ALB	63.25	Albania
+AND	96.91	Andorra
+ARE	91.24	United Arab Emirates
+ARG	69.40	Argentina
+ARM	58.25	Armenia
+ATG	65.20	Antigua and Barbuda
+AUS	84.56	Australia
+AUT	83.93	Austria
+AZE	77.00	Azerbaijan
+BDI	4.87	Burundi
+BEL	85.05	Belgium
+BEN	6.79	Benin
+BFA	11.39	Burkina Faso
+BGD	14.40	Bangladesh
+BGR	56.66	Bulgaria
+BHR	93.48	Bahrain
+BHS	78.00	Bahamas
+BIH	65.07	Bosnia and Herzegovina
+BLR	62.23	Belarus
+BLZ	41.59	Belize
+BMU	98.32	Bermuda
+BOL	45.10	Bolivia
+BRA	59.08	Brazil
+BRB	76.11	Barbados
+BRN	71.20	Brunei
+BTN	39.80	Bhutan
+BWA	27.50	Botswana
+CAF	4.56	Central African Republic
+CAN	88.47	Canada
+CHE	87.48	Switzerland
+CHL	64.29	Chile
+CHN	50.30	China
+CIV	21.00	Cote d'Ivoire
+CMR	20.68	Cameroon
+COD	3.80	Democratic Republic of Congo
+COG	7.62	Congo
+COL	55.90	Colombia
+COM	7.46	Comoros
+CPV	43.02	Cape Verde
+CRI	59.76	Costa Rica
+CUB	37.31	Cuba
+CYM	77.00	Cayman Islands
+CYP	71.72	Cyprus
+CZE	81.30	Czech Republic
+DEU	87.59	Germany
+DJI	11.92	Djibouti
+DMA	67.60	Dominica
+DNK	96.33	Denmark
+DOM	54.22	Dominican Republic
+DZA	38.20	Algeria
+ECU	48.94	Ecuador
+EGY	37.82	Egypt
+ERI	1.08	Eritrea
+ESP	78.69	Spain
+EST	88.41	Estonia
+ETH	11.60	Ethiopia
+FIN	92.65	Finland
+FJI	46.33	Fiji
+FRA	84.69	France
+FRO	94.20	Faeroe Islands
+FSM	31.50	Micronesia (country)
+GAB	23.50	Gabon
+GBR	92.00	United Kingdom
+GEO	47.57	Georgia
+GHA	23.48	Ghana
+GIN	4.70	Guinea
+GMB	17.12	Gambia
+GNB	3.54	Guinea-Bissau
+GNQ	21.32	Equatorial Guinea
+GRC	66.84	Greece
+GRD	53.81	Grenada
+GRL	67.60	Greenland
+GTM	27.10	Guatemala
+GUM	73.14	Guam
+GUY	38.20	Guyana
+HKG	84.95	Hong Kong
+HND	20.36	Honduras
+HRV	69.80	Croatia
+HTI	12.20	Haiti
+HUN	72.83	Hungary
+IDN	21.98	Indonesia
+IND	26.00	India
+IRL	80.12	Ireland
+IRN	45.33	Iran
+IRQ	17.22	Iraq
+ISL	98.20	Iceland
+ISR	77.35	Israel
+ITA	65.57	Italy
+JAM	42.22	Jamaica
+JOR	53.40	Jordan
+JPN	91.06	Japan
+KAZ	70.83	Kazakhstan
+KEN	45.62	Kenya
+KGZ	30.25	Kyrgyzstan
+KHM	19.00	Cambodia
+KIR	13.00	Kiribati
+KNA	75.70	Saint Kitts and Nevis
+KOR	89.65	South Korea
+KWT	82.08	Kuwait
+LAO	18.20	Laos
+LBN	74.00	Lebanon
+LBR	5.90	Liberia
+LBY	19.02	Libya
+LCA	52.35	Saint Lucia
+LIE	96.64	Liechtenstein
+LKA	29.99	Sri Lanka
+LSO	16.07	Lesotho
+LTU	71.38	Lithuania
+LUX	97.33	Luxembourg
+LVA	79.20	Latvia
+MAC	77.60	Macao
+MAR	57.08	Morocco
+MCO	93.36	Monaco
+MDA	49.84	Moldova
+MDG	4.17	Madagascar
+MDV	54.46	Maldives
+MEX	57.43	Mexico
+MHL	19.28	Marshall Islands
+MKD	70.38	Macedonia
+MLI	10.34	Mali
+MLT	76.18	Malta
+MMR	21.80	Myanmar
+MNE	68.12	Montenegro
+MNG	21.44	Mongolia
+MOZ	9.00	Mozambique
+MRT	15.20	Mauritania
+MUS	50.14	Mauritius
+MWI	9.30	Malawi
+MYS	71.06	Malaysia
+NAM	22.31	Namibia
+NCL	74.00	New Caledonia
+NER	2.22	Niger
+NGA	47.44	Nigeria
+NIC	19.70	Nicaragua
+NLD	93.10	Netherlands
+NOR	96.81	Norway
+NPL	17.58	Nepal
+NZL	88.22	New Zealand
+OMN	74.17	Oman
+OWID_WRL	43.90	World
+PAK	18.00	Pakistan
+PAN	51.21	Panama
+PER	40.90	Peru
+PHL	40.70	Philippines
+PNG	7.90	Papua New Guinea
+POL	68.00	Poland
+PRI	79.47	Puerto Rico
+PRT	68.63	Portugal
+PRY	48.44	Paraguay
+PSE	57.42	Palestine
+PYF	64.56	French Polynesia
+QAT	92.88	Qatar
+ROU	55.76	Romania
+RUS	70.10	Russia
+RWA	18.00	Rwanda
+SAU	69.62	Saudi Arabia
+SDN	26.61	Sudan
+SEN	21.69	Senegal
+SGP	82.10	Singapore
+SLB	10.00	Solomon Islands
+SLE	2.50	Sierra Leone
+SLV	26.92	El Salvador
+SOM	1.76	Somalia
+SRB	65.32	Serbia
+SSD	17.93	South Sudan
+STP	25.82	Sao Tome and Principe
+SUR	42.76	Suriname
+SVK	77.63	Slovakia
+SVN	73.10	Slovenia
+SWE	90.61	Sweden
+SWZ	30.38	Swaziland
+SYC	58.12	Seychelles
+SYR	29.98	Syria
+TCD	2.70	Chad
+TGO	7.12	Togo
+THA	39.32	Thailand
+TJK	18.98	Tajikistan
+TKM	15.00	Turkmenistan
+TLS	13.40	Timor
+TON	45.00	Tonga
+TTO	69.20	Trinidad and Tobago
+TUN	48.52	Tunisia
+TUR	53.74	Turkey
+TUV	42.70	Tuvalu
+TZA	5.36	Tanzania
+UGA	19.22	Uganda
+UKR	48.88	Ukraine
+URY	64.60	Uruguay
+USA	74.45	United States
+UZB	42.80	Uzbekistan
+VCT	51.77	Saint Vincent and the Grenadines
+VEN	61.87	Venezuela
+VIR	54.84	United States Virgin Islands
+VNM	52.72	Vietnam
+VUT	22.35	Vanuatu
+WSM	25.41	Samoa
+YEM	25.10	Yemen
+ZAF	51.92	South Africa
+ZMB	21.00	Zambia
+ZWE	16.36	Zimbabwe
+PRK		
+TWN		
+		

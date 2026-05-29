@@ -1,0 +1,218 @@
+{
+    "chart": {
+      "crdt": {
+        "data": {
+          "publicId": "6Ue5p",
+          "language": "en-US",
+          "theme": "datawrapper",
+          "chartHash": "273f435208f5a92104b1b908f4e00ead",
+          "id": "6Ue5p",
+          "type": "d3-maps-choropleth",
+          "title": "Share of people using the internet",
+          "lastEditStep": 3,
+          "publicVersion": 0,
+          "deleted": false,
+          "forkable": true,
+          "isFork": false,
+          "metadata": {
+            "data": {
+              "changes": [],
+              "transpose": false,
+              "vertical-header": true,
+              "horizontal-header": true,
+              "column-order": [],
+              "column-format": {
+                "code": {
+                  "type": "text"
+                }
+              },
+              "external-data": "",
+              "upload-method": "copy",
+              "use-datawrapper-cdn": true
+            },
+            "describe": {
+              "source-name": "Example Data",
+              "source-url": "",
+              "intro": "2015 survey estimating the share of the populations who has used the Internet in \"the last 3 months\" (via a computer, mobile phone, personal digital assistant, games machine, digital TV etc.). The bigger the square, the bigger the population of a country.",
+              "byline": "",
+              "aria-description": "",
+              "number-format": "-",
+              "number-divisor": 0,
+              "number-append": "",
+              "number-prepend": "",
+              "hide-title": false
+            },
+            "visualize": {
+              "dark-mode-invert": true,
+              "highlighted-series": [],
+              "highlighted-values": [],
+              "sharing": {
+                "enabled": false,
+                "url": "",
+                "auto": false
+              },
+              "basemap": "worldmap-square",
+              "tooltip": {
+                "body": "<big><b>{{ internet_usage }}</big></b> of individuals used the internet in 2015.",
+                "title": "{{ code }}",
+                "enabled": true,
+                "sticky": true,
+                "migrated": true
+              },
+              "color-to": "#00768d",
+              "zoomable": true,
+              "color-from": "#c13e2e",
+              "color-mode": "buckets",
+              "colorscale": {
+                "mode": "discrete",
+                "stops": "pretty",
+                "colors": [
+                  {
+                    "color": "#c13e2e",
+                    "position": 0
+                  },
+                  {
+                    "color": "#00768d",
+                    "position": 1
+                  }
+                ],
+                "stopCount": 5,
+                "interpolation": "equidistant",
+                "map": {},
+                "palette": 0,
+                "rangeMin": "",
+                "rangeMax": "",
+                "customStops": [
+                  null,
+                  20,
+                  40,
+                  60,
+                  80,
+                  null,
+                  60,
+                  70,
+                  80
+                ],
+                "rangeCenter": "",
+                "categoryOrder": [],
+                "categoryLabels": {}
+              },
+              "color-scale": "sqrt",
+              "color-steps": 7,
+              "hide-borders": false,
+              "map-key-attr": "iso-a3",
+              "map-type-set": true,
+              "show-tooltips": true,
+              "text-annotations": {},
+              "range-annotations": [],
+              "hide-empty-regions": true,
+              "tooltip-number-format": "0a",
+              "zoom-button-pos": "br",
+              "mapView": "crop",
+              "min-label-zoom": 1,
+              "map-padding": 0,
+              "map-align": "center",
+              "map-label-format": "0,0.[00]",
+              "max-map-height": 650,
+              "avoid-label-overlap": true,
+              "legends": {
+                "combined": {
+                  "orientation": "horizontal"
+                },
+                "color": {
+                  "enabled": true,
+                  "reverse": false,
+                  "interactive": false,
+                  "title": "",
+                  "size": 170,
+                  "labels": "ranges",
+                  "orientation": "horizontal",
+                  "position": "above",
+                  "labelMin": "low",
+                  "labelCenter": "medium",
+                  "labelMax": "high",
+                  "offsetX": 0,
+                  "offsetY": 0,
+                  "customLabels": [],
+                  "hideItems": [],
+                  "titleEnabled": false,
+                  "labelFormat": "0,0.[00]"
+                },
+                "pattern": {
+                  "enabled": true,
+                  "title": "",
+                  "titleEnabled": false,
+                  "interactive": false,
+                  "size": 170,
+                  "orientation": "horizontal",
+                  "position": "above",
+                  "useColorLegendPosition": true,
+                  "offsetX": 0,
+                  "offsetY": 0
+                }
+              },
+              "miniMap": {
+                "enabled": false,
+                "type": "region",
+                "offsetX": 1,
+                "offsetY": 1,
+                "position": "bottom-left",
+                "size": 120
+              },
+              "patterns": {
+                "enabled": false,
+                "map": {},
+                "order": [],
+                "opacity": 50,
+                "colorType": "auto-contrast"
+              },
+              "labels": {
+                "enabled": false,
+                "type": "places",
+                "places": [],
+                "max": 1
+              },
+              "chart-type-set": true
+            },
+            "axes": {
+              "keys": "code",
+              "values": "internet usage"
+            },
+            "publish": {
+              "embed-width": 600,
+              "embed-height": 514,
+              "blocks": {
+                "logo": {
+                  "id": "",
+                  "enabled": false
+                },
+                "embed": false,
+                "download-pdf": false,
+                "download-svg": false,
+                "get-the-data": false,
+                "download-image": false
+              },
+              "export-pdf": {},
+              "autoDarkMode": false,
+              "force-attribution": false,
+              "chart-height": 385
+            },
+            "annotate": {
+              "notes": ""
+            },
+            "custom": {}
+          },
+          "utf8": false,
+          "createdAt": "2025-10-31T15:56:12.000Z",
+          "lastModifiedAt": "2025-10-31T15:56:12.000Z",
+          "authorId": 52021,
+          "workspace": "ndr"
+        },
+        "pathsToItemArrays": [
+          "metadata.visualize.text-annotations"
+        ]
+      },
+      "clock": "0-7"
+    },
+    "data": "0-0"
+  }
