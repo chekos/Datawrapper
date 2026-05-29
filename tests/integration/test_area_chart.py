@@ -108,6 +108,26 @@ class TestAreaChartCreation:
             "Series B": "#0000ff",
         }
         assert serialized["metadata"]["visualize"]["show-color-key"] is True
+        assert serialized["metadata"]["visualize"]["categoryLabels"] == {
+            "enabled": True,
+            "position": "color-key",
+        }
+
+    def test_serialize_show_color_key_false(self):
+        """Test that show_color_key=False also disables categoryLabels."""
+        chart = AreaChart(
+            title="Test",
+            data=pd.DataFrame({"x": [1, 2], "y": [10, 20]}),
+            show_color_key=False,
+        )
+
+        serialized = chart.serialize_model()
+
+        assert serialized["metadata"]["visualize"]["show-color-key"] is False
+        assert serialized["metadata"]["visualize"]["categoryLabels"] == {
+            "enabled": False,
+            "position": "color-key",
+        }
 
     def test_serialize_with_tooltips(self):
         """Test serializing with tooltip configuration."""
