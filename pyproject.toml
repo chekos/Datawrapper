@@ -12,8 +12,13 @@ dependencies = [
     "rich",
     "requests",
     "pandas",
-    "pydantic",
+    "pydantic>=2,<3",
     "ipython",
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+    "faker>=37.11.0",
+    "mypy>=1.18.2",
+    "types-requests>=2.32.4.20250913",
 ]
 authors = [
   { name="checkos", email="chekos@tacosdedatos.com" },

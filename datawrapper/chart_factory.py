@@ -48,6 +48,7 @@ def get_chart(chart_id: str, access_token: str | None = None) -> BaseChart:
         MultipleColumnChart,
         ScatterPlot,
         StackedBarChart,
+        Table,
     )
 
     # Type mapping from Datawrapper API chart types to Python chart classes
@@ -60,6 +61,7 @@ def get_chart(chart_id: str, access_token: str | None = None) -> BaseChart:
         "d3-bars-split": MultipleColumnChart,
         "d3-scatter-plot": ScatterPlot,
         "d3-bars-stacked": StackedBarChart,
+        "tables": Table,
     }
 
     # Fetch chart metadata to determine type

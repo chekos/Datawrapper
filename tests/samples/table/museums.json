@@ -1,0 +1,264 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "7Jgac",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "889aa013731d10c7c1e9829fdc23e363",
+        "id": "7Jgac",
+        "type": "tables",
+        "title": "The most visited art museums in the world",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": true,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {
+
+            },
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-order": [],
+            "column-format": {
+
+            },
+            "external-data": "",
+            "upload-method": "copy",
+            "use-datawrapper-cdn": true
+          },
+          "describe": {
+            "source-name": "Wikipedia",
+            "source-url": "https://en.wikipedia.org/wiki/List_of_most_visited_art_museums",
+            "intro": "",
+            "byline": "",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": "",
+            "hide-title": false
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false,
+              "url": "",
+              "auto": false
+            },
+            "rows": {
+
+            },
+            "header": {
+              "style": {
+                "bold": true,
+                "color": false,
+                "italic": false,
+                "fontSize": 0.9,
+                "background": false
+              },
+              "borderTop": "none",
+              "borderBottom": "2px",
+              "borderTopColor": "#333333",
+              "borderBottomColor": "#333333"
+            },
+            "legend": {
+              "size": 170,
+              "title": "",
+              "labels": "ranges",
+              "enabled": false,
+              "reverse": false,
+              "labelMax": "high",
+              "labelMin": "low",
+              "position": "above",
+              "hideItems": [],
+              "interactive": false,
+              "labelCenter": "medium",
+              "customLabels": []
+            },
+            "sortBy": "Visitors in 2018",
+            "columns": {
+              "City": {
+                "style": {
+                  "color": "#989898"
+                },
+                "width": 0.3,
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "auto",
+                "flagStyle": "circle",
+                "showAsBar": false,
+                "borderLeft": "none",
+                "fixedWidth": true,
+                "replaceFlags": true,
+                "showOnMobile": true,
+                "showOnDesktop": true,
+                "borderLeftColor": "#333333",
+                "alignmentVertical": "middle"
+              },
+              "Name": {
+                "style": {
+
+                },
+                "width": 0.41,
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "auto",
+                "showAsBar": false,
+                "borderLeft": "none",
+                "fixedWidth": true,
+                "showOnMobile": true,
+                "showOnDesktop": true,
+                "borderLeftColor": "#333333",
+                "alignmentVertical": "middle"
+              },
+              "Rank": {
+                "style": {
+
+                },
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "auto",
+                "showAsBar": false,
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "showOnMobile": false,
+                "showOnDesktop": false,
+                "borderLeftColor": "#333333",
+                "alignmentVertical": "middle"
+              },
+              "Visitors in 2018": {
+                "style": {
+
+                },
+                "width": 0.33,
+                "format": "0.[0]a",
+                "barColor": "#cf0048",
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "auto",
+                "showAsBar": true,
+                "borderLeft": "none",
+                "fixedWidth": true,
+                "showOnMobile": true,
+                "showOnDesktop": true,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "alignmentVertical": "middle"
+              }
+            },
+            "heatmap": {
+              "map": {
+
+              },
+              "mode": "continuous",
+              "stops": "equidistant",
+              "colors": [],
+              "palette": 0,
+              "rangeMax": "",
+              "rangeMin": "",
+              "stopCount": 5,
+              "hideValues": false,
+              "customStops": [],
+              "rangeCenter": "",
+              "categoryOrder": [],
+              "interpolation": "equidistant",
+              "categoryLabels": {
+
+              }
+            },
+            "perPage": 10,
+            "striped": true,
+            "markdown": false,
+            "overlays": {
+
+            },
+            "showRank": true,
+            "sortTable": true,
+            "pagination": {
+              "enabled": true,
+              "position": "top"
+            },
+            "searchable": true,
+            "showHeader": true,
+            "compactMode": false,
+            "sortDirection": "desc",
+            "mobileFallback": false,
+            "mergeEmptyCells": false,
+            "firstRowIsHeader": false,
+            "text-annotations": {
+
+            },
+            "custom-area-fills": {
+
+            },
+            "range-annotations": {
+
+            },
+            "firstColumnIsSticky": false
+          },
+          "axes": {
+
+          },
+          "publish": {
+            "embed-width": 600,
+            "embed-height": 542,
+            "blocks": {
+              "logo": {
+                "id": "",
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": false,
+              "download-image": false
+            },
+            "export-pdf": {
+
+            },
+            "autoDarkMode": false,
+            "chart-height": 453,
+            "force-attribution": false
+          },
+          "annotate": {
+            "notes": "As of 2023, art museum attendance around the world is still well below these pre-pandemic figures"
+          },
+          "custom": {
+
+          }
+        },
+        "utf8": false,
+        "createdAt": "2026-03-21T08:51:04.000Z",
+        "lastModifiedAt": "2026-03-21T08:51:21.000Z",
+        "authorId": 435888,
+        "folderId": 290386,
+        "workspace": "AQKeZM5h"
+      },
+      "timestamps": {
+        "metadata": {
+          "publish": {
+            "embed-height": {
+              "__@t$__": "43588877890-1"
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-1"
+  },
+  "data": "0-0"
+}

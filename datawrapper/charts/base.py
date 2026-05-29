@@ -82,6 +82,7 @@ class BaseChart(BaseModel):
         "d3-scatter-plot",
         "locator-map",
         "multiple-columns",
+        "tables",
     ] = Field(alias="chart-type", description="The type of datawrapper chart to create")
 
     #

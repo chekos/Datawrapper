@@ -304,13 +304,18 @@ name = "datawrapper"
 source = { editable = "." }
 dependencies = [
     { name = "exceptiongroup", marker = "python_full_version < '3.11'" },
+    { name = "faker" },
     { name = "importlib-metadata" },
     { name = "ipython", version = "8.37.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "ipython", version = "9.6.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "mypy" },
     { name = "pandas" },
     { name = "pydantic" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
     { name = "requests" },
     { name = "rich" },
+    { name = "types-requests" },
 ]
 
 [package.optional-dependencies]
@@ -350,18 +355,22 @@ test = [
 requires-dist = [
     { name = "exceptiongroup", marker = "python_full_version < '3.11'" },
     { name = "factory-boy", marker = "extra == 'test'" },
+    { name = "faker", specifier = ">=37.11.0" },
     { name = "faker", marker = "extra == 'test'" },
     { name = "freezegun", marker = "extra == 'test'" },
     { name = "importlib-metadata" },
     { name = "ipython" },
+    { name = "mypy", specifier = ">=1.18.2" },
     { name = "mypy", marker = "extra == 'mypy'" },
     { name = "myst-parser", marker = "extra == 'docs'" },
     { name = "pandas" },
     { name = "pre-commit", marker = "extra == 'dev'" },
-    { name = "pydantic" },
+    { name = "pydantic", specifier = ">=2,<3" },
     { name = "pydantic-settings", marker = "extra == 'mypy'" },
+    { name = "pytest", specifier = ">=8.4.2" },
     { name = "pytest", marker = "extra == 'test'" },
     { name = "pytest-asyncio", marker = "extra == 'test'" },
+    { name = "pytest-cov", specifier = ">=7.0.0" },
     { name = "pytest-cov", marker = "extra == 'test'" },
     { name = "pytest-env", marker = "extra == 'test'" },
     { name = "pytest-mock", marker = "extra == 'test'" },
@@ -375,6 +384,7 @@ requires-dist = [
     { name = "sphinx-autobuild", marker = "extra == 'docs'" },
     { name = "sphinx-rtd-theme", marker = "extra == 'docs'" },
     { name = "types-docutils", marker = "extra == 'mypy'" },
+    { name = "types-requests", specifier = ">=2.32.4.20250913" },
     { name = "types-requests", marker = "extra == 'mypy'" },
 ]
 provides-extras = ["dev", "test", "docs", "mypy"]
