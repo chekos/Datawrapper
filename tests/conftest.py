@@ -4,7 +4,7 @@ import json
 import os
 import tempfile
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 from unittest.mock import Mock
 
 import pandas as pd
@@ -123,7 +123,7 @@ class AnnotationFactory:
             "y": fake.random_int(min=0, max=100),
         }
         defaults.update(kwargs)
-        return TextAnnotation(**defaults)
+        return TextAnnotation(**cast(Any, defaults))
 
     @classmethod
     def range_annotation(cls, **kwargs) -> RangeAnnotation:
@@ -142,7 +142,7 @@ class AnnotationFactory:
             "strokeWidth": 1,  # Use valid literal type
         }
         defaults.update(kwargs)
-        return RangeAnnotation(**defaults)
+        return RangeAnnotation(**cast(Any, defaults))
 
 
 # ============================================================================
