@@ -1,49 +1,69 @@
 # How to contribute
 
+Thanks for helping improve `datawrapper`. Please keep changes focused and easy to review.
+
 ## Dependencies
 
-Clone the repository. Move into the directory on your terminal.
+Clone the repository and move into it on your terminal.
 
-Install dependencies for development.
+Install the locked development dependencies with `uv`:
 
 ```sh
-uv sync
+uv sync --frozen --all-extras
 ```
 
-Install pre-commit to run a battery of automatic quick fixes against your work.
+Use `--frozen` for normal development and CI parity. It verifies the existing `uv.lock` instead of refreshing dependency versions.
+
+Install pre-commit to run quick local guardrails before each commit:
 
 ```sh
 uv run pre-commit install
 ```
 
-### Tests
+You can also run the full hook suite manually:
 
-You can run unit tests to verify the library is working with the following:
-
-```bash
-uv run pytest --cov -sv
+```sh
+uv run pre-commit run --all-files
 ```
 
-We also enforce ruff for linting, handled primarily via pre-commit. You can run it manually like so:
+## Tests and checks
+
+Run the full local validation suite before opening a pull request:
 
 ```bash
-uv run ruff check ./datawrapper
-```
-
-We also enforce static typing with mypy, also handled via pre-commit. You can run it manually like so:
-
-```bash
+uv run ruff check ./datawrapper ./tests
+uv run ruff format --check ./datawrapper ./tests
 uv run mypy ./datawrapper --ignore-missing-imports
+uv run pytest
+uv build --sdist --wheel
 ```
 
-### Before submitting
+For quicker iteration, run targeted tests first, then finish with the full suite:
+
+```bash
+uv run pytest tests/unit/test_flags.py
+uv run pytest tests/functional/test_chart_factory.py -k unsupported
+```
+
+## Test strategy
+
+- Add or update tests for behavior changes and bug fixes.
+- Keep the default test suite deterministic and credential-free. Tests that call the live Datawrapper API must be marked `@pytest.mark.api` and skipped unless `DATAWRAPPER_ACCESS_TOKEN` is set.
+- Prefer mocked HTTP tests with `responses`, `pytest-mock`, or `unittest.mock` for regression coverage.
+- Put fast isolated tests in `tests/unit/`, mocked multi-component tests in `tests/integration/` or `tests/functional/`, and real API smoke tests behind the `api` marker.
+
+## Before submitting
 
 Before submitting your code please do the following steps:
 
-1. Add any changes you want
-1. Add tests for the new changes
-1. Run tests
-1. Run the pre-commit hooks
-1. Edit documentation if you have changed something significant
+1. Keep the change scoped to one purpose.
+2. Add tests for the new or changed behavior.
+3. Update documentation when user-facing behavior, setup, or commands change.
+4. Run the full validation suite listed above.
+5. Confirm you did not commit generated artifacts such as `.venv/`, `.ruff_cache/`, `.mypy_cache/`, `htmlcov/`, `coverage.xml`, or `dist/`.
+
+## Guidance for AI agents
+
+AI-assisted pull requests are welcome when they follow the same contribution rules. Agents should also read `AGENTS.md` before editing. Do not weaken linting, type checks, tests, or CI to hide failures; if a check is impractical, explain the evidence and choose the strongest practical alternative.
 
 Now you're ready to submit your pull request.
