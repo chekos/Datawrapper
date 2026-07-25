@@ -40,6 +40,7 @@ classifiers = [
 [project.optional-dependencies]
 dev = [
     "pre-commit",
+    "ruff>=0.16.0",
     "setuptools-scm",
 ]
 test = [
