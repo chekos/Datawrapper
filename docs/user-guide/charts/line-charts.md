@@ -36,14 +36,12 @@ chart = dw.LineChart(
     # And now the tooltip with a bit more...
     tooltip_number_format="00.00",
     tooltip_x_format="YYYY",
-    # Configure the main temperature line's color
-    color_category={
-        "LandAverageTemperature": "#1d81a2",
-    },
     lines=[
-        # Style the main line
+        # Style the main line. The color argument is a line-centric
+        # convenience for the chart's color_category map.
         dw.Line(
             column="LandAverageTemperature",
+            color="#1d81a2",
             width=dw.LineWidth.THIN,
             interpolation=dw.LineInterpolation.CURVED,
         ),
@@ -70,6 +68,22 @@ chart = dw.LineChart(
 
 chart.create()
 ```
+
+You can also keep colors in the legacy chart-level mapping when that better fits
+existing code or shared category settings:
+
+```python
+chart = dw.LineChart(
+    data=df,
+    color_category={"LandAverageTemperature": "#1d81a2"},
+    lines=[dw.Line(column="LandAverageTemperature", width=dw.LineWidth.THIN)],
+)
+```
+
+`Line(color=...)` and `LineChart(color_category=...)` serialize to the same
+Datawrapper `color-category` metadata. If both are provided for the same line,
+the colors must match; conflicting values raise an error instead of silently
+choosing one.
 
 ## Reference
 

@@ -84,19 +84,23 @@ class TestLineChartCreation:
                     "width": "style3",
                     "dash": "style2",
                     "direct_label": True,
+                    "color": "#15607a",
                     "symbols": {"enabled": True, "shape": "square", "on": "last"},
                 }
             ],
         )
 
         serialized = chart.serialize_model()
-        line_config = serialized["metadata"]["visualize"]["lines"]["y"]
+        visualize = serialized["metadata"]["visualize"]
+        line_config = visualize["lines"]["y"]
 
         assert line_config["width"] == "style3"
         assert line_config["dash"] == "style2"
         assert line_config["directLabel"] is True
         assert line_config["symbols"]["enabled"] is True
         assert line_config["symbols"]["shape"] == "square"
+        assert "color" not in line_config
+        assert visualize["color-category"]["map"] == {"y": "#15607a"}
 
     def test_serialize_with_area_fill(self):
         """Test serializing with area fills."""
