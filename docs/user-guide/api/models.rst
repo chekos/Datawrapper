@@ -69,6 +69,15 @@ can also return an object keyed by internal change IDs, with fields such as
 ``id``, ``ignored``, and ``_index``. ``Transform`` accepts both shapes and
 round-trips object-shaped API responses without converting them to lists.
 
+Live API smoke verification for this behavior used an authorized unpublished
+Datawrapper test chart. The API accepted an object-map ``changes`` payload,
+returned that object-map shape on read-back, and preserved the relevant
+``id``, ``ignored``, and ``_index`` fields after a ``Transform``
+deserialize/serialize write-back. The documented list-shaped compatibility
+input was also accepted and read back as a list. The smoke restored the test
+chart's corrections to an empty object and did not publish or verify behavior
+for production-facing charts.
+
 .. code-block:: python
 
    chart = dw.BarChart(
