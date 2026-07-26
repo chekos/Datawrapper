@@ -60,6 +60,7 @@ from .models.range_annotations import (
 from .models.text_annotations import ConnectorLine, TextAnnotation
 from .multiple_column import (
     MultipleColumnChart,
+    MultipleColumnPanel,
     MultipleColumnRangeAnnotation,
     MultipleColumnTextAnnotation,
     MultipleColumnXLineAnnotation,
@@ -132,6 +133,7 @@ __all__ = (
     "AreaChart",
     "ArrowChart",
     "MultipleColumnChart",
+    "MultipleColumnPanel",
     "MultipleColumnTextAnnotation",
     "MultipleColumnRangeAnnotation",
     "MultipleColumnXLineAnnotation",

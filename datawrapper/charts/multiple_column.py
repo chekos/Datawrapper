@@ -3,6 +3,7 @@ from typing import Any, Literal
 
 import pandas as pd
 from pydantic import (
+    BaseModel,
     ConfigDict,
     Field,
     field_validator,
@@ -35,6 +36,52 @@ from .serializers import (
     PlotHeight,
     ValueLabels,
 )
+
+
+class MultipleColumnPanel(BaseModel):
+    """Panel configuration for a MultipleColumnChart entry.
+
+    Datawrapper stores panels as a mapping from the source column name to a
+    panel-specific configuration object. This model keeps the column name
+    alongside the panel configuration so callers can work with a list of typed
+    panel entries while preserving unknown Datawrapper panel options.
+    """
+
+    model_config = ConfigDict(
+        populate_by_name=True,
+        strict=True,
+        extra="allow",
+    )
+
+    #: The source data column for this panel
+    column: str = Field(
+        min_length=1,
+        description="The source data column for this panel",
+    )
+
+    #: Optional custom panel title
+    title: str | None = Field(
+        default=None,
+        description="Optional custom panel title",
+    )
+
+    #: Whether to show the panel on mobile
+    show_on_mobile: bool | None = Field(
+        default=None,
+        alias="showOnMobile",
+        description="Whether to show the panel on mobile",
+    )
+
+    #: Whether to show the panel on desktop
+    show_on_desktop: bool | None = Field(
+        default=None,
+        alias="showOnDesktop",
+        description="Whether to show the panel on desktop",
+    )
+
+    def serialize_model(self) -> dict[str, Any]:
+        """Serialize the panel to Datawrapper's API format."""
+        return self.model_dump(by_alias=True, exclude_none=True)
 
 
 class MultipleColumnTextAnnotation(TextAnnotation):
@@ -366,7 +413,7 @@ class MultipleColumnChart(
     )
 
     #: Panels configuration
-    panels: list[dict[str, Any]] = Field(
+    panels: list[MultipleColumnPanel] = Field(
         default_factory=list,
         description="Panel configurations for the chart",
     )
@@ -528,6 +575,23 @@ class MultipleColumnChart(
             if v not in valid_values:
                 raise ValueError(f"Invalid value: {v}. Must be one of {valid_values}")
         return v
+
+    @field_validator("panels", mode="before")
+    @classmethod
+    def convert_panels(
+        cls, v: Sequence[MultipleColumnPanel | dict[str, Any]]
+    ) -> list[MultipleColumnPanel]:
+        """Convert dict panel entries to MultipleColumnPanel instances."""
+        if not v:
+            return []
+
+        result = []
+        for item in v:
+            if isinstance(item, dict):
+                result.append(MultipleColumnPanel(**item))
+            else:
+                result.append(item)
+        return result
 
     @field_validator("text_annotations", mode="before")
     @classmethod
@@ -701,7 +765,7 @@ class MultipleColumnChart(
                 self.plot_height_fixed,
                 self.plot_height_ratio,
             ),
-            "panels": {panel["column"]: panel for panel in self.panels},
+            "panels": {panel.column: panel.serialize_model() for panel in self.panels},
             # Tooltips
             "show-tooltips": self.show_tooltips,
             "syncMultipleTooltips": self.sync_multiple_tooltips,

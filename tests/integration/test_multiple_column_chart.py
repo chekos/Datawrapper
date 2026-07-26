@@ -6,7 +6,7 @@ from unittest.mock import Mock, patch
 
 import pandas as pd
 
-from datawrapper import MultipleColumnChart
+from datawrapper import MultipleColumnChart, MultipleColumnPanel
 
 
 # Helper functions to load sample data
@@ -312,7 +312,7 @@ class TestMultipleColumnChartSerialization:
             data=data,
             panels=[
                 {"column": "Series A", "config": "value1"},
-                {"column": "Series B", "config": "value2"},
+                MultipleColumnPanel(column="Series B", config="value2"),
             ],
         )
 
@@ -323,6 +323,66 @@ class TestMultipleColumnChartSerialization:
         assert "Series A" in panels
         assert "Series B" in panels
         assert panels["Series A"]["config"] == "value1"
+        assert panels["Series B"]["config"] == "value2"
+
+    def test_panels_are_typed_models(self):
+        """Test that panel entries are converted to MultipleColumnPanel models."""
+        data = pd.DataFrame({"Year": [2020, 2021], "Value": [100, 110]})
+        chart = MultipleColumnChart(
+            title="Test",
+            data=data,
+            panels=[
+                {
+                    "column": "Series A",
+                    "title": "Custom title",
+                    "showOnMobile": False,
+                    "showOnDesktop": True,
+                },
+            ],
+        )
+
+        assert isinstance(chart.panels[0], MultipleColumnPanel)
+        assert chart.panels[0].column == "Series A"
+        assert chart.panels[0].title == "Custom title"
+        assert chart.panels[0].show_on_mobile is False
+        assert chart.panels[0].show_on_desktop is True
+
+    def test_panel_aliases_and_extra_fields_round_trip(self):
+        """Test that typed panels preserve API aliases and unknown panel options."""
+        data = pd.DataFrame({"Year": [2020, 2021], "Value": [100, 110]})
+        chart = MultipleColumnChart(
+            title="Test",
+            data=data,
+            panels=[
+                MultipleColumnPanel(
+                    column="Series A",
+                    show_on_mobile=False,
+                    show_on_desktop=False,
+                    customOption="kept",
+                ),
+            ],
+        )
+
+        panels = chart.serialize_model()["metadata"]["visualize"]["panels"]
+
+        assert panels["Series A"]["showOnMobile"] is False
+        assert panels["Series A"]["showOnDesktop"] is False
+        assert panels["Series A"]["customOption"] == "kept"
+
+    def test_deserialize_panels_as_typed_models(self):
+        """Test that API panel objects deserialize into MultipleColumnPanel models."""
+        init_data = MultipleColumnChart.deserialize_model(
+            load_sample_json("uk-spending.json")
+        )
+        chart = MultipleColumnChart(**init_data)
+
+        hidden_panel = next(
+            panel for panel in chart.panels if panel.column == "Transport"
+        )
+
+        assert isinstance(hidden_panel, MultipleColumnPanel)
+        assert hidden_panel.show_on_mobile is False
+        assert hidden_panel.show_on_desktop is False
 
     def test_serialize_value_labels(self):
         """Test that valueLabels is serialized correctly."""
