@@ -26,8 +26,9 @@ chart = dw.AreaChart(
     byline="Mirko Lorenz",
     # The DataFrame containing the source data
     data=df,
-    # Transpose the data with a transformation
-    transformations=dict(transpose=True),
+    # Transpose the data with the high-level transformation shortcut.
+    # Use transformations=dw.Transform(...) when you need the nested API shape.
+    transpose=True,
     # Format x-axis labels as full years (e.g., "2020").
     # Alternatively, you could provide "YYYY" if you'd rather not use the DateFormat enum.
     x_grid_format=dw.DateFormat.YEAR_FULL,

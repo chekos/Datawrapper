@@ -9,7 +9,27 @@ from IPython.display import IFrame
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from datawrapper.__main__ import Datawrapper
-from datawrapper.charts.models import Annotate, Describe, Publish, Transform, Visualize
+from datawrapper.charts.models import (
+    Annotate,
+    ColumnFormatList,
+    DataChangeList,
+    Describe,
+    Publish,
+    Transform,
+    Visualize,
+)
+
+TRANSFORMATION_FIELD_NAMES = (
+    "transpose",
+    "vertical_header",
+    "horizontal_header",
+    "column_order",
+    "column_format",
+    "changes",
+    "external_data",
+    "use_datawrapper_cdn",
+    "upload_method",
+)
 
 
 class BaseChart(BaseModel):
@@ -89,8 +109,91 @@ class BaseChart(BaseModel):
         default_factory=list[dict], description="The data to use for the chart"
     )
 
-    #: The metadata options for the data columns in the "Check and Describe" tab
+    #: The metadata options for the data columns in the "Check and Describe" tab.
+    #: Advanced callers can continue to pass the nested Datawrapper API-shaped
+    #: ``Transform`` model or dictionary here. The top-level fields below are
+    #: ergonomic aliases for the same supported transformation settings.
     transformations: Transform | dict[str, Any] = Field(default_factory=Transform)
+
+    #: Whether to transpose the data before visualization. Mirrors
+    #: ``transformations.transpose``.
+    transpose: bool | None = Field(
+        default=None,
+        exclude=True,
+        description="Whether to transpose the data before visualization",
+    )
+
+    #: Whether Datawrapper treats the first column as a vertical header. Mirrors
+    #: ``transformations.vertical_header``.
+    vertical_header: bool | None = Field(
+        default=None,
+        alias="vertical-header",
+        exclude=True,
+        description="Whether Datawrapper treats the first column as a vertical header",
+    )
+
+    #: Whether Datawrapper treats the first row as a horizontal header. Mirrors
+    #: ``transformations.horizontal_header``.
+    horizontal_header: bool | None = Field(
+        default=None,
+        alias="horizontal-header",
+        exclude=True,
+        description="Whether Datawrapper treats the first row as a horizontal header",
+    )
+
+    #: The order of data columns by zero-based index. Mirrors
+    #: ``transformations.column_order``.
+    column_order: list[int] | None = Field(
+        default=None,
+        alias="column-order",
+        exclude=True,
+        description="The order of data columns by zero-based index",
+    )
+
+    #: Formatting options for data columns. Accepts the same inputs as
+    #: ``Transform.column_format``: a ``ColumnFormatList``, a list of
+    #: ``ColumnFormat`` objects/dicts, or an API-shaped dict keyed by column name.
+    column_format: ColumnFormatList | list[Any] | dict[str, Any] | None = Field(
+        default=None,
+        alias="column-format",
+        exclude=True,
+        description="Formatting options for data columns",
+    )
+
+    #: Individual value corrections made in the Check & Describe tab. Accepts the
+    #: same list or API object-map inputs as ``Transform.changes``.
+    changes: DataChangeList | list[Any] | dict[str, Any] | None = Field(
+        default=None,
+        exclude=True,
+        description="Individual value corrections made in the Check & Describe tab",
+    )
+
+    #: External data source URL. Mirrors ``transformations.external_data``.
+    external_data: str | None = Field(
+        default=None,
+        alias="external-data",
+        exclude=True,
+        description="External data source URL",
+    )
+
+    #: Whether the external data URL should use the Datawrapper CDN. Mirrors
+    #: ``transformations.use_datawrapper_cdn``.
+    use_datawrapper_cdn: bool | None = Field(
+        default=None,
+        alias="use-datawrapper-cdn",
+        exclude=True,
+        description="Whether the external data URL should use the Datawrapper CDN",
+    )
+
+    #: Data upload method. Mirrors ``transformations.upload_method``.
+    upload_method: (
+        Literal["copy", "upload", "google-spreadsheet", "external-data"] | None
+    ) = Field(
+        default=None,
+        alias="upload-method",
+        exclude=True,
+        description="Data upload method",
+    )
 
     #
     # Description
@@ -284,11 +387,7 @@ class BaseChart(BaseModel):
             dw_obj["theme"] = self.theme
 
         # Set the transformations
-        data_section = (
-            self.transformations
-            if isinstance(self.transformations, Transform)
-            else Transform.model_validate(self.transformations)
-        ).model_dump(by_alias=True)
+        data_section = self._merged_transformations().model_dump(by_alias=True)
 
         # Validate the Describe data
         describe = Describe.model_validate(
@@ -430,7 +529,7 @@ class BaseChart(BaseModel):
     @model_validator(mode="before")
     @classmethod
     def convert_column_format_dicts(cls, data: dict[str, Any]) -> dict[str, Any]:
-        """Convert dictionary items in transformation to Transform objects."""
+        """Convert transformation dictionaries to Transform objects before merging."""
         if not isinstance(data, dict):
             return data
 
@@ -438,6 +537,93 @@ class BaseChart(BaseModel):
             data["transformations"] = Transform.model_validate(data["transformations"])
 
         return data
+
+    @model_validator(mode="after")
+    def validate_flat_transformation_conflicts(self):
+        """Reject conflicting flat/nested transformation inputs early."""
+        object.__setattr__(self, "transformations", self._merged_transformations())
+        return self
+
+    @staticmethod
+    def _is_empty_transformation_value(field_name: str, value: Any) -> bool:
+        """Return whether a nested transform value represents its unset default."""
+        if field_name in {"column_order", "column_format", "changes"}:
+            return not bool(value)
+        if field_name in {"external_data"}:
+            return value == ""
+        return False
+
+    @staticmethod
+    def _normalized_transform_value(field_name: str, value: Any) -> Any:
+        """Normalize a transformation value for conflict comparison."""
+        if field_name == "column_format":
+            return ColumnFormatList.model_validate(value).model_dump(by_alias=True)
+        if field_name == "changes":
+            return DataChangeList.model_validate(value).model_dump(by_alias=True)
+        return value
+
+    @staticmethod
+    def _coerce_transform_value(field_name: str, value: Any) -> Any:
+        """Coerce flat values to the nested Transform field type before assignment."""
+        if field_name == "column_format":
+            return ColumnFormatList.model_validate(value)
+        if field_name == "changes":
+            return DataChangeList.model_validate(value)
+        return value
+
+    def _flat_transformation_values(self) -> dict[str, Any]:
+        """Collect top-level transformation convenience fields explicitly set by users."""
+        flat_values: dict[str, Any] = {}
+        for field_name in TRANSFORMATION_FIELD_NAMES:
+            if field_name in self.model_fields_set:
+                value = getattr(self, field_name)
+                if value is not None:
+                    flat_values[field_name] = value
+        return flat_values
+
+    def _merged_transformations(self) -> Transform:
+        """Merge top-level transformation fields into the nested Transform model.
+
+        The nested ``transformations`` object remains the source of truth for the
+        lower-level API. Flat fields fill unset/default nested values. If the same
+        setting is supplied in both places with different non-empty values, raise a
+        clear validation error instead of silently choosing one.
+        """
+        transform = (
+            self.transformations
+            if isinstance(self.transformations, Transform)
+            else Transform.model_validate(self.transformations)
+        )
+        flat_values = self._flat_transformation_values()
+        if not flat_values:
+            return transform
+
+        merged = transform.model_copy(deep=True)
+        for field_name, flat_value in flat_values.items():
+            nested_value = getattr(merged, field_name)
+            normalized_flat = self._normalized_transform_value(field_name, flat_value)
+            normalized_nested = self._normalized_transform_value(
+                field_name, nested_value
+            )
+
+            if (
+                field_name in transform.model_fields_set
+                and not self._is_empty_transformation_value(field_name, nested_value)
+                and normalized_flat != normalized_nested
+            ):
+                raise ValueError(
+                    f"Conflicting transformation values for '{field_name}'. "
+                    "Pass it either as a top-level BaseChart field or inside "
+                    "transformations, not both with different values."
+                )
+
+            setattr(
+                merged,
+                field_name,
+                self._coerce_transform_value(field_name, flat_value),
+            )
+
+        return merged
 
     @classmethod
     def deserialize_data(cls, csv_data: str | pd.DataFrame) -> pd.DataFrame:

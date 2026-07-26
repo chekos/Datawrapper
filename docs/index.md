@@ -34,6 +34,7 @@ caption: Advanced usage
 user-guide/advanced/authentication-and-account.md
 user-guide/advanced/organization.md
 user-guide/advanced/chart-operations.md
+user-guide/advanced/transformations.md
 user-guide/advanced/exporting.md
 ```
 

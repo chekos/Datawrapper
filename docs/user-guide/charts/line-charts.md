@@ -20,15 +20,14 @@ chart = dw.LineChart(
     source_url="http://berkeleyearth.org/data/",
     # Data from pandas DataFrame
     data=df,
-    # Set the suffix on our values
-    transformations=dw.Transform(
-        column_format=[
-            dw.ColumnFormat(
-                column="LandAverageTemperature",
-                number_append=" °C",
-            )
-        ]
-    ),
+    # Set the suffix on our values with the high-level transformation shortcut.
+    # Use transformations=dw.Transform(...) when you need the nested API shape.
+    column_format=[
+        dw.ColumnFormat(
+            column="LandAverageTemperature",
+            number_append=" °C",
+        )
+    ],
     # Set the range
     custom_range_y=[8, 21],
     # Format Y-axis grid labels with no decimal places
@@ -98,9 +97,7 @@ chart = dw.LineChart(
         dw.Line(column="lower", width=dw.LineWidth.INVISIBLE),
         dw.Line(column="upper", width=dw.LineWidth.INVISIBLE),
     ],
-    area_fills=[
-        dw.AreaFill(from_column="lower", to_column="upper", color="#cccccc")
-    ],
+    area_fills=[dw.AreaFill(from_column="lower", to_column="upper", color="#cccccc")],
 )
 ```
 
