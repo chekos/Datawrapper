@@ -57,6 +57,9 @@ Line Configuration
 ------------------
 .. currentmodule:: datawrapper.charts.line
 
+For practical workflow guidance, examples, and migration notes, see the
+:doc:`LineChart guide </user-guide/charts/line-charts>`.
+
 .. autoclass:: Line
    :members:
    :show-inheritance:

@@ -69,6 +69,41 @@ chart = dw.LineChart(
 chart.create()
 ```
 
+## Configuring individual lines
+
+Use the `lines` argument when you need to style or hide individual data columns
+in a line chart. Each `dw.Line` entry is tied to one column in your data through
+`column=...`, then carries the line-specific settings for that series, such as
+its color, width, interpolation, symbols, or value labels.
+
+A practical workflow is:
+
+1. Create one `dw.Line(column="...")` for each series you want to customize.
+2. Keep chart-wide settings, such as titles, axes, tooltips, and shaded
+   `area_fills`, on `dw.LineChart`.
+3. Put per-series presentation choices on the matching `dw.Line`.
+4. Keep any series that only support other features, such as confidence bands,
+   in `lines` too, but hide them with `width=dw.LineWidth.INVISIBLE`.
+
+```python
+chart = dw.LineChart(
+    data=df,
+    lines=[
+        dw.Line(
+            column="LandAverageTemperature",
+            color="#1d81a2",
+            width=dw.LineWidth.THIN,
+            interpolation=dw.LineInterpolation.CURVED,
+        ),
+        dw.Line(column="lower", width=dw.LineWidth.INVISIBLE),
+        dw.Line(column="upper", width=dw.LineWidth.INVISIBLE),
+    ],
+    area_fills=[
+        dw.AreaFill(from_column="lower", to_column="upper", color="#cccccc")
+    ],
+)
+```
+
 You can also keep colors in the legacy chart-level mapping when that better fits
 existing code or shared category settings:
 
@@ -84,6 +119,33 @@ chart = dw.LineChart(
 Datawrapper `color-category` metadata. If both are provided for the same line,
 the colors must match; conflicting values raise an error instead of silently
 choosing one.
+
+For new code, prefer `Line(color=...)` when the color belongs to one visible
+series. Keep `LineChart(color_category=...)` when you are migrating older code,
+sharing a color mapping across multiple chart settings, or matching metadata
+that was already configured in Datawrapper. Migration can be incremental: move
+one series at a time into `dw.Line(color=...)`, verify that the color matches the
+existing `color_category` entry, and then remove the redundant chart-level entry
+when no other setting depends on it.
+
+Advanced line-only options are still configured on `dw.Line`, but can be broken
+out into helper models when the setting is more structured:
+
+```python
+chart = dw.LineChart(
+    data=df,
+    lines=[
+        dw.Line(
+            column="LandAverageTemperature",
+            symbol=dw.LineSymbol(),
+            value_label=dw.LineValueLabel(),
+        )
+    ],
+)
+```
+
+See the {doc}`extra models API reference <../api/models>` for the complete
+parameter list for `dw.Line`, `dw.LineSymbol`, and `dw.LineValueLabel`.
 
 ## Reference
 
