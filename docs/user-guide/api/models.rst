@@ -41,6 +41,14 @@ Annotations
    :members:
    :show-inheritance:
 
+Multiple Column Panels
+----------------------
+.. currentmodule:: datawrapper.charts.multiple_column
+
+.. autoclass:: MultipleColumnPanel
+   :members:
+   :show-inheritance:
+
 Column Format
 -------------
 .. currentmodule:: datawrapper.charts.models
