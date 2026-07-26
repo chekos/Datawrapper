@@ -498,6 +498,21 @@ class BaseChart(BaseModel):
         super().__init__(**data)
         self._client = None
 
+    def __str__(self) -> str:
+        """Return a compact, safe summary of the chart.
+
+        Pydantic's default string representation includes every model field, which can
+        be noisy for chart objects and may expose the chart's underlying data or custom
+        metadata. Keep the public string form focused on stable identifying details.
+        """
+        return (
+            f"{self.__class__.__name__}("
+            f"title={self.title!r}, "
+            f"chart_type={self.chart_type!r}, "
+            f"chart_id={self.chart_id!r}"
+            ")"
+        )
+
     def _get_client(self, access_token: str | None = None) -> Datawrapper:
         """Get or create a Datawrapper client instance.
 
