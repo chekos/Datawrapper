@@ -152,19 +152,48 @@ class AreaFill(BaseModel):
         return result
 
     @classmethod
-    def deserialize_model(cls, api_data: dict[str, dict] | None) -> list[dict]:
+    def deserialize_model(
+        cls, api_data: dict[str, dict[str, Any]] | list[dict[str, Any]] | None
+    ) -> list[dict[str, Any]]:
         """Deserialize area fills from API response format.
 
+        Datawrapper has returned ``custom-area-fills`` in two valid shapes:
+        a keyed dictionary of fill IDs to fill data and a list of fill data
+        dictionaries. Support both shapes while failing explicitly for malformed
+        payloads.
+
         Args:
-            api_data: Dictionary mapping UUID keys to area fill data, or None
+            api_data: Dictionary mapping UUID keys to area fill data, list of
+                area fill data dictionaries, or None.
 
         Returns:
-            List of area fill dicts with 'id' field preserved
+            List of area fill dicts with any available ``id`` field preserved.
+
+        Raises:
+            TypeError: If api_data or one of its entries has an unexpected type.
         """
-        if not api_data:
+        if api_data is None:
             return []
 
-        return [{**fill_data, "id": fill_id} for fill_id, fill_data in api_data.items()]
+        if isinstance(api_data, dict):
+            fills: list[dict[str, Any]] = []
+            for fill_id, fill_data in api_data.items():
+                if not isinstance(fill_data, dict):
+                    raise TypeError(
+                        "custom-area-fills dict values must be dictionaries"
+                    )
+                fills.append({**fill_data, "id": fill_id})
+            return fills
+
+        if isinstance(api_data, list):
+            fills = []
+            for fill_data in api_data:
+                if not isinstance(fill_data, dict):
+                    raise TypeError("custom-area-fills list items must be dictionaries")
+                fills.append(fill_data.copy())
+            return fills
+
+        raise TypeError("custom-area-fills must be a dict, list, or None")
 
 
 class LineSymbol(BaseModel):
