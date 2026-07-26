@@ -1,12 +1,12 @@
 """Comprehensive tests for uncovered methods in datawrapper/__main__.py with mocked API calls."""
 
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import pandas as pd
 import pytest
 
 from datawrapper import Datawrapper
-from datawrapper.exceptions import InvalidRequestError
+from datawrapper.exceptions import FailedRequestError, InvalidRequestError
 
 
 class TestDeprecatedMethods:
@@ -150,6 +150,39 @@ class TestChartMethods:
             result = dw.refresh_data("chart123")
 
             assert "lastRefresh" in result
+            mock_post.assert_called_once()
+
+    def test_refresh_data_empty_success_response(self):
+        """Test refreshing external data when the API returns no response data."""
+        with patch("datawrapper.__main__.r.post") as mock_post:
+            mock_response = Mock()
+            mock_response.ok = True
+            mock_response.status_code = 204
+            mock_response.text = ""
+            mock_post.return_value = mock_response
+
+            dw = Datawrapper(access_token="test_token")
+            result = dw.refresh_data("chart123")
+
+            assert result is True
+            mock_post.assert_called_once()
+            assert mock_post.call_args.args[0].endswith("/charts/chart123/data/refresh")
+
+    def test_refresh_data_error_response_raises_failed_request(self):
+        """Test that refresh_data preserves failed POST request behavior."""
+        with patch("datawrapper.__main__.r.post") as mock_post:
+            mock_response = Mock()
+            mock_response.ok = False
+            mock_response.status_code = 400
+            mock_response.content = b"Bad Request"
+            mock_post.return_value = mock_response
+
+            dw = Datawrapper(access_token="test_token")
+
+            with pytest.raises(FailedRequestError) as exc_info:
+                dw.refresh_data("chart123")
+
+            assert "400" in str(exc_info.value)
             mock_post.assert_called_once()
 
     def test_update_description_no_params(self):
