@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import warnings
 from typing import TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
@@ -22,10 +23,12 @@ def get_chart(chart_id: str, access_token: str | None = None) -> BaseChart:
             will attempt to use the DATAWRAPPER_ACCESS_TOKEN environment variable.
 
     Returns:
-        BaseChart: A typed chart instance (LineChart, BarChart, ColumnChart, etc.)
+        BaseChart: A typed chart instance when the chart type is supported, or a
+        BaseChart compatibility instance for maps, tables and other Datawrapper
+        visualization types that do not yet have a dedicated class.
 
     Raises:
-        ValueError: If the chart type is not supported
+        ValueError: If the chart metadata is missing a type
         FailedRequestError: If the API request fails
         InvalidRequestError: If the request is invalid
 
@@ -43,6 +46,7 @@ def get_chart(chart_id: str, access_token: str | None = None) -> BaseChart:
         AreaChart,
         ArrowChart,
         BarChart,
+        BaseChart,
         ColumnChart,
         LineChart,
         MultipleColumnChart,
@@ -73,13 +77,20 @@ def get_chart(chart_id: str, access_token: str | None = None) -> BaseChart:
     if not chart_type:
         raise ValueError(f"Chart {chart_id} has no type field in metadata")
 
-    # Get the appropriate chart class
+    # Get the appropriate chart class. Unsupported types intentionally fall back to
+    # BaseChart so users can still create, fetch, update and publish maps, tables and
+    # newly introduced Datawrapper types while dedicated classes are added gradually.
     chart_class = chart_type_map.get(chart_type)
     if not chart_class:
-        raise ValueError(
-            f"Unsupported chart type: {chart_type}. "
-            f"Supported types: {', '.join(chart_type_map.keys())}"
+        warnings.warn(
+            f"Chart type {chart_type!r} does not have a dedicated datawrapper class yet. "
+            "Returning BaseChart as a compatibility shim; raw metadata is preserved "
+            "for round-trip updates, but chart-specific convenience fields are not "
+            "available until a dedicated class is added.",
+            UserWarning,
+            stacklevel=2,
         )
+        chart_class = BaseChart
 
     # Cast to satisfy type checkers while avoiding circular imports
     # Use string literal to avoid NameError at runtime
