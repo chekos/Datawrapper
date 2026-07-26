@@ -163,6 +163,23 @@ class TestAreaChartCreation:
 class TestAreaChartGet:
     """Tests for AreaChart.get() method."""
 
+    def test_tate_fixture_loads_with_explicit_utf8_encoding(self):
+        """Regression test for Windows cp1252 fixture-decoding failures."""
+        with patch("builtins.open", wraps=open) as mocked_open:
+            sample_json = load_sample_json("tate.json")
+
+        chart_metadata = sample_json["chart"]["crdt"]["data"]
+
+        assert mocked_open.call_args.kwargs["encoding"] == "utf-8"
+        assert chart_metadata["title"] == (
+            "Only 4% of all artworks acquired by Tate were created by women"
+        )
+        annotation_text = chart_metadata["metadata"]["visualize"]["text-annotations"][
+            "mobwnf7rs6"
+        ]["text"]
+
+        assert "←" in annotation_text
+
     def test_get_migration_sample(self):
         """Test get() with migration.json sample data (complex stacked chart)."""
         # Load sample data
