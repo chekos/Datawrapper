@@ -1404,7 +1404,7 @@ class Datawrapper:
         # Post it to the chart via the add_data method
         return self.add_data(chart_id, json_data)
 
-    def refresh_data(self, chart_id: str) -> dict:
+    def refresh_data(self, chart_id: str) -> dict | bool:
         """Fetch configured external data and add it to the chart.
 
         Parameters
@@ -1414,12 +1414,11 @@ class Datawrapper:
 
         Returns
         -------
-        dict
-            A dictionary containing the chart's information.
+        dict | bool
+            A dictionary containing the chart's information when returned by the API,
+            or True if the refresh succeeded without response data.
         """
-        response = self.post(f"{self._CHARTS_URL}/{chart_id}/data/refresh")
-        assert isinstance(response, dict)
-        return response
+        return self.post(f"{self._CHARTS_URL}/{chart_id}/data/refresh")
 
     #
     # Folder methods
