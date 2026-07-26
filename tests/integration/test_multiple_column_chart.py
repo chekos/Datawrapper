@@ -6,7 +6,7 @@ from unittest.mock import Mock, patch
 
 import pandas as pd
 
-from datawrapper import MultipleColumnChart
+from datawrapper import MultipleColumnChart, MultipleColumnPanel
 
 
 # Helper functions to load sample data
@@ -305,16 +305,23 @@ class TestMultipleColumnChartSerialization:
         assert viz["color-by-column"] is True
 
     def test_serialize_panels(self):
-        """Test that panels list is converted to dict."""
+        """Test that panels list is converted to the keyed API dict."""
         data = pd.DataFrame({"Year": [2020, 2021], "Value": [100, 110]})
         chart = MultipleColumnChart(
             title="Test",
             data=data,
             panels=[
-                {"column": "Series A", "config": "value1"},
-                {"column": "Series B", "config": "value2"},
+                {"column": "Series A", "title": "Custom A", "config": "value1"},
+                MultipleColumnPanel(
+                    column="Series B",
+                    show_on_mobile=False,
+                    show_on_desktop=True,
+                    config="value2",
+                ),
             ],
         )
+
+        assert all(isinstance(panel, MultipleColumnPanel) for panel in chart.panels)
 
         serialized = chart.serialize_model()
         panels = serialized["metadata"]["visualize"]["panels"]
@@ -322,7 +329,54 @@ class TestMultipleColumnChartSerialization:
         assert isinstance(panels, dict)
         assert "Series A" in panels
         assert "Series B" in panels
-        assert panels["Series A"]["config"] == "value1"
+        assert "column" not in panels["Series A"]
+        assert panels["Series A"] == {"title": "Custom A", "config": "value1"}
+        assert panels["Series B"] == {
+            "showOnMobile": False,
+            "showOnDesktop": True,
+            "config": "value2",
+        }
+
+    def test_panels_accept_api_dict_shape(self):
+        """Test panels can be initialized from Datawrapper's keyed API shape."""
+        data = pd.DataFrame({"Year": [2020, 2021], "Value": [100, 110]})
+        chart = MultipleColumnChart(
+            title="Test",
+            data=data,
+            panels={
+                "Health": {},
+                "Transport": {"showOnMobile": False, "showOnDesktop": False},
+            },
+        )
+
+        assert chart.panels == [
+            MultipleColumnPanel(column="Health"),
+            MultipleColumnPanel(
+                column="Transport",
+                show_on_mobile=False,
+                show_on_desktop=False,
+            ),
+        ]
+        assert chart.serialize_model()["metadata"]["visualize"]["panels"] == {
+            "Health": {},
+            "Transport": {"showOnMobile": False, "showOnDesktop": False},
+        }
+
+    def test_panels_accept_legacy_keyed_dict_with_column_value(self):
+        """Test panels tolerate the wrapper's previous keyed dict output shape."""
+        data = pd.DataFrame({"Year": [2020, 2021], "Value": [100, 110]})
+        chart = MultipleColumnChart(
+            title="Test",
+            data=data,
+            panels={"Health": {"column": "Health", "title": "Custom Health"}},
+        )
+
+        assert chart.panels == [
+            MultipleColumnPanel(column="Health", title="Custom Health")
+        ]
+        assert chart.serialize_model()["metadata"]["visualize"]["panels"] == {
+            "Health": {"title": "Custom Health"}
+        }
 
     def test_serialize_value_labels(self):
         """Test that valueLabels is serialized correctly."""
@@ -481,6 +535,18 @@ class TestMultipleColumnChartParsing:
 
             assert chart.chart_type == "multiple-columns"
             assert chart.grid_layout == "fixedCount"
+            assert all(isinstance(panel, MultipleColumnPanel) for panel in chart.panels)
+            assert chart.panels[0] == MultipleColumnPanel(column="Health")
+
+            transport = next(
+                panel for panel in chart.panels if panel.column == "Transport"
+            )
+            assert transport.show_on_mobile is False
+            assert transport.show_on_desktop is False
+            assert transport.serialize_model() == {
+                "showOnMobile": False,
+                "showOnDesktop": False,
+            }
 
     def test_parse_preserves_all_fields(self):
         """Test that parsing preserves all important fields."""
