@@ -4,7 +4,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from datawrapper import BarChart, Datawrapper, get_chart
+from datawrapper import BarChart, BaseChart, Datawrapper, get_chart
 
 
 @pytest.mark.parametrize(
@@ -12,13 +12,12 @@ from datawrapper import BarChart, Datawrapper, get_chart
     [
         (None, "has no type field in metadata"),
         ("", "has no type field in metadata"),
-        ("unknown-chart-type", "Unsupported chart type: unknown-chart-type"),
     ],
 )
-def test_get_chart_rejects_missing_or_unsupported_chart_types(
+def test_get_chart_rejects_missing_chart_types(
     clean_env, metadata_type, expected_error
 ):
-    """The typed chart factory must fail clearly instead of guessing a class."""
+    """The chart factory must fail clearly when metadata does not include a type."""
     mock_client = MagicMock(spec=Datawrapper)
     mock_client.get_chart.return_value = {
         "id": "chart-123",
@@ -32,6 +31,32 @@ def test_get_chart_rejects_missing_or_unsupported_chart_types(
             get_chart("chart-123")
 
     mock_client.get_chart.assert_called_once_with("chart-123")
+
+
+def test_get_chart_unsupported_type_returns_base_chart_with_warning(clean_env):
+    """Unsupported types should use the BaseChart compatibility shim."""
+    mock_client = MagicMock(spec=Datawrapper)
+    mock_client.get_chart.return_value = {
+        "id": "map-123",
+        "title": "Unsupported map",
+        "type": "d3-maps-choropleth",
+        "metadata": {"visualize": {}},
+    }
+
+    with (
+        patch("datawrapper.Datawrapper", return_value=mock_client),
+        patch.object(
+            BaseChart, "get", return_value=BaseChart(chart_type="d3-maps-choropleth")
+        ) as mock_get,
+    ):
+        with pytest.warns(
+            UserWarning, match="does not have a dedicated datawrapper class"
+        ):
+            result = get_chart("map-123")
+
+    assert isinstance(result, BaseChart)
+    assert result.chart_type == "d3-maps-choropleth"
+    mock_get.assert_called_once_with(chart_id="map-123", access_token=None)
 
 
 def test_get_chart_prefers_explicit_token_over_environment(env_with_token):

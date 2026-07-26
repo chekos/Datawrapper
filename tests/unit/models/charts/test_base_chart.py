@@ -64,5 +64,5 @@ def test_base_chart():
     with pytest.raises(ValueError):
         datawrapper.BaseChart.model_validate({"chart_type": 123})
 
-    with pytest.raises(ValueError):
-        datawrapper.BaseChart.model_validate({"chart_type": "invalid_type"})
+    chart = datawrapper.BaseChart.model_validate({"chart_type": "d3-maps-choropleth"})
+    assert chart.chart_type == "d3-maps-choropleth"

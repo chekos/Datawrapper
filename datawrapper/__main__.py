@@ -699,8 +699,10 @@ class Datawrapper:
         """Creates a new Datawrapper chart, table or map.
 
         .. deprecated::
-            Use the object-oriented chart classes instead (e.g., BarChart, LineChart).
-            This method will be removed in a future version.
+            Prefer the object-oriented chart classes for supported chart types.
+            For maps, tables and other visualization types without a dedicated class,
+            this method remains a supported compatibility path until an
+            object-oriented replacement exists.
 
         Parameters
         ----------
@@ -734,9 +736,10 @@ class Datawrapper:
             A dictionary containing the created chart's information.
         """
         warnings.warn(
-            "create_chart() is deprecated and will be removed in a future version. "
-            "Use the object-oriented chart classes instead. "
-            "Example: chart = BarChart(title='My Chart', data=df).create()",
+            "create_chart() is deprecated for chart types with object-oriented classes. "
+            "For maps, tables and other unsupported visualization types it remains a "
+            "supported compatibility path until a dedicated class is available. "
+            "Example for supported charts: chart = BarChart(title='My Chart', data=df).create()",
             DeprecationWarning,
             stacklevel=2,
         )
@@ -790,8 +793,10 @@ class Datawrapper:
         """Updates a chart's title, theme, type, language, folder or organization.
 
         .. deprecated::
-            Use the object-oriented chart classes instead (e.g., BarChart, LineChart).
-            This method will be removed in a future version.
+            Prefer the object-oriented chart classes for supported chart types.
+            For maps, tables and other visualization types without a dedicated class,
+            this method remains a supported compatibility path until an
+            object-oriented replacement exists.
 
         Parameters
         ----------
@@ -830,9 +835,10 @@ class Datawrapper:
             If no updates are submitted.
         """
         warnings.warn(
-            "update_chart() is deprecated and will be removed in a future version. "
-            "Use the object-oriented chart classes instead. "
-            "Example: chart = BarChart.get(chart_id='abc123'); chart.title = 'New Title'; chart.update()",
+            "update_chart() is deprecated for chart types with object-oriented classes. "
+            "For maps, tables and other unsupported visualization types it remains a "
+            "supported compatibility path until a dedicated class is available. "
+            "Example for supported charts: chart = BarChart.get(chart_id='abc123'); chart.title = 'New Title'; chart.update()",
             DeprecationWarning,
             stacklevel=2,
         )
@@ -1098,8 +1104,10 @@ class Datawrapper:
         """Publishes a chart, table or map.
 
         .. deprecated::
-            Use the object-oriented chart classes instead (e.g., BarChart, LineChart).
-            This method will be removed in a future version.
+            Prefer the object-oriented chart classes for supported chart types.
+            For maps, tables and other visualization types without a dedicated class,
+            this method remains a supported compatibility path until an
+            object-oriented replacement exists.
 
         Parameters
         ----------
@@ -1115,9 +1123,10 @@ class Datawrapper:
             object displaying the chart.
         """
         warnings.warn(
-            "publish_chart() is deprecated and will be removed in a future version. "
-            "Use the object-oriented chart classes instead. "
-            "Example: chart = BarChart.get(chart_id='abc123'); chart.publish()",
+            "publish_chart() is deprecated for chart types with object-oriented classes. "
+            "For maps, tables and other unsupported visualization types it remains a "
+            "supported compatibility path until a dedicated class is available. "
+            "Example for supported charts: chart = BarChart.get(chart_id='abc123'); chart.publish()",
             DeprecationWarning,
             stacklevel=2,
         )
@@ -1334,8 +1343,10 @@ class Datawrapper:
         """Add data to a specified chart.
 
         .. deprecated::
-            Use the object-oriented chart classes instead (e.g., BarChart, LineChart).
-            This method will be removed in a future version.
+            Prefer the object-oriented chart classes for supported chart types.
+            For maps, tables and other visualization types without a dedicated class,
+            this method remains a supported compatibility path until an
+            object-oriented replacement exists.
 
         Parameters
         ----------
@@ -1351,9 +1362,10 @@ class Datawrapper:
             True if the data was added successfully.
         """
         warnings.warn(
-            "add_data() is deprecated and will be removed in a future version. "
-            "Use the object-oriented chart classes instead. "
-            "Example: chart = BarChart(title='My Chart', data=df).create() or chart.data = df; chart.update()",
+            "add_data() is deprecated for chart types with object-oriented classes. "
+            "For maps, tables and other unsupported visualization types it remains a "
+            "supported compatibility path until a dedicated class is available. "
+            "Example for supported charts: chart = BarChart(title='My Chart', data=df).create() or chart.data = df; chart.update()",
             DeprecationWarning,
             stacklevel=2,
         )
