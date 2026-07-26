@@ -475,7 +475,9 @@ class TestScatterPlotParsing:
             chart_metadata = load_sample_json("automation.json")
             sample_csv = load_sample_csv("automation.csv")
 
-        encoding_kwargs = [call.kwargs["encoding"] for call in mocked_open.call_args_list]
+        encoding_kwargs = [
+            call.kwargs["encoding"] for call in mocked_open.call_args_list
+        ]
 
         assert encoding_kwargs == ["utf-8", "utf-8"]
         assert chart_metadata["title"] == (
