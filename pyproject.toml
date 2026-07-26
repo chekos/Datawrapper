@@ -75,8 +75,8 @@ Maintainer = "https://github.com/chekos/"
 Source = "https://github.com/chekos/datawrapper"
 Issues = "https://github.com/chekos/datawrapper/issues/"
 
-[tool.setuptools]
-packages = ["datawrapper"]
+[tool.setuptools.packages.find]
+include = ["datawrapper*"]
 
 [tool.setuptools.package-data]
 datawrapper = ["py.typed"]
