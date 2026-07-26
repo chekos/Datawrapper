@@ -34,6 +34,28 @@ def test_line_color_merges_into_color_category_serialization():
     assert "color" not in visualize["lines"]["sales"]
 
 
+def test_dict_line_color_is_validated_once_during_serialization(monkeypatch):
+    """Serialization reuses validated line configs for color and line output."""
+    call_count = 0
+    original_model_validate = Line.model_validate.__func__
+
+    def counting_model_validate(cls, obj):
+        nonlocal call_count
+        call_count += 1
+        return original_model_validate(cls, obj)
+
+    monkeypatch.setattr(Line, "model_validate", classmethod(counting_model_validate))
+
+    chart = LineChart(title="Dict line colors")
+    chart.lines.append({"column": "sales", "color": "#ff0000", "width": "style2"})
+
+    visualize = chart.serialize_model()["metadata"]["visualize"]
+
+    assert call_count == 1
+    assert visualize["color-category"] == {"map": {"sales": "#ff0000"}}
+    assert visualize["lines"]["sales"]["width"] == "style2"
+
+
 def test_legacy_color_category_serialization_is_unchanged():
     """Existing color_category callers keep the same serialized API shape."""
     chart = LineChart(

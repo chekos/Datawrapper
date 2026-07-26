@@ -819,7 +819,14 @@ class LineChart(
                 raise ValueError(f"Invalid value: {v}. Must be one of {valid_values}")
         return v
 
-    def _color_category_from_lines(self) -> dict[str, str]:
+    def _validated_lines(self) -> list[Line]:
+        """Return line configs as Line models, validating dict inputs once."""
+        return [
+            Line.model_validate(line_obj) if isinstance(line_obj, dict) else line_obj
+            for line_obj in self.lines
+        ]
+
+    def _color_category_from_lines(self, lines: list[Line]) -> dict[str, str]:
         """Return color-category entries declared on individual Line objects.
 
         Line.color is a convenience interface for the chart-level
@@ -827,18 +834,13 @@ class LineChart(
         inside Datawrapper's per-line config object.
         """
         line_colors: dict[str, str] = {}
-        for line_obj in self.lines:
-            if isinstance(line_obj, dict):
-                line_config = Line.model_validate(line_obj)
-            else:
-                line_config = line_obj
-
+        for line_config in lines:
             if line_config.color is not None:
                 line_colors[line_config.column] = line_config.color
 
         return line_colors
 
-    def _merged_color_category(self) -> dict[str, str]:
+    def _merged_color_category(self, lines: list[Line]) -> dict[str, str]:
         """Merge legacy color_category with Line.color convenience values.
 
         Explicit color_category values remain fully supported. When a line-level
@@ -847,7 +849,7 @@ class LineChart(
         over the other for ambiguous input.
         """
         color_category = dict(self.color_category)
-        for column, color in self._color_category_from_lines().items():
+        for column, color in self._color_category_from_lines(lines).items():
             if column in color_category and color_category[column] != color:
                 raise ValueError(
                     "Conflicting colors for line "
@@ -863,7 +865,8 @@ class LineChart(
         """Serialize the model to a dictionary."""
         # Call the parent class's serialize_model method
         model = super().serialize_model()
-        color_category = self._merged_color_category()
+        line_configs = self._validated_lines()
+        color_category = self._merged_color_category(line_configs)
 
         # Set the axes setting if x_column is provided
         if self.x_column:
@@ -913,12 +916,7 @@ class LineChart(
         model["metadata"]["visualize"].update(self._serialize_annotations())
 
         # Add line configurations
-        for line_obj in self.lines:
-            if isinstance(line_obj, dict):
-                line_config = Line.model_validate(line_obj)
-            else:
-                line_config = line_obj
-
+        for line_config in line_configs:
             line_name = line_config.column
             model["metadata"]["visualize"]["lines"][line_name] = Line.serialize_model(
                 line_config
