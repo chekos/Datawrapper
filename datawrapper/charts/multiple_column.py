@@ -447,12 +447,15 @@ class MultipleColumnChart(
             result = []
             for column, panel in value.items():
                 if isinstance(panel, MultipleColumnPanel):
-                    result.append(panel)
+                    result.append(panel.model_copy(update={"column": column}))
                 elif isinstance(panel, dict):
-                    panel_data = {"column": column, **panel}
+                    panel_data = {**panel, "column": column}
                     result.append(MultipleColumnPanel(**panel_data))
                 else:
-                    result.append(panel)
+                    raise TypeError(
+                        "panels keyed-dict values must be MultipleColumnPanel "
+                        f"or dict instances, got {type(panel).__name__}"
+                    )
             return result
 
         result = []
@@ -462,7 +465,10 @@ class MultipleColumnChart(
             elif isinstance(item, dict):
                 result.append(MultipleColumnPanel(**item))
             else:
-                result.append(item)
+                raise TypeError(
+                    "panels list items must be MultipleColumnPanel or dict "
+                    f"instances, got {type(item).__name__}"
+                )
         return result
 
     #

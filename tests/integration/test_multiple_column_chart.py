@@ -378,6 +378,71 @@ class TestMultipleColumnChartSerialization:
             "Health": {"title": "Custom Health"}
         }
 
+    def test_panels_keyed_dict_column_key_overrides_value_column(self):
+        """Test the API dict key is authoritative when column values conflict."""
+        data = pd.DataFrame({"Year": [2020, 2021], "Value": [100, 110]})
+        chart = MultipleColumnChart(
+            title="Test",
+            data=data,
+            panels={"Health": {"column": "Transport", "title": "Custom Health"}},
+        )
+
+        assert chart.panels == [
+            MultipleColumnPanel(column="Health", title="Custom Health")
+        ]
+        assert chart.serialize_model()["metadata"]["visualize"]["panels"] == {
+            "Health": {"title": "Custom Health"}
+        }
+
+    def test_panels_keyed_dict_panel_object_uses_mapping_key_column(self):
+        """Test keyed-dict panel objects also treat the key as authoritative."""
+        data = pd.DataFrame({"Year": [2020, 2021], "Value": [100, 110]})
+        chart = MultipleColumnChart(
+            title="Test",
+            data=data,
+            panels={
+                "Health": MultipleColumnPanel(
+                    column="Transport",
+                    title="Custom Health",
+                )
+            },
+        )
+
+        assert chart.panels == [
+            MultipleColumnPanel(column="Health", title="Custom Health")
+        ]
+        assert chart.serialize_model()["metadata"]["visualize"]["panels"] == {
+            "Health": {"title": "Custom Health"}
+        }
+
+    def test_panels_reject_unsupported_keyed_dict_values(self):
+        """Test invalid API dict panel values raise a clear error."""
+        data = pd.DataFrame({"Year": [2020, 2021], "Value": [100, 110]})
+
+        try:
+            MultipleColumnChart(title="Test", data=data, panels={"Health": 123})
+        except TypeError as exc:
+            assert (
+                "panels keyed-dict values must be MultipleColumnPanel "
+                "or dict instances, got int"
+            ) in str(exc)
+        else:
+            raise AssertionError("Expected TypeError for invalid keyed panel value")
+
+    def test_panels_reject_unsupported_list_items(self):
+        """Test invalid panel list items raise a clear error."""
+        data = pd.DataFrame({"Year": [2020, 2021], "Value": [100, 110]})
+
+        try:
+            MultipleColumnChart(title="Test", data=data, panels=[123])
+        except TypeError as exc:
+            assert (
+                "panels list items must be MultipleColumnPanel or dict "
+                "instances, got int"
+            ) in str(exc)
+        else:
+            raise AssertionError("Expected TypeError for invalid panel list item")
+
     def test_serialize_value_labels(self):
         """Test that valueLabels is serialized correctly."""
         data = pd.DataFrame({"Year": [2020, 2021], "Value": [100, 110]})
