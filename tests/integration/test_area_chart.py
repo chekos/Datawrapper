@@ -13,14 +13,14 @@ from datawrapper import AreaChart
 def load_sample_json(filename: str) -> dict:
     """Load a sample JSON file from tests/samples/area directory."""
     samples_dir = Path(__file__).parent.parent / "samples" / "area"
-    with open(samples_dir / filename) as f:
+    with open(samples_dir / filename, encoding="utf-8") as f:
         return json.load(f)
 
 
 def load_sample_csv(filename: str) -> str:
     """Load a sample CSV file from tests/samples/area directory."""
     samples_dir = Path(__file__).parent.parent / "samples" / "area"
-    with open(samples_dir / filename) as f:
+    with open(samples_dir / filename, encoding="utf-8") as f:
         return f.read()
 
 
@@ -182,6 +182,23 @@ class TestAreaChartCreation:
 
 class TestAreaChartGet:
     """Tests for AreaChart.get() method."""
+
+    def test_tate_fixture_loads_with_explicit_utf8_encoding(self):
+        """Regression test for Windows cp1252 fixture-decoding failures."""
+        with patch("builtins.open", wraps=open) as mocked_open:
+            sample_json = load_sample_json("tate.json")
+
+        chart_metadata = sample_json["chart"]["crdt"]["data"]
+
+        assert mocked_open.call_args.kwargs["encoding"] == "utf-8"
+        assert chart_metadata["title"] == (
+            "Only 4% of all artworks acquired by Tate were created by women"
+        )
+        annotation_text = chart_metadata["metadata"]["visualize"]["text-annotations"][
+            "mobwnf7rs6"
+        ]["text"]
+
+        assert "←" in annotation_text
 
     def test_get_migration_sample(self):
         """Test get() with migration.json sample data (complex stacked chart)."""
