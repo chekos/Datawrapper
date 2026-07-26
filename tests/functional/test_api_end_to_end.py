@@ -108,7 +108,7 @@ def test_create_sample_bar_chart_with_datawrapper():
         base_color=_visualize.get("base-color", 7),
         # Range and formatting
         custom_range=_visualize.get("custom-range", ["", ""]),
-        value_label_format=_visualize.get("value-label-format", ""),
+        value_labels_format=_visualize.get("value-label-format", ""),
         tick_position=_visualize.get("tick-position", "top"),
         # Notes (from BaseChart)
         notes=metadata.get("annotate", {}).get("notes", ""),
@@ -323,7 +323,7 @@ def test_create_happiness_scores_bar_chart_with_datawrapper():
         base_color=visualize.get("base-color", 0),
         # Range and formatting
         custom_range=visualize.get("custom-range", ["", ""]),
-        value_label_format=visualize.get("value-label-format", ""),
+        value_labels_format=visualize.get("value-label-format", ""),
         tick_position=visualize.get("tick-position", "top"),
         # Labels
         label_alignment=visualize.get("label-alignment", "left"),

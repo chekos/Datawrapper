@@ -920,8 +920,9 @@ class LineChart(
             init_data["label_colors"] = visualize["label-colors"]
         if "label-margin" in visualize:
             init_data["label_margin"] = visualize["label-margin"]
-        if "value-labels-format" in visualize:
-            init_data["value_labels_format"] = visualize["value-labels-format"]
+        value_labels_format = cls._value_labels_format_from_api(visualize)
+        if value_labels_format is not None:
+            init_data["value_labels_format"] = value_labels_format
         if "value-label-colors" in visualize:
             init_data["value_label_colors"] = visualize["value-label-colors"]
 

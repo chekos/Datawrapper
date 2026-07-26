@@ -185,7 +185,7 @@ class BarChart(AnnotationsMixin, BaseChart):
     )
 
     #: The format of the value labels (use DateFormat or NumberFormat enum or custom format strings)
-    value_label_format: DateFormat | NumberFormat | str = Field(
+    value_labels_format: DateFormat | NumberFormat | str = Field(
         default="",
         alias="value-label-format",
         description="The format of the value labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
@@ -411,7 +411,7 @@ class BarChart(AnnotationsMixin, BaseChart):
                 "block-labels": self.block_labels,
                 "show-value-labels": self.show_value_labels,
                 "value-label-alignment": self.value_label_alignment,
-                "value-label-format": self.value_label_format,
+                "value-label-format": self.value_labels_format,
                 "swap-labels": self.swap_labels,
                 "replace-flags": ReplaceFlags.serialize(self.replace_flags),
                 "show-color-key": self.show_color_key,
@@ -512,8 +512,9 @@ class BarChart(AnnotationsMixin, BaseChart):
             init_data["show_value_labels"] = visualize["show-value-labels"]
         if "value-label-alignment" in visualize:
             init_data["value_label_alignment"] = visualize["value-label-alignment"]
-        if "value-label-format" in visualize:
-            init_data["value_label_format"] = visualize["value-label-format"]
+        value_labels_format = cls._value_labels_format_from_api(visualize)
+        if value_labels_format is not None:
+            init_data["value_labels_format"] = value_labels_format
         if "swap-labels" in visualize:
             init_data["swap_labels"] = visualize["swap-labels"]
 

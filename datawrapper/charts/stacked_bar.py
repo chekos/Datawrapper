@@ -63,7 +63,7 @@ class StackedBarChart(BaseChart):
     )
 
     #: The number format for value labels (use DateFormat or NumberFormat enum or custom format strings)
-    value_label_format: DateFormat | NumberFormat | str = Field(
+    value_labels_format: DateFormat | NumberFormat | str = Field(
         default="",
         alias="value-label-format",
         description="The number format for value labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
@@ -186,7 +186,7 @@ class StackedBarChart(BaseChart):
                 "color-category": ColorCategory.serialize(self.color_category),
                 "range-value-labels": self.range_value_labels,
                 "show-color-key": self.show_color_key,
-                "value-label-format": self.value_label_format,
+                "value-label-format": self.value_labels_format,
                 "date-label-format": self.date_label_format,
                 "color-by-column": bool(self.color_category),
                 "group-by-column": self.groups_column is not None,
@@ -240,8 +240,9 @@ class StackedBarChart(BaseChart):
             init_data["range_value_labels"] = visualize["range-value-labels"]
         if "show-color-key" in visualize:
             init_data["show_color_key"] = visualize["show-color-key"]
-        if "value-label-format" in visualize:
-            init_data["value_label_format"] = visualize["value-label-format"]
+        value_labels_format = cls._value_labels_format_from_api(visualize)
+        if value_labels_format is not None:
+            init_data["value_labels_format"] = value_labels_format
         if "date-label-format" in visualize:
             init_data["date_label_format"] = visualize["date-label-format"]
         if "thick" in visualize:

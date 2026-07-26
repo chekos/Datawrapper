@@ -27,7 +27,7 @@ chart = dw.StackedBarChart(
     # Enable percentage stacking
     stack_percentages=True,
     # Format value labels as percentages
-    value_label_format="0%",
+    value_labels_format="0%",
     # Use diverging mode for better visual separation
     value_label_mode="diverging",
     # Sort bars by the "Low trust" column in descending order

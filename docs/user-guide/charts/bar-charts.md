@@ -26,7 +26,7 @@ chart = dw.BarChart(
     # Data
     data=df,
     # Value label format using enum
-    value_label_format=dw.NumberFormat.THOUSANDS_WITH_OPTIONAL_DECIMALS,
+    value_labels_format=dw.NumberFormat.THOUSANDS_WITH_OPTIONAL_DECIMALS,
     # Show value labels
     show_value_labels=True,
     # Value label alignment

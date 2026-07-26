@@ -226,7 +226,7 @@ class TestArrowChartCreation:
             data=pd.DataFrame({"x": [1, 2], "y": [10, 20], "z": [15, 25]}),
             start_column="y",
             end_column="z",
-            value_label_format="0.0%",
+            value_labels_format="0.0%",
             range_value_labels="both",
         )
 

@@ -20,12 +20,18 @@ data = pd.DataFrame(
 chart = dw.BarChart(
     title="Most Popular Programming Languages 2024",
     data=data,
-    value_label_format=dw.NumberFormat.ONE_DECIMAL,
+    value_labels_format=dw.NumberFormat.ONE_DECIMAL,
 )
 
 # Create it by sending to Datawrapper
 chart.create()
 ```
+
+``value_labels_format`` is the canonical Python attribute for formatting value labels.
+The older singular spelling, ``value_label_format``, remains supported as a
+backwards-compatible alias; if both spellings are supplied, their values must match.
+The serialized Datawrapper API key may still be ``value-label-format`` or
+``value-labels-format`` depending on the chart type.
 
 ## Getting an existing chart
 

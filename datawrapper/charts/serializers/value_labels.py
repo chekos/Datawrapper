@@ -134,8 +134,22 @@ class ValueLabels(BaseSerializer):
             # BarChart flat structure
             if "show-value-labels" in api_obj:
                 result["show_value_labels"] = api_obj["show-value-labels"]
-            if "value-label-format" in api_obj:
-                result["value_labels_format"] = api_obj["value-label-format"]
+
+            bar_format_candidates: list[tuple[str, Any]] = [
+                (key, api_obj[key])
+                for key in ("value-labels-format", "value-label-format")
+                if key in api_obj
+            ]
+            if bar_format_candidates:
+                first_key, first_value = bar_format_candidates[0]
+                for key, value in bar_format_candidates[1:]:
+                    if value != first_value:
+                        raise ValueError(
+                            "Conflicting value labels format values supplied by the API "
+                            f"for {first_key!r} and {key!r}."
+                        )
+                result["value_labels_format"] = first_value
+
             if "value-label-alignment" in api_obj:
                 result["value_labels_alignment"] = api_obj["value-label-alignment"]
 
@@ -175,21 +189,53 @@ class ValueLabels(BaseSerializer):
 
             result["show_value_labels"] = show
 
-            # Always include format and placement
+            # Always include format and placement. Datawrapper sometimes mirrors the
+            # nested valueLabels.format value into a top-level value-label-format or
+            # value-labels-format field. Accept matching mirrors, but fail loudly if
+            # a payload contains genuinely conflicting format values.
+            column_format_candidates: list[tuple[str, Any]] = []
             if isinstance(value_labels_obj, dict):
-                result["value_labels_format"] = value_labels_obj.get("format", "")
+                if "format" in value_labels_obj:
+                    column_format_candidates.append(
+                        ("valueLabels.format", value_labels_obj["format"])
+                    )
                 result["value_labels_placement"] = value_labels_obj.get(
                     "placement", "outside"
                 )
             else:
-                result["value_labels_format"] = ""
                 result["value_labels_placement"] = "outside"
+
+            for key in ("value-labels-format", "value-label-format"):
+                if key in api_obj:
+                    column_format_candidates.append((key, api_obj[key]))
+
+            if column_format_candidates:
+                first_key, first_value = column_format_candidates[0]
+                for key, value in column_format_candidates[1:]:
+                    if value != first_value:
+                        raise ValueError(
+                            "Conflicting value labels format values supplied by the API for "
+                            f"{first_key!r} and {key!r}."
+                        )
+                result["value_labels_format"] = first_value
+            else:
+                result["value_labels_format"] = ""
 
         else:
             # Simple format field (line, arrow, stacked-bar)
-            if "value-label-format" in api_obj:
-                result["value_labels_format"] = api_obj["value-label-format"]
-            elif "value-labels-format" in api_obj:
-                result["value_labels_format"] = api_obj["value-labels-format"]
+            simple_format_candidates: list[tuple[str, Any]] = [
+                (key, api_obj[key])
+                for key in ("value-labels-format", "value-label-format")
+                if key in api_obj
+            ]
+            if simple_format_candidates:
+                first_key, first_value = simple_format_candidates[0]
+                for key, value in simple_format_candidates[1:]:
+                    if value != first_value:
+                        raise ValueError(
+                            "Conflicting value labels format values supplied by the API "
+                            f"for {first_key!r} and {key!r}."
+                        )
+                result["value_labels_format"] = first_value
 
         return result

@@ -114,7 +114,7 @@ class ArrowChart(BaseChart):
     #
 
     #: The number format for value labels (use DateFormat or NumberFormat enum or custom format strings)
-    value_label_format: DateFormat | NumberFormat | str = Field(
+    value_labels_format: DateFormat | NumberFormat | str = Field(
         default="",
         alias="value-label-format",
         description="The number format for value labels. Use DateFormat for temporal data, NumberFormat for numeric data, or provide custom format strings.",
@@ -220,7 +220,7 @@ class ArrowChart(BaseChart):
                 },
                 "custom-range": CustomRange.serialize(self.custom_range),
                 "range-extent": self.range_extent,
-                "value-label-format": self.value_label_format,
+                "value-label-format": self.value_labels_format,
                 "color-by-column": bool(self.color_category),
                 "group-by-column": self.groups_column is not None,
                 "replace-flags": ReplaceFlags.serialize(self.replace_flags),
@@ -285,8 +285,9 @@ class ArrowChart(BaseChart):
         # Labels & formatting
         if "range-value-labels" in visualize:
             init_data["range_value_labels"] = visualize["range-value-labels"]
-        if "value-label-format" in visualize:
-            init_data["value_label_format"] = visualize["value-label-format"]
+        value_labels_format = cls._value_labels_format_from_api(visualize)
+        if value_labels_format is not None:
+            init_data["value_labels_format"] = value_labels_format
 
         # Sorting & ordering
         sort_range_obj = visualize.get("sort-range", {})

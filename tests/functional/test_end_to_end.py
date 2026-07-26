@@ -165,7 +165,7 @@ class TestEndToEndWorkflows:
         chart.sort_bars = True
         chart.reverse_order = True
         chart.show_value_labels = True
-        chart.value_label_format = "0.1f"
+        chart.value_labels_format = "0.1f"
         chart.tick_position = "bottom"
         chart.custom_range = (0, 100)
 

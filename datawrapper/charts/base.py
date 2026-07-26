@@ -84,6 +84,119 @@ class BaseChart(BaseModel):
         "multiple-columns",
     ] = Field(alias="chart-type", description="The type of datawrapper chart to create")
 
+    @classmethod
+    def _normalize_value_labels_format_alias(
+        cls, data: dict[str, Any]
+    ) -> dict[str, Any]:
+        """Normalize value label format spelling variants to the Python field name.
+
+        The public Python API uses ``value_labels_format`` because the setting formats
+        value labels collectively. Earlier chart classes also exposed the singular
+        ``value_label_format`` spelling, and Datawrapper's wire format uses both
+        ``value-label-format`` and ``value-labels-format`` depending on chart type.
+
+        Accept all equivalent spellings when a chart has the canonical Python field,
+        but fail loudly when callers provide conflicting values for the same setting.
+        """
+        canonical = "value_labels_format"
+        if canonical not in cls.model_fields:
+            return data
+
+        field_info = cls.model_fields[canonical]
+        actual_alias = field_info.alias
+        candidate_keys = [
+            canonical,
+            "value_label_format",
+            "value-labels-format",
+            "value-label-format",
+        ]
+
+        seen: list[tuple[str, Any]] = [
+            (key, data[key]) for key in candidate_keys if key in data
+        ]
+        if not seen:
+            return data
+
+        def comparable(value: Any) -> Any:
+            return getattr(value, "value", value)
+
+        first_key, first_value = seen[0]
+        for key, value in seen[1:]:
+            if comparable(value) != comparable(first_value):
+                raise ValueError(
+                    "Conflicting value labels format values supplied for "
+                    f"{first_key!r} and {key!r}. Use the canonical "
+                    "'value_labels_format' spelling, or provide matching values "
+                    "when using a compatibility alias."
+                )
+
+        normalized = dict(data)
+        normalized[canonical] = first_value
+
+        # Remove compatibility aliases so pydantic does not have to choose between
+        # duplicate inputs for the same field. Keeping the real pydantic alias is not
+        # necessary after copying to the canonical field name.
+        for key in candidate_keys:
+            if key != canonical and key in normalized:
+                normalized.pop(key)
+
+        # If the field's real wire alias was supplied, the canonical copy above is
+        # the source of truth. This branch is explicit for readability and future
+        # aliases, even though actual_alias is currently in candidate_keys.
+        if actual_alias and actual_alias != canonical and actual_alias in normalized:
+            normalized.pop(actual_alias)
+
+        return normalized
+
+    @classmethod
+    def _value_labels_format_from_api(cls, visualize: dict[str, Any]) -> Any | None:
+        """Return a value label format from either Datawrapper wire spelling.
+
+        Some chart types receive ``value-label-format`` from Datawrapper while others
+        receive ``value-labels-format``. Treat matching values as equivalent and raise
+        on conflicts so callers do not get whichever spelling happened to be checked
+        first.
+        """
+        seen = [
+            (key, visualize[key])
+            for key in ("value-labels-format", "value-label-format")
+            if key in visualize
+        ]
+        if not seen:
+            return None
+
+        first_key, first_value = seen[0]
+        for key, value in seen[1:]:
+            if value != first_value:
+                raise ValueError(
+                    "Conflicting value labels format values supplied by the API for "
+                    f"{first_key!r} and {key!r}."
+                )
+
+        return first_value
+
+    @property
+    def value_label_format(self) -> Any:
+        """Backward-compatible alias for ``value_labels_format``.
+
+        New code should use the plural canonical spelling. This property remains so
+        existing code can continue to read and assign the older singular spelling on
+        chart types that expose value label formatting.
+        """
+        if "value_labels_format" not in type(self).model_fields:
+            raise AttributeError(
+                f"{type(self).__name__!s} has no value label format setting"
+            )
+        return self.value_labels_format
+
+    @value_label_format.setter
+    def value_label_format(self, value: Any) -> None:
+        if "value_labels_format" not in type(self).model_fields:
+            raise AttributeError(
+                f"{type(self).__name__!s} has no value label format setting"
+            )
+        self.value_labels_format = value
+
     #
     # Data
     #
@@ -371,6 +484,8 @@ class BaseChart(BaseModel):
         """
         if not isinstance(data, dict):
             return data
+
+        data = cls._normalize_value_labels_format_alias(data)
 
         # Get all valid field names and aliases for this class
         valid_keys = set()

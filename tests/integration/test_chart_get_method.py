@@ -338,7 +338,7 @@ class TestBarChartGet:
             assert chart.block_labels is False
             assert chart.show_value_labels is True
             assert chart.value_label_alignment == "left"
-            assert chart.value_label_format == "0.[0]%"
+            assert chart.value_labels_format == "0.[0]%"
 
             # Verify replace flags
             assert chart.replace_flags == "off"

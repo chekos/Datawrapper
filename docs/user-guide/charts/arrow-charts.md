@@ -32,7 +32,7 @@ chart = dw.ArrowChart(
     range_extent="custom",
     custom_range=[0.15, 0.6],
     # Value label format (three decimal places)
-    value_label_format=dw.NumberFormat.THREE_DECIMALS,
+    value_labels_format=dw.NumberFormat.THREE_DECIMALS,
     # Sort by the start column
     sort_by="end",
     # Enable sorting

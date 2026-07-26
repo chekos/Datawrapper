@@ -80,10 +80,10 @@ class TestStackedBarChartCreation:
             title="Percentage Chart",
             data=df,
             stack_percentages=True,
-            value_label_format="0%",
+            value_labels_format="0%",
         )
         assert chart.stack_percentages is True
-        assert chart.value_label_format == "0%"
+        assert chart.value_labels_format == "0%"
 
     def test_create_with_grouping(self):
         """Test creating a chart with grouping."""
@@ -271,7 +271,7 @@ class TestStackedBarChartParsing:
             assert chart.sort_by == "I like them a lot"
             assert chart.base_color == 2
             assert chart.show_color_key is True
-            assert chart.value_label_format == "0%"
+            assert chart.value_labels_format == "0%"
             assert len(chart.color_category) > 0
             assert "I like them a lot" in chart.color_category
 
@@ -372,7 +372,7 @@ class TestStackedBarChartParsing:
             assert chart.base_color == 0
             assert chart.show_color_key is True
             assert chart.groups_column == "Description"  # From axes.groups
-            assert chart.value_label_format == "0.[0]"
+            assert chart.value_labels_format == "0.[0]"
 
 
 class TestStackedBarChartRoundTrip:
@@ -550,7 +550,7 @@ class TestStackedBarChartRoundTrip:
             chart2 = StackedBarChart.get("test-id", access_token="test-token")
 
         assert chart.groups_column == chart2.groups_column
-        assert chart.value_label_format == chart2.value_label_format
+        assert chart.value_labels_format == chart2.value_labels_format
 
 
 class TestStackedBarChartCompatibility:
@@ -568,7 +568,7 @@ class TestStackedBarChartCompatibility:
         assert hasattr(chart, "sort_ranges")
         assert hasattr(chart, "thick_bars")
         assert hasattr(chart, "reverse_order")
-        assert hasattr(chart, "value_label_format")
+        assert hasattr(chart, "value_labels_format")
         assert hasattr(chart, "date_label_format")
         assert hasattr(chart, "intro")
         assert hasattr(chart, "byline")
@@ -591,7 +591,7 @@ class TestStackedBarChartCompatibility:
         assert chart.sort_ranges is False
         assert chart.thick_bars is False
         assert chart.reverse_order is False
-        assert chart.value_label_format == ""
+        assert chart.value_labels_format == ""
         assert chart.date_label_format == ""
         assert chart.intro == ""
         assert chart.byline == ""
