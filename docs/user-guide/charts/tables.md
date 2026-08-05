@@ -23,7 +23,7 @@ chart = dw.Table(
     intro="Life expectancy at birth in years, 1960-2016",
     # Data source attribution
     source_name="Worldbank",
-    source_url="https://data.worldbank.org/indicator/sp.dyn.le00.in"
+    source_url="https://data.worldbank.org/indicator/sp.dyn.le00.in",
     # Data from pandas DataFrame
     data=df,
     # Show a search bar on the table

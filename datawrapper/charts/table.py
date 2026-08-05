@@ -178,7 +178,7 @@ class Table(BaseChart):
             "showRank": self.show_ranks,
             "firstColumnIsSticky": self.sticky_first_column,
             "mobileFallback": self.mobile_fallback,
-            "compactMode": self.mobile_fallback,
+            "compactMode": self.compact_layout,
             "markdown": self.parse_markdown,
             "mergeEmptyCells": self.merge_empty_cells,
             "pagination": Pagination.serialize(self.pagination),
@@ -300,9 +300,9 @@ class Table(BaseChart):
         if "mobileFallback" in visualize:
             init_data["mobile_fallback"] = visualize["mobileFallback"]
         if "compactMode" in visualize:
-            init_data["compact_mode"] = visualize["compactMode"]
+            init_data["compact_layout"] = visualize["compactMode"]
         if "markdown" in visualize:
-            init_data["markdown"] = visualize["markdown"]
+            init_data["parse_markdown"] = visualize["markdown"]
         if "mergeEmptyCells" in visualize:
             init_data["merge_empty_cells"] = visualize["mergeEmptyCells"]
         if "pagination" in visualize:
@@ -340,7 +340,6 @@ class Table(BaseChart):
                         sparkline = col_data["sparkline"]
                         sparkline_title = sparkline.get("title")
                         sparkline_type = sparkline.get("type")
-                        print(f"title is {sparkline_title}, type is {sparkline_type}")
                         match = next(
                             (
                                 chart
