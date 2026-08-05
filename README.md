@@ -31,8 +31,10 @@ import datawrapper as dw
 # Configure a bar chart
 chart = dw.BarChart(
     title="Top Programming Languages 2024",
-    data=pd.DataFrame({"Language": ["Python", "JavaScript", "Java"], "Users": [45.3, 38.2, 30.5]}),
-    axis_label_format=dw.NumberFormat.ONE_DECIMAL
+    data=pd.DataFrame(
+        {"Language": ["Python", "JavaScript", "Java"], "Users": [45.3, 38.2, 30.5]}
+    ),
+    axis_label_format=dw.NumberFormat.ONE_DECIMAL,
 )
 
 # Create and publish (uses DATAWRAPPER_ACCESS_TOKEN environment variable)
@@ -43,12 +45,10 @@ See the [full documentation](https://datawrapper.readthedocs.io/) for comprehens
 
 ### Contributing
 
-Clone the repository. Move into the directory on your terminal.
-
-Install dependencies for development.
+Clone the repository and install the locked development dependencies.
 
 ```bash
-uv install --all-extras
+uv sync --frozen --all-extras
 ```
 
 Install pre-commit to run a battery of automatic quick fixes against your work.
@@ -57,11 +57,17 @@ Install pre-commit to run a battery of automatic quick fixes against your work.
 uv run pre-commit install
 ```
 
-Run tests with
+Run the canonical local checks before opening a pull request.
 
 ```bash
+uv run ruff check ./datawrapper ./tests
+uv run ruff format --check ./datawrapper ./tests
+uv run mypy ./datawrapper --ignore-missing-imports
 uv run pytest
+uv build --sdist --wheel
 ```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow. AI agents should also read [AGENTS.md](AGENTS.md) before changing files.
 
 ## 📈 Releases
 

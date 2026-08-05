@@ -45,6 +45,7 @@ classifiers = [
 [project.optional-dependencies]
 dev = [
     "pre-commit",
+    "ruff>=0.16.0",
     "setuptools-scm",
 ]
 test = [
@@ -79,8 +80,8 @@ Maintainer = "https://github.com/chekos/"
 Source = "https://github.com/chekos/datawrapper"
 Issues = "https://github.com/chekos/datawrapper/issues/"
 
-[tool.setuptools]
-packages = ["datawrapper"]
+[tool.setuptools.packages.find]
+include = ["datawrapper*"]
 
 [tool.setuptools.package-data]
 datawrapper = ["py.typed"]

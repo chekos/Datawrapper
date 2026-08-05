@@ -41,6 +41,8 @@ from .models import (
     ColumnFormatList,
     CustomRangeMixin,
     CustomTicksMixin,
+    DataChange,
+    DataChangeList,
     Describe,
     GridDisplayMixin,
     GridFormatMixin,
@@ -61,6 +63,7 @@ from .models.range_annotations import (
 from .models.text_annotations import ConnectorLine, TextAnnotation
 from .multiple_column import (
     MultipleColumnChart,
+    MultipleColumnPanel,
     MultipleColumnRangeAnnotation,
     MultipleColumnTextAnnotation,
     MultipleColumnXLineAnnotation,
@@ -85,6 +88,8 @@ __all__ = (
     "ColumnFormatList",
     "CustomRangeMixin",
     "CustomTicksMixin",
+    "DataChange",
+    "DataChangeList",
     "GridFormatMixin",
     "GridDisplayMixin",
     "ArrowHead",
@@ -135,6 +140,7 @@ __all__ = (
     "AreaChart",
     "ArrowChart",
     "MultipleColumnChart",
+    "MultipleColumnPanel",
     "MultipleColumnTextAnnotation",
     "MultipleColumnRangeAnnotation",
     "MultipleColumnXLineAnnotation",

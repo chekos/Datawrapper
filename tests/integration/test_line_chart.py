@@ -5,6 +5,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch
 
 import pandas as pd
+import pytest
 
 from datawrapper import LineChart
 
@@ -83,19 +84,23 @@ class TestLineChartCreation:
                     "width": "style3",
                     "dash": "style2",
                     "direct_label": True,
+                    "color": "#15607a",
                     "symbols": {"enabled": True, "shape": "square", "on": "last"},
                 }
             ],
         )
 
         serialized = chart.serialize_model()
-        line_config = serialized["metadata"]["visualize"]["lines"]["y"]
+        visualize = serialized["metadata"]["visualize"]
+        line_config = visualize["lines"]["y"]
 
         assert line_config["width"] == "style3"
         assert line_config["dash"] == "style2"
         assert line_config["directLabel"] is True
         assert line_config["symbols"]["enabled"] is True
         assert line_config["symbols"]["shape"] == "square"
+        assert "color" not in line_config
+        assert visualize["color-category"]["map"] == {"y": "#15607a"}
 
     def test_serialize_with_area_fill(self):
         """Test serializing with area fills."""
@@ -122,6 +127,106 @@ class TestLineChartCreation:
         assert fill["to"] == "value"
         assert fill["color"] == "#c3e8d5"
         assert fill["opacity"] == 0.7
+
+    def test_deserialize_area_fill_list_from_get_chart_response(self):
+        """Regression test for API responses that return custom-area-fills as a list."""
+        # Datawrapper can return custom-area-fills in the same list form this
+        # library serializes. Before v2.0.6 this path was permissive; the stricter
+        # AreaFill.deserialize_model implementation then assumed a dict and raised
+        # AttributeError: 'list' object has no attribute 'items'.
+        api_response = {
+            "type": "d3-lines",
+            "title": "List area fill response",
+            "metadata": {
+                "visualize": {
+                    "custom-area-fills": [
+                        {
+                            "id": "fill-list-1",
+                            "from": "baseline",
+                            "to": "value",
+                            "color": "#c3e8d5",
+                            "opacity": 0.7,
+                            "useMixedColors": False,
+                            "interpolation": "linear",
+                        }
+                    ]
+                }
+            },
+        }
+
+        init_data = LineChart.deserialize_model(api_response)
+
+        assert len(init_data["area_fills"]) == 1
+        area_fill = init_data["area_fills"][0]
+        assert area_fill.id == "fill-list-1"
+        assert area_fill.from_column == "baseline"
+        assert area_fill.to_column == "value"
+        assert area_fill.color == "#c3e8d5"
+        assert area_fill.opacity == 0.7
+
+    def test_deserialize_area_fill_dict_from_legacy_response(self):
+        """Test deserializing the keyed object shape used by older fixtures."""
+        api_response = {
+            "type": "d3-lines",
+            "title": "Dict area fill response",
+            "metadata": {
+                "visualize": {
+                    "custom-area-fills": {
+                        "legacy-fill-1": {
+                            "from": "lower",
+                            "to": "upper",
+                            "color": "#bcbcbc",
+                            "opacity": 0.49,
+                            "useMixedColors": False,
+                            "interpolation": "linear",
+                        }
+                    }
+                }
+            },
+        }
+
+        init_data = LineChart.deserialize_model(api_response)
+
+        assert len(init_data["area_fills"]) == 1
+        area_fill = init_data["area_fills"][0]
+        assert area_fill.id == "legacy-fill-1"
+        assert area_fill.from_column == "lower"
+        assert area_fill.to_column == "upper"
+
+    def test_deserialize_area_fill_empty_shapes(self):
+        """Test empty legacy and list shapes both deserialize to no area fills."""
+        for custom_area_fills in ({}, [], None):
+            init_data = LineChart.deserialize_model(
+                {
+                    "type": "d3-lines",
+                    "metadata": {"visualize": {"custom-area-fills": custom_area_fills}},
+                }
+            )
+
+            assert init_data["area_fills"] == []
+
+    @pytest.mark.parametrize(
+        ("custom_area_fills", "message"),
+        [
+            ("not-a-list-or-dict", "custom-area-fills must be a dict, list, or None"),
+            (["not-a-dict"], "custom-area-fills list items must be dictionaries"),
+            (
+                {"fill-1": "not-a-dict"},
+                "custom-area-fills dict values must be dictionaries",
+            ),
+        ],
+    )
+    def test_deserialize_area_fill_rejects_unexpected_shape(
+        self, custom_area_fills, message
+    ):
+        """Malformed custom-area-fills data should fail explicitly, not with AttributeError."""
+        api_response = {
+            "type": "d3-lines",
+            "metadata": {"visualize": {"custom-area-fills": custom_area_fills}},
+        }
+
+        with pytest.raises(TypeError, match=message):
+            LineChart.deserialize_model(api_response)
 
     def test_serialize_y_axis_scale(self):
         """Test serializing Y-axis scale configuration."""
@@ -158,6 +263,52 @@ class TestLineChartCreation:
 
 class TestLineChartGet:
     """Tests for LineChart.get() method."""
+
+    def test_get_with_custom_area_fills_list_response(self):
+        """Test get() with custom-area-fills in the list shape returned by the API."""
+        chart_metadata = {
+            "type": "d3-lines",
+            "title": "List area fill response",
+            "metadata": {
+                "visualize": {
+                    "custom-area-fills": [
+                        {
+                            "id": "fill-list-1",
+                            "from": "baseline",
+                            "to": "value",
+                            "color": "#c3e8d5",
+                            "opacity": 0.7,
+                            "useMixedColors": False,
+                            "interpolation": "linear",
+                        }
+                    ]
+                }
+            },
+        }
+        sample_csv = "date,baseline,value\n2024-01-01,0,10\n"
+
+        mock_client = Mock()
+        mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
+
+        def mock_get(url):
+            if url.endswith("/data"):
+                return sample_csv
+            return chart_metadata
+
+        mock_client.get.side_effect = mock_get
+
+        with patch("datawrapper.charts.base.Datawrapper", return_value=mock_client):
+            chart = LineChart.get("customAreaFillList", access_token="test-token")
+
+        assert chart.chart_type == "d3-lines"
+        assert chart.title == "List area fill response"
+        assert len(chart.area_fills) == 1
+        area_fill = chart.area_fills[0]
+        assert area_fill.id == "fill-list-1"
+        assert area_fill.from_column == "baseline"
+        assert area_fill.to_column == "value"
+        assert area_fill.color == "#c3e8d5"
+        assert area_fill.opacity == 0.7
 
     def test_get_covid_sample(self):
         """Test get() with covid.json sample data (complex chart with area fills)."""

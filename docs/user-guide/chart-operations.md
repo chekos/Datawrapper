@@ -154,3 +154,63 @@ Path("chart.png").write_bytes(png_data)
 Path("chart.pdf").write_bytes(pdf_data)
 Path("chart.svg").write_bytes(svg_data)
 ```
+
+## Compatibility for maps, tables and newer Datawrapper types
+
+The object-oriented API is the preferred path for chart types that have dedicated
+classes, such as `BarChart`, `LineChart`, `ColumnChart` and `ScatterPlot`. The
+older `Datawrapper.create_chart()`, `Datawrapper.update_chart()`,
+`Datawrapper.add_data()` and `Datawrapper.publish_chart()` methods are deprecated
+for those supported chart classes, but they are not scheduled for removal for
+maps, tables or other Datawrapper visualization types until equivalent
+object-oriented classes exist.
+
+For unsupported types, use one of these compatible migration paths:
+
+```python
+import pandas as pd
+import datawrapper as dw
+
+# Forward-compatible object-oriented shim. This works for any non-empty
+# Datawrapper visualization type, including maps that do not yet have a
+# dedicated Python class.
+chart = dw.BaseChart(
+    chart_type="d3-maps-choropleth",
+    title="Population by region",
+    data=pd.DataFrame({"region": ["CA", "NY"], "value": [39.0, 19.6]}),
+)
+chart.create()
+chart.publish()
+```
+
+You can also keep using the legacy client methods for unsupported types when you
+need to pass raw Datawrapper metadata:
+
+```python
+client = dw.Datawrapper()
+chart = client.create_chart(
+    title="Population by region",
+    chart_type="d3-maps-choropleth",
+)
+client.update_chart(
+    chart["id"],
+    metadata={"visualize": {"basemap": "usa-states"}},
+)
+client.publish_chart(chart["id"])
+```
+
+`dw.get_chart(chart_id)` returns a dedicated chart class when one is available.
+When the Datawrapper API reports a type that is not yet modeled by this package,
+it now returns `BaseChart` with a warning instead of failing as unsupported. This
+keeps existing maps and newly released Datawrapper visualization types usable
+while making it clear that chart-specific convenience fields are not available
+until a dedicated class is added.
+
+### Deprecation timeline
+
+- Dedicated chart classes are the future-facing API for supported types.
+- Legacy client methods remain available for unsupported maps, tables and new
+  visualization types until a dedicated replacement exists.
+- After a dedicated class lands for a type, the corresponding legacy-method use
+  for that type should go through at least one minor release with clear warnings
+  and migration examples before removal is considered in a future major release.

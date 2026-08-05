@@ -10,7 +10,7 @@ repos:
       - id: check-yaml
       - id: check-added-large-files
         args:
-          - '--maxkb=100000'
+          - '--maxkb=1024'
       - id: fix-byte-order-marker
       - id: check-case-conflict
       - id: check-json
@@ -19,7 +19,7 @@ repos:
       - id: check-merge-conflict
 
   - repo: 'https://github.com/astral-sh/ruff-pre-commit'
-    rev: v0.13.3
+    rev: v0.16.0
     hooks:
       - id: ruff
         args:
@@ -27,14 +27,14 @@ repos:
       - id: ruff-format
 
   - repo: 'https://github.com/asottile/pyupgrade'
-    rev: v3.20.0
+    rev: v3.21.2
     hooks:
       - id: pyupgrade
         args:
-          - '--py37-plus'
+          - '--py310-plus'
 
   - repo: 'https://github.com/pre-commit/mirrors-mypy'
-    rev: v1.18.2
+    rev: v2.3.0
     hooks:
       - id: mypy
         additional_dependencies:

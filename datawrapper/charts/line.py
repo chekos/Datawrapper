@@ -152,19 +152,48 @@ class AreaFill(BaseModel):
         return result
 
     @classmethod
-    def deserialize_model(cls, api_data: dict[str, dict] | None) -> list[dict]:
+    def deserialize_model(
+        cls, api_data: dict[str, dict[str, Any]] | list[dict[str, Any]] | None
+    ) -> list[dict[str, Any]]:
         """Deserialize area fills from API response format.
 
+        Datawrapper has returned ``custom-area-fills`` in two valid shapes:
+        a keyed dictionary of fill IDs to fill data and a list of fill data
+        dictionaries. Support both shapes while failing explicitly for malformed
+        payloads.
+
         Args:
-            api_data: Dictionary mapping UUID keys to area fill data, or None
+            api_data: Dictionary mapping UUID keys to area fill data, list of
+                area fill data dictionaries, or None.
 
         Returns:
-            List of area fill dicts with 'id' field preserved
+            List of area fill dicts with any available ``id`` field preserved.
+
+        Raises:
+            TypeError: If api_data or one of its entries has an unexpected type.
         """
-        if not api_data:
+        if api_data is None:
             return []
 
-        return [{**fill_data, "id": fill_id} for fill_id, fill_data in api_data.items()]
+        if isinstance(api_data, dict):
+            fills: list[dict[str, Any]] = []
+            for fill_id, fill_data in api_data.items():
+                if not isinstance(fill_data, dict):
+                    raise TypeError(
+                        "custom-area-fills dict values must be dictionaries"
+                    )
+                fills.append({**fill_data, "id": fill_id})
+            return fills
+
+        if isinstance(api_data, list):
+            fills = []
+            for fill_data in api_data:
+                if not isinstance(fill_data, dict):
+                    raise TypeError("custom-area-fills list items must be dictionaries")
+                fills.append(fill_data.copy())
+            return fills
+
+        raise TypeError("custom-area-fills must be a dict, list, or None")
 
 
 class LineSymbol(BaseModel):
@@ -378,6 +407,17 @@ class Line(BaseModel):
             )
         return v
 
+    #: The line color. This is a convenience interface for LineChart.color_category.
+    #: During LineChart serialization, each Line.color value is merged into the
+    #: chart-level color_category mapping using the line's column name.
+    color: str | None = Field(
+        default=None,
+        description=(
+            "The line color (hex string or Datawrapper-supported color value). "
+            "This is a convenience interface for LineChart.color_category."
+        ),
+    )
+
     #: Whether or not to show in the color key
     color_key: bool = Field(
         default=False,
@@ -517,6 +557,8 @@ class Line(BaseModel):
             init_dict["interpolation"] = line_config["interpolation"]
         if "width" in line_config:
             init_dict["width"] = line_config["width"]
+        if "color" in line_config:
+            init_dict["color"] = line_config["color"]
 
         # Always include dash field (None if not present in API response)
         init_dict["dash"] = line_config.get("dash")
@@ -777,10 +819,54 @@ class LineChart(
                 raise ValueError(f"Invalid value: {v}. Must be one of {valid_values}")
         return v
 
+    def _validated_lines(self) -> list[Line]:
+        """Return line configs as Line models, validating dict inputs once."""
+        return [
+            Line.model_validate(line_obj) if isinstance(line_obj, dict) else line_obj
+            for line_obj in self.lines
+        ]
+
+    def _color_category_from_lines(self, lines: list[Line]) -> dict[str, str]:
+        """Return color-category entries declared on individual Line objects.
+
+        Line.color is a convenience interface for the chart-level
+        color_category mapping. It intentionally does not replace or serialize
+        inside Datawrapper's per-line config object.
+        """
+        line_colors: dict[str, str] = {}
+        for line_config in lines:
+            if line_config.color is not None:
+                line_colors[line_config.column] = line_config.color
+
+        return line_colors
+
+    def _merged_color_category(self, lines: list[Line]) -> dict[str, str]:
+        """Merge legacy color_category with Line.color convenience values.
+
+        Explicit color_category values remain fully supported. When a line-level
+        convenience color names a column that is also present in color_category,
+        the values must match. Raising here avoids silently choosing one source
+        over the other for ambiguous input.
+        """
+        color_category = dict(self.color_category)
+        for column, color in self._color_category_from_lines(lines).items():
+            if column in color_category and color_category[column] != color:
+                raise ValueError(
+                    "Conflicting colors for line "
+                    f"{column!r}: color_category has {color_category[column]!r} "
+                    f"but Line.color has {color!r}. Use one source of truth or "
+                    "make the values match."
+                )
+            color_category[column] = color
+
+        return color_category
+
     def serialize_model(self) -> dict:
         """Serialize the model to a dictionary."""
         # Call the parent class's serialize_model method
         model = super().serialize_model()
+        line_configs = self._validated_lines()
+        color_category = self._merged_color_category(line_configs)
 
         # Set the axes setting if x_column is provided
         if self.x_column:
@@ -802,7 +888,7 @@ class LineChart(
             "base-color": self.base_color,
             "interpolation": self.interpolation,
             "connector-lines": self.connector_lines,
-            "color-category": ColorCategory.serialize(self.color_category),
+            "color-category": ColorCategory.serialize(color_category),
             # Labels
             "stack-color-legend": self.stack_color_legend,
             "label-colors": self.label_colors,
@@ -830,12 +916,7 @@ class LineChart(
         model["metadata"]["visualize"].update(self._serialize_annotations())
 
         # Add line configurations
-        for line_obj in self.lines:
-            if isinstance(line_obj, dict):
-                line_config = Line.model_validate(line_obj)
-            else:
-                line_config = line_obj
-
+        for line_config in line_configs:
             line_name = line_config.column
             model["metadata"]["visualize"]["lines"][line_name] = Line.serialize_model(
                 line_config
@@ -891,7 +972,9 @@ class LineChart(
         if "connector-lines" in visualize:
             init_data["connector_lines"] = visualize["connector-lines"]
 
-        # Parse color-category using utility
+        # Parse color-category using utility. Preserve the legacy chart-level
+        # color_category mapping as the source of truth during deserialization;
+        # line-level colors are a write-time convenience only.
         color_data = ColorCategory.deserialize(visualize.get("color-category"))
         init_data["color_category"] = color_data["color_category"]
 

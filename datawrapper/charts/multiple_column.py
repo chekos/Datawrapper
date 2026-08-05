@@ -3,6 +3,7 @@ from typing import Any, Literal
 
 import pandas as pd
 from pydantic import (
+    BaseModel,
     ConfigDict,
     Field,
     field_validator,
@@ -35,6 +36,59 @@ from .serializers import (
     PlotHeight,
     ValueLabels,
 )
+
+
+class MultipleColumnPanel(BaseModel):
+    """Panel configuration for a :class:`MultipleColumnChart` column.
+
+    Datawrapper stores multiple-column panel settings as a mapping in
+    ``metadata.visualize.panels`` where each key is a data column name and each
+    value is that panel's configuration. This model keeps the column name as a
+    first-class Python attribute while serializing back to the keyed API shape.
+
+    Unknown extra fields are preserved so new Datawrapper panel options can
+    round-trip before this wrapper has explicit typed attributes for them.
+    """
+
+    model_config = ConfigDict(
+        populate_by_name=True,
+        strict=True,
+        extra="allow",
+    )
+
+    #: The data column this panel configures. Serialized as the API mapping key.
+    column: str = Field(
+        description="The data column this panel configures",
+        min_length=1,
+    )
+
+    #: Optional custom panel title, which can include Datawrapper-supported HTML.
+    title: str | None = Field(
+        default=None,
+        description="Optional custom panel title",
+    )
+
+    #: Whether to show this panel on mobile layouts.
+    show_on_mobile: bool | None = Field(
+        default=None,
+        alias="showOnMobile",
+        description="Whether to show this panel on mobile layouts",
+    )
+
+    #: Whether to show this panel on desktop layouts.
+    show_on_desktop: bool | None = Field(
+        default=None,
+        alias="showOnDesktop",
+        description="Whether to show this panel on desktop layouts",
+    )
+
+    def serialize_model(self) -> dict[str, Any]:
+        """Serialize the panel to the value stored under its column key."""
+        return self.model_dump(
+            by_alias=True,
+            exclude={"column"},
+            exclude_none=True,
+        )
 
 
 class MultipleColumnTextAnnotation(TextAnnotation):
@@ -366,10 +420,56 @@ class MultipleColumnChart(
     )
 
     #: Panels configuration
-    panels: list[dict[str, Any]] = Field(
+    panels: list[MultipleColumnPanel] = Field(
         default_factory=list,
         description="Panel configurations for the chart",
     )
+
+    @field_validator("panels", mode="before")
+    @classmethod
+    def convert_panels(
+        cls,
+        value: (
+            dict[str, dict[str, Any]]
+            | Sequence[MultipleColumnPanel | dict[str, Any]]
+            | None
+        ),
+    ) -> list[MultipleColumnPanel]:
+        """Convert API and legacy panel inputs to MultipleColumnPanel objects.
+
+        Accepts both the Datawrapper API's keyed dictionary shape and the
+        wrapper's historical list-of-dicts shape for backwards compatibility.
+        """
+        if not value:
+            return []
+
+        if isinstance(value, dict):
+            result = []
+            for column, panel in value.items():
+                if isinstance(panel, MultipleColumnPanel):
+                    result.append(panel.model_copy(update={"column": column}))
+                elif isinstance(panel, dict):
+                    panel_data = {**panel, "column": column}
+                    result.append(MultipleColumnPanel(**panel_data))
+                else:
+                    raise TypeError(
+                        "panels keyed-dict values must be MultipleColumnPanel "
+                        f"or dict instances, got {type(panel).__name__}"
+                    )
+            return result
+
+        result = []
+        for item in value:
+            if isinstance(item, MultipleColumnPanel):
+                result.append(item)
+            elif isinstance(item, dict):
+                result.append(MultipleColumnPanel(**item))
+            else:
+                raise TypeError(
+                    "panels list items must be MultipleColumnPanel or dict "
+                    f"instances, got {type(item).__name__}"
+                )
+        return result
 
     #
     # Layout
@@ -701,7 +801,7 @@ class MultipleColumnChart(
                 self.plot_height_fixed,
                 self.plot_height_ratio,
             ),
-            "panels": {panel["column"]: panel for panel in self.panels},
+            "panels": {panel.column: panel.serialize_model() for panel in self.panels},
             # Tooltips
             "show-tooltips": self.show_tooltips,
             "syncMultipleTooltips": self.sync_multiple_tooltips,
@@ -837,14 +937,9 @@ class MultipleColumnChart(
         # Plot height
         init_data.update(PlotHeight.deserialize(visualize))
 
-        # Parse panels (dict to list)
-        panels_obj = visualize.get("panels", {})
-        if isinstance(panels_obj, dict):
-            init_data["panels"] = [
-                {"column": col, **config} for col, config in panels_obj.items()
-            ]
-        else:
-            init_data["panels"] = []
+        # Parse panels. The field validator accepts the API's keyed dict shape
+        # and converts values to MultipleColumnPanel objects.
+        init_data["panels"] = visualize.get("panels", {})
 
         # Tooltips
         if "show-tooltips" in visualize:

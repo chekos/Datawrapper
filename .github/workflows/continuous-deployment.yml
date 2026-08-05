@@ -5,47 +5,22 @@ on:
   pull_request:
   workflow_dispatch:
 
-env:
-  DATAWRAPPER_ACCESS_TOKEN: ${{ secrets.DATAWRAPPER_ACCESS_TOKEN }}
-
 jobs:
   lint-python:
-    name: Lint Python code
+    name: Lint and format Python code
     runs-on: ubuntu-latest
     steps:
       - id: checkout
         name: Checkout
-        uses: actions/checkout@v6
-
-      - id: check-ruff
-        name: Check with Ruff
-        uses: astral-sh/ruff-action@v3
-        with:
-          args: 'check --exit-zero --verbose'
-          src: './datawrapper'
-
-      - id: format-ruff
-        name: Format with Ruff
-        uses: astral-sh/ruff-action@v3
-        with:
-          args: 'format --check --verbose'
-          src: './datawrapper'
-
-  mypy-python:
-    name: Check Python static typing
-    runs-on: ubuntu-latest
-    steps:
-      - id: checkout
-        name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - id: install-uv
         name: Install uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@v9.0.0
         with:
           version: "latest"
           enable-cache: true
-          cache-dependency-glob: '**/pyproject.toml'
+          cache-dependency-glob: '**/uv.lock'
 
       - id: install-python
         name: Install Python
@@ -53,11 +28,43 @@ jobs:
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: uv sync --extra mypy
+        run: uv sync --frozen --extra dev --extra test
+
+      - id: check-ruff
+        name: Check with Ruff
+        run: uv run ruff check ./datawrapper ./tests
+
+      - id: format-ruff
+        name: Check formatting with Ruff
+        run: uv run ruff format --check ./datawrapper ./tests
+
+  mypy-python:
+    name: Check Python static typing
+    runs-on: ubuntu-latest
+    steps:
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v7
+
+      - id: install-uv
+        name: Install uv
+        uses: astral-sh/setup-uv@v9.0.0
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: '**/uv.lock'
+
+      - id: install-python
+        name: Install Python
+        run: uv python install 3.13
+
+      - id: install-python-dependencies
+        name: Install Python dependencies
+        run: uv sync --frozen --extra mypy
 
       - id: mypy
         name: Run mypy
-        run: uv run mypy ./ --ignore-missing-imports
+        run: uv run mypy ./datawrapper --ignore-missing-imports
 
   test-python:
     name: Test Python code
@@ -67,15 +74,15 @@ jobs:
         python: ['3.10', '3.11', '3.12', '3.13']
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - id: install-uv
         name: Install uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@v9.0.0
         with:
           version: "latest"
           enable-cache: true
-          cache-dependency-glob: '**/pyproject.toml'
+          cache-dependency-glob: '**/uv.lock'
 
       - id: install-python
         name: Install Python
@@ -83,29 +90,29 @@ jobs:
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: uv sync --extra test --python ${{ matrix.python }}
+        run: uv sync --frozen --extra test --python ${{ matrix.python }}
         shell: bash
 
       - id: tests
         name: Run tests
-        run: uv run pytest --cov -sv
+        run: uv run pytest
         shell: bash
 
   build:
     name: Build release candidate
     runs-on: ubuntu-latest
-    needs: [test-python]
+    needs: [lint-python, mypy-python, test-python]
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - id: install-uv
         name: Install uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@v9.0.0
         with:
           version: "latest"
           enable-cache: true
-          cache-dependency-glob: '**/pyproject.toml'
+          cache-dependency-glob: '**/uv.lock'
 
       - id: install-python
         name: Install Python
@@ -118,7 +125,7 @@ jobs:
 
       - id: save
         name: Save artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: release-candidate
           path: ./dist
@@ -132,7 +139,7 @@ jobs:
     steps:
       - id: fetch
         name: Fetch artifact
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: release-candidate
           path: ./dist

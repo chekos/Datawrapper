@@ -261,6 +261,7 @@ class AreaChart(
             "color-category": ColorCategory.serialize(self.color_category),
             # Labels
             "show-color-key": self.show_color_key,
+            "categoryLabels": {"enabled": self.show_color_key, "position": "color-key"},
             # Tooltips
             "show-tooltips": self.show_tooltips,
             "tooltip-x-format": self.tooltip_x_format,

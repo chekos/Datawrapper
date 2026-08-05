@@ -236,6 +236,158 @@ class ColumnFormatList(BaseModel):
         return self.formats[index]
 
 
+class DataChange(BaseModel):
+    """A data-value correction from Datawrapper's Check & Describe step.
+
+    Datawrapper stores individual cell edits in ``metadata.data.changes``. Row
+    and column are zero-based indexes into the uploaded dataset, value is the
+    replacement value, and time is the edit timestamp in Unix milliseconds when
+    Datawrapper includes it. Overwritten cells can include previous, while
+    added-column/header edits can omit it.
+    """
+
+    model_config = ConfigDict(
+        populate_by_name=True,
+        strict=True,
+        json_schema_extra={
+            "examples": [
+                {
+                    "row": 9,
+                    "column": 3,
+                    "value": "1.7",
+                    "time": 1573134075869,
+                    "previous": "0.7",
+                }
+            ]
+        },
+    )
+
+    #: The zero-based row index for the change
+    row: int = Field(
+        ge=0,
+        description="The zero-based row index for the data change",
+    )
+
+    #: The zero-based column index for the change
+    column: int = Field(
+        ge=0,
+        description="The zero-based column index for the data change",
+    )
+
+    #: The replacement value stored by Datawrapper
+    value: str = Field(description="The replacement value for the changed cell")
+
+    #: Unix time in milliseconds when the change was made, when available
+    time: int | None = Field(
+        default=None,
+        ge=0,
+        description="Unix time in milliseconds when the change was made",
+    )
+
+    #: The original value overwritten by the correction, when Datawrapper includes it
+    previous: str | None = Field(
+        default=None,
+        description="The original value overwritten by the correction",
+    )
+
+    #: Datawrapper's internal change ID, when returned by the API
+    id: str | None = Field(
+        default=None,
+        description="Datawrapper's internal change ID",
+    )
+
+    #: Whether Datawrapper marks the change as ignored
+    ignored: bool | None = Field(
+        default=None,
+        description="Whether Datawrapper marks the change as ignored",
+    )
+
+    #: Datawrapper's internal ordering index, when returned by the API
+    index: int | None = Field(
+        default=None,
+        alias="_index",
+        ge=0,
+        description="Datawrapper's internal ordering index",
+    )
+
+    @model_serializer
+    def serialize_change(self) -> dict[str, Any]:
+        """Serialize only fields that Datawrapper supplied or the user set."""
+        result: dict[str, Any] = {
+            "row": self.row,
+            "column": self.column,
+            "value": self.value,
+        }
+        if self.time is not None:
+            result["time"] = self.time
+        if "previous" in self.model_fields_set:
+            result["previous"] = self.previous
+        if self.id is not None:
+            result["id"] = self.id
+        if self.ignored is not None:
+            result["ignored"] = self.ignored
+        if self.index is not None:
+            result["_index"] = self.index
+        return result
+
+
+class DataChangeList(BaseModel):
+    """Collection wrapper for Datawrapper's ``metadata.data.changes`` value.
+
+    Datawrapper's public docs show ``changes`` as a list of change objects. Some
+    API responses return an object keyed by internal change IDs instead. This
+    wrapper accepts both forms and serializes back to the same form it received;
+    direct user-created lists remain lists.
+    """
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    #: The list of data changes
+    changes: list[DataChange] = Field(default_factory=list)
+
+    #: Internal keys from API object-shaped changes, when that shape was supplied
+    keys: list[str] | None = Field(default=None, exclude=True)
+
+    @model_validator(mode="before")
+    @classmethod
+    def convert_from_dict_or_list(cls, data: Any) -> dict[str, Any]:
+        """Accept docs-style lists, API object maps, or wrapped values."""
+        if isinstance(data, cls):
+            return {"changes": data.changes, "keys": data.keys}
+        if isinstance(data, dict) and "changes" in data:
+            return data
+        if isinstance(data, dict):
+            keys = list(data.keys())
+            return {"changes": list(data.values()), "keys": keys}
+        if isinstance(data, list):
+            return {"changes": data}
+        return data
+
+    @model_serializer
+    def serialize_changes(self) -> list[dict[str, Any]] | dict[str, dict[str, Any]]:
+        """Serialize to the same changes container shape that was provided."""
+        serialized = [change.model_dump(by_alias=True) for change in self.changes]
+        if self.keys is not None and len(self.keys) == len(serialized):
+            return dict(zip(self.keys, serialized, strict=True))
+        return serialized
+
+    def __iter__(self):
+        """Allow iteration over the changes list."""
+        return iter(self.changes)
+
+    def __len__(self):
+        """Return the number of changes."""
+        return len(self.changes)
+
+    def __getitem__(self, index):
+        """Allow indexing into the changes list."""
+        return self.changes[index]
+
+    def __bool__(self):
+        """Return whether any changes are present."""
+        return bool(self.changes)
+
+
 class Transform(BaseModel):
     """A model for the Datawrapper API's 'data' metadata attribute."""
 
@@ -250,6 +402,15 @@ class Transform(BaseModel):
                     "column-order": [0, 1, 2],
                     "column-format": [
                         {"column": "sales", "type": "number", "number-prepend": "$"}
+                    ],
+                    "changes": [
+                        {
+                            "row": 9,
+                            "column": 3,
+                            "value": "1.7",
+                            "time": 1573134075869,
+                            "previous": "0.7",
+                        }
                     ],
                     "external-data": "",
                     "use-datawrapper-cdn": True,
@@ -286,6 +447,13 @@ class Transform(BaseModel):
         default_factory=ColumnFormatList,
         alias="column-format",
         description="The formatting options for the data columns",
+    )
+
+    #: Individual value corrections made in the Check & Describe tab
+    changes: DataChangeList = Field(
+        default_factory=DataChangeList,
+        exclude_if=lambda value: not value,
+        description="Individual value corrections made in the Check & Describe tab",
     )
 
     #: An external data source URL

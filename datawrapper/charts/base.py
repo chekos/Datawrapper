@@ -1,11 +1,12 @@
 import os
 import warnings
+from copy import deepcopy
 from io import StringIO
 from typing import Any, Literal
 
 import pandas as pd
 from IPython.display import IFrame
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from datawrapper.__main__ import Datawrapper
 from datawrapper.charts.models import Annotate, Describe, Publish, Transform, Visualize
@@ -84,6 +85,13 @@ class BaseChart(BaseModel):
         "multiple-columns",
         "tables",
     ] = Field(alias="chart-type", description="The type of datawrapper chart to create")
+    #: The Datawrapper visualization type to create. Typed subclasses narrow this
+    #: field to the chart types they fully model, while BaseChart intentionally
+    #: accepts any non-empty type supported by the Datawrapper API so maps, tables
+    #: and newly added visualization types still have an object-oriented path.
+    chart_type: str = Field(
+        alias="chart-type", description="The type of datawrapper chart to create"
+    )
 
     #
     # Data
@@ -247,6 +255,29 @@ class BaseChart(BaseModel):
         exclude=True,  # Don't include in serialization
     )
 
+    #: Raw Datawrapper metadata loaded from the API. This is primarily used by the
+    #: BaseChart compatibility shim to preserve map, table and newly added
+    #: visualization settings that do not yet have typed Python fields.
+    raw_metadata: dict[str, Any] = Field(
+        default_factory=dict,
+        alias="metadata",
+        description="Raw Datawrapper metadata preserved for compatibility",
+        exclude=True,
+    )
+
+    @field_validator("chart_type")
+    @classmethod
+    def validate_chart_type(cls, value: str) -> str:
+        """Require a non-empty Datawrapper visualization type.
+
+        The base class deliberately avoids a hardcoded allowlist so it can act as a
+        compatibility shim for chart, map and table types that do not yet have a
+        typed Python class. Subclasses keep their narrower Literal annotations.
+        """
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError("chart_type must be a non-empty string")
+        return value
+
     #
     # Serialization methods for preparing data for API upload
     #
@@ -322,15 +353,24 @@ class BaseChart(BaseModel):
             }
         )
 
-        # Create the metadata section in the proper Datawrapper order
-        dw_obj["metadata"] = {
+        # Create the metadata section in the proper Datawrapper order. Start with
+        # raw API metadata when present so BaseChart can round-trip unsupported
+        # map/table/new-type settings while still overlaying the common typed fields.
+        metadata = deepcopy(self.raw_metadata) if self.raw_metadata else {}
+        for section_name, section_data in {
             "data": data_section,
             "describe": describe.model_dump(by_alias=True),
             "visualize": visualize.model_dump(by_alias=True),
             "publish": publish.model_dump(by_alias=True),
             "annotate": annotate.model_dump(by_alias=True),
-            "custom": self.custom,
-        }
+        }.items():
+            existing_section = metadata.get(section_name)
+            if isinstance(existing_section, dict):
+                metadata[section_name] = {**existing_section, **section_data}
+            else:
+                metadata[section_name] = section_data
+        metadata["custom"] = self.custom
+        dw_obj["metadata"] = metadata
 
         # Return the obj
         return dw_obj
@@ -483,8 +523,9 @@ class BaseChart(BaseModel):
             "share_url": visualize_sharing.get("url"),
             "logo": publish_logo.get("enabled"),
             "logo_id": publish_logo.get("id"),
-            # Custom
+            # Custom and raw metadata compatibility
             "custom": metadata.get("custom"),
+            "raw_metadata": metadata,
         }
 
         # Remove None values to let Pydantic apply model defaults
@@ -498,6 +539,21 @@ class BaseChart(BaseModel):
         """Initialize the BaseChart with private attributes."""
         super().__init__(**data)
         self._client = None
+
+    def __str__(self) -> str:
+        """Return a compact, safe summary of the chart.
+
+        Pydantic's default string representation includes every model field, which can
+        be noisy for chart objects and may expose the chart's underlying data or custom
+        metadata. Keep the public string form focused on stable identifying details.
+        """
+        return (
+            f"{self.__class__.__name__}("
+            f"title={self.title!r}, "
+            f"chart_type={self.chart_type!r}, "
+            f"chart_id={self.chart_id!r}"
+            ")"
+        )
 
     def _get_client(self, access_token: str | None = None) -> Datawrapper:
         """Get or create a Datawrapper client instance.
@@ -635,17 +691,24 @@ class BaseChart(BaseModel):
         # Get the serialized chart metadata
         metadata = self.serialize_model()
 
-        # Use the convenience method from the client to create the chart
-        response = client.create_chart(
-            title=metadata["title"],
-            chart_type=metadata["type"],
-            theme=metadata.get("theme") or None,
-            data=self.serialize_data(),
-            forkable=self.forkable,
-            language=metadata.get("language"),
-            metadata=metadata["metadata"],
-            folder_id=folder_id,
-        )
+        # Use the compatibility client method without surfacing its legacy-method
+        # deprecation warning to users already using the object-oriented API.
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                "ignore",
+                message=r"create_chart\(\) is deprecated.*",
+                category=DeprecationWarning,
+            )
+            response = client.create_chart(
+                title=metadata["title"],
+                chart_type=metadata["type"],
+                theme=metadata.get("theme") or None,
+                data=self.serialize_data(),
+                forkable=self.forkable,
+                language=metadata.get("language"),
+                metadata=metadata["metadata"],
+                folder_id=folder_id,
+            )
 
         # Extract and validate the chart ID
         if not isinstance(response, dict):
@@ -683,16 +746,23 @@ class BaseChart(BaseModel):
         # Get the serialized chart metadata
         metadata = self.serialize_model()
 
-        # Use the convenience method from the client to update the chart
-        client.update_chart(
-            chart_id=self.chart_id,
-            title=metadata["title"],
-            chart_type=metadata["type"],
-            theme=metadata.get("theme") or None,
-            data=self.serialize_data(),
-            language=metadata.get("language"),
-            metadata=metadata["metadata"],
-        )
+        # Use the compatibility client method without surfacing its legacy-method
+        # deprecation warning to users already using the object-oriented API.
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                "ignore",
+                message=r"update_chart\(\) is deprecated.*",
+                category=DeprecationWarning,
+            )
+            client.update_chart(
+                chart_id=self.chart_id,
+                title=metadata["title"],
+                chart_type=metadata["type"],
+                theme=metadata.get("theme") or None,
+                data=self.serialize_data(),
+                language=metadata.get("language"),
+                metadata=metadata["metadata"],
+            )
 
         # Return self for chaining
         return self
@@ -722,8 +792,15 @@ class BaseChart(BaseModel):
         # Get the client
         client = self._get_client(access_token)
 
-        # Call the publish_chart method from the client
-        result = client.publish_chart(chart_id=self.chart_id)
+        # Call the compatibility client method without surfacing its legacy-method
+        # deprecation warning to users already using the object-oriented API.
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                "ignore",
+                message=r"publish_chart\(\) is deprecated.*",
+                category=DeprecationWarning,
+            )
+            result = client.publish_chart(chart_id=self.chart_id)
 
         # Raise an exception if publishing failed
         if not result:

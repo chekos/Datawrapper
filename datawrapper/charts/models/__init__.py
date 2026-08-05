@@ -36,7 +36,13 @@ from .table_mini_chart import MiniColumn, MiniLine, TableMiniChart
 from .table_row import TableBodyRow, TableRow
 from .table_text_style import TableTextStyle
 from .text_annotations import ConnectorLine, TextAnnotation
-from .transforms import ColumnFormat, ColumnFormatList, Transform
+from .transforms import (
+    ColumnFormat,
+    ColumnFormatList,
+    DataChange,
+    DataChangeList,
+    Transform,
+)
 
 __all__ = [
     "Annotate",
@@ -47,6 +53,8 @@ __all__ = [
     "ConnectorLine",
     "CustomRangeMixin",
     "CustomTicksMixin",
+    "DataChange",
+    "DataChangeList",
     "Describe",
     "GridDisplayMixin",
     "GridFormatMixin",

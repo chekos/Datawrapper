@@ -9,6 +9,7 @@ from datawrapper.charts import (
     AreaChart,
     ArrowChart,
     BarChart,
+    BaseChart,
     ColumnChart,
     LineChart,
     MultipleColumnChart,
@@ -330,24 +331,36 @@ def test_get_chart_missing_type():
             get_chart(chart_id="notype777")
 
 
-def test_get_chart_unsupported_type():
-    """Test get_chart raises ValueError for unsupported chart types."""
+def test_get_chart_unsupported_type_returns_base_chart():
+    """Test get_chart returns BaseChart for unsupported but valid chart types."""
     # Create a mock Datawrapper client
     mock_client = MagicMock(spec=Datawrapper)
 
-    # Mock get_chart response with unsupported type
+    # Mock get_chart response with an unsupported type
     mock_metadata = {
         "id": "unsupported888",
         "title": "Test Chart",
-        "type": "d3-maps",  # Unsupported type
+        "type": "d3-maps",
         "metadata": {"visualize": {}},
     }
     mock_client.get_chart.return_value = mock_metadata
 
-    with patch("datawrapper.Datawrapper", return_value=mock_client):
-        # Call get_chart should raise ValueError
-        with pytest.raises(ValueError, match="Unsupported chart type: d3-maps"):
-            get_chart(chart_id="unsupported888")
+    with (
+        patch("datawrapper.Datawrapper", return_value=mock_client),
+        patch.object(BaseChart, "get") as mock_base_get,
+    ):
+        mock_chart = BaseChart(chart_type="d3-maps", title="Test Chart")
+        mock_chart.chart_id = "unsupported888"
+        mock_base_get.return_value = mock_chart
+
+        with pytest.warns(
+            UserWarning, match="does not have a dedicated datawrapper class"
+        ):
+            result = get_chart(chart_id="unsupported888")
+
+    assert isinstance(result, BaseChart)
+    assert result.chart_id == "unsupported888"
+    mock_base_get.assert_called_once_with(chart_id="unsupported888", access_token=None)
 
 
 def test_get_chart_all_supported_types():
