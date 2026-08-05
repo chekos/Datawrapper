@@ -72,19 +72,6 @@ class BaseChart(BaseModel):
         },
     )
 
-    #: The type of datawrapper chart to create
-    chart_type: Literal[
-        "column-chart",
-        "d3-area",
-        "d3-arrow-plot",
-        "d3-bars",
-        "d3-bars-stacked",
-        "d3-lines",
-        "d3-scatter-plot",
-        "locator-map",
-        "multiple-columns",
-        "tables",
-    ] = Field(alias="chart-type", description="The type of datawrapper chart to create")
     #: The Datawrapper visualization type to create. Typed subclasses narrow this
     #: field to the chart types they fully model, while BaseChart intentionally
     #: accepts any non-empty type supported by the Datawrapper API so maps, tables

@@ -3,7 +3,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from ..enums import BorderWidth, NumberFormat
-from ..models import TableTextStyle
+from .table_text_style import TableTextStyle
 
 
 class TableRow(BaseModel):
