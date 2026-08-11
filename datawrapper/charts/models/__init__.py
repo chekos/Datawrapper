@@ -23,6 +23,18 @@ from .range_annotations import (
     YLineAnnotation,
     YRangeAnnotation,
 )
+from .table_column import TableColumn
+from .table_heatmap import (
+    ColorStop,
+    HeatMap,
+    HeatMapContinuous,
+    HeatMapSteps,
+    LegendContinuous,
+    LegendSteps,
+)
+from .table_mini_chart import MiniColumn, MiniLine
+from .table_row import TableBodyRow, TableRow
+from .table_text_style import TableTextStyle
 from .text_annotations import ConnectorLine, TextAnnotation
 from .transforms import (
     ColumnFormat,
@@ -35,6 +47,7 @@ from .transforms import (
 __all__ = [
     "Annotate",
     "AnnotationsMixin",
+    "ColorStop",
     "ColumnFormat",
     "ColumnFormatList",
     "ConnectorLine",
@@ -45,11 +58,22 @@ __all__ = [
     "Describe",
     "GridDisplayMixin",
     "GridFormatMixin",
+    "HeatMap",
+    "HeatMapContinuous",
+    "HeatMapSteps",
+    "LegendContinuous",
+    "LegendSteps",
     "Logo",
+    "MiniLine",
+    "MiniColumn",
     "Publish",
     "PublishBlocks",
     "RangeAnnotation",
     "Sharing",
+    "TableBodyRow",
+    "TableColumn",
+    "TableRow",
+    "TableTextStyle",
     "TextAnnotation",
     "Transform",
     "Visualize",
