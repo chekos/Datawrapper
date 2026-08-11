@@ -15,14 +15,14 @@ from .models import (
     MiniLine,
     TableBodyRow,
     TableColumn,
-    TableMiniChart,
     TableRow,
 )
+from .models.table_mini_chart import TableMiniChart
 from .serializers import Pagination
 
 
 class Table(BaseChart):
-    """A base class for the Datawrapper API's column chart."""
+    """A base class for the Datawrapper API's table."""
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -243,7 +243,7 @@ class Table(BaseChart):
                         column_json[column] = {"sparkline": chart.serialize_model()}
 
         # Only include columns if non-empty
-        if column_json is not None:
+        if column_json:
             visualize_data["columns"] = column_json
 
         row_json = {}
@@ -252,7 +252,7 @@ class Table(BaseChart):
                 row_index = row.row_index
                 if row_index < data_length:
                     row_json[f"row-{row_index}"] = row.serialize_model()
-        if row_json is not None:
+        if row_json:
             visualize_data["rows"] = row_json
 
         model["metadata"]["visualize"].update(visualize_data)

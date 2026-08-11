@@ -28,7 +28,9 @@ class TableMiniChart(BaseModel):
             }
         },
     )
-    type: str = Field(alias="type", description="The type of mini chart")
+    type: Literal["line", "columns"] = Field(
+        alias="type", description="The type of mini chart"
+    )
 
     title: str | None = Field(
         default=None,

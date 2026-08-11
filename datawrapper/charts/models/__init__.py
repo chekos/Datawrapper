@@ -32,7 +32,7 @@ from .table_heatmap import (
     LegendContinuous,
     LegendSteps,
 )
-from .table_mini_chart import MiniColumn, MiniLine, TableMiniChart
+from .table_mini_chart import MiniColumn, MiniLine
 from .table_row import TableBodyRow, TableRow
 from .table_text_style import TableTextStyle
 from .text_annotations import ConnectorLine, TextAnnotation
@@ -73,7 +73,6 @@ __all__ = [
     "TableBodyRow",
     "TableColumn",
     "TableRow",
-    "TableMiniChart",
     "TableTextStyle",
     "TextAnnotation",
     "Transform",

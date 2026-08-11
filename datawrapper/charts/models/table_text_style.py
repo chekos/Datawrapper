@@ -20,12 +20,9 @@ class TableTextStyle(BaseModel):
         default=None, alias="fontSize", description="The size of the text"
     )
 
-
-color: str | None | bool = Field(...)
-
-
-@field_validator("color", mode="before")
-def only_false_bool(cls, v):
-    if v is True:
-        raise ValueError("color cannot be True")
-    return v
+    @field_validator("color", mode="before")
+    @classmethod
+    def only_false_bool(cls, v):
+        if v is True:
+            raise ValueError("color cannot be True")
+        return v

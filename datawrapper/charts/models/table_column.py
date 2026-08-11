@@ -176,7 +176,7 @@ class TableColumn(BaseModel):
     bar_color_negative: bool | int | str = Field(
         default=False,
         alias="barColorNegative",
-        description="Whether to use a different bar color for negative values",
+        description="Whether to use a different bar color for negative values. If True, defaults to datawrapper red. If int, references the corresponding datawrapper color. If string, maps to explicit color value.",
     )
     bar_no_background: bool = Field(
         default=False,

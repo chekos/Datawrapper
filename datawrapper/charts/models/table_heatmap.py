@@ -79,7 +79,7 @@ class Legend(BaseModel):
             "labelFormat": self.label_format,
         }
         if self.title:
-            model["title"] = (self.title,)
+            model["title"] = self.title
             model["titleEnabled"] = True
         return model
 
@@ -281,7 +281,7 @@ class HeatMap(BaseModel):
         return self
 
     @classmethod
-    def deserialize_model(cls, api_data: dict | None, legend_api_data: dict):
+    def deserialize_model(cls, api_data: dict | None, legend_api_data: dict | None):
         if api_data is None:
             return {}
         enabled = api_data.get("enabled")
@@ -295,7 +295,9 @@ class HeatMap(BaseModel):
             "range_max": api_data.get("rangeMax"),
         }
         mode = api_data.get("mode")
-        legend_enabled = legend_api_data.get("enabled")
+        legend_enabled = (
+            legend_api_data is not None and legend_api_data.get("enabled") is True
+        )
 
         # Mode determines which kind of Legend to create
         if mode == "continuous":
@@ -366,8 +368,12 @@ class HeatMapContinuous(HeatMap):
             legend_json = {"enabled": False}
 
         else:
-            self.legend = LegendContinuous()
-            legend_json = self.legend.serialize_model()
+            legend_obj = (
+                self.legend
+                if isinstance(self.legend, LegendContinuous)
+                else LegendContinuous()  # handles True
+            )
+            legend_json = legend_obj.serialize_model()
 
         return heatmap_json, legend_json
 
