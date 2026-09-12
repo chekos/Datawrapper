@@ -17,7 +17,7 @@ repos:
       - id: check-toml
       - id: check-yaml
       - id: check-added-large-files
-        args: [--maxkb=100000]
+        args: [--maxkb=1024]
       - id: check-json
       - id: forbid-submodules
       - id: end-of-file-fixer
@@ -32,14 +32,14 @@ repos:
       - id: check-symlinks
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.13.3
+    rev: v0.16.0
     hooks:
       - id: ruff
         args: [--fix]
       - id: ruff-format
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.20.0
+    rev: v3.21.2
     hooks:
       - id: pyupgrade
         args: [--py310-plus]

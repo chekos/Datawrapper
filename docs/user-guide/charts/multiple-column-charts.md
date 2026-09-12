@@ -42,38 +42,38 @@ chart = dw.MultipleColumnChart(
     y_grid_label_align="left",
     # Custom panel titles with city and country information
     panels=[
-        {
-            "column": "Delhi",
-            "title": 'Delhi, <span style="color:gray; font-weight: normal;">India</span>',
-        },
-        {
-            "column": "Dhaka",
-            "title": 'Dhaka, <span style="color:gray; font-weight: normal;"> Bangladesh </span>',
-        },
-        {
-            "column": "Lagos",
-            "title": 'Lagos, <span style="color:gray; font-weight: normal;">Nigeria</span>',
-        },
-        {
-            "column": "Paris",
-            "title": 'Paris, <span style="color:gray; font-weight: normal;">France</span>',
-        },
-        {
-            "column": "Tokyo",
-            "title": 'Tokyo, <span style="color:gray; font-weight: normal;">Japan</span>',
-        },
-        {
-            "column": "Beijing",
-            "title": 'Beijing, <span style="color:gray; font-weight: normal;">China</span>',
-        },
-        {
-            "column": "Mumbai (Bombay)",
-            "title": 'Mumbai, <span style="color:gray; font-weight: normal;">India</span>',
-        },
-        {
-            "column": "New York-Newark",
-            "title": 'New York/Newark, <span style="color:gray; font-weight: normal;">U.S.</span>',
-        },
+        dw.MultipleColumnPanel(
+            column="Delhi",
+            title='Delhi, <span style="color:gray; font-weight: normal;">India</span>',
+        ),
+        dw.MultipleColumnPanel(
+            column="Dhaka",
+            title='Dhaka, <span style="color:gray; font-weight: normal;"> Bangladesh </span>',
+        ),
+        dw.MultipleColumnPanel(
+            column="Lagos",
+            title='Lagos, <span style="color:gray; font-weight: normal;">Nigeria</span>',
+        ),
+        dw.MultipleColumnPanel(
+            column="Paris",
+            title='Paris, <span style="color:gray; font-weight: normal;">France</span>',
+        ),
+        dw.MultipleColumnPanel(
+            column="Tokyo",
+            title='Tokyo, <span style="color:gray; font-weight: normal;">Japan</span>',
+        ),
+        dw.MultipleColumnPanel(
+            column="Beijing",
+            title='Beijing, <span style="color:gray; font-weight: normal;">China</span>',
+        ),
+        dw.MultipleColumnPanel(
+            column="Mumbai (Bombay)",
+            title='Mumbai, <span style="color:gray; font-weight: normal;">India</span>',
+        ),
+        dw.MultipleColumnPanel(
+            column="New York-Newark",
+            title='New York/Newark, <span style="color:gray; font-weight: normal;">U.S.</span>',
+        ),
     ],
     # Add text annotations to label specific panels
     text_annotations=[

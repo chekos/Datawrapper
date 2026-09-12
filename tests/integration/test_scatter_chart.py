@@ -13,7 +13,7 @@ from datawrapper.charts import ScatterPlot
 def load_sample_json(filename: str) -> dict:
     """Load a sample JSON file from tests/samples/scatter/."""
     path = Path(__file__).parent.parent / "samples" / "scatter" / filename
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         data = json.load(f)
         return data["chart"]["crdt"]["data"]
 
@@ -22,7 +22,7 @@ def load_sample_csv(filename: str) -> str:
     """Load a sample CSV file from tests/samples/scatter/."""
     path = Path(__file__).parent.parent / "samples" / "scatter" / filename
     # Read the file and convert tabs to commas if needed
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         content = f.read()
         # Check if this is a tab-delimited file
         if "\t" in content.split("\n")[0]:
@@ -468,6 +468,23 @@ class TestScatterPlotSerialization:
 
 class TestScatterPlotParsing:
     """Test parsing ScatterPlot from API responses."""
+
+    def test_automation_fixture_loads_with_explicit_utf8_encoding(self):
+        """Regression test for Windows cp1252 fixture-decoding failures."""
+        with patch("builtins.open", wraps=open) as mocked_open:
+            chart_metadata = load_sample_json("automation.json")
+            sample_csv = load_sample_csv("automation.csv")
+
+        encoding_kwargs = [
+            call.kwargs["encoding"] for call in mocked_open.call_args_list
+        ]
+
+        assert encoding_kwargs == ["utf-8", "utf-8"]
+        assert chart_metadata["title"] == (
+            "Higher Risk of Job Automation in Lower Paying Jobs"
+        )
+        assert "Helpers–Brickmasons" in sample_csv
+        assert "Helpersâ€“Brickmasons" not in sample_csv
 
     def test_parse_automation_sample(self):
         """Test parsing the automation sample JSON."""

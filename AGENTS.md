@@ -10,6 +10,10 @@ object-oriented chart API, serialization/deserialization patterns, annotation
 mixins, and other code-level guidance). This file covers repository structure
 and the development/CI workflow instead.
 
+Prefer the object-oriented chart API (`BarChart`, `LineChart`, `get_chart`,
+etc.) for new work. Treat lower-level `Datawrapper` methods as legacy
+compatibility paths unless a task explicitly targets them.
+
 ## Repository Structure
 
 - `datawrapper/`: The published package. `datawrapper/charts/` holds the
@@ -45,6 +49,15 @@ make test-parallel  # Use for the full, independent test suite
 Use `make fix` or `make format` only when changes to source files are
 intended. `make hooks` may also modify files.
 
+Before committing, run the hook suite against all files:
+
+```sh
+uv run pre-commit run --all-files
+```
+
+Keep pull requests focused. Do not mix dependency upgrades, broad refactors,
+generated artifacts, and product changes in one PR.
+
 ## Worktrees and Parallel Agents
 
 - Edit only the current checkout. Never modify the primary checkout or sibling
@@ -62,6 +75,18 @@ intended. `make hooks` may also modify files.
 Static types are checked with `ty` (`make type-check`), configured in
 `[tool.ty]` in `pyproject.toml`. Prefer precise type hints over `Any`; add
 `# ty: ignore[...]` comments only with a reason.
+
+## Testing
+
+- Put fast, isolated validation in `tests/unit/`.
+- Put mocked multi-component behavior in `tests/integration/` or
+  `tests/functional/`.
+- Mark tests that require the real Datawrapper API with `@pytest.mark.api`
+  and a `DATAWRAPPER_ACCESS_TOKEN` skip guard. The default local and CI test
+  runs must pass without credentials.
+- Prefer `responses`, `pytest-mock`, or `unittest.mock` over live HTTP calls
+  for regression tests.
+- When fixing a bug, add a regression test that would fail before the fix.
 
 ## Documentation
 
@@ -86,14 +111,20 @@ commit, obtain explicit approval for the tag-triggered package publication,
 then create a public GitHub Release from that existing tag with concise
 changelog-based notes. Agents may prepare release notes and validate a
 release, but must not create tags, releases, or package publications without
-explicit human approval.
+explicit human approval. Agents also must not merge pull requests or change
+repository settings.
 
 ## Change Guidelines
 
 - Keep production code, tests, package configuration, and documentation aligned.
 - Add tests for new library behavior under `tests/`.
 - Use the configured Ruff and ty checks; do not introduce duplicate tooling
-  without a project need.
+  without a project need. If a check is too slow or flaky, document the
+  evidence in the PR and choose the strongest practical alternative instead of
+  disabling it silently.
 - Copy `.env.example` to `.env` or use `make bootstrap` in a linked worktree.
   Do not commit generated build output, virtual environments, `.env` files,
-  `.env.worktree`, or credentials.
+  `.env.worktree`, credentials, API tokens, or recordings of API responses
+  containing private data.
+- Do not edit `uv.lock` or dependency constraints unless the task is
+  explicitly about dependency maintenance.

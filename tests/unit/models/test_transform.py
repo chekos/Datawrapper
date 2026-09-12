@@ -262,3 +262,170 @@ class TestTransform:
         assert len(transform.column_format) == 2
         assert transform.column_format[0].column == "sales"
         assert transform.column_format[1].column == "date"
+
+
+def test_data_change_serializes_documented_api_shape():
+    """Individual value corrections serialize to metadata.data.changes entries."""
+    change = datawrapper.DataChange(
+        row=9,
+        column=3,
+        value="1.7",
+        time=1573134075869,
+        previous="0.7",
+    )
+
+    assert change.model_dump(by_alias=True) == {
+        "row": 9,
+        "column": 3,
+        "value": "1.7",
+        "time": 1573134075869,
+        "previous": "0.7",
+    }
+
+
+def test_data_change_previous_is_optional_for_added_column_entries():
+    """Datawrapper omits previous for added-column entries in changes."""
+    change = datawrapper.DataChange(
+        row=0,
+        column=5,
+        value="Extra column",
+        time=1573134111144,
+    )
+
+    assert change.previous is None
+    assert change.model_dump(by_alias=True) == {
+        "row": 0,
+        "column": 5,
+        "value": "Extra column",
+        "time": 1573134111144,
+    }
+
+
+def test_transform_accepts_data_change_objects_and_dicts():
+    """Transform exposes changes ergonomically while preserving API output."""
+    transform = datawrapper.Transform(
+        changes=[
+            datawrapper.DataChange(
+                row=9,
+                column=3,
+                value="1.7",
+                time=1573134075869,
+                previous="0.7",
+            ),
+            {
+                "row": 0,
+                "column": 5,
+                "value": "Extra column",
+                "time": 1573134111144,
+            },
+        ]
+    )
+
+    assert all(
+        isinstance(change, datawrapper.DataChange) for change in transform.changes
+    )
+    assert transform.model_dump(by_alias=True)["changes"] == [
+        {
+            "row": 9,
+            "column": 3,
+            "value": "1.7",
+            "time": 1573134075869,
+            "previous": "0.7",
+        },
+        {
+            "row": 0,
+            "column": 5,
+            "value": "Extra column",
+            "time": 1573134111144,
+        },
+    ]
+
+
+def test_transform_deserializes_documented_data_changes_fixture():
+    """The documented Check & Describe fixture round-trips through Transform."""
+    import json
+    from pathlib import Path
+
+    fixture_path = Path(__file__).parents[2] / "fixtures" / "metadata_data_changes.json"
+    fixture = json.loads(fixture_path.read_text())
+
+    transform = datawrapper.Transform.model_validate(fixture["metadata"]["data"])
+
+    assert list(transform.changes) == [
+        datawrapper.DataChange(
+            row=9,
+            column=3,
+            value="1.7",
+            time=1573134075869,
+            previous="0.7",
+        ),
+        datawrapper.DataChange(
+            row=0,
+            column=5,
+            value="Extra column",
+            time=1573134111144,
+        ),
+    ]
+    assert (
+        transform.model_dump(by_alias=True)["changes"]
+        == fixture["metadata"]["data"]["changes"]
+    )
+
+
+def test_transform_defaults_do_not_emit_empty_changes():
+    """Existing default transformation serialization remains unchanged."""
+    transform = datawrapper.Transform()
+
+    assert len(transform.changes) == 0
+    assert "changes" not in transform.model_dump(by_alias=True)
+
+
+def test_data_change_rejects_negative_indexes():
+    """Row and column indexes are zero-based and cannot be negative."""
+    with pytest.raises(ValidationError):
+        datawrapper.DataChange(row=-1, column=0, value="x", time=1)
+
+    with pytest.raises(ValidationError):
+        datawrapper.DataChange(row=0, column=-1, value="x", time=1)
+
+
+def test_transform_accepts_empty_changes_object_as_no_changes():
+    """Existing API responses can use changes: {} when no corrections exist."""
+    transform = datawrapper.Transform.model_validate({"changes": {}})
+
+    assert len(transform.changes) == 0
+    assert "changes" not in transform.model_dump(by_alias=True)
+
+
+def test_transform_preserves_api_object_shaped_changes():
+    """Existing API fixtures can key changes by Datawrapper's internal IDs."""
+    api_changes = {
+        "20azca858m": {
+            "id": "20azca858m",
+            "row": 0,
+            "time": 1592404219100,
+            "value": "New cases",
+            "column": 1,
+            "ignored": False,
+            "previous": "new",
+            "_index": 0,
+        },
+        "sfr5gsdyqd": {
+            "id": "sfr5gsdyqd",
+            "row": 0,
+            "time": 1592404227900,
+            "value": "Deaths per day",
+            "column": 2,
+            "ignored": False,
+            "previous": "deaths",
+            "_index": 1,
+        },
+    }
+
+    transform = datawrapper.Transform.model_validate({"changes": api_changes})
+
+    assert [change.id for change in transform.changes] == [
+        "20azca858m",
+        "sfr5gsdyqd",
+    ]
+    assert transform.model_dump(by_alias=True)["changes"] == api_changes

@@ -47,6 +47,7 @@ dev = [
     "check-wheel-contents",
     "deptry",
     "pre-commit",
+    "ruff>=0.16.0",
     "setuptools-scm",
     "twine",
     "ty",
@@ -73,8 +74,8 @@ docs = [
     "sphinx_rtd_theme",
 ]
 
-[tool.setuptools]
-packages = ["datawrapper"]
+[tool.setuptools.packages.find]
+include = ["datawrapper*"]
 
 [tool.setuptools.package-data]
 datawrapper = ["py.typed"]

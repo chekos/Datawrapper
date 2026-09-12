@@ -1,0 +1,38 @@
+{
+  "type": "d3-bars",
+  "title": "Corrections fixture",
+  "language": "en-US",
+  "metadata": {
+    "data": {
+      "transpose": false,
+      "vertical-header": true,
+      "horizontal-header": true,
+      "changes": [
+        {
+          "row": 9,
+          "time": 1573134075869,
+          "value": "1.7",
+          "column": 3,
+          "previous": "0.7"
+        },
+        {
+          "row": 0,
+          "time": 1573134111144,
+          "value": "Extra column",
+          "column": 5
+        }
+      ],
+      "column-order": [2, 0, 1],
+      "column-format": {
+        "Column A": {
+          "type": "text",
+          "ignore": false,
+          "number-append": "",
+          "number-format": "n1",
+          "number-divisor": 0,
+          "number-prepend": ""
+        }
+      }
+    }
+  }
+}

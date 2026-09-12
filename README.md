@@ -45,9 +45,7 @@ See the [full documentation](https://datawrapper.readthedocs.io/) for comprehens
 
 ### Contributing
 
-Clone the repository. Move into the directory on your terminal.
-
-Install dependencies for development.
+Clone the repository and install the locked development dependencies.
 
 ```bash
 make bootstrap
@@ -59,14 +57,14 @@ Install pre-commit to run a battery of automatic quick fixes against your work.
 uv run pre-commit install
 ```
 
-Run tests with
+Run the canonical local checks before opening a pull request.
 
 ```bash
+make check
 make test
 ```
 
-See `AGENTS.md` for the full development workflow, including `make check` and
-`make verify`.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow. AI agents should also read [AGENTS.md](AGENTS.md) before changing files.
 
 ## 📈 Releases
 
