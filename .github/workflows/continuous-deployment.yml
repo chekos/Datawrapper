@@ -1,80 +1,56 @@
 name: Continuous deployment
 
+permissions:
+  contents: read
+
 on:
   push:
   pull_request:
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  lint-python:
-    name: Lint and format Python code
+  check:
+    name: Check project
     runs-on: ubuntu-latest
     steps:
-      - id: checkout
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
-      - id: install-uv
-        name: Install uv
+      - name: Setup uv
         uses: astral-sh/setup-uv@v9.0.0
         with:
           version: "latest"
           enable-cache: true
-          cache-dependency-glob: '**/uv.lock'
+          cache-dependency-glob: "uv.lock"
 
-      - id: install-python
-        name: Install Python
-        run: uv python install 3.13
+      - name: Install Python dependencies
+        run: make install-dev
 
-      - id: install-python-dependencies
-        name: Install Python dependencies
-        run: uv sync --frozen --extra dev --extra test
+      - name: Run static checks
+        run: make check
 
-      - id: check-ruff
-        name: Check with Ruff
-        run: uv run ruff check ./datawrapper ./tests
-
-      - id: format-ruff
-        name: Check formatting with Ruff
-        run: uv run ruff format --check ./datawrapper ./tests
-
-  mypy-python:
-    name: Check Python static typing
-    runs-on: ubuntu-latest
-    steps:
-      - id: checkout
-        name: Checkout
-        uses: actions/checkout@v7
-
-      - id: install-uv
-        name: Install uv
-        uses: astral-sh/setup-uv@v9.0.0
-        with:
-          version: "latest"
-          enable-cache: true
-          cache-dependency-glob: '**/uv.lock'
-
-      - id: install-python
-        name: Install Python
-        run: uv python install 3.13
-
-      - id: install-python-dependencies
-        name: Install Python dependencies
-        run: uv sync --frozen --extra mypy
-
-      - id: mypy
-        name: Run mypy
-        run: uv run mypy ./datawrapper --ignore-missing-imports
+      - name: Prune uv cache
+        run: uv cache prune --ci
 
   test-python:
     name: Test Python code
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python: ['3.10', '3.11', '3.12', '3.13']
+        python: ["3.10", "3.11", "3.12", "3.13"]
+    env:
+      DATAWRAPPER_ACCESS_TOKEN: ${{ secrets.DATAWRAPPER_ACCESS_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - id: install-uv
         name: Install uv
@@ -82,7 +58,7 @@ jobs:
         with:
           version: "latest"
           enable-cache: true
-          cache-dependency-glob: '**/uv.lock'
+          cache-dependency-glob: "uv.lock"
 
       - id: install-python
         name: Install Python
@@ -90,21 +66,28 @@ jobs:
 
       - id: install-python-dependencies
         name: Install Python dependencies
-        run: uv sync --frozen --extra test --python ${{ matrix.python }}
-        shell: bash
+        run: make install-test UV_PYTHON=${{ matrix.python }}
 
       - id: tests
         name: Run tests
-        run: uv run pytest
-        shell: bash
+        run: make test UV_PYTHON=${{ matrix.python }}
+
+      - name: Verify package distribution
+        if: matrix.python == '3.13'
+        run: make package-verify PACKAGE=datawrapper UV_PYTHON=${{ matrix.python }}
+
+      - name: Prune uv cache
+        run: uv cache prune --ci
 
   build:
     name: Build release candidate
     runs-on: ubuntu-latest
-    needs: [lint-python, mypy-python, test-python]
+    needs: [check, test-python]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - id: install-uv
         name: Install uv
@@ -112,16 +95,14 @@ jobs:
         with:
           version: "latest"
           enable-cache: true
-          cache-dependency-glob: '**/uv.lock'
-
-      - id: install-python
-        name: Install Python
-        run: uv python install 3.13
+          cache-dependency-glob: "uv.lock"
 
       - id: build
         name: Build releases
-        run: uv build --sdist --wheel
-        shell: bash
+        run: make build
+
+      - name: Prune uv cache
+        run: uv cache prune --ci
 
       - id: save
         name: Save artifact
@@ -151,4 +132,4 @@ jobs:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
           verbose: true
-          verify_metadata: false
+          verify-metadata: false

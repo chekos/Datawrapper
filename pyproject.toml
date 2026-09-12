@@ -7,9 +7,7 @@ name = "datawrapper"
 dynamic = ["version"]
 requires-python = ">=3.10.0"
 dependencies = [
-    'exceptiongroup; python_version<"3.11"',
     "importlib_metadata",
-    "rich",
     "requests",
     "pandas",
     "pydantic",
@@ -37,11 +35,24 @@ classifiers = [
     "Typing :: Typed",
 ]
 
-[project.optional-dependencies]
+[project.urls]
+Documentation = "https://github.com/chekos/datawrapper"
+Maintainer = "https://github.com/chekos/"
+Source = "https://github.com/chekos/datawrapper"
+Issues = "https://github.com/chekos/datawrapper/issues/"
+
+[dependency-groups]
 dev = [
+    "check-manifest",
+    "check-wheel-contents",
+    "deptry",
     "pre-commit",
     "ruff>=0.16.0",
     "setuptools-scm",
+    "twine",
+    "ty",
+    "vulture",
+    "zizmor",
 ]
 test = [
     "pytest",
@@ -62,18 +73,6 @@ docs = [
     "myst-parser",
     "sphinx_rtd_theme",
 ]
-mypy = [
-    "mypy",
-    "types-requests",
-    "types-docutils",
-    "pydantic-settings",
-]
-
-[project.urls]
-Documentation = "https://github.com/chekos/datawrapper"
-Maintainer = "https://github.com/chekos/"
-Source = "https://github.com/chekos/datawrapper"
-Issues = "https://github.com/chekos/datawrapper/issues/"
 
 [tool.setuptools.packages.find]
 include = ["datawrapper*"]
@@ -119,8 +118,37 @@ docstring-code-format = true
 known-first-party = ["datawrapper"]
 force-single-line = false
 
-[tool.mypy]
-plugins = ["pydantic.mypy"]
+[tool.deptry]
+extend_exclude = ["docs"]
+
+[tool.ty.environment]
+python-version = "3.10"
+
+[tool.ty.src]
+include = ["datawrapper"]
+exclude = [
+    "tests/**",
+    "build/**",
+    "docs/**",
+    ".venv/**",
+    ".github/**",
+    ".vscode/**",
+    "**/__pycache__",
+]
+
+[tool.ty.rules]
+invalid-argument-type = "error"
+invalid-return-type = "error"
+invalid-key = "error"
+invalid-assignment = "error"
+invalid-method-override = "error"
+unresolved-attribute = "error"
+possibly-missing-attribute = "error"
+missing-type-argument = "error"
+no-matching-overload = "error"
+unsound-return-statement = "error"
+possibly-unresolved-reference = "warn"
+unused-ignore-comment = "error"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

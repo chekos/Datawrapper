@@ -85,8 +85,9 @@ class BaseChart(BaseModel):
     #
 
     #: The data to use for the chart
-    data: pd.DataFrame | list[dict] = Field(
-        default_factory=list[dict], description="The data to use for the chart"
+    data: pd.DataFrame | list[dict[str, Any]] = Field(
+        default_factory=list[dict[str, Any]],
+        description="The data to use for the chart",
     )
 
     #: The metadata options for the data columns in the "Check and Describe" tab
@@ -1193,7 +1194,7 @@ class BaseChart(BaseModel):
         # Fetch the full chart data using the class's get method
         return self.__class__.get(chart_id=new_chart_id, access_token=access_token)
 
-    def get_display_urls(self, access_token: str | None = None) -> list[dict]:
+    def get_display_urls(self, access_token: str | None = None) -> list[dict[str, Any]]:
         """Get the URLs for the published chart, table or map.
 
         Args:

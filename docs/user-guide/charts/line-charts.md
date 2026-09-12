@@ -98,9 +98,7 @@ chart = dw.LineChart(
         dw.Line(column="lower", width=dw.LineWidth.INVISIBLE),
         dw.Line(column="upper", width=dw.LineWidth.INVISIBLE),
     ],
-    area_fills=[
-        dw.AreaFill(from_column="lower", to_column="upper", color="#cccccc")
-    ],
+    area_fills=[dw.AreaFill(from_column="lower", to_column="upper", color="#cccccc")],
 )
 ```
 

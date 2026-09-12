@@ -115,7 +115,7 @@ class MultipleColumnTextAnnotation(TextAnnotation):
         description="Whether to show this annotation in all plots",
     )
 
-    def serialize_model(self) -> dict:
+    def serialize_model(self) -> dict[str, Any]:
         """Serialize the annotation to API format.
 
         Extends the base TextAnnotation serialization to include:
@@ -139,7 +139,7 @@ class MultipleColumnTextAnnotation(TextAnnotation):
     @classmethod
     def deserialize_model(
         cls, api_data: dict[str, dict[Any, Any]] | list[dict[Any, Any]] | None
-    ) -> list[dict]:
+    ) -> list[dict[str, Any]]:
         """Parse API response to extract MultipleColumnTextAnnotation data.
 
         Handles the API format where:
@@ -208,7 +208,7 @@ class MultipleColumnRangeAnnotation(RangeAnnotation):
         description="Whether to show this annotation in all plots",
     )
 
-    def serialize_model(self) -> dict:
+    def serialize_model(self) -> dict[str, Any]:
         """Serialize the annotation to API format.
 
         Extends the base RangeAnnotation serialization to include:
@@ -232,7 +232,7 @@ class MultipleColumnRangeAnnotation(RangeAnnotation):
     @classmethod
     def deserialize_model(
         cls, api_data: dict[str, dict[Any, Any]] | list[dict[Any, Any]] | None
-    ) -> list[dict]:
+    ) -> list[dict[str, Any]]:
         """Parse API response to extract MultipleColumnRangeAnnotation data.
 
         Handles the API format where:
@@ -450,7 +450,7 @@ class MultipleColumnChart(
                     result.append(panel.model_copy(update={"column": column}))
                 elif isinstance(panel, dict):
                     panel_data = {**panel, "column": column}
-                    result.append(MultipleColumnPanel(**panel_data))
+                    result.append(MultipleColumnPanel.model_validate(panel_data))
                 else:
                     raise TypeError(
                         "panels keyed-dict values must be MultipleColumnPanel "
@@ -753,7 +753,7 @@ class MultipleColumnChart(
         description="Show label for all panels",
     )
 
-    def serialize_model(self) -> dict:
+    def serialize_model(self) -> dict[str, Any]:
         """Serialize the model to a dictionary."""
         # Call the parent class's serialize_model method
         model = super().serialize_model()

@@ -61,7 +61,7 @@ class ReplaceFlags(BaseSerializer):
             return "off"
 
         enabled = api_obj.get("enabled", False)
-        flag_type = api_obj.get("style", "")
+        flag_type: str = api_obj.get("style", "")
 
         # If enabled is False or style is empty, return "off"
         if not enabled or not flag_type:

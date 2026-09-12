@@ -130,7 +130,7 @@ class AreaFill(BaseModel):
             self.use_mixed_colors = True
         return self
 
-    def serialize_model(self) -> dict:
+    def serialize_model(self) -> dict[str, Any]:
         """Serialize the model to a dictionary for the Datawrapper API.
 
         Note: The 'id' field is not included in the output as it's used as the dict key.
@@ -521,7 +521,9 @@ class Line(BaseModel):
         return line_dict
 
     @classmethod
-    def deserialize_model(cls, line_name: str, line_config: dict) -> dict[str, Any]:
+    def deserialize_model(
+        cls, line_name: str, line_config: dict[str, Any]
+    ) -> dict[str, Any]:
         """Deserialize API line config to Line initialization dict.
 
         Args:
@@ -861,7 +863,7 @@ class LineChart(
 
         return color_category
 
-    def serialize_model(self) -> dict:
+    def serialize_model(self) -> dict[str, Any]:
         """Serialize the model to a dictionary."""
         # Call the parent class's serialize_model method
         model = super().serialize_model()

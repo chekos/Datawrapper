@@ -20,7 +20,7 @@ Create a new folder:
 
 ```python
 folder = client.create_folder(name="Q4 2024 Reports")
-folder_id = folder['id']
+folder_id = folder["id"]
 ```
 
 ### Move Chart to Folder
@@ -50,11 +50,7 @@ Apply a theme when creating or updating a chart:
 ```python
 import datawrapper as dw
 
-chart = dw.BarChart(
-    title="Themed Chart",
-    data=df,
-    theme="my-custom-theme"
-)
+chart = dw.BarChart(title="Themed Chart", data=df, theme="my-custom-theme")
 chart_id = chart.create()
 ```
 

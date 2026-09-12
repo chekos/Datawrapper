@@ -10,7 +10,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 
 # Install all project dependencies
 echo "📚 Installing project dependencies..."
-uv install --all-extras
+uv sync --all-groups
 
 # Install pre-commit hooks
 echo "🔧 Installing pre-commit hooks..."

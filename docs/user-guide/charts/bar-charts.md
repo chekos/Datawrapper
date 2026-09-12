@@ -68,7 +68,7 @@ chart = dw.BarChart(
         "156. South Sudan": "#2c7f67",
         "19. United States": "#ef7f35",
         "15. United Kingdom": "#f7d503",
-        "155. Central African Republic": "#2c7f67"
+        "155. Central African Republic": "#2c7f67",
     },
     # Category labels for the legend
     label_column="Country",
@@ -99,7 +99,7 @@ chart = dw.BarChart(
         "153. Tanzania": "Africa",
         "154. Afghanistan": "Asia",
         "155. Central African Republic": "Africa",
-        "156. South Sudan": "Africa"
+        "156. South Sudan": "Africa",
     },
     # Bar overlay for confidence interval
     overlays=[
@@ -112,9 +112,9 @@ chart = dw.BarChart(
             title="Confidence Interval (95%)",
             type="range",
             show_in_color_key=True,
-            label_directly=False
+            label_directly=False,
         )
-    ]
+    ],
 )
 
 # Create the chart

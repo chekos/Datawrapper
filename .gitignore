@@ -1,4 +1,5 @@
 .env
+.env.worktree
 chart.png
 coverage.xml
 _build_html
@@ -189,9 +190,6 @@ docs/_build/
 # PyBuilder
 target/
 
-# pyenv
-.python-version
-
 # poetry
 .venv
 
@@ -227,6 +225,9 @@ celerybeat-schedule
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# ty
+.ty/
 
 # Pyre type checker
 .pyre/

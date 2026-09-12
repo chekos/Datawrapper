@@ -56,7 +56,7 @@ class Datawrapper:
     _ACCESS_TOKEN = os.getenv("DATAWRAPPER_ACCESS_TOKEN")  #: The access token to use
 
     def __init__(self, access_token=_ACCESS_TOKEN):
-        """Initalize a connection with the Datawrapper API.
+        """Initialize a connection with the Datawrapper API.
 
         Parameters
         ----------
@@ -67,7 +67,7 @@ class Datawrapper:
 
         self._access_token = access_token
 
-    def _get_auth_header(self) -> dict:
+    def _get_auth_header(self) -> dict[str, Any]:
         """Get the authentication header for the Datawrapper API.
 
         Returns
@@ -85,8 +85,8 @@ class Datawrapper:
         self,
         url: str,
         timeout: int = 15,
-        data: dict | None = None,
-        extra_headers: dict | None = None,
+        data: dict[str, Any] | None = None,
+        extra_headers: dict[str, Any] | None = None,
     ) -> bool:
         """Make a DELETE request to the Datawrapper API.
 
@@ -132,7 +132,9 @@ class Datawrapper:
             raise RateLimitError(response)
         raise FailedRequestError(response)
 
-    def get(self, url: str, params: dict | None = None, timeout: int = 15) -> Any:
+    def get(
+        self, url: str, params: dict[str, Any] | None = None, timeout: int = 15
+    ) -> Any:
         """Make a GET request to the Datawrapper API.
 
         Parameters
@@ -180,10 +182,10 @@ class Datawrapper:
     def patch(
         self,
         url: str,
-        data: dict | None = None,
+        data: dict[str, Any] | None = None,
         timeout: int = 15,
-        extra_headers: dict | None = None,
-    ) -> dict:
+        extra_headers: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """Make a PATCH request to the Datawrapper API.
 
         Parameters
@@ -234,10 +236,10 @@ class Datawrapper:
     def post(
         self,
         url: str,
-        data: dict | None = None,
+        data: dict[str, Any] | None = None,
         timeout: int = 30,
-        extra_headers: dict | None = None,
-    ) -> dict | bool:
+        extra_headers: dict[str, Any] | None = None,
+    ) -> dict[str, Any] | bool:
         """Make a POST request to the Datawrapper API.
 
         Parameters
@@ -290,9 +292,9 @@ class Datawrapper:
     def put(
         self,
         url: str,
-        data: dict | bytes | None = None,
+        data: dict[str, Any] | bytes | None = None,
         timeout: int = 15,
-        extra_headers: dict | None = None,
+        extra_headers: dict[str, Any] | None = None,
         dump_data: bool = True,
     ) -> bool:
         """Make a PUT request to the Datawrapper API.
@@ -352,7 +354,7 @@ class Datawrapper:
         self,
         limit: int = 100,
         offset: int = 0,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Retrieves all login tokens associated to the current user.
 
         Parameters
@@ -367,7 +369,7 @@ class Datawrapper:
         dict
             A dictionary containing the login tokens for your Datawrapper account.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if limit:
             _query["limit"] = limit
         if offset:
@@ -375,7 +377,7 @@ class Datawrapper:
 
         return self.get(self._LOGIN_TOKENS_URL, params=_query)
 
-    def create_login_token(self) -> dict:
+    def create_login_token(self) -> dict[str, Any]:
         """Creates a new login token to authenticate a user, for use in CMS integrations.
 
         Login tokens are valid for five minutes and can only be used once.
@@ -422,13 +424,14 @@ class Datawrapper:
         str
             The HTML of the page that the token redirects to.
         """
-        return self.get(f"{self._LOGIN_URL}/{token}")
+        result: str = self.get(f"{self._LOGIN_URL}/{token}")
+        return result
 
     #
     # API token methods
     #
 
-    def get_api_tokens(self, limit: int = 100, offset: int = 0) -> dict:
+    def get_api_tokens(self, limit: int = 100, offset: int = 0) -> dict[str, Any]:
         """Retrieves all API tokens associated to the current user.
 
         Response will not include full tokens for security reasons. Requires scope `auth:read`.
@@ -445,7 +448,7 @@ class Datawrapper:
         dict
             A dictionary containing the API tokens for your Datawrapper account.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if limit:
             _query["limit"] = limit
         if offset:
@@ -453,7 +456,7 @@ class Datawrapper:
 
         return self.get(self._API_TOKEN_URL, params=_query)
 
-    def create_api_token(self, comment: str, scopes: list[str]) -> dict:
+    def create_api_token(self, comment: str, scopes: list[str]) -> dict[str, Any]:
         """Create a new API Token.
 
         Make sure to save the token somewhere, since you won't be able to see it again. Requires scope `auth:write`.
@@ -497,7 +500,7 @@ class Datawrapper:
         bool
             True if the API token was updated successfully.
         """
-        _query: dict = {"comment": comment}
+        _query: dict[str, Any] = {"comment": comment}
         if scopes:
             _query["scopes"] = scopes
 
@@ -530,13 +533,14 @@ class Datawrapper:
         list[str]
             A list containing the scopes available to the current user.
         """
-        return self.get(self._LOGIN_SCOPES_URL)
+        result: list[str] = self.get(self._LOGIN_SCOPES_URL)
+        return result
 
     #
     # Basemap actions
     #
 
-    def get_basemaps(self) -> list[dict]:
+    def get_basemaps(self) -> list[dict[str, Any]]:
         """Get a list of the available basemaps.
 
         Returns
@@ -546,7 +550,7 @@ class Datawrapper:
         """
         return self.get(self._BASEMAPS_URL)
 
-    def get_basemap(self, basemap_id: str, wgs84: bool = False) -> dict:
+    def get_basemap(self, basemap_id: str, wgs84: bool = False) -> dict[str, Any]:
         """Get the metadata of the requested basemap.
 
         Parameters
@@ -566,7 +570,7 @@ class Datawrapper:
             params={"wgs84": wgs84},
         )
 
-    def get_basemap_key(self, basemap_id: str, basemap_key: str) -> dict:
+    def get_basemap_key(self, basemap_id: str, basemap_key: str) -> dict[str, Any]:
         """Get the list of available values for a basemap's key.
 
         Parameters
@@ -605,7 +609,7 @@ class Datawrapper:
         user_id : str, optional
             ID of the user to fetch charts for, by default ""
         published : bool, optional
-            Flag to filter resutls by publish status, by default True
+            Flag to filter results by publish status, by default True
         search : str, optional
             Search for charts with a specific title, by default ""
         order : str, optional
@@ -626,7 +630,7 @@ class Datawrapper:
         list
             List of charts.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if user_id:
             _query["userId"] = user_id
         if published:
@@ -646,7 +650,7 @@ class Datawrapper:
 
         return self.get(self._CHARTS_URL, params=_query)
 
-    def get_chart(self, chart_id: str) -> dict:
+    def get_chart(self, chart_id: str) -> dict[str, Any]:
         """Retrieve information of a specific chart, table or map.
 
         .. deprecated::
@@ -672,7 +676,7 @@ class Datawrapper:
         )
         return self.get(f"{self._CHARTS_URL}/{chart_id}")
 
-    def chart_properties(self, chart_id: str) -> dict:
+    def chart_properties(self, chart_id: str) -> dict[str, Any]:
         """A deprecated method of the get_chart method."""
         # Issue a deprecation warning
         logger.warning(
@@ -694,8 +698,8 @@ class Datawrapper:
         organization_id: str | None = None,
         forkable: bool | None = None,
         language: str | None = None,
-        metadata: dict | None = None,
-    ) -> dict:
+        metadata: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """Creates a new Datawrapper chart, table or map.
 
         .. deprecated::
@@ -788,8 +792,8 @@ class Datawrapper:
         organization_id: str | None = None,
         forkable: bool | None = None,
         language: str | None = None,
-        metadata: dict | None = None,
-    ) -> dict:
+        metadata: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """Updates a chart's title, theme, type, language, folder or organization.
 
         .. deprecated::
@@ -887,7 +891,9 @@ class Datawrapper:
         # Return the result
         return obj
 
-    def update_metadata(self, chart_id: str, metadata: dict) -> dict:
+    def update_metadata(
+        self, chart_id: str, metadata: dict[str, Any]
+    ) -> dict[str, Any]:
         """A deprecated method of the update_chart method."""
         # Issue a deprecation warning
         logger.warning(
@@ -911,7 +917,7 @@ class Datawrapper:
         number_format: str | None = None,
         number_divisor: int | None = None,
         hide_title: bool = False,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Update a chart's description attributes
 
         A convienece method for updating the 'describe' key of a chart's metadata.
@@ -1027,7 +1033,7 @@ class Datawrapper:
         height = obj["metadata"]["publish"]["embed-height"]
         return IFrame(src, width=width, height=height)
 
-    def copy_chart(self, chart_id: str) -> dict:
+    def copy_chart(self, chart_id: str) -> dict[str, Any]:
         """Copy one of your charts, tables, or maps and create a new editable copy.
 
         .. deprecated::
@@ -1056,7 +1062,7 @@ class Datawrapper:
         assert isinstance(response, dict)
         return response
 
-    def fork_chart(self, chart_id: str) -> dict:
+    def fork_chart(self, chart_id: str) -> dict[str, Any]:
         """Fork a chart, table, or map and create an editable copy.
 
         .. deprecated::
@@ -1085,7 +1091,7 @@ class Datawrapper:
         assert isinstance(response, dict)
         return response
 
-    def move_chart(self, chart_id: str, folder_id: int) -> dict:
+    def move_chart(self, chart_id: str, folder_id: int) -> dict[str, Any]:
         """Moves a chart, table, or map to a specified folder.
 
         Parameters
@@ -1100,7 +1106,9 @@ class Datawrapper:
             data={"folderId": folder_id},
         )
 
-    def publish_chart(self, chart_id: str, display: bool = False) -> dict | IFrame:
+    def publish_chart(
+        self, chart_id: str, display: bool = False
+    ) -> dict[str, Any] | IFrame:
         """Publishes a chart, table or map.
 
         .. deprecated::
@@ -1274,7 +1282,7 @@ class Datawrapper:
         logger.debug(f"File exported at {_filepath}")
         return _filepath
 
-    def get_chart_display_urls(self, chart_id: str) -> list[dict]:
+    def get_chart_display_urls(self, chart_id: str) -> list[dict[str, Any]]:
         """Get the URLs for the published chart, table or map.
 
         Parameters
@@ -1287,7 +1295,10 @@ class Datawrapper:
         list[dict]
             A list of dictionaries containing the URLs for the published chart, table, or map.
         """
-        return self.get(f"{self._CHARTS_URL}/{chart_id}/display-urls")
+        result: list[dict[str, Any]] = self.get(
+            f"{self._CHARTS_URL}/{chart_id}/display-urls"
+        )
+        return result
 
     def get_iframe_code(self, chart_id: str, responsive: bool = False) -> str:
         """Returns a chart, table, or map's iframe embed code.
@@ -1311,7 +1322,7 @@ class Datawrapper:
             ]
         else:
             iframe = obj["metadata"]["publish"]["embed-codes"]["embed-method-iframe"]
-        return iframe
+        return str(iframe)
 
     def get_data(self, chart_id: str):
         """Retrieve the data stored for a specific chart, table or map, which is typically CSV.
@@ -1416,7 +1427,7 @@ class Datawrapper:
         # Post it to the chart via the add_data method
         return self.add_data(chart_id, json_data)
 
-    def refresh_data(self, chart_id: str) -> dict | bool:
+    def refresh_data(self, chart_id: str) -> dict[str, Any] | bool:
         """Fetch configured external data and add it to the chart.
 
         Parameters
@@ -1436,7 +1447,7 @@ class Datawrapper:
     # Folder methods
     #
 
-    def get_folders(self) -> dict:
+    def get_folders(self) -> dict[str, Any]:
         """Get a list of folders in your Datawrapper account.
 
         Returns
@@ -1447,7 +1458,7 @@ class Datawrapper:
         """
         return self.get(self._FOLDERS_URL)
 
-    def get_folder(self, folder_id: int) -> dict:
+    def get_folder(self, folder_id: int) -> dict[str, Any]:
         """Get an existing folder.
 
         Parameters
@@ -1467,7 +1478,7 @@ class Datawrapper:
         name: str,
         parent_id: int | None = None,
         team_id: int | None = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Create a new folder.
 
         Parameters
@@ -1485,7 +1496,7 @@ class Datawrapper:
         dict
             A dictionary containing the folder's information.
         """
-        _query: dict = {"name": name}
+        _query: dict[str, Any] = {"name": name}
         if parent_id:
             _query["parentId"] = parent_id
         if team_id:
@@ -1506,7 +1517,7 @@ class Datawrapper:
         parent_id: int | None = None,
         team_id: int | None = None,
         user_id: int | None = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Update an existing folder.
 
         Parameters
@@ -1527,7 +1538,7 @@ class Datawrapper:
         dict
             A dictionary with the folder's updated metadata
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if name:
             _query["name"] = name
         if parent_id:
@@ -1561,7 +1572,7 @@ class Datawrapper:
     # "Me" methods
     #
 
-    def get_my_account(self) -> dict:
+    def get_my_account(self) -> dict[str, Any]:
         """Access your account information.
 
         Returns
@@ -1571,7 +1582,7 @@ class Datawrapper:
         """
         return self.get(self._ME_URL)
 
-    def account_info(self) -> dict:
+    def account_info(self) -> dict[str, Any]:
         """A deprecated method for calling get_my_account."""
         # Issue a deprecation warning
         logger.warning(
@@ -1590,7 +1601,7 @@ class Datawrapper:
         language: str | None = None,
         password: str | None = None,
         old_password: str | None = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Update your account information.
 
         Parameters
@@ -1613,7 +1624,7 @@ class Datawrapper:
         dict
             A dictionary containing your updated account information.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if name:
             _query["name"] = name
         if email:
@@ -1642,7 +1653,7 @@ class Datawrapper:
     def update_my_settings(
         self,
         active_team: str | None = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Update your account information.
 
         Parameters
@@ -1655,7 +1666,7 @@ class Datawrapper:
         dict
             The user settings dictionary following the change.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if active_team:
             _query["activeTeam"] = active_team
 
@@ -1674,7 +1685,7 @@ class Datawrapper:
         limit: int = 100,
         offset: int = 0,
         min_last_edit_step: str | int = 0,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Get a list of your recently edited charts.
 
         Parameters
@@ -1693,7 +1704,7 @@ class Datawrapper:
         dict
             A dictionary with the list of charts and metadata about the selection.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if limit:
             _query["limit"] = limit
         if offset:
@@ -1711,7 +1722,7 @@ class Datawrapper:
         limit: int = 100,
         offset: int = 0,
         min_last_edit_step: int = 0,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Get a list of your recently published charts.
 
         Parameters
@@ -1730,7 +1741,7 @@ class Datawrapper:
         dict
             A dictionary with the list of charts and metadata about the selection.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if limit:
             _query["limit"] = limit
         if offset:
@@ -1753,7 +1764,7 @@ class Datawrapper:
         max_width: int | None = None,
         max_height: int | None = None,
         iframe: bool | None = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Get an oEmbed object for a chart, table, or map.
 
         Parameters
@@ -1772,7 +1783,7 @@ class Datawrapper:
         dict
             A dictionary containing the oEmbed object.
         """
-        _query: dict = {"url": url, "format": "json"}
+        _query: dict[str, Any] = {"url": url, "format": "json"}
         if max_width:
             _query["maxwidth"] = max_width
         if max_height:
@@ -1792,7 +1803,7 @@ class Datawrapper:
         limit: int = 100,
         offset: int = 0,
         search: str | None = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Search and filter a list of your River charts.
 
         Parameters
@@ -1811,7 +1822,7 @@ class Datawrapper:
         dict
             A dictionary containing the River charts.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if approved:
             _query["approved"] = json.dumps(approved)
         if limit:
@@ -1823,7 +1834,7 @@ class Datawrapper:
 
         return self.get(self._RIVER_URL, params=_query)
 
-    def get_river_chart(self, chart_id: str) -> dict:
+    def get_river_chart(self, chart_id: str) -> dict[str, Any]:
         """Get a River chart by ID.
 
         Parameters
@@ -1866,7 +1877,7 @@ class Datawrapper:
         bool
             True if the River chart was updated successfully.
         """
-        _query: dict = {
+        _query: dict[str, Any] = {
             "description": description,
             "byline": byline,
             "tags": tags,
@@ -1885,7 +1896,7 @@ class Datawrapper:
 
     def get_themes(
         self, limit: int = 100, offset: int = 0, deleted: bool = False
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Get a list of themes in your Datawrapper account.
 
         Parameters
@@ -1924,7 +1935,7 @@ class Datawrapper:
         order_by: str = "name",
         limit: int = 100,
         offset: int = 0,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Get a list of workspaces in your Datawrapper account.
 
         Parameters
@@ -1945,7 +1956,7 @@ class Datawrapper:
         dict
             A dictionary containing the workspaces in your Datawrapper account.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if search:
             _query["search"] = search
         if order:
@@ -1959,7 +1970,7 @@ class Datawrapper:
 
         return self.get(self._WORKSPACES_URL, params=_query)
 
-    def get_workspace(self, workspace_slug: str) -> dict:
+    def get_workspace(self, workspace_slug: str) -> dict[str, Any]:
         """Get an existing workspace by its slug.
 
         Parameters
@@ -1978,7 +1989,7 @@ class Datawrapper:
         self,
         name: str,
         slug: str | None = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Create a new workspace.
 
         Parameters
@@ -1994,7 +2005,7 @@ class Datawrapper:
         dict
             A dictionary containing the workspace's information.
         """
-        _query: dict = {"name": name}
+        _query: dict[str, Any] = {"name": name}
         if slug:
             _query["slug"] = slug
 
@@ -2011,10 +2022,10 @@ class Datawrapper:
         workspace_slug: str,
         name: str | None = None,
         slug: str | None = None,
-        settings: dict | None = None,
-        secrets: dict | None = None,
+        settings: dict[str, Any] | None = None,
+        secrets: dict[str, Any] | None = None,
         color: str | None = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Update an existing workspace.
 
         Parameters
@@ -2042,7 +2053,7 @@ class Datawrapper:
         Exception
             If no parameters are supplied to update the workspace.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if name:
             _query["name"] = name
         if slug:
@@ -2089,7 +2100,7 @@ class Datawrapper:
         offset: int = 0,
         role: str | None = None,
         include_invites: bool = False,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Get a list of members in a workspace.
 
         Parameters
@@ -2116,7 +2127,7 @@ class Datawrapper:
         dict
             A dictionary containing the members in the workspace.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if search:
             _query["search"] = search
         if order:
@@ -2141,7 +2152,7 @@ class Datawrapper:
         workspace_slug: str,
         member_ids: list[int],
         role: str,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Update workspace members' roles.
 
         Parameters
@@ -2201,7 +2212,7 @@ class Datawrapper:
         order_by: str = "name",
         limit: int = 100,
         offset: int = 0,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Get a list of teams in a workspace.
 
         Parameters
@@ -2224,7 +2235,7 @@ class Datawrapper:
         dict
             A dictionary containing the teams in the workspace.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if search:
             _query["search"] = search
         if order:
@@ -2238,7 +2249,7 @@ class Datawrapper:
 
         return self.get(f"{self._WORKSPACES_URL}/{workspace_slug}/teams", params=_query)
 
-    def get_workspace_team(self, workspace_slug: str, team_id: str) -> dict:
+    def get_workspace_team(self, workspace_slug: str, team_id: str) -> dict[str, Any]:
         """Get a team within a workspace.
 
         Parameters
@@ -2261,7 +2272,7 @@ class Datawrapper:
         name: str,
         is_private: bool = False,
         icon: str | None = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Create a new team in a workspace.
 
         Parameters
@@ -2280,7 +2291,7 @@ class Datawrapper:
         dict
             A dictionary containing the team's information.
         """
-        _query: dict = {"name": name, "isPrivate": is_private}
+        _query: dict[str, Any] = {"name": name, "isPrivate": is_private}
         if icon:
             _query["icon"] = icon
 
@@ -2298,10 +2309,10 @@ class Datawrapper:
         team_id: str,
         name: str | None = None,
         is_private: bool | None = None,
-        settings: dict | None = None,
-        secrets: dict | None = None,
+        settings: dict[str, Any] | None = None,
+        secrets: dict[str, Any] | None = None,
         icon: str | None = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Update a team within a workspace.
 
         Parameters
@@ -2331,7 +2342,7 @@ class Datawrapper:
         Exception
             If no parameters are supplied to update the team.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if name:
             _query["name"] = name
         if is_private is not None:
@@ -2397,7 +2408,7 @@ class Datawrapper:
         offset: int = 0,
         role: str | None = None,
         include_invites: bool = False,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Get a list of members in a workspace team.
 
         Parameters
@@ -2427,7 +2438,7 @@ class Datawrapper:
         dict
             A dictionary containing the members in the workspace team.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if search:
             _query["search"] = search
         if order:
@@ -2493,7 +2504,7 @@ class Datawrapper:
         team_id: str,
         member_ids: list[int],
         role: str = "member",
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Modify the role of users in a workspace team.
 
         Parameters
@@ -2563,7 +2574,7 @@ class Datawrapper:
         order_by: str = "id",
         limit: int = 100,
         offset: int = 0,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Get a list of users in your Datawrapper account.
 
         Parameters
@@ -2586,7 +2597,7 @@ class Datawrapper:
         dict
             A dictionary containing the users in your Datawrapper account.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if team_id:
             _query["teamId"] = team_id
         if search:
@@ -2602,7 +2613,7 @@ class Datawrapper:
 
         return self.get(self._USERS_URL, params=_query)
 
-    def get_user(self, user_id: str) -> dict:
+    def get_user(self, user_id: str) -> dict[str, Any]:
         """Get an existing user.
 
         Parameters
@@ -2654,7 +2665,7 @@ class Datawrapper:
         dict
             A dictionary with the user's updated metadata
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if name:
             _query["name"] = name
         if email:
@@ -2689,7 +2700,7 @@ class Datawrapper:
         self,
         user_id: int | str,
         active_team: str | None = None,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Update your account information.
 
         Parameters
@@ -2702,7 +2713,7 @@ class Datawrapper:
         dict
             The user settings dictionary following the change.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if active_team:
             _query["activeTeam"] = active_team
 
@@ -2722,7 +2733,7 @@ class Datawrapper:
         limit: int = 100,
         offset: int = 0,
         min_last_edit_step: str | int = 0,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Get a list of your recently edited charts.
 
         Parameters
@@ -2743,7 +2754,7 @@ class Datawrapper:
         dict
             A dictionary with the list of charts and metadata about the selection.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if limit:
             _query["limit"] = limit
         if offset:
@@ -2762,7 +2773,7 @@ class Datawrapper:
         limit: int = 100,
         offset: int = 0,
         min_last_edit_step: str | int = 0,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Get a list of your recently published charts.
 
         Parameters
@@ -2783,7 +2794,7 @@ class Datawrapper:
         dict
             A dictionary with the list of charts and metadata about the selection.
         """
-        _query: dict = {}
+        _query: dict[str, Any] = {}
         if limit:
             _query["limit"] = limit
         if offset:

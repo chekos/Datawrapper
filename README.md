@@ -48,7 +48,7 @@ See the [full documentation](https://datawrapper.readthedocs.io/) for comprehens
 Clone the repository and install the locked development dependencies.
 
 ```bash
-uv sync --frozen --all-extras
+make bootstrap
 ```
 
 Install pre-commit to run a battery of automatic quick fixes against your work.
@@ -60,11 +60,8 @@ uv run pre-commit install
 Run the canonical local checks before opening a pull request.
 
 ```bash
-uv run ruff check ./datawrapper ./tests
-uv run ruff format --check ./datawrapper ./tests
-uv run mypy ./datawrapper --ignore-missing-imports
-uv run pytest
-uv build --sdist --wheel
+make check
+make test
 ```
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow. AI agents should also read [AGENTS.md](AGENTS.md) before changing files.

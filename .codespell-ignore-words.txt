@@ -1,0 +1,13 @@
+# Python terms
+pytest
+codespell
+sphinxcontrib
+venv
+uv
+__pycache__
+.pytest_cache
+
+# Country/locale codes and ordinal-suffix examples that look like typos
+fo
+januar
+nd

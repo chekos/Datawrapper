@@ -233,7 +233,7 @@ class AreaChart(
                 raise ValueError(f"Invalid value: {v}. Must be one of {valid_values}")
         return v
 
-    def serialize_model(self) -> dict:
+    def serialize_model(self) -> dict[str, Any]:
         """Serialize the model to a dictionary."""
         # Call the parent class's serialize_model method
         model = super().serialize_model()

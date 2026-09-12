@@ -11,7 +11,7 @@ import datawrapper as dw
 # Load media trust data from GitHub
 df = pd.read_csv(
     "https://raw.githubusercontent.com/chekos/Datawrapper/main/tests/samples/stacked_bar/media-trust.csv",
-    sep=";"
+    sep=";",
 )
 
 chart = dw.StackedBarChart(

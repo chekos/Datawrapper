@@ -263,7 +263,7 @@ class TextAnnotation(BaseModel):
         description="Whether or not to show a mobile fallback",
     )
 
-    def serialize_model(self) -> dict:
+    def serialize_model(self) -> dict[str, Any]:
         """Serialize the model to a dictionary for the Datawrapper API.
 
         Note: The 'id' field is not included in the output as it's used as the dict key.
@@ -300,8 +300,8 @@ class TextAnnotation(BaseModel):
 
     @classmethod
     def deserialize_model(
-        cls, api_data: dict[str, dict] | list[dict] | None
-    ) -> list[dict]:
+        cls, api_data: dict[str, dict[str, Any]] | list[dict[str, Any]] | None
+    ) -> list[dict[str, Any]]:
         """Deserialize annotations from API response format.
 
         Handles both dict format (UUID keys from API) and list format (from serialization).

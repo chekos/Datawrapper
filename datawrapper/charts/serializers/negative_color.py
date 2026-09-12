@@ -62,6 +62,6 @@ class NegativeColor(BaseSerializer):
             return None
 
         enabled = api_obj.get("enabled", False)
-        color_value = api_obj.get("value", "")
+        color_value: str = api_obj.get("value", "")
 
         return color_value if enabled else None

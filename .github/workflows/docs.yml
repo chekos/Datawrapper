@@ -1,0 +1,76 @@
+name: Documentation
+
+permissions:
+  contents: read
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    if: github.event_name != 'schedule'
+    steps:
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - id: install-uv
+        name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - id: install-python
+        name: Install Python
+        run: uv python install 3.13
+
+      - id: install-python-dependencies
+        name: Install Python dependencies
+        run: make install-docs
+
+      - id: build-sphinx-documentation
+        name: Build Sphinx documentation
+        run: make docs
+
+      - name: Prune uv cache
+        run: uv cache prune --ci
+
+  linkcheck:
+    name: Check documentation links
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Install Python dependencies
+        run: make install-docs
+
+      - name: Check documentation links
+        run: make linkcheck
+
+      - name: Prune uv cache
+        run: uv cache prune --ci
