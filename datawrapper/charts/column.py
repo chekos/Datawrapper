@@ -205,7 +205,7 @@ class ColumnChart(
         return v
 
     @classmethod
-    def _deserialize_grid_config(cls, visualize: dict) -> dict:
+    def _deserialize_grid_config(cls, visualize: dict[str, Any]) -> dict[str, Any]:
         """Override to handle ColumnChart-specific grid fields.
 
         ColumnChart uses different API fields than other charts:
@@ -228,7 +228,7 @@ class ColumnChart(
 
         return result
 
-    def _serialize_grid_config(self) -> dict:
+    def _serialize_grid_config(self) -> dict[str, Any]:
         """Override to add ColumnChart-specific grid-lines field.
 
         ColumnChart uses both the standard y-grid field (from mixin) and an
@@ -252,7 +252,7 @@ class ColumnChart(
 
         return result
 
-    def _serialize_custom_range(self) -> dict:
+    def _serialize_custom_range(self) -> dict[str, Any]:
         """Override to handle ColumnChart-specific field naming.
 
         ColumnChart uses 'custom-range' (not 'custom-range-y') for Y-axis custom range.
@@ -267,7 +267,7 @@ class ColumnChart(
         return result
 
     @classmethod
-    def _deserialize_custom_range(cls, visualize: dict) -> dict:
+    def _deserialize_custom_range(cls, visualize: dict[str, Any]) -> dict[str, Any]:
         """Override to handle ColumnChart-specific field naming.
 
         ColumnChart uses 'custom-range' (not 'custom-range-y') for Y-axis custom range.
@@ -282,7 +282,7 @@ class ColumnChart(
         # Call the parent deserializer with the modified dict
         return super()._deserialize_custom_range(modified_visualize)
 
-    def _serialize_custom_ticks(self) -> dict:
+    def _serialize_custom_ticks(self) -> dict[str, Any]:
         """Override to handle ColumnChart-specific field naming.
 
         ColumnChart uses 'custom-ticks' (not 'custom-ticks-y') for Y-axis custom ticks.
@@ -297,7 +297,7 @@ class ColumnChart(
         return result
 
     @classmethod
-    def _deserialize_custom_ticks(cls, visualize: dict) -> dict:
+    def _deserialize_custom_ticks(cls, visualize: dict[str, Any]) -> dict[str, Any]:
         """Override to handle ColumnChart-specific field naming.
 
         ColumnChart uses 'custom-ticks' (not 'custom-ticks-y') for Y-axis custom ticks.
@@ -312,7 +312,7 @@ class ColumnChart(
         # Call the parent deserializer with the modified dict
         return super()._deserialize_custom_ticks(modified_visualize)
 
-    def serialize_model(self) -> dict:
+    def serialize_model(self) -> dict[str, Any]:
         """Serialize the model to a dictionary."""
         # Call the parent class's serialize_model method
         model = super().serialize_model()

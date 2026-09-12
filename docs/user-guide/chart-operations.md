@@ -78,12 +78,7 @@ chart.create().publish()
 chart.export(filepath="chart.png")
 
 # Export with custom dimensions
-chart.export(
-    filepath="chart.png",
-    unit="px",
-    width=800,
-    height=600
-)
+chart.export(filepath="chart.png", unit="px", width=800, height=600)
 ```
 
 ## Duplicating a chart

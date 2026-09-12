@@ -95,4 +95,4 @@ class ArrowHead(str, Enum):
 
     LINES = "lines"
     TRIANGLE = "triangle"
-    NONE = False  # type: ignore
+    NONE = False

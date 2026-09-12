@@ -515,7 +515,7 @@ class ScatterPlot(AnnotationsMixin, BaseChart):
         description="Whether the tooltip is sticky on click",
     )
 
-    def serialize_model(self) -> dict:
+    def serialize_model(self) -> dict[str, Any]:
         """Serialize the model to a dictionary."""
         # Call the parent class's serialize_model method
         model = super().serialize_model()

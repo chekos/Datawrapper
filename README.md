@@ -31,8 +31,10 @@ import datawrapper as dw
 # Configure a bar chart
 chart = dw.BarChart(
     title="Top Programming Languages 2024",
-    data=pd.DataFrame({"Language": ["Python", "JavaScript", "Java"], "Users": [45.3, 38.2, 30.5]}),
-    axis_label_format=dw.NumberFormat.ONE_DECIMAL
+    data=pd.DataFrame(
+        {"Language": ["Python", "JavaScript", "Java"], "Users": [45.3, 38.2, 30.5]}
+    ),
+    axis_label_format=dw.NumberFormat.ONE_DECIMAL,
 )
 
 # Create and publish (uses DATAWRAPPER_ACCESS_TOKEN environment variable)
@@ -48,7 +50,7 @@ Clone the repository. Move into the directory on your terminal.
 Install dependencies for development.
 
 ```bash
-uv install --all-extras
+make bootstrap
 ```
 
 Install pre-commit to run a battery of automatic quick fixes against your work.
@@ -60,8 +62,11 @@ uv run pre-commit install
 Run tests with
 
 ```bash
-uv run pytest
+make test
 ```
+
+See `AGENTS.md` for the full development workflow, including `make check` and
+`make verify`.
 
 ## 📈 Releases
 

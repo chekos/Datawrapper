@@ -7,7 +7,7 @@ Clone the repository. Move into the directory on your terminal.
 Install dependencies for development.
 
 ```sh
-uv sync
+make bootstrap
 ```
 
 Install pre-commit to run a battery of automatic quick fixes against your work.
@@ -21,20 +21,22 @@ uv run pre-commit install
 You can run unit tests to verify the library is working with the following:
 
 ```bash
-uv run pytest --cov -sv
+make test
 ```
 
 We also enforce ruff for linting, handled primarily via pre-commit. You can run it manually like so:
 
 ```bash
-uv run ruff check ./datawrapper
+uv run ruff check
 ```
 
-We also enforce static typing with mypy, also handled via pre-commit. You can run it manually like so:
+We also enforce static typing with [ty](https://github.com/astral-sh/ty), also handled via pre-commit (on push). You can run it manually like so:
 
 ```bash
-uv run mypy ./datawrapper --ignore-missing-imports
+uv run ty check
 ```
+
+See `AGENTS.md` for the full set of `make` targets, including `make check` (fast, non-mutating checks) and `make verify` (the full local CI suite).
 
 ### Before submitting
 

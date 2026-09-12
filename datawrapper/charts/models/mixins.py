@@ -37,7 +37,7 @@ class GridDisplayMixin:
         description="Y-axis grid display setting. Controls horizontal grid lines.",
     )
 
-    def _serialize_grid_config(self) -> dict:
+    def _serialize_grid_config(self) -> dict[str, Any]:
         """Serialize grid configuration to API format.
 
         Handles conversion of boolean values to "on"/"off" strings for backwards compatibility.
@@ -67,7 +67,7 @@ class GridDisplayMixin:
         return result
 
     @classmethod
-    def _deserialize_grid_config(cls, visualize: dict) -> dict:
+    def _deserialize_grid_config(cls, visualize: dict[str, Any]) -> dict[str, Any]:
         """Deserialize grid configuration from API format.
 
         Preserves original API values without conversion.
@@ -106,7 +106,7 @@ class GridFormatMixin:
         description="Format string for Y-axis grid labels. Supports number formats.",
     )
 
-    def _serialize_grid_format(self) -> dict:
+    def _serialize_grid_format(self) -> dict[str, Any]:
         """Serialize grid format configuration to API format.
 
         Returns:
@@ -130,7 +130,7 @@ class GridFormatMixin:
         return result
 
     @classmethod
-    def _deserialize_grid_format(cls, visualize: dict) -> dict:
+    def _deserialize_grid_format(cls, visualize: dict[str, Any]) -> dict[str, Any]:
         """Deserialize grid format configuration from API format.
 
         Args:
@@ -165,7 +165,7 @@ class CustomRangeMixin:
         description="Custom range for Y-axis as [min, max]. Overrides automatic range calculation.",
     )
 
-    def _serialize_custom_range(self) -> dict:
+    def _serialize_custom_range(self) -> dict[str, Any]:
         """Serialize custom range configuration to API format.
 
         Returns:
@@ -181,7 +181,7 @@ class CustomRangeMixin:
         return result
 
     @classmethod
-    def _deserialize_custom_range(cls, visualize: dict) -> dict:
+    def _deserialize_custom_range(cls, visualize: dict[str, Any]) -> dict[str, Any]:
         """Deserialize custom range configuration from API format.
 
         Args:
@@ -220,7 +220,7 @@ class CustomTicksMixin:
         description="Custom tick mark positions for Y-axis. List of values where ticks should appear.",
     )
 
-    def _serialize_custom_ticks(self) -> dict:
+    def _serialize_custom_ticks(self) -> dict[str, Any]:
         """Serialize custom ticks configuration to API format.
 
         Returns:
@@ -236,7 +236,7 @@ class CustomTicksMixin:
         return result
 
     @classmethod
-    def _deserialize_custom_ticks(cls, visualize: dict) -> dict:
+    def _deserialize_custom_ticks(cls, visualize: dict[str, Any]) -> dict[str, Any]:
         """Deserialize custom ticks configuration from API format.
 
         Args:
@@ -287,7 +287,7 @@ class AnnotationsMixin:
         self,
         text_annotation_class: type[TextAnnotation] = TextAnnotation,
         range_annotation_class: type[RangeAnnotation] = RangeAnnotation,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Serialize annotations to API format.
 
         Uses ModelListSerializer to serialize annotation lists without generating IDs.
@@ -324,10 +324,10 @@ class AnnotationsMixin:
     @classmethod
     def _deserialize_annotations(
         cls,
-        visualize: dict,
+        visualize: dict[str, Any],
         text_annotation_class: type[TextAnnotation] = TextAnnotation,
         range_annotation_class: type[RangeAnnotation] = RangeAnnotation,
-    ) -> dict:
+    ) -> dict[str, Any]:
         """Deserialize annotations from API format.
 
         Args:

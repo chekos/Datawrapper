@@ -1,0 +1,35 @@
+name: Question
+description: Ask for help when the documentation does not answer your question.
+title: "[Question]: "
+labels:
+  - question
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: What do you need help with?
+      description: Ask a specific question and describe what you are trying to accomplish.
+    validations:
+      required: true
+
+  - type: textarea
+    id: attempted
+    attributes:
+      label: What have you tried?
+      description: Include relevant documentation, code, commands, or error messages.
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include version and platform details when relevant.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched the documentation and existing issues first.
+          required: true

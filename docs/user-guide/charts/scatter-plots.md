@@ -11,7 +11,7 @@ import datawrapper as dw
 # Load life expectancy data from GitHub
 df = pd.read_csv(
     "https://raw.githubusercontent.com/chekos/Datawrapper/main/tests/samples/scatter/life-expectancy.csv",
-    sep="\t"
+    sep="\t",
 )
 
 chart = dw.ScatterPlot(

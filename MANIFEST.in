@@ -1,0 +1,31 @@
+include .clinerules
+include .codespell-ignore-words.txt
+include .editorconfig
+include .env.example
+include .gitattributes
+include .gitignore
+include .pre-commit-config.yaml
+include .python-version
+include .readthedocs.yaml
+include .vscode/extensions.json
+include AGENTS.md
+include CHANGELOG.md
+include LICENSE
+include README.md
+include CODE_OF_CONDUCT.md
+include CONTRIBUTING.md
+include Makefile
+include MANIFEST.in
+include RELEASING.md
+include SECURITY.md
+include uv.lock
+include zizmor.yml
+recursive-include .devcontainer *
+recursive-include .github *
+recursive-include datawrapper *.py
+include datawrapper/py.typed
+recursive-include docs *.md *.rst *.py *.png *.txt Makefile
+prune docs/_build
+prune docs/_build_html
+recursive-include scripts *.py
+recursive-include tests *.py *.csv *.json *.md

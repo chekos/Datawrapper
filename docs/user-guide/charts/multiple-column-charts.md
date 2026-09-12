@@ -11,7 +11,7 @@ import datawrapper as dw
 # Load population data from GitHub
 df = pd.read_csv(
     "https://raw.githubusercontent.com/chekos/Datawrapper/main/tests/samples/multiple_column/population.csv",
-    sep="\t"
+    sep="\t",
 )
 
 chart = dw.MultipleColumnChart(
@@ -33,9 +33,7 @@ chart = dw.MultipleColumnChart(
     sort_reverse=False,
     # Set custom column color with highlighted year for 2025
     base_color="#c9a291",
-    color_category={
-        "2025": "#c71e1d"
-    },
+    color_category={"2025": "#c71e1d"},
     # Turn off the y grid lines
     y_grid=False,
     # Format y-axis with abbreviated numbers
@@ -44,14 +42,38 @@ chart = dw.MultipleColumnChart(
     y_grid_label_align="left",
     # Custom panel titles with city and country information
     panels=[
-        {"column": "Delhi", "title": "Delhi, <span style=\"color:gray; font-weight: normal;\">India</span>"},
-        {"column": "Dhaka", "title": "Dhaka, <span style=\"color:gray; font-weight: normal;\"> Bangladesh </span>"},
-        {"column": "Lagos", "title": "Lagos, <span style=\"color:gray; font-weight: normal;\">Nigeria</span>"},
-        {"column": "Paris", "title": "Paris, <span style=\"color:gray; font-weight: normal;\">France</span>"},
-        {"column": "Tokyo", "title": "Tokyo, <span style=\"color:gray; font-weight: normal;\">Japan</span>"},
-        {"column": "Beijing", "title": "Beijing, <span style=\"color:gray; font-weight: normal;\">China</span>"},
-        {"column": "Mumbai (Bombay)", "title": "Mumbai, <span style=\"color:gray; font-weight: normal;\">India</span>"},
-        {"column": "New York-Newark", "title": "New York/Newark, <span style=\"color:gray; font-weight: normal;\">U.S.</span>"},
+        {
+            "column": "Delhi",
+            "title": 'Delhi, <span style="color:gray; font-weight: normal;">India</span>',
+        },
+        {
+            "column": "Dhaka",
+            "title": 'Dhaka, <span style="color:gray; font-weight: normal;"> Bangladesh </span>',
+        },
+        {
+            "column": "Lagos",
+            "title": 'Lagos, <span style="color:gray; font-weight: normal;">Nigeria</span>',
+        },
+        {
+            "column": "Paris",
+            "title": 'Paris, <span style="color:gray; font-weight: normal;">France</span>',
+        },
+        {
+            "column": "Tokyo",
+            "title": 'Tokyo, <span style="color:gray; font-weight: normal;">Japan</span>',
+        },
+        {
+            "column": "Beijing",
+            "title": 'Beijing, <span style="color:gray; font-weight: normal;">China</span>',
+        },
+        {
+            "column": "Mumbai (Bombay)",
+            "title": 'Mumbai, <span style="color:gray; font-weight: normal;">India</span>',
+        },
+        {
+            "column": "New York-Newark",
+            "title": 'New York/Newark, <span style="color:gray; font-weight: normal;">U.S.</span>',
+        },
     ],
     # Add text annotations to label specific panels
     text_annotations=[
@@ -150,21 +172,25 @@ chart = dw.MultipleColumnChart(
     ],
     # Add range annotation to highlight projection period
     range_annotations=[
-        dw.MultipleColumnXRangeAnnotation(**{
-            "x0": "2018/01/01",
-            "x1": "2037/07/02",
-            "y0": 0,
-            "y1": 50000000,
-            "color": "#888",
-            "opacity": 18,
-        }),
-        dw.MultipleColumnYLineAnnotation(**{
-            "y0": 11765087.7143,
-            "color": "#888",
-            "opacity": 76,
-            "stroke_width": dw.StrokeWidth.MEDIUM,
-            "stroke_type": dw.StrokeType.DOTTED,
-        })
+        dw.MultipleColumnXRangeAnnotation(
+            **{
+                "x0": "2018/01/01",
+                "x1": "2037/07/02",
+                "y0": 0,
+                "y1": 50000000,
+                "color": "#888",
+                "opacity": 18,
+            }
+        ),
+        dw.MultipleColumnYLineAnnotation(
+            **{
+                "y0": 11765087.7143,
+                "color": "#888",
+                "opacity": 76,
+                "stroke_width": dw.StrokeWidth.MEDIUM,
+                "stroke_type": dw.StrokeType.DOTTED,
+            }
+        ),
     ],
 )
 

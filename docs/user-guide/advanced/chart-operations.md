@@ -64,20 +64,14 @@ client.publish_chart(chart_id="abc123")
 
 Update chart data from a URL:
 ```python
-client.add_data(
-    chart_id="abc123",
-    data="https://example.com/data.csv"
-)
+client.add_data(chart_id="abc123", data="https://example.com/data.csv")
 client.publish_chart(chart_id="abc123")
 ```
 
 ## Metadata Customization
 
 ```python
-client.add_data(
-    chart_id="abc123",
-    data="https://example.com/data.csv"
-)
+client.add_data(chart_id="abc123", data="https://example.com/data.csv")
 client.publish_chart(chart_id="abc123")
 ```
 
@@ -88,10 +82,7 @@ client.publish_chart(chart_id="abc123")
 ```python
 client.update_metadata(
     chart_id="abc123",
-    metadata={
-        "title": "Updated Chart Title",
-        "description": "New description text"
-    }
+    metadata={"title": "Updated Chart Title", "description": "New description text"},
 )
 client.publish_chart(chart_id="abc123")
 ```
@@ -105,8 +96,8 @@ metadata = {
         "custom-colors": {
             "Category A": "#FF6B6B",
             "Category B": "#4ECDC4",
-            "Category C": "#45B7D1"
-        }
+            "Category C": "#45B7D1",
+        },
     }
 }
 
@@ -125,7 +116,7 @@ client.update_description(
     source_url="https://www.census.gov",
     byline="Data Analysis Team",
     intro="This chart shows population trends over the past decade.",
-    notes="Data updated quarterly."
+    notes="Data updated quarterly.",
 )
 client.publish_chart(chart_id="abc123")
 ```
@@ -136,9 +127,7 @@ Change the chart title:
 
 ```python
 client.update_chart(
-    chart_id="abc123",
-    title="Updated Chart Title",
-    intro="New introduction text"
+    chart_id="abc123", title="Updated Chart Title", intro="New introduction text"
 )
 client.publish_chart(chart_id="abc123")
 ```

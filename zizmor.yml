@@ -1,0 +1,8 @@
+rules:
+  # Keep version-tagged Actions references until the workflows adopt SHA pinning.
+  unpinned-uses:
+    disable: true
+  # PyPI publishing intentionally stays on the existing PYPI_API_TOKEN secret,
+  # not Trusted Publishing (OIDC).
+  use-trusted-publishing:
+    disable: true

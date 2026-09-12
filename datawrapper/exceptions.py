@@ -1,5 +1,7 @@
 """Custom exceptions for the datawrapper package."""
 
+import json
+
 
 class FailedRequestError(Exception):
     """Custom exception for failed API requests."""
@@ -35,8 +37,6 @@ class RateLimitError(FailedRequestError):
 
         # Try to parse the error message from response
         try:
-            import json
-
             error_data = json.loads(response.content)
             self.error_message = error_data.get("message", "Rate limit exceeded")
         except (json.JSONDecodeError, AttributeError):

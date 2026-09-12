@@ -44,10 +44,7 @@ chart = dw.ArrowChart(
     # Highlight specific countries in red
     color_column="Country",
     label_column="Country",
-    color_category={
-        "<b>Mexico</b>": "#c71e1d",
-        "<b>United States</b>": "#c71e1d"
-    }
+    color_category={"<b>Mexico</b>": "#c71e1d", "<b>United States</b>": "#c71e1d"},
 )
 
 # Create the chart in Datawrapper
