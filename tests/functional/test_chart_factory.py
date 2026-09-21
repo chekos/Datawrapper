@@ -331,7 +331,7 @@ def test_get_chart_missing_type():
             get_chart(chart_id="notype777")
 
 
-def test_get_chart_unsupported_type_returns_base_chart():
+def test_get_chart_unsupported_type_returns_base_chart(clean_env):
     """Test get_chart returns BaseChart for unsupported but valid chart types."""
     # Create a mock Datawrapper client
     mock_client = MagicMock(spec=Datawrapper)

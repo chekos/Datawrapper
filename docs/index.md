@@ -24,6 +24,7 @@ user-guide/charts/line-charts.md
 user-guide/charts/multiple-column-charts.md
 user-guide/charts/scatter-plots.md
 user-guide/charts/stacked-bar-charts.md
+user-guide/charts/tables.md
 ```
 
 ```{toctree}

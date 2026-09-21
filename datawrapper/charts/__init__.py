@@ -15,6 +15,7 @@ from .enums import (
     LineWidth,
     NumberDivisor,
     NumberFormat,
+    PaginationType,
     PlotHeightMode,
     RegressionMethod,
     ReplaceFlagsType,
@@ -36,6 +37,7 @@ from .enums import (
 from .line import AreaFill, Line, LineChart, LineSymbol, LineValueLabel
 from .models import (
     Annotate,
+    ColorStop,
     ColumnFormat,
     ColumnFormatList,
     CustomRangeMixin,
@@ -45,10 +47,20 @@ from .models import (
     Describe,
     GridDisplayMixin,
     GridFormatMixin,
+    HeatMapContinuous,
+    HeatMapSteps,
+    LegendContinuous,
+    LegendSteps,
     Logo,
+    MiniColumn,
+    MiniLine,
     Publish,
     PublishBlocks,
     Sharing,
+    TableBodyRow,
+    TableColumn,
+    TableRow,
+    TableTextStyle,
     Transform,
     Visualize,
 )
@@ -72,6 +84,7 @@ from .multiple_column import (
 )
 from .scatter import ScatterPlot
 from .stacked_bar import StackedBarChart
+from .table import Table
 
 __all__ = (
     "ConnectorLine",
@@ -101,6 +114,7 @@ __all__ = (
     "LineWidth",
     "NumberDivisor",
     "NumberFormat",
+    "PaginationType",
     "PlotHeightMode",
     "RegressionMethod",
     "ReplaceFlagsType",
@@ -146,4 +160,16 @@ __all__ = (
     "MultipleColumnYRangeAnnotation",
     "ScatterPlot",
     "StackedBarChart",
+    "Table",
+    "TableColumn",
+    "TableRow",
+    "TableBodyRow",
+    "TableTextStyle",
+    "MiniLine",
+    "MiniColumn",
+    "HeatMapContinuous",
+    "HeatMapSteps",
+    "LegendContinuous",
+    "LegendSteps",
+    "ColorStop",
 )

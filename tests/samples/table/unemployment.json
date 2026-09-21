@@ -1,0 +1,1415 @@
+{
+  "chart": {
+    "crdt": {
+      "data": {
+        "publicId": "TRahm",
+        "language": "en-US",
+        "theme": "datawrapper",
+        "chartHash": "5c8c4bda916f59c026380c9cc62ff616",
+        "id": "TRahm",
+        "type": "tables",
+        "title": "Unemployment rate in selected countries",
+        "lastEditStep": 3,
+        "publicVersion": 0,
+        "deleted": false,
+        "forkable": false,
+        "isFork": false,
+        "metadata": {
+          "data": {
+            "changes": {
+
+            },
+            "transpose": false,
+            "vertical-header": true,
+            "horizontal-header": true,
+            "column-format": {
+
+            },
+            "upload-method": "copy"
+          },
+          "describe": {
+            "source-name": "OECD",
+            "source-url": "https://data.oecd.org/unemp/unemployment-rate.htm",
+            "intro": "January-August 2020, sorted by the unemployment rate in January.",
+            "byline": "",
+            "aria-description": "",
+            "number-format": "-",
+            "number-divisor": 0,
+            "number-append": "",
+            "number-prepend": ""
+          },
+          "visualize": {
+            "dark-mode-invert": true,
+            "highlighted-series": [],
+            "highlighted-values": [],
+            "sharing": {
+              "enabled": false
+            },
+            "rows": {
+              "row-4": {
+                "style": {
+                  "bold": true,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 1,
+                  "underline": false,
+                  "background": false
+                },
+                "format": "0,0.[00]",
+                "moveTo": "top",
+                "sticky": false,
+                "moveRow": false,
+                "stickTo": "top",
+                "borderTop": "none",
+                "borderBottom": "none",
+                "borderTopColor": "#333333",
+                "overrideFormat": false,
+                "borderBottomColor": "#333333"
+              },
+              "row-9": {
+                "style": {
+                  "bold": true,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 1,
+                  "underline": false,
+                  "background": false
+                },
+                "format": "0,0.[00]",
+                "moveTo": "top",
+                "sticky": false,
+                "moveRow": false,
+                "stickTo": "top",
+                "borderTop": "none",
+                "borderBottom": "none",
+                "borderTopColor": "#333333",
+                "overrideFormat": false,
+                "borderBottomColor": "#333333"
+              },
+              "row--1": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 1,
+                  "underline": false,
+                  "background": false
+                },
+                "format": "0,0.[00]",
+                "moveTo": "top",
+                "sticky": false,
+                "moveRow": false,
+                "stickTo": "top",
+                "borderTop": "none",
+                "borderBottom": "none",
+                "borderTopColor": "#333333",
+                "overrideFormat": false,
+                "borderBottomColor": "#333333"
+              }
+            },
+            "header": {
+              "style": {
+                "bold": false,
+                "color": false,
+                "italic": false,
+                "fontSize": 0.9,
+                "background": false
+              },
+              "borderTop": "none",
+              "borderBottom": "2px",
+              "borderTopColor": "#333333",
+              "borderBottomColor": "#333333"
+            },
+            "legend": {
+              "size": 170,
+              "title": "",
+              "labels": "ranges",
+              "enabled": false,
+              "reverse": false,
+              "labelMax": "high",
+              "labelMin": "low",
+              "position": "above",
+              "hideItems": [],
+              "interactive": false,
+              "labelCenter": "medium",
+              "customLabels": []
+            },
+            "sortBy": "Jan",
+            "columns": {
+              "A": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 1,
+                  "underline": false,
+                  "background": false
+                },
+                "width": 0.2,
+                "append": "",
+                "format": "0.0%",
+                "heatmap": {
+                  "enabled": true
+                },
+                "prepend": "",
+                "barColor": 0,
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "auto",
+                "flagStyle": "1x1",
+                "showAsBar": false,
+                "sparkline": {
+                  "area": false,
+                  "type": "line",
+                  "color": 0,
+                  "title": "",
+                  "dotMax": false,
+                  "dotMin": false,
+                  "format": "0.[0]a",
+                  "height": 20,
+                  "stroke": 2,
+                  "dotLast": true,
+                  "enabled": false,
+                  "baseline": false,
+                  "colorNeg": 0,
+                  "dotFirst": true,
+                  "rangeMax": "",
+                  "rangeMin": "",
+                  "labelDiff": false,
+                  "baselineAt": 0
+                },
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "barRangeMax": "",
+                "barRangeMin": "",
+                "borderRight": "none",
+                "compactMode": false,
+                "customColor": false,
+                "replaceFlags": false,
+                "showOnMobile": true,
+                "customColorBy": 0,
+                "showOnDesktop": true,
+                "customBarColor": false,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "customColorText": {
+                  "__object": true
+                },
+                "barColorNegative": false,
+                "customBarColorBy": 0,
+                "alignmentVertical": "middle",
+                "customColorBackground": {
+                  "__object": true
+                },
+                "customColorBarBackground": {
+                  "__object": true
+                }
+              },
+              "F": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 1,
+                  "underline": false,
+                  "background": false
+                },
+                "width": 0.2,
+                "append": "",
+                "format": "0.0%",
+                "heatmap": {
+                  "enabled": true
+                },
+                "prepend": "",
+                "barColor": 0,
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "auto",
+                "flagStyle": "1x1",
+                "showAsBar": false,
+                "sparkline": {
+                  "area": false,
+                  "type": "line",
+                  "color": 0,
+                  "title": "",
+                  "dotMax": false,
+                  "dotMin": false,
+                  "format": "0.[0]a",
+                  "height": 20,
+                  "stroke": 2,
+                  "dotLast": true,
+                  "enabled": false,
+                  "baseline": false,
+                  "colorNeg": 0,
+                  "dotFirst": true,
+                  "rangeMax": "",
+                  "rangeMin": "",
+                  "labelDiff": false,
+                  "baselineAt": 0
+                },
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "barRangeMax": "",
+                "barRangeMin": "",
+                "borderRight": "none",
+                "compactMode": false,
+                "customColor": false,
+                "replaceFlags": false,
+                "showOnMobile": true,
+                "customColorBy": 0,
+                "showOnDesktop": true,
+                "customBarColor": false,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "customColorText": {
+                  "__object": true
+                },
+                "barColorNegative": false,
+                "customBarColorBy": 0,
+                "alignmentVertical": "middle",
+                "customColorBackground": {
+                  "__object": true
+                },
+                "customColorBarBackground": {
+                  "__object": true
+                }
+              },
+              "J": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 1,
+                  "underline": false,
+                  "background": false
+                },
+                "width": 0.2,
+                "append": "",
+                "format": "0.0%",
+                "heatmap": {
+                  "enabled": true
+                },
+                "prepend": "",
+                "barColor": 0,
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "auto",
+                "flagStyle": "1x1",
+                "showAsBar": false,
+                "sparkline": {
+                  "area": false,
+                  "type": "line",
+                  "color": 0,
+                  "title": "",
+                  "dotMax": false,
+                  "dotMin": false,
+                  "format": "0.[0]a",
+                  "height": 20,
+                  "stroke": 2,
+                  "dotLast": true,
+                  "enabled": false,
+                  "baseline": false,
+                  "colorNeg": 0,
+                  "dotFirst": true,
+                  "rangeMax": "",
+                  "rangeMin": "",
+                  "labelDiff": false,
+                  "baselineAt": 0
+                },
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "barRangeMax": "",
+                "barRangeMin": "",
+                "borderRight": "none",
+                "compactMode": false,
+                "customColor": false,
+                "replaceFlags": false,
+                "showOnMobile": true,
+                "customColorBy": 0,
+                "showOnDesktop": true,
+                "customBarColor": false,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "customColorText": {
+                  "__object": true
+                },
+                "barColorNegative": false,
+                "customBarColorBy": 0,
+                "alignmentVertical": "middle",
+                "customColorBackground": {
+                  "__object": true
+                },
+                "customColorBarBackground": {
+                  "__object": true
+                }
+              },
+              "M": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 1,
+                  "underline": false,
+                  "background": false
+                },
+                "width": 0.2,
+                "append": "",
+                "format": "0.0%",
+                "heatmap": {
+                  "enabled": true
+                },
+                "prepend": "",
+                "barColor": 0,
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "auto",
+                "flagStyle": "1x1",
+                "showAsBar": false,
+                "sparkline": {
+                  "area": false,
+                  "type": "line",
+                  "color": 0,
+                  "title": "",
+                  "dotMax": false,
+                  "dotMin": false,
+                  "format": "0.[0]a",
+                  "height": 20,
+                  "stroke": 2,
+                  "dotLast": true,
+                  "enabled": false,
+                  "baseline": false,
+                  "colorNeg": 0,
+                  "dotFirst": true,
+                  "rangeMax": "",
+                  "rangeMin": "",
+                  "labelDiff": false,
+                  "baselineAt": 0
+                },
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "barRangeMax": "",
+                "barRangeMin": "",
+                "borderRight": "none",
+                "compactMode": false,
+                "customColor": false,
+                "replaceFlags": false,
+                "showOnMobile": true,
+                "customColorBy": 0,
+                "showOnDesktop": true,
+                "customBarColor": false,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "customColorText": {
+                  "__object": true
+                },
+                "barColorNegative": false,
+                "customBarColorBy": 0,
+                "alignmentVertical": "middle",
+                "customColorBackground": {
+                  "__object": true
+                },
+                "customColorBarBackground": {
+                  "__object": true
+                }
+              },
+              "J1": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 1,
+                  "underline": false,
+                  "background": false
+                },
+                "width": 0.2,
+                "append": "",
+                "format": "0.0%",
+                "heatmap": {
+                  "enabled": true
+                },
+                "prepend": "",
+                "barColor": 0,
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "auto",
+                "flagStyle": "1x1",
+                "showAsBar": false,
+                "sparkline": {
+                  "area": false,
+                  "type": "line",
+                  "color": 0,
+                  "title": "",
+                  "dotMax": false,
+                  "dotMin": false,
+                  "format": "0.[0]a",
+                  "height": 20,
+                  "stroke": 2,
+                  "dotLast": true,
+                  "enabled": false,
+                  "baseline": false,
+                  "colorNeg": 0,
+                  "dotFirst": true,
+                  "rangeMax": "",
+                  "rangeMin": "",
+                  "labelDiff": false,
+                  "baselineAt": 0
+                },
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "barRangeMax": "",
+                "barRangeMin": "",
+                "borderRight": "none",
+                "compactMode": false,
+                "customColor": false,
+                "replaceFlags": false,
+                "showOnMobile": true,
+                "customColorBy": 0,
+                "showOnDesktop": true,
+                "customBarColor": false,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "customColorText": {
+                  "__object": true
+                },
+                "barColorNegative": false,
+                "customBarColorBy": 0,
+                "alignmentVertical": "middle",
+                "customColorBackground": {
+                  "__object": true
+                },
+                "customColorBarBackground": {
+                  "__object": true
+                }
+              },
+              "J2": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 1,
+                  "underline": false,
+                  "background": false
+                },
+                "width": 0.2,
+                "append": "",
+                "format": "0.0%",
+                "heatmap": {
+                  "enabled": true
+                },
+                "prepend": "",
+                "barColor": 0,
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "auto",
+                "flagStyle": "1x1",
+                "showAsBar": false,
+                "sparkline": {
+                  "area": false,
+                  "type": "line",
+                  "color": 0,
+                  "title": "",
+                  "dotMax": false,
+                  "dotMin": false,
+                  "format": "0.[0]a",
+                  "height": 20,
+                  "stroke": 2,
+                  "dotLast": true,
+                  "enabled": false,
+                  "baseline": false,
+                  "colorNeg": 0,
+                  "dotFirst": true,
+                  "rangeMax": "",
+                  "rangeMin": "",
+                  "labelDiff": false,
+                  "baselineAt": 0
+                },
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "barRangeMax": "",
+                "barRangeMin": "",
+                "borderRight": "none",
+                "compactMode": false,
+                "customColor": false,
+                "replaceFlags": false,
+                "showOnMobile": true,
+                "customColorBy": 0,
+                "showOnDesktop": true,
+                "customBarColor": false,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "customColorText": {
+                  "__object": true
+                },
+                "barColorNegative": false,
+                "customBarColorBy": 0,
+                "alignmentVertical": "middle",
+                "customColorBackground": {
+                  "__object": true
+                },
+                "customColorBarBackground": {
+                  "__object": true
+                }
+              },
+              "M1": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 1,
+                  "underline": false,
+                  "background": false
+                },
+                "width": 0.2,
+                "append": "",
+                "format": "0.0%",
+                "heatmap": {
+                  "enabled": true
+                },
+                "prepend": "",
+                "barColor": 0,
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "auto",
+                "flagStyle": "1x1",
+                "showAsBar": false,
+                "sparkline": {
+                  "area": false,
+                  "type": "line",
+                  "color": 0,
+                  "title": "",
+                  "dotMax": false,
+                  "dotMin": false,
+                  "format": "0.[0]a",
+                  "height": 20,
+                  "stroke": 2,
+                  "dotLast": true,
+                  "enabled": false,
+                  "baseline": false,
+                  "colorNeg": 0,
+                  "dotFirst": true,
+                  "rangeMax": "",
+                  "rangeMin": "",
+                  "labelDiff": false,
+                  "baselineAt": 0
+                },
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "barRangeMax": "",
+                "barRangeMin": "",
+                "borderRight": "none",
+                "compactMode": false,
+                "customColor": false,
+                "replaceFlags": false,
+                "showOnMobile": true,
+                "customColorBy": 0,
+                "showOnDesktop": true,
+                "customBarColor": false,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "customColorText": {
+                  "__object": true
+                },
+                "barColorNegative": false,
+                "customBarColorBy": 0,
+                "alignmentVertical": "middle",
+                "customColorBackground": {
+                  "__object": true
+                },
+                "customColorBarBackground": {
+                  "__object": true
+                }
+              },
+              "Apr": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 0.9,
+                  "underline": false,
+                  "background": false
+                },
+                "width": 0.2,
+                "append": "",
+                "format": "0.0%",
+                "heatmap": {
+                  "enabled": true
+                },
+                "prepend": "",
+                "barColor": 0,
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "center",
+                "flagStyle": "1x1",
+                "showAsBar": false,
+                "sparkline": {
+                  "area": false,
+                  "type": "line",
+                  "color": "#18a1cd",
+                  "title": "",
+                  "dotMax": false,
+                  "dotMin": false,
+                  "format": "0.[0]a",
+                  "height": 20,
+                  "stroke": 2,
+                  "dotLast": true,
+                  "enabled": false,
+                  "baseline": false,
+                  "colorNeg": 0,
+                  "dotFirst": true,
+                  "rangeMax": "15",
+                  "rangeMin": "0",
+                  "labelDiff": false,
+                  "baselineAt": 0
+                },
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "barRangeMax": "",
+                "barRangeMin": "",
+                "borderRight": "none",
+                "compactMode": false,
+                "customColor": false,
+                "replaceFlags": false,
+                "showOnMobile": true,
+                "customColorBy": 0,
+                "showOnDesktop": true,
+                "customBarColor": false,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "customColorText": {
+                  "__object": true
+                },
+                "barColorNegative": false,
+                "customBarColorBy": 0,
+                "alignmentVertical": "middle",
+                "customColorBackground": {
+                  "__object": true
+                },
+                "customColorBarBackground": {
+                  "__object": true
+                }
+              },
+              "Aug": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 0.9,
+                  "underline": false,
+                  "background": false
+                },
+                "width": 0.2,
+                "append": "",
+                "format": "0.0%",
+                "heatmap": {
+                  "enabled": true
+                },
+                "prepend": "",
+                "barColor": 0,
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "center",
+                "flagStyle": "1x1",
+                "showAsBar": false,
+                "sparkline": {
+                  "area": false,
+                  "type": "line",
+                  "color": "#18a1cd",
+                  "title": "",
+                  "dotMax": false,
+                  "dotMin": false,
+                  "format": "0.[0]a",
+                  "height": 20,
+                  "stroke": 2,
+                  "dotLast": true,
+                  "enabled": false,
+                  "baseline": false,
+                  "colorNeg": 0,
+                  "dotFirst": true,
+                  "rangeMax": "15",
+                  "rangeMin": "0",
+                  "labelDiff": false,
+                  "baselineAt": 0
+                },
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "barRangeMax": "",
+                "barRangeMin": "",
+                "borderRight": "none",
+                "compactMode": false,
+                "customColor": false,
+                "replaceFlags": false,
+                "showOnMobile": true,
+                "customColorBy": 0,
+                "showOnDesktop": true,
+                "customBarColor": false,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "customColorText": {
+                  "__object": true
+                },
+                "barColorNegative": false,
+                "customBarColorBy": 0,
+                "alignmentVertical": "middle",
+                "customColorBackground": {
+                  "__object": true
+                },
+                "customColorBarBackground": {
+                  "__object": true
+                }
+              },
+              "Feb": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 0.9,
+                  "underline": false,
+                  "background": false
+                },
+                "width": 0.2,
+                "append": "",
+                "format": "0.0%",
+                "heatmap": {
+                  "enabled": true
+                },
+                "prepend": "",
+                "barColor": 0,
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "center",
+                "flagStyle": "1x1",
+                "showAsBar": false,
+                "sparkline": {
+                  "area": false,
+                  "type": "line",
+                  "color": "#18a1cd",
+                  "title": "",
+                  "dotMax": false,
+                  "dotMin": false,
+                  "format": "0.[0]a",
+                  "height": 20,
+                  "stroke": 2,
+                  "dotLast": true,
+                  "enabled": false,
+                  "baseline": false,
+                  "colorNeg": 0,
+                  "dotFirst": true,
+                  "rangeMax": "15",
+                  "rangeMin": "0",
+                  "labelDiff": false,
+                  "baselineAt": 0
+                },
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "barRangeMax": "",
+                "barRangeMin": "",
+                "borderRight": "none",
+                "compactMode": false,
+                "customColor": false,
+                "replaceFlags": false,
+                "showOnMobile": true,
+                "customColorBy": 0,
+                "showOnDesktop": true,
+                "customBarColor": false,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "customColorText": {
+                  "__object": true
+                },
+                "barColorNegative": false,
+                "customBarColorBy": 0,
+                "alignmentVertical": "middle",
+                "customColorBackground": {
+                  "__object": true
+                },
+                "customColorBarBackground": {
+                  "__object": true
+                }
+              },
+              "Jan": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 0.9,
+                  "underline": false,
+                  "background": false
+                },
+                "width": 0.2,
+                "append": "",
+                "format": "0.0%",
+                "heatmap": {
+                  "enabled": true
+                },
+                "prepend": "",
+                "barColor": 0,
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "center",
+                "flagStyle": "1x1",
+                "showAsBar": false,
+                "sparkline": {
+                  "area": false,
+                  "type": "line",
+                  "color": "#18a1cd",
+                  "title": "",
+                  "dotMax": false,
+                  "dotMin": false,
+                  "format": "0.[0]a",
+                  "height": 20,
+                  "stroke": 2,
+                  "dotLast": true,
+                  "enabled": false,
+                  "baseline": false,
+                  "colorNeg": 0,
+                  "dotFirst": true,
+                  "rangeMax": "15",
+                  "rangeMin": "0",
+                  "labelDiff": false,
+                  "baselineAt": 0
+                },
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "barRangeMax": "",
+                "barRangeMin": "",
+                "borderRight": "none",
+                "compactMode": false,
+                "customColor": false,
+                "replaceFlags": false,
+                "showOnMobile": true,
+                "customColorBy": 0,
+                "showOnDesktop": true,
+                "customBarColor": false,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "customColorText": {
+                  "__object": true
+                },
+                "barColorNegative": false,
+                "customBarColorBy": 0,
+                "alignmentVertical": "middle",
+                "customColorBackground": {
+                  "__object": true
+                },
+                "customColorBarBackground": {
+                  "__object": true
+                }
+              },
+              "Jul": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 0.9,
+                  "underline": false,
+                  "background": false
+                },
+                "width": 0.2,
+                "append": "",
+                "format": "0.0%",
+                "heatmap": {
+                  "enabled": true
+                },
+                "prepend": "",
+                "barColor": 0,
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "center",
+                "flagStyle": "1x1",
+                "showAsBar": false,
+                "sparkline": {
+                  "area": false,
+                  "type": "line",
+                  "color": "#18a1cd",
+                  "title": "",
+                  "dotMax": false,
+                  "dotMin": false,
+                  "format": "0.[0]a",
+                  "height": 20,
+                  "stroke": 2,
+                  "dotLast": true,
+                  "enabled": false,
+                  "baseline": false,
+                  "colorNeg": 0,
+                  "dotFirst": true,
+                  "rangeMax": "15",
+                  "rangeMin": "0",
+                  "labelDiff": false,
+                  "baselineAt": 0
+                },
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "barRangeMax": "",
+                "barRangeMin": "",
+                "borderRight": "none",
+                "compactMode": false,
+                "customColor": false,
+                "replaceFlags": false,
+                "showOnMobile": true,
+                "customColorBy": 0,
+                "showOnDesktop": true,
+                "customBarColor": false,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "customColorText": {
+                  "__object": true
+                },
+                "barColorNegative": false,
+                "customBarColorBy": 0,
+                "alignmentVertical": "middle",
+                "customColorBackground": {
+                  "__object": true
+                },
+                "customColorBarBackground": {
+                  "__object": true
+                }
+              },
+              "Jun": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 0.9,
+                  "underline": false,
+                  "background": false
+                },
+                "width": 0.2,
+                "append": "",
+                "format": "0.0%",
+                "heatmap": {
+                  "enabled": true
+                },
+                "prepend": "",
+                "barColor": 0,
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "center",
+                "flagStyle": "1x1",
+                "showAsBar": false,
+                "sparkline": {
+                  "area": false,
+                  "type": "line",
+                  "color": "#18a1cd",
+                  "title": "",
+                  "dotMax": false,
+                  "dotMin": false,
+                  "format": "0.[0]a",
+                  "height": 20,
+                  "stroke": 2,
+                  "dotLast": true,
+                  "enabled": false,
+                  "baseline": false,
+                  "colorNeg": 0,
+                  "dotFirst": true,
+                  "rangeMax": "15",
+                  "rangeMin": "0",
+                  "labelDiff": false,
+                  "baselineAt": 0
+                },
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "barRangeMax": "",
+                "barRangeMin": "",
+                "borderRight": "none",
+                "compactMode": false,
+                "customColor": false,
+                "replaceFlags": false,
+                "showOnMobile": true,
+                "customColorBy": 0,
+                "showOnDesktop": true,
+                "customBarColor": false,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "customColorText": {
+                  "__object": true
+                },
+                "barColorNegative": false,
+                "customBarColorBy": 0,
+                "alignmentVertical": "middle",
+                "customColorBackground": {
+                  "__object": true
+                },
+                "customColorBarBackground": {
+                  "__object": true
+                }
+              },
+              "Mar": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 0.9,
+                  "underline": false,
+                  "background": false
+                },
+                "width": 0.2,
+                "append": "",
+                "format": "0.0%",
+                "heatmap": {
+                  "enabled": true
+                },
+                "prepend": "",
+                "barColor": 0,
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "center",
+                "flagStyle": "1x1",
+                "showAsBar": false,
+                "sparkline": {
+                  "area": false,
+                  "type": "line",
+                  "color": "#18a1cd",
+                  "title": "",
+                  "dotMax": false,
+                  "dotMin": false,
+                  "format": "0.[0]a",
+                  "height": 20,
+                  "stroke": 2,
+                  "dotLast": true,
+                  "enabled": false,
+                  "baseline": false,
+                  "colorNeg": 0,
+                  "dotFirst": true,
+                  "rangeMax": "15",
+                  "rangeMin": "0",
+                  "labelDiff": false,
+                  "baselineAt": 0
+                },
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "barRangeMax": "",
+                "barRangeMin": "",
+                "borderRight": "none",
+                "compactMode": false,
+                "customColor": false,
+                "replaceFlags": false,
+                "showOnMobile": true,
+                "customColorBy": 0,
+                "showOnDesktop": true,
+                "customBarColor": false,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "customColorText": {
+                  "__object": true
+                },
+                "barColorNegative": false,
+                "customBarColorBy": 0,
+                "alignmentVertical": "middle",
+                "customColorBackground": {
+                  "__object": true
+                },
+                "customColorBarBackground": {
+                  "__object": true
+                }
+              },
+              "May": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 0.9,
+                  "underline": false,
+                  "background": false
+                },
+                "width": 0.2,
+                "append": "",
+                "format": "0.0%",
+                "heatmap": {
+                  "enabled": true
+                },
+                "prepend": "",
+                "barColor": 0,
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "center",
+                "flagStyle": "1x1",
+                "showAsBar": false,
+                "sparkline": {
+                  "area": false,
+                  "type": "line",
+                  "color": "#18a1cd",
+                  "title": "",
+                  "dotMax": false,
+                  "dotMin": false,
+                  "format": "0.[0]a",
+                  "height": 20,
+                  "stroke": 2,
+                  "dotLast": true,
+                  "enabled": false,
+                  "baseline": false,
+                  "colorNeg": 0,
+                  "dotFirst": true,
+                  "rangeMax": "15",
+                  "rangeMin": "0",
+                  "labelDiff": false,
+                  "baselineAt": 0
+                },
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "barRangeMax": "",
+                "barRangeMin": "",
+                "borderRight": "none",
+                "compactMode": false,
+                "customColor": false,
+                "replaceFlags": false,
+                "showOnMobile": true,
+                "customColorBy": 0,
+                "showOnDesktop": true,
+                "customBarColor": false,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "customColorText": {
+                  "__object": true
+                },
+                "barColorNegative": false,
+                "customBarColorBy": 0,
+                "alignmentVertical": "middle",
+                "customColorBackground": {
+                  "__object": true
+                },
+                "customColorBarBackground": {
+                  "__object": true
+                }
+              },
+              "country": {
+                "style": {
+                  "bold": false,
+                  "color": false,
+                  "italic": false,
+                  "fontSize": 1,
+                  "underline": false,
+                  "background": false
+                },
+                "width": 0.2,
+                "append": "",
+                "format": "0,0",
+                "heatmap": {
+                  "enabled": false
+                },
+                "prepend": "",
+                "barColor": 0,
+                "barStyle": "normal",
+                "minWidth": 30,
+                "sortable": true,
+                "alignment": "auto",
+                "flagStyle": "1x1",
+                "showAsBar": false,
+                "sparkline": {
+                  "area": false,
+                  "type": "line",
+                  "color": 0,
+                  "title": "",
+                  "dotMax": false,
+                  "dotMin": false,
+                  "format": "0.[0]a",
+                  "height": 20,
+                  "stroke": 2,
+                  "dotLast": true,
+                  "enabled": false,
+                  "baseline": false,
+                  "colorNeg": 0,
+                  "dotFirst": true,
+                  "rangeMax": "",
+                  "rangeMin": "",
+                  "labelDiff": false,
+                  "baselineAt": 0
+                },
+                "borderLeft": "none",
+                "fixedWidth": false,
+                "barRangeMax": "",
+                "barRangeMin": "",
+                "borderRight": "none",
+                "compactMode": false,
+                "customColor": false,
+                "replaceFlags": false,
+                "showOnMobile": true,
+                "customColorBy": 0,
+                "showOnDesktop": true,
+                "customBarColor": false,
+                "barNoBackground": false,
+                "borderLeftColor": "#333333",
+                "customColorText": {
+                  "__object": true
+                },
+                "barColorNegative": false,
+                "customBarColorBy": 0,
+                "alignmentVertical": "middle",
+                "customColorBackground": {
+                  "__object": true
+                },
+                "customColorBarBackground": {
+                  "__object": true
+                }
+              }
+            },
+            "heatmap": {
+              "map": {
+
+              },
+              "mode": "continuous",
+              "stops": "equidistant",
+              "colors": [
+                {
+                  "color": "#feebe2",
+                  "position": 0
+                },
+                {
+                  "color": "#fcc5c0",
+                  "position": 0.2
+                },
+                {
+                  "color": "#fa9fb5",
+                  "position": 0.4
+                },
+                {
+                  "color": "#f768a1",
+                  "position": 0.6
+                },
+                {
+                  "color": "#c51b8a",
+                  "position": 0.8
+                },
+                {
+                  "color": "#7a0177",
+                  "position": 1
+                }
+              ],
+              "palette": 0,
+              "rangeMax": "",
+              "rangeMin": "",
+              "stopCount": 5,
+              "hideValues": false,
+              "customStops": [null, null, 3.6, 4.02, 4.4, 4.95, 5.1, 5.96, 7.22],
+              "rangeCenter": "",
+              "categoryOrder": [],
+              "interpolation": "equidistant",
+              "valueTooltips": true,
+              "categoryLabels": {
+
+              }
+            },
+            "perPage": 45,
+            "striped": false,
+            "markdown": false,
+            "noHeader": false,
+            "overlays": {
+
+            },
+            "showRank": false,
+            "sortTable": true,
+            "pagination": {
+              "enabled": true,
+              "position": "top"
+            },
+            "searchable": false,
+            "showHeader": true,
+            "compactMode": false,
+            "sortDirection": "asc",
+            "chart-type-set": true,
+            "mobileFallback": false,
+            "mergeEmptyCells": false,
+            "firstRowIsHeader": false,
+            "text-annotations": {
+
+            },
+            "custom-area-fills": {
+
+            },
+            "range-annotations": {
+
+            },
+            "firstColumnIsSticky": false
+          },
+          "axes": {
+
+          },
+          "publish": {
+            "embed-width": 616,
+            "embed-height": 589,
+            "blocks": {
+              "logo": {
+                "enabled": false
+              },
+              "embed": false,
+              "download-pdf": false,
+              "download-svg": false,
+              "get-the-data": true,
+              "download-image": false
+            },
+            "export-pdf": {
+              "unit": "mm",
+              "scale": 1,
+              "width": "163",
+              "height": "151",
+              "include": "full",
+              "colorMode": "rgb",
+              "fullVectorMode": true
+            },
+            "text": "#333333",
+            "background": "#ffffff",
+            "export-svg": {
+              "width": 616,
+              "height": 570,
+              "include": "full",
+              "fullVectorMode": true
+            },
+            "embed-codes": {
+              "embed-method-iframe": "\u003Ciframe title=\"Unemployment rate in selected countries\" aria-label=\"Table\" id=\"datawrapper-chart-uFSM1\" src=\"https://datawrapper.dwcdn.net/uFSM1/3/\" scrolling=\"no\" frameborder=\"0\" style=\"border: none;\" width=\"616\" height=\"562\" data-external=\"1\"\u003E\u003C/iframe\u003E",
+              "embed-method-responsive": "\u003Ciframe title=\"Unemployment rate in selected countries\" aria-label=\"Table\" id=\"datawrapper-chart-uFSM1\" src=\"https://datawrapper.dwcdn.net/uFSM1/3/\" scrolling=\"no\" frameborder=\"0\" style=\"width: 0; min-width: 100% !important; border: none;\" height=\"562\" data-external=\"1\"\u003E\u003C/iframe\u003E\u003Cscript type=\"text/javascript\"\u003E!function(){\"use strict\";window.addEventListener(\"message\",(function(a){if(void 0!==a.data[\"datawrapper-height\"]){var e=document.querySelectorAll(\"iframe\");for(var t in a.data[\"datawrapper-height\"])for(var r=0;r\u003Ce.length;r++)if(e[r].contentWindow===a.source){var i=a.data[\"datawrapper-height\"][t]+\"px\";e[r].style.height=i}}}))}();\n\u003C/script\u003E",
+              "embed-method-web-component": "\u003Cdiv style=\"min-height:562px\" id=\"datawrapper-vis-uFSM1\"\u003E\u003Cscript type=\"text/javascript\" defer src=\"https://datawrapper.dwcdn.net/uFSM1/embed.js\" charset=\"utf-8\" data-target=\"#datawrapper-vis-uFSM1\"\u003E\u003C/script\u003E\u003Cnoscript\u003E\u003Cimg src=\"https://datawrapper.dwcdn.net/uFSM1/full.png\" alt=\"\" /\u003E\u003C/noscript\u003E\u003C/div\u003E"
+            },
+            "chart-height": 492
+          },
+          "annotate": {
+            "notes": ""
+          },
+          "custom": {
+
+          }
+        },
+        "utf8": false,
+        "createdAt": "2026-02-22T06:36:19.000Z",
+        "lastModifiedAt": "2026-02-22T06:36:25.000Z",
+        "forkedFrom": "uFSM1",
+        "authorId": 435888,
+        "folderId": 290386,
+        "workspace": "AQKeZM5h"
+      },
+      "timestamps": {
+        "metadata": {
+          "visualize": {
+            "heatmap": {
+              "customStops": {
+                "__@t$__": "43588800283-1"
+              }
+            }
+          }
+        }
+      },
+      "pathsToItemArrays": [
+        "metadata.visualize.custom-area-fills",
+        "metadata.visualize.range-annotations",
+        "metadata.visualize.text-annotations",
+        "metadata.visualize.overlays",
+        "metadata.data.changes"
+      ]
+    },
+    "clock": "0-1"
+  },
+  "data": "0-0"
+}

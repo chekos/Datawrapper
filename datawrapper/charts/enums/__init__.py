@@ -1,6 +1,7 @@
 """Enum classes for Datawrapper chart formatting and styling options."""
 
 from .annos import ArrowHead, ConnectorLineType, StrokeType, StrokeWidth
+from .border_width import BorderWidth
 from .date_format import DateFormat
 from .grid_display import GridDisplay
 from .grid_label import GridLabelAlign, GridLabelPosition
@@ -9,6 +10,7 @@ from .line_dash import LineDash
 from .line_width import LineWidth
 from .number_divisor import NumberDivisor
 from .number_format import NumberFormat
+from .pagination import PaginationType
 from .plot_height import PlotHeightMode
 from .replace_flags import ReplaceFlagsType
 from .scatter_shape import (
@@ -29,6 +31,7 @@ from .value_label import (
 
 __all__ = [
     "ArrowHead",
+    "BorderWidth",
     "ConnectorLineType",
     "DateFormat",
     "GridDisplay",
@@ -39,6 +42,7 @@ __all__ = [
     "LineWidth",
     "NumberDivisor",
     "NumberFormat",
+    "PaginationType",
     "PlotHeightMode",
     "RegressionMethod",
     "ReplaceFlagsType",
