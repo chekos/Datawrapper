@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import csv
 import json
 import logging
 import os
+import re
 import warnings
 from io import StringIO
 from pathlib import Path
@@ -17,6 +19,40 @@ from IPython.display import IFrame, Image
 from .exceptions import FailedRequestError, InvalidRequestError, RateLimitError
 
 logger = logging.getLogger(__name__)
+
+
+def read_csv(text: str) -> pd.DataFrame:
+    """Parse chart data the way Datawrapper does.
+
+    Datawrapper accepts comma, semicolon, tab and pipe separated data, and its
+    editor stores data pasted from a spreadsheet as tab separated. The
+    delimiter is sniffed from the first lines, falling back to a comma.
+
+    A column with a blank header is named "X.<position>", as Datawrapper names
+    it in a chart's settings (``axes``, ``column-format``), instead of pandas'
+    "Unnamed: <position>".
+
+    Data read here is uploaded again on ``update()``, so it keeps its text
+    where pandas would change it: only empty cells are missing (not "NA" or
+    "N/A"), and a column stays text when a number wouldn't reproduce it, such as
+    codes with leading zeros ("05001") or labels with spaces that settings like
+    ``highlighted-series`` refer to ("2025 ").
+    """
+    sample = "\n".join(text.splitlines()[:20])
+    try:
+        sep = csv.Sniffer().sniff(sample, delimiters=",;\t|").delimiter
+    except csv.Error:
+        sep = ","
+    df = pd.read_csv(StringIO(text), sep=sep, keep_default_na=False, na_values=[""])
+    raw = pd.read_csv(
+        StringIO(text), sep=sep, keep_default_na=False, na_values=[""], dtype=str
+    )
+    for column in df.columns:
+        if pd.api.types.is_numeric_dtype(df[column]) and (
+            raw[column].dropna().str.fullmatch(r"\s.*|.*\s|[+-]?0\d.*").any()
+        ):
+            df[column] = raw[column]
+    return df.rename(columns=lambda name: re.sub(r"^Unnamed: (\d+)$", r"X.\1", name))
 
 
 class Datawrapper:
@@ -170,7 +206,7 @@ class Datawrapper:
                 return response.json()
             # If it's a csv, read the text into a dataframe
             if "text/csv" in response.headers["content-type"]:
-                return pd.read_csv(StringIO(response.text))
+                return read_csv(response.text)
             # Otherwise just return the content
             return response.content
         # If not, raise an exception
