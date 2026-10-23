@@ -12,6 +12,17 @@ from datawrapper.__main__ import Datawrapper
 from datawrapper.charts.models import Annotate, Describe, Publish, Transform, Visualize
 
 
+def _deep_merge(base: dict[str, Any], overlay: dict[str, Any]) -> dict[str, Any]:
+    """Return a copy of ``base`` with ``overlay`` merged in, recursing into dicts."""
+    merged = deepcopy(base)
+    for key, value in overlay.items():
+        if isinstance(value, dict) and isinstance(merged.get(key), dict):
+            merged[key] = _deep_merge(merged[key], value)
+        else:
+            merged[key] = deepcopy(value)
+    return merged
+
+
 class BaseChart(BaseModel):
     """A base class for Datawrapper charts published via its API."""
 
@@ -317,7 +328,6 @@ class BaseChart(BaseModel):
                 "sharing": {
                     "enabled": self.share_buttons,
                     "url": self.share_url,
-                    "auto": False,
                 },
             }
         )
@@ -345,18 +355,30 @@ class BaseChart(BaseModel):
         # raw API metadata when present so BaseChart can round-trip unsupported
         # map/table/new-type settings while still overlaying the common typed fields.
         metadata = deepcopy(self.raw_metadata) if self.raw_metadata else {}
-        for section_name, section_data in {
-            "data": data_section,
-            "describe": describe.model_dump(by_alias=True),
-            "visualize": visualize.model_dump(by_alias=True),
-            "publish": publish.model_dump(by_alias=True),
-            "annotate": annotate.model_dump(by_alias=True),
+        existing_data = metadata.get("data")
+        metadata["data"] = (
+            {**existing_data, **data_section}
+            if isinstance(existing_data, dict)
+            else data_section
+        )
+        # Layer each section as model defaults, then the raw API metadata, then
+        # the values set from this chart's fields. Merging deeply keeps settings
+        # the models do not cover, such as describe's number formatting,
+        # sharing.auto or extra publish blocks, instead of resetting them.
+        for section_name, section in {
+            "describe": describe,
+            "visualize": visualize,
+            "publish": publish,
+            "annotate": annotate,
         }.items():
             existing_section = metadata.get(section_name)
-            if isinstance(existing_section, dict):
-                metadata[section_name] = {**existing_section, **section_data}
-            else:
-                metadata[section_name] = section_data
+            metadata[section_name] = _deep_merge(
+                _deep_merge(
+                    section.model_dump(by_alias=True),
+                    existing_section if isinstance(existing_section, dict) else {},
+                ),
+                section.model_dump(by_alias=True, exclude_unset=True),
+            )
         metadata["custom"] = self.custom
         dw_obj["metadata"] = metadata
 
