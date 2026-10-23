@@ -22,6 +22,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Send each column's `number-format` in `ColumnFormatList`. The serializer
+  dropped it along with the default values, so a column's number or date
+  format was lost on create, and on every `update()` of a fetched chart.
+
 ### Removed
 
 - Remove the unused `rich` and `exceptiongroup` runtime dependencies.
