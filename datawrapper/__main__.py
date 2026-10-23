@@ -6,6 +6,7 @@ import csv
 import json
 import logging
 import os
+import re
 import warnings
 from io import StringIO
 from pathlib import Path
@@ -26,13 +27,18 @@ def read_csv(text: str) -> pd.DataFrame:
     Datawrapper accepts comma, semicolon, tab and pipe separated data, and its
     editor stores data pasted from a spreadsheet as tab separated. The
     delimiter is sniffed from the first lines, falling back to a comma.
+
+    A column with a blank header is named "X.<position>", as Datawrapper names
+    it in a chart's settings (``axes``, ``column-format``), instead of pandas'
+    "Unnamed: <position>".
     """
     sample = "\n".join(text.splitlines()[:20])
     try:
         sep = csv.Sniffer().sniff(sample, delimiters=",;\t|").delimiter
     except csv.Error:
         sep = ","
-    return pd.read_csv(StringIO(text), sep=sep)
+    df = pd.read_csv(StringIO(text), sep=sep)
+    return df.rename(columns=lambda name: re.sub(r"^Unnamed: (\d+)$", r"X.\1", name))
 
 
 class Datawrapper:

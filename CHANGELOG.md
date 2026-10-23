@@ -28,6 +28,9 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   the editor stores when you paste from a spreadsheet) came back as a single
   column. `get()` and `BaseChart.deserialize_data()` now share a
   `read_csv()` helper that sniffs the delimiter from the first lines.
+- Name columns with a blank header `X.1`, `X.2`, ... as Datawrapper does,
+  instead of pandas' `Unnamed: 1`, so a chart's settings that refer to them
+  (`axes`, `column-format`) still match after `update()`.
 
 ### Removed
 

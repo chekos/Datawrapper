@@ -53,6 +53,12 @@ def test_single_column_falls_back_to_comma():
     assert df["Value"].tolist() == [3, 2]
 
 
+def test_blank_headers_get_datawrapper_names():
+    """Settings such as axes refer to a column with a blank header as X.<position>."""
+    df = read_csv("Item,,\nFunding,10,62%\nDebt,5,24%\n")
+    assert list(df.columns) == ["Item", "X.1", "X.2"]
+
+
 def test_deserialize_data_uses_the_sniffed_delimiter():
     df = BaseChart.deserialize_data("a;b\n1;2\n")
     assert list(df.columns) == ["a", "b"]
