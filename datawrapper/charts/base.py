@@ -322,22 +322,32 @@ class BaseChart(BaseModel):
             }
         )
 
-        # Validate the Publish data
+        # Validate the Publish data. Only the footer blocks and logo settings
+        # that were set go out, so a new chart gets its team's and theme's
+        # defaults (such as the theme's logo) instead of having them turned off.
+        blocks: dict[str, Any] = {
+            alias: getattr(self, name)
+            for name, alias in (
+                ("get_the_data", "get-the-data"),
+                ("download_image", "download-image"),
+                ("download_pdf", "download-pdf"),
+                ("download_svg", "download-svg"),
+                ("embed", "embed"),
+            )
+            if name in self.model_fields_set
+        }
+        logo = {
+            key: getattr(self, name)
+            for name, key in (("logo_id", "id"), ("logo", "enabled"))
+            if name in self.model_fields_set
+        }
+        if logo:
+            blocks["logo"] = logo
         publish = Publish.model_validate(
             {
                 "autoDarkMode": self.auto_dark_mode,
                 "force-attribution": self.force_attribution,
-                "blocks": {
-                    "get-the-data": self.get_the_data,
-                    "download-image": self.download_image,
-                    "download-pdf": self.download_pdf,
-                    "download-svg": self.download_svg,
-                    "embed": self.embed,
-                    "logo": {
-                        "id": self.logo_id,
-                        "enabled": self.logo,
-                    },
-                },
+                "blocks": blocks,
             }
         )
 
@@ -349,7 +359,7 @@ class BaseChart(BaseModel):
             "data": data_section,
             "describe": describe.model_dump(by_alias=True),
             "visualize": visualize.model_dump(by_alias=True),
-            "publish": publish.model_dump(by_alias=True),
+            "publish": publish.model_dump(by_alias=True, exclude_unset=True),
             "annotate": annotate.model_dump(by_alias=True),
         }.items():
             existing_section = metadata.get(section_name)

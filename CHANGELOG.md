@@ -22,6 +22,12 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Stop turning off the theme's logo and the team's footer settings on new
+  charts. `serialize_model()` always sent `logo`, `get-the-data`,
+  `download-*` and `embed` with the model defaults (all `False`), which
+  override what the team and theme would otherwise apply. It now sends only
+  the publish blocks that were set or read from the API.
+
 ### Removed
 
 - Remove the unused `rich` and `exceptiongroup` runtime dependencies.

@@ -84,9 +84,10 @@ def test_metadata_content_structure():
     assert "dark-mode-invert" in metadata["visualize"]
     assert "sharing" in metadata["visualize"]
 
-    # Check publish section structure
+    # Check publish section structure. Blocks that weren't set are left out,
+    # so the team's and theme's defaults apply.
     assert "blocks" in metadata["publish"]
-    assert "logo" in metadata["publish"]["blocks"]
+    assert metadata["publish"]["blocks"] == {}
 
     # Check annotate section structure
     assert "notes" in metadata["annotate"]
