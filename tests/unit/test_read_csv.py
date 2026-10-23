@@ -59,6 +59,26 @@ def test_blank_headers_get_datawrapper_names():
     assert list(df.columns) == ["Item", "X.1", "X.2"]
 
 
+def test_codes_with_leading_zeros_stay_text():
+    df = read_csv("Code,Town,Value\n05001,Medellin,3\n11001,Bogota,4\n")
+    assert df["Code"].tolist() == ["05001", "11001"]
+    assert df["Value"].tolist() == [3, 4]
+
+
+def test_labels_with_spaces_stay_text():
+    """A chart's settings refer to the label as written, trailing space included."""
+    df = read_csv("Year|Births\n2025 |441537\n2026 |253175\n")
+    assert df["Year"].tolist() == ["2025 ", "2026 "]
+    assert df["Births"].tolist() == [441537, 253175]
+
+
+def test_only_empty_cells_are_missing():
+    df = read_csv("Name,Note,Value\nA,N/A,1\nB,NA,\n")
+    assert df["Note"].tolist() == ["N/A", "NA"]
+    assert df["Value"].iloc[0] == 1
+    assert pd.isna(df["Value"].iloc[1])
+
+
 def test_deserialize_data_uses_the_sniffed_delimiter():
     df = BaseChart.deserialize_data("a;b\n1;2\n")
     assert list(df.columns) == ["a", "b"]

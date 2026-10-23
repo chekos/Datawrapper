@@ -31,6 +31,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Name columns with a blank header `X.1`, `X.2`, ... as Datawrapper does,
   instead of pandas' `Unnamed: 1`, so a chart's settings that refer to them
   (`axes`, `column-format`) still match after `update()`.
+- Keep the text of fetched data that `update()` uploads again. Codes with
+  leading zeros (`05001`) became numbers, labels with spaces (`2025 `) lost
+  them, so settings such as `highlighted-series` no longer matched, and cells
+  reading `NA` or `N/A` were emptied. Such columns now stay text, and only
+  empty cells are missing values.
 
 ### Removed
 
