@@ -162,14 +162,23 @@ class TextAnnotation(BaseModel):
     )
 
     #: The x offset of the annotation relative to its position
-    dx: int = Field(
+    dx: int | float = Field(
         default=0, description="The x offset of the annotation relative to its position"
     )
 
     #: The y offset of the annotation relative to its position
-    dy: int = Field(
+    dy: int | float = Field(
         default=0, description="The y offset of the annotation relative to its position"
     )
+
+    @field_validator("dx", "dy", mode="before")
+    @classmethod
+    def parse_offset(cls, v: Any) -> Any:
+        """Accept offsets the Datawrapper editor stores as numeric strings."""
+        if isinstance(v, str):
+            number = float(v)
+            return int(number) if number.is_integer() else number
+        return v
 
     #: Whether or not to bold the text
     bold: bool = Field(default=False, description="Whether or not to bold the text")

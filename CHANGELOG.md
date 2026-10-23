@@ -22,6 +22,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Accept annotation numbers the Datawrapper editor stores as strings or
+  decimals: `RangeAnnotation.opacity` (`"10"`) and `TextAnnotation.dx` and
+  `dy` (`"3"`, `-29.5`). Charts with such annotations loaded with `get()` but
+  failed validation when serialized again, so `update()` raised.
+
 ### Removed
 
 - Remove the unused `rich` and `exceptiongroup` runtime dependencies.

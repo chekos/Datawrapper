@@ -64,6 +64,14 @@ class RangeAnnotation(BaseModel):
     #: The opacity of the annotation
     opacity: int = Field(default=50, description="The opacity of the annotation")
 
+    @field_validator("opacity", mode="before")
+    @classmethod
+    def parse_opacity(cls, v: Any) -> Any:
+        """Accept opacities the Datawrapper editor stores as numeric strings."""
+        if isinstance(v, str):
+            return round(float(v))
+        return v
+
     @field_validator("opacity")
     @classmethod
     def validate_opacity(cls, v: int) -> int:
