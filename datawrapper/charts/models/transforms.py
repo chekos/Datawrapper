@@ -212,6 +212,9 @@ class ColumnFormatList(BaseModel):
                     filtered_config[key] = value
                 elif key in ("number-prepend", "number-append") and value != "":
                     filtered_config[key] = value
+                elif key == "number-format" and value not in ("-", "auto"):
+                    # "-" is the model default, "auto" the API's
+                    filtered_config[key] = value
                 elif key == "number-divisor" and value not in (0, "0"):
                     # Convert NumberDivisor enum to its value for API
                     if isinstance(value, NumberDivisor):
