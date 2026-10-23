@@ -22,6 +22,11 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Map the `multiple-columns` API type to `MultipleColumnChart` in `get_chart()`.
+  The factory keyed the class under `d3-bars-split`, so real multiple-column
+  charts fell back to `BaseChart` and split-bar charts raised a chart type
+  mismatch instead of falling back.
+
 ### Removed
 
 - Remove the unused `rich` and `exceptiongroup` runtime dependencies.

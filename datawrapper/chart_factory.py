@@ -61,7 +61,7 @@ def get_chart(chart_id: str, access_token: str | None = None) -> BaseChart:
         "column-chart": ColumnChart,
         "d3-area": AreaChart,
         "d3-arrow-plot": ArrowChart,
-        "d3-bars-split": MultipleColumnChart,
+        "multiple-columns": MultipleColumnChart,
         "d3-scatter-plot": ScatterPlot,
         "d3-bars-stacked": StackedBarChart,
     }

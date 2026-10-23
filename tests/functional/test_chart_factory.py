@@ -1,5 +1,8 @@
 """Functional tests for the get_chart factory function with mocked API calls."""
 
+import json
+import warnings
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -181,7 +184,7 @@ def test_get_chart_arrow_chart():
 
 
 def test_get_chart_multiple_column_chart():
-    """Test get_chart returns MultipleColumnChart for d3-bars-split type."""
+    """Test get_chart returns MultipleColumnChart for multiple-columns type."""
     # Create a mock Datawrapper client
     mock_client = MagicMock(spec=Datawrapper)
 
@@ -189,7 +192,7 @@ def test_get_chart_multiple_column_chart():
     mock_metadata = {
         "id": "multi333",
         "title": "Grouped Data",
-        "type": "d3-bars-split",
+        "type": "multiple-columns",
         "metadata": {"visualize": {}},
     }
     mock_client.get_chart.return_value = mock_metadata
@@ -371,12 +374,16 @@ def test_get_chart_all_supported_types():
         "column-chart": ColumnChart,
         "d3-area": AreaChart,
         "d3-arrow-plot": ArrowChart,
-        "d3-bars-split": MultipleColumnChart,
+        "multiple-columns": MultipleColumnChart,
         "d3-scatter-plot": ScatterPlot,
         "d3-bars-stacked": StackedBarChart,
     }
 
     for chart_type, expected_class in supported_types.items():
+        # The mapped class must accept the API type, or its real .get() raises
+        # a chart type mismatch that the mocked .get() below would hide.
+        expected_class._validate_chart_type(chart_type)
+
         # Create a mock Datawrapper client
         mock_client = MagicMock(spec=Datawrapper)
 
@@ -404,3 +411,56 @@ def test_get_chart_all_supported_types():
             # Verify result is an instance of the expected class
             assert isinstance(result, expected_class)
             assert result.chart_id == f"test_{chart_type}"
+
+
+def _mock_api_client(chart_metadata: dict, csv: str) -> MagicMock:
+    """Build a client that serves one chart's metadata and data."""
+    mock_client = MagicMock()
+    mock_client._CHARTS_URL = "https://api.datawrapper.de/v3/charts"
+    mock_client.get_chart.return_value = chart_metadata
+    mock_client.get.side_effect = lambda url: (
+        csv if url.endswith("/data") else chart_metadata
+    )
+    return mock_client
+
+
+def test_get_chart_multiple_column_sample_without_mocked_get():
+    """A real multiple-columns chart resolves to MultipleColumnChart end to end."""
+    samples = Path(__file__).parent.parent / "samples" / "multiple_column"
+    with open(samples / "jobs.json") as f:
+        chart_metadata = json.load(f)["chart"]["crdt"]["data"]
+    with open(samples / "jobs.csv") as f:
+        csv = f.read()
+    mock_client = _mock_api_client(chart_metadata, csv)
+
+    with (
+        patch("datawrapper.Datawrapper", return_value=mock_client),
+        patch("datawrapper.charts.base.Datawrapper", return_value=mock_client),
+        warnings.catch_warnings(),
+    ):
+        warnings.simplefilter("error", UserWarning)
+        result = get_chart(chart_id="test-id", access_token="test-token")
+
+    assert type(result) is MultipleColumnChart
+    assert result.chart_type == "multiple-columns"
+
+
+def test_get_chart_split_bars_falls_back_to_base_chart():
+    """Split bars have no dedicated class yet and must not raise a type mismatch."""
+    chart_metadata = {
+        "id": "split123",
+        "type": "d3-bars-split",
+        "title": "Split bars",
+        "metadata": {"visualize": {"mirror-bars": True}},
+    }
+    mock_client = _mock_api_client(chart_metadata, "label,a,b\nx,1,2\n")
+
+    with (
+        patch("datawrapper.Datawrapper", return_value=mock_client),
+        patch("datawrapper.charts.base.Datawrapper", return_value=mock_client),
+        pytest.warns(UserWarning, match="does not have a dedicated datawrapper class"),
+    ):
+        result = get_chart(chart_id="split123", access_token="test-token")
+
+    assert type(result) is BaseChart
+    assert result.chart_type == "d3-bars-split"
