@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import csv
 import json
 import logging
 import os
@@ -17,6 +18,21 @@ from IPython.display import IFrame, Image
 from .exceptions import FailedRequestError, InvalidRequestError, RateLimitError
 
 logger = logging.getLogger(__name__)
+
+
+def read_csv(text: str) -> pd.DataFrame:
+    """Parse chart data the way Datawrapper does.
+
+    Datawrapper accepts comma, semicolon, tab and pipe separated data, and its
+    editor stores data pasted from a spreadsheet as tab separated. The
+    delimiter is sniffed from the first lines, falling back to a comma.
+    """
+    sample = "\n".join(text.splitlines()[:20])
+    try:
+        sep = csv.Sniffer().sniff(sample, delimiters=",;\t|").delimiter
+    except csv.Error:
+        sep = ","
+    return pd.read_csv(StringIO(text), sep=sep)
 
 
 class Datawrapper:
@@ -170,7 +186,7 @@ class Datawrapper:
                 return response.json()
             # If it's a csv, read the text into a dataframe
             if "text/csv" in response.headers["content-type"]:
-                return pd.read_csv(StringIO(response.text))
+                return read_csv(response.text)
             # Otherwise just return the content
             return response.content
         # If not, raise an exception

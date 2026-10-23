@@ -1,14 +1,13 @@
 import os
 import warnings
 from copy import deepcopy
-from io import StringIO
 from typing import Any, Literal
 
 import pandas as pd
 from IPython.display import IFrame
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from datawrapper.__main__ import Datawrapper
+from datawrapper.__main__ import Datawrapper, read_csv
 from datawrapper.charts.models import Annotate, Describe, Publish, Transform, Visualize
 
 
@@ -450,10 +449,9 @@ class BaseChart(BaseModel):
         Returns:
             DataFrame containing the parsed CSV data
         """
-        # Use sep=None with engine='python' to auto-detect delimiter (comma or tab)
         if isinstance(csv_data, pd.DataFrame):
             return csv_data
-        return pd.read_csv(StringIO(csv_data), sep=None, engine="python")
+        return read_csv(csv_data)
 
     @classmethod
     def deserialize_model(cls, api_response: dict[str, Any]) -> dict[str, Any]:
